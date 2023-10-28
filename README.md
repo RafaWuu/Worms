@@ -1,18 +1,14 @@
 # Worms
 
-Instalar SDL: 
+Instalar libSDL2pp, explicado en este [thread](https://discord.com/channels/758354783223939092/758707836146155571/threads/1108210796586086641) de Discord.
+
+Para ejecutar el cliente:
 ```
-apt-get install libsdl2-dev
-```
-Para probar el CMake y que se linkea todo bien ejecutamos el test `hello_world.cpp` de Box2D:
-```
-sh hello_world.sh
+sh client_test.sh
 ```
 O de manera equivalente: 
 ```
-mkdir build
-cd build
-cmake ..
+cmake .
 make
-./hello_world
+./worms
 ```
