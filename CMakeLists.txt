@@ -19,8 +19,10 @@ set(BOX2D_INCLUDE_PATH "${CMAKE_SOURCE_DIR}/Box2D")
 
 # add compilation flags
 set(CMAKE_CXX_STANDARD 17)
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
 include_directories(${SDL2PP_INCLUDE_DIRS})
 include_directories(PRIVATE ${BOX2D_INCLUDE_PATH})
+
 
 add_executable(worms 
 	client/client_main.cpp
@@ -31,6 +33,7 @@ add_executable(worms
 	common/common_resolver.cpp
 	common/common_resolvererror.cpp
 	common/common_socket.cpp
+	common/common_baseprotocol.cpp
 )
 
 target_include_directories(worms PUBLIC

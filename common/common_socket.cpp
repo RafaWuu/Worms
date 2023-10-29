@@ -387,7 +387,7 @@ Socket Socket::accept() {
      * */
     int peer_skt = ::accept(this->skt, nullptr, nullptr);
     if (peer_skt == -1)
-        throw LibError(errno, "socket accept failed");
+        throw ClosedSocket();
 
     /*
      * `peer_skt` es un file descriptor crudo y no queremos

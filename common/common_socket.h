@@ -1,11 +1,18 @@
 #ifndef SOCKET_H
 #define SOCKET_H
 
+#include <stdexcept>
+
 /*
  * TDA Socket.
  * Por simplificación este TDA se enfocará solamente
  * en sockets IPv4 para TCP.
  * */
+
+struct ClosedSocket: public std::runtime_error {
+    ClosedSocket(): std::runtime_error("The socket is closed") {}
+};
+
 class Socket {
 private:
     int skt;
