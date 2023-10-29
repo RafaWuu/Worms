@@ -36,6 +36,21 @@ add_executable(worms
 	common/common_baseprotocol.cpp
 )
 
+add_executable(server
+		server/server_main.cpp
+		server/server_server.cpp
+		server/server_protocol.cpp
+		server/server_clienthandler.cpp
+		server/server_receiver.cpp
+		server/server_sender.cpp
+		server/server_lobby.cpp
+		common/common_liberror.cpp
+		common/common_resolver.cpp
+		common/common_resolvererror.cpp
+		common/common_socket.cpp
+		common/common_baseprotocol.cpp
+)
+
 target_include_directories(worms PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/common
     ${CMAKE_CURRENT_SOURCE_DIR}/client
