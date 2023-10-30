@@ -15,9 +15,11 @@ private:
     std::string servicename;
 
     // Descomentar cuando este el server y se pueda conectar
-    // Socket socket;
-    // ClientProtocol protocol;
-    // ClientSender sender;
+    Socket socket;
+    ClientProtocol protocol;
+
+    ClientSender sender;
+    ClientReceiver receiver;
 
     // Por ahora que sea un array de chars, despues cambiarlo a una clase propia
     Queue<std::vector<uint8_t>> messages_to_send;
@@ -25,7 +27,12 @@ private:
 
 public:
     Client(const std::string& hostname, const std::string& servicename);
-    Client();
+    ~Client();
+    
+    void kill();
 
     int start();
+
+    void move_left();
+    void move_right();
 };

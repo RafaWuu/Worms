@@ -17,19 +17,30 @@ using namespace SDL2pp;
 #define SUCCESS 0
 #define FAILURE 1
 
-// Descomentar cuando este el server y se pueda conectar el socket
-
-// Client::Client(const std::string& hostname, const std::string& servicename):
-//         hostname(hostname), servicename(servicename), socket(hostname.c_str(), servicename.c_str()), 
-//         protocol(std::move(socket)), sender(protocol, messages_to_send){
-
-//     sender.start();
-// }
-
 Client::Client(const std::string& hostname, const std::string& servicename):
-        hostname(hostname), servicename(servicename)
-        {}
+        hostname(hostname), servicename(servicename), socket(hostname.c_str(), servicename.c_str()), 
+        protocol(std::move(socket)), sender(protocol, messages_to_send), 
+        receiver(protocol, messages_received) {
 
+    sender.start();
+    receiver.start();
+}
+
+Client::~Client() {
+    kill();
+}
+
+void Client::kill() {
+    messages_to_send.close();
+    messages_received.close();
+    
+    protocol.kill();
+    sender.kill();
+    receiver.kill();
+
+    sender.join();
+    receiver.join();
+}
 
 int Client::start() {
     std::string input;
@@ -58,9 +69,13 @@ int Client::start() {
 					return 0;
                 case SDLK_LEFT:
                     std::cout << "LEFT" << std::endl;
+
+                    move_left();
                     break;
                 case SDLK_RIGHT:
                     std::cout << "RIGHT" << std::endl;
+
+                    move_right();
                     break;
                 case SDLK_UP:
                     std::cout << "UP" << std::endl;
@@ -71,4 +86,17 @@ int Client::start() {
 	}
 
     return SUCCESS;
+}
+
+void Client::move_left() {
+    // hardcodeado
+    std::vector<uint8_t> message = {0x01, 0x01};
+
+    messages_to_send.push(message);
+}
+
+void Client::move_right() {
+    std::vector<uint8_t> message = {0x01, 0x02};
+
+    messages_to_send.push(message);
 }

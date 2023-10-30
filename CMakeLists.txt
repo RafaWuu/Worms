@@ -24,38 +24,39 @@ include_directories(${SDL2PP_INCLUDE_DIRS})
 include_directories(PRIVATE ${BOX2D_INCLUDE_PATH})
 
 
-add_executable(worms 
-	client/client_main.cpp
-	client/client_client.cpp
-	client/client_protocol.cpp
-	client/client_sender.cpp
-	common/common_liberror.cpp
-	common/common_resolver.cpp
-	common/common_resolvererror.cpp
-	common/common_socket.cpp
-	common/common_baseprotocol.cpp
+add_executable(client 
+	src/client/client_main.cpp
+	src/client/client_client.cpp
+	src/client/client_protocol.cpp
+	src/client/client_sender.cpp
+	src/client/client_receiver.cpp
+	src/common/common_liberror.cpp
+	src/common/common_resolver.cpp
+	src/common/common_resolvererror.cpp
+	src/common/common_socket.cpp
+	src/common/common_baseprotocol.cpp
 )
 
 add_executable(server
-		server/server_main.cpp
-		server/server_server.cpp
-		server/server_protocol.cpp
-		server/server_clienthandler.cpp
-		server/server_receiver.cpp
-		server/server_sender.cpp
-		server/server_lobby.cpp
-		common/common_liberror.cpp
-		common/common_resolver.cpp
-		common/common_resolvererror.cpp
-		common/common_socket.cpp
-		common/common_baseprotocol.cpp
+	src/server/server_main.cpp
+	src/server/server_server.cpp
+	src/server/server_protocol.cpp
+	src/server/server_clienthandler.cpp
+	src/server/server_receiver.cpp
+	src/server/server_sender.cpp
+	src/server/server_lobby.cpp
+	src/common/common_liberror.cpp
+	src/common/common_resolver.cpp
+	src/common/common_resolvererror.cpp
+	src/common/common_socket.cpp
+	src/common/common_baseprotocol.cpp
 )
 
-target_include_directories(worms PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}/common
-    ${CMAKE_CURRENT_SOURCE_DIR}/client
-    ${CMAKE_CURRENT_SOURCE_DIR}/server
+target_include_directories(client PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/common
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/client
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/server
 )
 
 # define targets
-target_link_libraries(worms PUBLIC ${BOX2D_LIBRARY_PATH}  SDL2pp::SDL2pp)
+target_link_libraries(client PUBLIC ${BOX2D_LIBRARY_PATH}  SDL2pp::SDL2pp)
