@@ -23,7 +23,7 @@ private:
 
     // Por ahora que sea un array de chars, despues cambiarlo a una clase propia
     Queue<std::vector<uint8_t>> messages_to_send;
-    Queue<std::vector<uint8_t>> messages_received;
+    Queue<EstadoJuego> messages_received;
 
 public:
     Client(const std::string& hostname, const std::string& servicename);
@@ -32,7 +32,6 @@ public:
     void kill();
 
     int start();
-
     void move_left();
     void move_right();
 };

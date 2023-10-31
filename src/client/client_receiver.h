@@ -9,13 +9,14 @@ private:
     ClientProtocol& protocol;
 
     // Por ahora que sea un array de chars, despues cambiarlo a una clase propia
-    Queue<std::vector<uint8_t>>& messages_received;
+    Queue<EstadoJuego>& messages_received;
 
     std::atomic<bool> keep_talking;
     std::atomic<bool> is_alive;
 
 public:
-    ClientReceiver(ClientProtocol& protocol, Queue<std::vector<uint8_t>>& messages_received);
+    ClientReceiver(ClientProtocol& protocol, 
+                Queue<EstadoJuego>& messages_received);
 
     void run() override;
     bool is_dead();
