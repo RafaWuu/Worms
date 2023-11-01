@@ -45,6 +45,10 @@ void BaseProtocol::send_char_vector(std::vector<char>& buffer) {
     send_throw(buffer.data(), buffer.size());
 }
 
+void BaseProtocol::send_uint_vector(std::vector<uint8_t>& buffer) {
+    send_throw(buffer.data(), buffer.size());
+}
+
 void BaseProtocol::recv_char_vector(std::vector<char>& buffer) {
     recv_throw(buffer.data(), buffer.size());
 }

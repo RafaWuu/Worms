@@ -31,6 +31,7 @@ public:
     void recv_1byte_number(uint8_t& number);
     void send_char_vector(std::vector<char>& buffer);
     void recv_char_vector(std::vector<char>& buffer);
+    void send_uint_vector(std::vector<uint8_t>& buffer);
 
     void kill();
 };

@@ -7,6 +7,7 @@
 
 #include "../common/common_liberror.h"
 #include "../common/common_socket.h"
+#include "commands/client_move.h"
 
 #include "client_protocol.h"
 
@@ -23,11 +24,13 @@ Client::Client(const std::string& hostname, const std::string& servicename):
         socket(hostname.c_str(), 
         servicename.c_str()), 
         protocol(std::move(socket)),
-        sender(protocol, messages_to_send), 
-        receiver(protocol, messages_received) {
+        messages_to_send(1000){
 
-    sender.start();
-    receiver.start();
+    sender = new ClientSender(protocol, messages_to_send);
+    receiver = new ClientReceiver(protocol, messages_received);
+
+    sender->start();
+    receiver->start();
 }
 
 Client::~Client() {
@@ -39,11 +42,14 @@ void Client::kill() {
     messages_received.close();
     
     protocol.kill();
-    sender.kill();
-    receiver.kill();
+    sender->kill();
+    receiver->kill();
 
-    sender.join();
-    receiver.join();
+    sender->join();
+    receiver->join();
+
+    delete sender;
+    delete receiver;
 }
 
 int Client::start() {
@@ -115,14 +121,15 @@ int Client::start() {
 }
 
 void Client::move_left() {
-    // hardcodeado
-    std::vector<uint8_t> message = {0x01, 0x01};
+    std::shared_ptr<Move> move_command = std::make_shared<Move>(Move::Direction::Left);
+    std::shared_ptr<Command> command = move_command;
 
-    messages_to_send.push(message);
+    messages_to_send.push(command);
 }
 
 void Client::move_right() {
-    std::vector<uint8_t> message = {0x01, 0x02};
+    std::shared_ptr<Move> move_command = std::make_shared<Move>(Move::Direction::Right);
+    std::shared_ptr<Command> command = move_command;
 
-    messages_to_send.push(message);
+    messages_to_send.push(command);
 }

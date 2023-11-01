@@ -35,6 +35,8 @@ add_executable(client
 	src/common/common_resolvererror.cpp
 	src/common/common_socket.cpp
 	src/common/common_baseprotocol.cpp
+	src/client/commands/client_move.cpp
+	src/client/commands/client_command.cpp
 )
 
 add_executable(server

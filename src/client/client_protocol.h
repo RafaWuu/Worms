@@ -26,7 +26,7 @@ class ClientProtocol : public BaseProtocol {
 public:
     explicit ClientProtocol(Socket socket);
 
-    void send_move(uint8_t dir);
+    std::vector<uint8_t> serialize_move(int dir);
 
     EstadoJuego recv_msg();
     /* Shutdown y close del socket */

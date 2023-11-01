@@ -20,12 +20,6 @@
 
 ClientProtocol::ClientProtocol(Socket socket): BaseProtocol(std::move(socket)) {}
 
-void ClientProtocol::send_move(uint8_t dir) {
-
-    send_1byte_number(MOVE_CODE);
-    send_1byte_number(dir);
-}
-
 EstadoJuego ClientProtocol::recv_msg(){
     EstadoJuego estado;
     uint8_t cod_op;
@@ -34,4 +28,9 @@ EstadoJuego ClientProtocol::recv_msg(){
     return estado;
 }
 
+std::vector<uint8_t> ClientProtocol::serialize_move(int dir) {
+    uint8_t direction = dir;
 
+    std::vector<uint8_t> serialized_command = {MOVE_CODE, direction};
+    return serialized_command;
+}

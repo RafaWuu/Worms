@@ -8,6 +8,7 @@
 #include "client_receiver.h"
 #include "client_sender.h"
 #include "client_protocol.h"
+#include "commands/client_command.h"
 
 class Client {
 private:
@@ -18,11 +19,11 @@ private:
     Socket socket;
     ClientProtocol protocol;
 
-    ClientSender sender;
-    ClientReceiver receiver;
+    ClientSender* sender;
+    ClientReceiver* receiver;
 
     // Por ahora que sea un array de chars, despues cambiarlo a una clase propia
-    Queue<std::vector<uint8_t>> messages_to_send;
+    Queue<std::shared_ptr<Command>> messages_to_send;
     Queue<EstadoJuego> messages_received;
 
 public:
