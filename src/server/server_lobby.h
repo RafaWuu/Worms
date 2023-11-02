@@ -1,36 +1,36 @@
 //
-// Created by xguss on 03/10/23.
+// Created by xguss on 31/10/23.
 //
 
-#ifndef THREADS_SERVER_ACCEPTOR_H
-#define THREADS_SERVER_ACCEPTOR_H
+#ifndef WORMS_SERVER_LOBBY_H
+#define WORMS_SERVER_LOBBY_H
 
-#include <list>
-#include <thread>
+#include <map>
+#include <memory>
+#include <string>
+#include <vector>
 
-#include "../common/common_queue.h"
-#include "../common/common_socket.h"
-#include "../common/common_thread.h"
-#include "server_clienthandler.h"
+#include "server_game.h"
+#include "server_gameinfo.h"
 
-class Lobby: public Thread {
-private:
-    Socket& sk_acceptor;
-    std::list<ClientHandler> clients_list;
-
-    std::atomic<bool> is_alive;
-
-    void reap_dead();
-    void kill_all();
-
-public:
-    explicit Lobby(Socket&& sk);
-    Lobby(const Lobby&) = delete;
-
-    Lobby& operator=(const Lobby&) = delete;
-    ~Lobby() override;
-    void run() override;
-    void kill();
+struct InvalidGameID: public std::runtime_error {
+    InvalidGameID(): std::runtime_error("The requested game with specified id was not found") {}
 };
 
-#endif  // THREADS_SERVER_ACCEPTOR_H
+class Lobby {
+private:
+    std::map<uint8_t, Game> games_map;
+    size_t id;
+
+public:
+    Lobby();
+    Lobby(const Lobby&) = delete;
+    Lobby& operator=(const Lobby&) = delete;
+
+    size_t create_game(std::string name);
+    std::unique_ptr<Game> join_game(size_t game_id);
+
+    std::vector<GameInfo> list_games();
+};
+
+#endif  // WORMS_SERVER_LOBBY_H

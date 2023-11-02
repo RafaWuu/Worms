@@ -2,8 +2,7 @@
 
 #include "../common/common_queue.h"
 
-Receiver::Receiver(Queue<uint8_t>& outgoing_q,
-                   ProtocolGameInterface& gp):
+Receiver::Receiver(Queue<uint8_t>& outgoing_q, ServerProtocol& gp):
         game_protocol(gp), outgoing_q(outgoing_q), is_alive(true) {}
 
 void Receiver::run() {

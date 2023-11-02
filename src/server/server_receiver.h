@@ -10,17 +10,18 @@
 
 #include "../common/common_queue.h"
 #include "../common/common_thread.h"
+
 #include "server_protocol.h"
 
 class Receiver: public Thread {
 private:
-    ProtocolGameInterface& game_protocol;
+    ServerProtocol& game_protocol;
     Queue<uint8_t>& outgoing_q;
 
     std::atomic<bool> is_alive;
 
 public:
-    Receiver(Queue<std::uint8_t>& outgoing_q, ProtocolGameInterface& gp);
+    Receiver(Queue<std::uint8_t>& outgoing_q, ServerProtocol& gp);
     Receiver(const Receiver&) = delete;
     Receiver& operator=(const Receiver&) = delete;
 

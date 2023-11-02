@@ -8,38 +8,38 @@
 
 #include <atomic>
 #include <list>
+#include <memory>
 #include <queue>
 
 #include "../common/common_queue.h"
 #include "../common/common_socket.h"
 #include "../common/common_thread.h"
+#include "client_states/server_clientstate.h"
+#include "client_states/server_clientstate_lobby.h"
+
+#include "server_lobby.h"
 #include "server_protocol.h"
 #include "server_receiver.h"
 #include "server_sender.h"
 
-class ClientHandler {
+class ClientHandler: public Thread {
 private:
-    ProtocolGameInterface game_protocol;
-    Queue<std::uint8_t> outgoing_q;
-    Sender sender;
-    Receiver receiver;
+    ServerProtocol game_protocol;
+    Lobby& lobby;
+    std::unique_ptr<ClientState> state;
+    std::atomic<bool> is_alive;
+    size_t client_id;
 
 public:
-    explicit ClientHandler(Socket socket);
+    friend LobbyClientState;
+
+    explicit ClientHandler(size_t id, Socket socket, Lobby& lobby);
     ClientHandler(const ClientHandler&) = delete;
     ClientHandler& operator=(const ClientHandler&) = delete;
 
-    ~ClientHandler() = default;
-
-    void start_all();
-
-    void kill_both();
+    void run() override;
 
     bool is_dead();
-
-    void join_both();
-
-    void close_socket();
 
     void kill_connection();
 

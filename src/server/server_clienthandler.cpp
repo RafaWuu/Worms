@@ -4,41 +4,42 @@
 
 #include "server_clienthandler.h"
 
+#include <memory>
+
+#include "client_states/server_clientstate_lobby.h"
+
 #include "utility"
 
-
-ClientHandler::ClientHandler(Socket socket):
+ClientHandler::ClientHandler(size_t id, Socket socket, Lobby& lobby):
         game_protocol(std::move(socket)),
-        outgoing_q(),
-        sender(outgoing_q, game_protocol),
-        receiver(outgoing_q, game_protocol) {}
+        lobby(lobby),
+        state(nullptr),
+        is_alive(true),
+        client_id(id) {}
 
-void ClientHandler::start_all() {
-    this->sender.start();
-    this->receiver.start();
+void ClientHandler::run() {
+    this->state = std::make_unique<LobbyClientState>(lobby, game_protocol);
+
+    while (is_alive) {
+        this->state = this->state->run();
+        if (!this->state)
+            is_alive = false;
+    }
 }
 
-bool ClientHandler::is_dead() { return receiver.is_dead() || sender.is_dead(); }
-
-void ClientHandler::kill_both() {
-    receiver.kill();
-    sender.kill();
-}
-
-void ClientHandler::join_both() {
-    receiver.join();
-    sender.join();
-}
-
-void ClientHandler::close_socket() { game_protocol.kill(); }
+bool ClientHandler::is_dead() { return !is_alive; }
 
 void ClientHandler::kill_connection() {
-    kill_both();
-    close_socket();
-    join_both();
+    is_alive = false;
+
+    if (state)
+        this->state->kill();
+    game_protocol.kill();
 }
 
 void ClientHandler::reap_connection() {
-    kill_both();  // Por si solo una de las dos conexiones termino
-    join_both();
+    is_alive = false;
+
+    if (state)
+        this->state->kill();
 }

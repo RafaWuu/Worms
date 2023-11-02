@@ -10,19 +10,20 @@
 
 #include "../common/common_queue.h"
 #include "../common/common_thread.h"
+
 #include "server_protocol.h"
 
 
 class Sender: public Thread {
 private:
-    ProtocolGameInterface& game_protocol;
+    ServerProtocol& game_protocol;
 
     Queue<uint8_t>& outgoing_q;
 
     std::atomic<bool> is_alive;
 
 public:
-    Sender(Queue<uint8_t>& queue, ProtocolGameInterface& gp);
+    Sender(Queue<uint8_t>& queue, ServerProtocol& gp);
     Sender(const Sender&) = delete;
     Sender& operator=(const Sender&) = delete;
 

@@ -1,62 +1,36 @@
-//
-// Created by xguss on 03/10/23.
-//
-
 #include "server_lobby.h"
 
-#include <sys/socket.h>
+#include <algorithm>
+#include <string>
 
-#include "server_clienthandler.h"
-#include "../common/common_baseprotocol.h"
-#include "utility"
+#include "server_gameinfo.h"
 
-Lobby::Lobby(Socket&& sk):
-        sk_acceptor(sk),
-        is_alive(true) {}
+//
+// Created by xguss on 31/10/23.
+//
+Lobby::Lobby(): id(1) {}
 
-Lobby::~Lobby() {
-    kill_all();
+size_t Lobby::create_game(std::string scenario) {
+    games_map.emplace(id, scenario);
+    this->id++;
+    return id - 1;
 }
 
-void Lobby::run() {
-    while (is_alive) {
-        try {
-            Socket peer = sk_acceptor.accept();
+std::unique_ptr<Game> Lobby::join_game(size_t game_id) {
+    auto it = games_map.find(game_id);
+    if (it == games_map.end())
+        throw InvalidGameID();
 
-            auto& client_handler = clients_list.emplace_back(std::move(peer));
-            client_handler.start_all();
+    it->second.player_count++;
 
-            reap_dead();
-        } catch (ClosedSocket& e) {
-            if (is_alive) {
-                throw(e);  // Inesperado, dejo que run_expecting loggee
-            }
-        }
-    }
+    return std::make_unique<Game>(it->second);
 }
 
-void Lobby::reap_dead() {
-    clients_list.remove_if([](ClientHandler& c) {
-        if (c.is_dead()) {
-            c.reap_connection();
+std::vector<GameInfo> Lobby::list_games() {
+    std::vector<GameInfo> v;
 
-            return true;
-        }
-        return false;
-    });
-}
-void Lobby::kill_all() {
-    for (auto& c: clients_list) {
-        if (c.is_dead())
-            c.reap_connection();
-        else
-            c.kill_connection();
-    }
-}
+    std::transform(games_map.begin(), games_map.end(), v.begin(),
+                   [](const auto& g) { return GameInfo(g.first, g.second.name); });
 
-void Lobby::kill() {
-    is_alive = false;
-
-    sk_acceptor.shutdown(SHUT_RDWR);
-    sk_acceptor.close();
+    return v;
 }

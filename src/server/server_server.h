@@ -7,7 +7,7 @@
 
 #include <string>
 
-#include "server_lobby.h"
+#include "server_accepter.h"
 #include "server_protocol.h"
 
 class Server {

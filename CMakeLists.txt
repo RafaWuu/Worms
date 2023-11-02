@@ -46,12 +46,22 @@ add_executable(server
 	src/server/server_clienthandler.cpp
 	src/server/server_receiver.cpp
 	src/server/server_sender.cpp
-	src/server/server_lobby.cpp
+	src/server/server_accepter.cpp
 	src/common/common_liberror.cpp
 	src/common/common_resolver.cpp
 	src/common/common_resolvererror.cpp
 	src/common/common_socket.cpp
 	src/common/common_baseprotocol.cpp
+	src/server/server_game.cpp
+	src/server/server_lobby.cpp
+	src/server/client_states/server_clientstate.cpp
+	src/server/client_states/server_clientstate_game.cpp
+	src/server/client_states/server_clientstate_lobby.cpp
+	src/server/server_lobby_request.cpp
+	src/server/server_lobby_answer.cpp
+	src/server/server_gameinfo.cpp
+	src/server/server_protocol_constants.h
+
 )
 
 target_include_directories(client PUBLIC
