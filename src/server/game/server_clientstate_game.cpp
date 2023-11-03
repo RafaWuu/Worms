@@ -5,21 +5,28 @@
 #include "server_clientstate_game.h"
 
 #include <memory>
+#include <utility>
 
-#include "../server_game.h"
+#include "server_game.h"
 
-#include "server_clientstate.h"
+GameClientState::GameClientState(uint16_t client_id, ServerProtocol& gameProtocol, Game& game):
+        game(game),
+        outgoing_q(),
+        sender(outgoing_q, gameProtocol),
+        ClientState(client_id, gameProtocol) {
 
-GameClientState::GameClientState(ServerProtocol& gameProtocol, Game& game):
-        outgoing_q(), gp(gameProtocol), sender(outgoing_q, gameProtocol), ClientState() {}
+    game.subscribe_queue(outgoing_q, client_id);
+    sender.start();
+}
 
 std::unique_ptr<ClientState> GameClientState::run() {
-    sender.start();
-
     while (is_alive) {
         try {
-            uint8_t msg = gp.recv_msg();
-            outgoing_q.push(msg);
+            std::unique_ptr<GameEvent> event = gp.recv_game_msg(this->client_id);
+            if (!event) {
+                is_alive = false;
+            }
+            game.push_event(std::move(event));
         } catch (ClosedSocket& e) {
             is_alive = false;
         } catch (ClosedQueue& e) {
@@ -41,5 +48,6 @@ void GameClientState::kill() { this->is_alive = false; }
 
 GameClientState::~GameClientState() {
     sender.kill();
+    game.exit_game(client_id);
     sender.join();
 }

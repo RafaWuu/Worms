@@ -11,10 +11,11 @@
 
 LobbyRequestNewGame::LobbyRequestNewGame(const std::string& s): scenario(s) {}
 
-std::unique_ptr<Game> LobbyRequestNewGame::execute(Lobby& lobby, ServerProtocol& gp) {
+std::shared_ptr<Game> LobbyRequestNewGame::execute(LobbyMonitor& lobby, ServerProtocol& gp,
+                                                   uint16_t client_id) {
     try {
-        size_t id = lobby.create_game(this->scenario);
-        auto game = lobby.join_game(id);
+        uint16_t id = lobby.create_game(this->scenario, client_id);
+        auto game = lobby.join_game(id, client_id);
 
         auto answer = LobbyAnswerGame(id);
         answer.send(gp);
@@ -28,11 +29,12 @@ std::unique_ptr<Game> LobbyRequestNewGame::execute(Lobby& lobby, ServerProtocol&
     }
 }
 
-LobbyRequestJoinGame::LobbyRequestJoinGame(size_t id): id(id) {}
+LobbyRequestJoinGame::LobbyRequestJoinGame(uint16_t id): id(id) {}
 
-std::unique_ptr<Game> LobbyRequestJoinGame::execute(Lobby& lobby, ServerProtocol& gp) {
+std::shared_ptr<Game> LobbyRequestJoinGame::execute(LobbyMonitor& lobby, ServerProtocol& gp,
+                                                    uint16_t client_id) {
     try {
-        auto game = lobby.join_game(id);
+        auto game = lobby.join_game(id, client_id);
 
         auto answer = LobbyAnswerGame(id);
         answer.send(gp);
@@ -46,7 +48,8 @@ std::unique_ptr<Game> LobbyRequestJoinGame::execute(Lobby& lobby, ServerProtocol
     }
 }
 
-std::unique_ptr<Game> LobbyRequestListGames::execute(Lobby& lobby, ServerProtocol& gp) {
+std::shared_ptr<Game> LobbyRequestListGames::execute(LobbyMonitor& lobby, ServerProtocol& gp,
+                                                     uint16_t client_id) {
     try {
         auto games = lobby.list_games();
 

@@ -28,7 +28,7 @@ include_directories(PRIVATE ${BOX2D_INCLUDE_PATH})
 
 qt5_wrap_ui(UIS_HEADERS
   src/client/lobby/join_game_dialog.ui
-  src/client/lobby/mainwindow.ui 
+  src/client/lobby/mainwindow.ui
   src/client/lobby/new_game_dialog.ui
 )
 # Habilito el automoc para poder hacer autoconnect de señales
@@ -65,24 +65,34 @@ add_executable(server
 	src/server/server_main.cpp
 	src/server/server_server.cpp
 	src/server/server_protocol.cpp
-	src/server/server_clienthandler.cpp
-	src/server/server_receiver.cpp
-	src/server/server_sender.cpp
+	src/server/server_client.cpp
+	src/server/game/server_sender.cpp
 	src/server/server_accepter.cpp
 	src/common/common_liberror.cpp
 	src/common/common_resolver.cpp
 	src/common/common_resolvererror.cpp
 	src/common/common_socket.cpp
 	src/common/common_baseprotocol.cpp
-	src/server/server_game.cpp
-	src/server/server_lobby.cpp
-	src/server/client_states/server_clientstate.cpp
-	src/server/client_states/server_clientstate_game.cpp
-	src/server/client_states/server_clientstate_lobby.cpp
-	src/server/server_lobby_request.cpp
-	src/server/server_lobby_answer.cpp
-	src/server/server_gameinfo.cpp
-	src/server/server_protocol_constants.h
+	src/server/game/server_game.cpp
+	src/server/lobby/server_lobby.cpp
+	src/server/server_clientstate.cpp
+	src/server/game/server_clientstate_game.cpp
+	src/server/lobby/server_clientstate_lobby.cpp
+	src/server/lobby/server_lobby_request.cpp
+	src/server/lobby/server_lobby_answer.cpp
+	src/server/game/server_gameinfo.cpp
+	src/server/game/server_gameevent.cpp
+	src/server/game/server_statusbroadcast_monitor.cpp
+	src/server/game/server_event_handler.cpp
+	src/server/game/server_gamestatus.cpp
+	src/server/game/server_worm.cpp
+	src/server/game/server_gameworld.cpp
+	src/server/game/server_scenario_file_handler.cpp
+	src/server/game/server_beam.cpp
+	src/server/game/server_worm_info.cpp
+	src/server/game/server_worm_info.h
+	src/server/game/server_beam_info.cpp
+	src/server/game/server_beam_info.h
 
 )
 
@@ -93,8 +103,15 @@ target_include_directories(client PUBLIC
 
 )
 
+target_include_directories(server PUBLIC
+		${CMAKE_CURRENT_SOURCE_DIR}/src/common
+		${CMAKE_CURRENT_SOURCE_DIR}/src/server
+)
+
+
 # define targets
-target_link_libraries(client PUBLIC ${BOX2D_LIBRARY_PATH}  
-					SDL2pp::SDL2pp 
+target_link_libraries(client PUBLIC ${BOX2D_LIBRARY_PATH}
+					SDL2pp::SDL2pp
 					Qt5::Widgets
 					Qt5::Core)
+target_link_libraries(server PUBLIC ${BOX2D_LIBRARY_PATH})

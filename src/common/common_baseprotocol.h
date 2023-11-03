@@ -6,9 +6,9 @@
 #define SOCKETS_2023C2_ABRAIDA_COMMON_BASEPROTOCOL_H
 
 #include <cstdint>
+#include <stdexcept>
 #include <string>
 #include <vector>
-#include <stdexcept>
 
 #include "common_socket.h"
 
@@ -34,5 +34,9 @@ public:
     void send_uint_vector(std::vector<uint8_t>& buffer);
 
     void kill();
+
+    void send_4byte_float(float number);
+
+    void recv_4byte_float(float& number);
 };
 #endif  // SOCKETS_2023C2_ABRAIDA_COMMON_BASEPROTOCOL_H

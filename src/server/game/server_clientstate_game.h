@@ -10,20 +10,20 @@
 #include <memory>
 
 #include "../../common/common_queue.h"
-#include "../server_game.h"
+#include "../server_clientstate.h"
 #include "../server_protocol.h"
-#include "../server_sender.h"
 
-#include "server_clientstate.h"
+#include "server_game.h"
+#include "server_sender.h"
 
 class GameClientState: public ClientState {
 private:
-    Queue<std::uint8_t> outgoing_q;
-    ServerProtocol& gp;
+    Game& game;
+    Queue<std::shared_ptr<GameStatus>> outgoing_q;
     Sender sender;
 
 public:
-    explicit GameClientState(ServerProtocol& gameProtocol, Game& game);
+    explicit GameClientState(uint16_t client_id, ServerProtocol& gameProtocol, Game& game);
     std::unique_ptr<ClientState> run() override;
     void kill() override;
     bool is_dead() override;

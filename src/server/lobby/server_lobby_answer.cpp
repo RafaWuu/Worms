@@ -10,7 +10,7 @@ LobbyAnswerError::LobbyAnswerError(uint8_t code): code(code) {}
 
 void LobbyAnswerError::send(ServerProtocol& gp) { gp.send_lobby_errormessage(this->code); }
 
-LobbyAnswerGame::LobbyAnswerGame(size_t id): id(id) {}
+LobbyAnswerGame::LobbyAnswerGame(uint16_t id): id(id) {}
 
 void LobbyAnswerGame::send(ServerProtocol& gp) { gp.send_gameid_message(id); }
 

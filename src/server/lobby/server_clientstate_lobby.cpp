@@ -4,24 +4,24 @@
 
 #include "server_clientstate_lobby.h"
 
-#include "../server_clienthandler.h"
-#include "../server_lobby_request.h"
+#include "../game/server_clientstate_game.h"
+#include "../server_client.h"
 #include "../server_protocol.h"
 
 #include "memory"
-#include "server_clientstate_game.h"
+#include "server_lobby_request.h"
 
-LobbyClientState::LobbyClientState(Lobby& lobby, ServerProtocol& gameProtocol):
-        lobby(lobby), gp(gameProtocol), game(nullptr) {}
+LobbyClientState::LobbyClientState(uint16_t id, LobbyMonitor& lobby, ServerProtocol& gameProtocol):
+        lobby(lobby), game(nullptr), ClientState(id, gameProtocol) {}
 
 std::unique_ptr<ClientState> LobbyClientState::run() {
     while (is_alive) {
         try {
             std::unique_ptr<LobbyRequest> request = gp.recv_lobby_msg();
-            game = request->execute(lobby, gp);
+            game = request->execute(lobby, gp, client_id);
 
             if (game != nullptr) {
-                return std::make_unique<GameClientState>(gp, *game);
+                return std::make_unique<GameClientState>(client_id, gp, *game);
             }
         } catch (InvalidMsg& e) {
         } catch (ClosedSocket& e) {

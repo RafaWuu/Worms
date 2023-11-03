@@ -6,24 +6,26 @@
 #define THREADS_SERVER_SENDER_H
 
 #include <atomic>
+#include <memory>
 #include <queue>
 
-#include "../common/common_queue.h"
-#include "../common/common_thread.h"
+#include "../../common/common_queue.h"
+#include "../../common/common_thread.h"
+#include "../server_protocol.h"
 
-#include "server_protocol.h"
+#include "server_gamestatus.h"
 
 
 class Sender: public Thread {
 private:
     ServerProtocol& game_protocol;
 
-    Queue<uint8_t>& outgoing_q;
+    Queue<std::shared_ptr<GameStatus>>& outgoing_q;
 
     std::atomic<bool> is_alive;
 
 public:
-    Sender(Queue<uint8_t>& queue, ServerProtocol& gp);
+    Sender(Queue<std::shared_ptr<GameStatus>>& queue, ServerProtocol& gp);
     Sender(const Sender&) = delete;
     Sender& operator=(const Sender&) = delete;
 

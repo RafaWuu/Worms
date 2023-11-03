@@ -2,24 +2,22 @@
 // Created by xguss on 03/10/23.
 //
 
-#include "server_clienthandler.h"
+#include "server_client.h"
 
 #include <memory>
 
-#include "client_states/server_clientstate_lobby.h"
+#include "lobby/server_clientstate_lobby.h"
 
 #include "utility"
 
-ClientHandler::ClientHandler(size_t id, Socket socket, Lobby& lobby):
+Client::Client(uint16_t id, Socket socket, LobbyMonitor& lobby):
         game_protocol(std::move(socket)),
         lobby(lobby),
-        state(nullptr),
+        state(std::make_unique<LobbyClientState>(id, lobby, game_protocol)),
         is_alive(true),
         client_id(id) {}
 
-void ClientHandler::run() {
-    this->state = std::make_unique<LobbyClientState>(lobby, game_protocol);
-
+void Client::run() {
     while (is_alive) {
         this->state = this->state->run();
         if (!this->state)
@@ -27,9 +25,9 @@ void ClientHandler::run() {
     }
 }
 
-bool ClientHandler::is_dead() { return !is_alive; }
+bool Client::is_dead() { return !is_alive; }
 
-void ClientHandler::kill_connection() {
+void Client::kill_connection() {
     is_alive = false;
 
     if (state)
@@ -37,7 +35,7 @@ void ClientHandler::kill_connection() {
     game_protocol.kill();
 }
 
-void ClientHandler::reap_connection() {
+void Client::reap_connection() {
     is_alive = false;
 
     if (state)

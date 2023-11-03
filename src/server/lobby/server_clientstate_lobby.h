@@ -7,19 +7,18 @@
 
 #include <memory>
 
-#include "../server_lobby.h"
+#include "../server_clientstate.h"
 #include "../server_protocol.h"
 
-#include "server_clientstate.h"
+#include "server_lobby.h"
 
 class LobbyClientState: public ClientState {
 private:
-    Lobby& lobby;
-    ServerProtocol& gp;
-    std::unique_ptr<Game> game;
+    LobbyMonitor& lobby;
+    std::shared_ptr<Game> game;
 
 public:
-    LobbyClientState(Lobby& lobby, ServerProtocol& gameProtocol);
+    LobbyClientState(uint16_t id, LobbyMonitor& lobby, ServerProtocol& gameProtocol);
     std::unique_ptr<ClientState> run() override;
     void kill() override;
     bool is_dead() override;

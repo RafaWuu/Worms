@@ -11,15 +11,15 @@
 #include "../common/common_queue.h"
 #include "../common/common_socket.h"
 #include "../common/common_thread.h"
+#include "lobby/server_lobby.h"
 
-#include "server_clienthandler.h"
-#include "server_lobby.h"
+#include "server_client.h"
 
 class Acceptor: public Thread {
 private:
     Socket& sk_acceptor;
-    Lobby lobby;
-    std::list<ClientHandler> clients_list;
+    LobbyMonitor lobby;
+    std::list<Client> clients_list;
 
     std::atomic<bool> is_alive;
 

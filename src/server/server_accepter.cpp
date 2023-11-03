@@ -8,7 +8,7 @@
 
 #include <sys/socket.h>
 
-#include "server_lobby.h"
+#include "lobby/server_lobby.h"
 
 Acceptor::Acceptor(Socket&& sk): sk_acceptor(sk), lobby(), is_alive(true), client_ids(0) {}
 
@@ -32,7 +32,7 @@ void Acceptor::run() {
 }
 
 void Acceptor::reap_dead() {
-    clients_list.remove_if([](ClientHandler& c) {
+    clients_list.remove_if([](Client& c) {
         if (c.is_dead()) {
             c.reap_connection();
             c.join();

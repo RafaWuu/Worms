@@ -8,12 +8,16 @@
 #include <atomic>
 #include <memory>
 
+#include "server_protocol.h"
+
 class ClientState {
 protected:
     std::atomic<bool> is_alive;
+    ServerProtocol& gp;
+    uint16_t client_id;
 
 public:
-    ClientState();
+    ClientState(uint16_t client_id, ServerProtocol& gp);
     virtual std::unique_ptr<ClientState> run() = 0;
     virtual void kill() = 0;
     virtual bool is_dead() = 0;

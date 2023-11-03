@@ -7,8 +7,8 @@
 
 #include <vector>
 
-#include "server_gameinfo.h"
-#include "server_protocol.h"
+#include "../game/server_gameinfo.h"
+#include "../server_protocol.h"
 
 class LobbyAnswer {
 public:
@@ -27,10 +27,10 @@ public:
 
 class LobbyAnswerGame: LobbyAnswer {
 private:
-    size_t id;
+    uint16_t id;
 
 public:
-    explicit LobbyAnswerGame(size_t id);
+    explicit LobbyAnswerGame(uint16_t id);
     void send(ServerProtocol& gp) override;
 };
 

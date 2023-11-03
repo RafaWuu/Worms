@@ -1,9 +1,9 @@
 #include "common_baseprotocol.h"
 
+#include <stdexcept>
 #include <string>
 
 #include <netinet/in.h>
-#include <stdexcept>
 
 #include "common_socket.h"
 #include "utility"
@@ -19,19 +19,35 @@ BaseProtocol::BaseProtocol(Socket socket): skt(std::move(socket)) {}
 
 void BaseProtocol::send_4byte_number(uint32_t number) {
     uint32_t num = htonl(number);
-    send_throw(&num, sizeof(num));
+    send_throw(&num, sizeof(uint32_t));
 }
 
 void BaseProtocol::send_2byte_number(uint16_t number) {
     uint16_t num = htons(number);
-    send_throw(&num, sizeof(num));
+    send_throw(&num, sizeof(uint16_t));
 }
 
-void BaseProtocol::send_1byte_number(uint8_t number) { send_throw(&number, sizeof(number)); }
+
+void BaseProtocol::send_1byte_number(uint8_t number) { send_throw(&number, sizeof(uint8_t)); }
 
 void BaseProtocol::recv_4byte_number(uint32_t& number) {
     recv_throw(&number, sizeof(uint32_t));
     number = ntohl(number);
+}
+
+void BaseProtocol::send_4byte_float(float number) {
+
+    uint32_t num = htonl((uint32_t)number);
+    send_throw(&num, sizeof(uint32_t));
+}
+
+void BaseProtocol::recv_4byte_float(float& number) {
+    uint32_t num;
+    recv_throw(&num, sizeof(uint32_t));
+    num = ntohl(num);
+
+
+    number = (float)(*(char*)&num);
 }
 
 void BaseProtocol::recv_2byte_number(uint16_t& number) {
