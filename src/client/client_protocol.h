@@ -6,29 +6,20 @@
 
 #include <string.h>
 
-#include "../common/common_socket.h"
 #include "../common/common_baseprotocol.h"
+#include "../common/common_socket.h"
+#include "game/estado_juego.h"
 
-// DTO para renderizar
-struct Gusano {
-    std::uint8_t id = 0;
-    std::uint16_t pos_x = 0;
-    std::uint16_t pos_y = 0;
-    std::uint8_t cant_vida = 0;
-};
-struct EstadoJuego {
-    std::uint8_t dir = 0;
-    std::vector<Gusano> gusanos;
-};
-
-class ClientProtocol : public BaseProtocol {
+class ClientProtocol: public BaseProtocol {
 
 public:
     explicit ClientProtocol(Socket socket);
 
     std::vector<uint8_t> serialize_move(int dir);
+    std::vector<uint8_t> serialize_stop_move();
 
     EstadoJuego recv_msg();
+    void recv_worm(std::vector<Worm>& worms);
     /* Shutdown y close del socket */
     void close();
 };

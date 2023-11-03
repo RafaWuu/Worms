@@ -1,6 +1,7 @@
 #include "client_sender.h"
 
-ClientSender::ClientSender(ClientProtocol& protocol, Queue<std::shared_ptr<Command>>& messages_to_send):
+ClientSender::ClientSender(ClientProtocol& protocol,
+                           Queue<std::shared_ptr<Command>>& messages_to_send):
         protocol(protocol), messages_to_send(messages_to_send) {}
 
 void ClientSender::run() {

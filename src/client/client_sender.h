@@ -1,10 +1,13 @@
+#include "../common/common_queue.h"
 #include "../common/common_socket.h"
 #include "../common/common_thread.h"
-#include "../common/common_queue.h"
-#include "client_protocol.h"
 #include "commands/client_command.h"
+#include "client_protocol.h"
 
-class ClientSender : public Thread {
+#include <memory>
+#include <vector>
+
+class ClientSender: public Thread {
 
 private:
     ClientProtocol& protocol;

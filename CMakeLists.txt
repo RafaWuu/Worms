@@ -54,6 +54,9 @@ add_executable(client
 	src/common/common_baseprotocol.cpp
 	src/client/commands/client_move.cpp
 	src/client/commands/client_command.cpp
+	src/client/commands/client_stop_moving.cpp
+	src/client/game/estado_juego.cpp
+	src/client/game/worm.cpp
 	# lobby QT
 	src/client/lobby/join_game_dialog.cpp
 	src/client/lobby/mainwindow.cpp

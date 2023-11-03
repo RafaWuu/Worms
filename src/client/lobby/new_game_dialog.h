@@ -7,12 +7,11 @@ namespace Ui {
 class NewGameDialog;
 }
 
-class NewGameDialog : public QDialog
-{
+class NewGameDialog: public QDialog {
     Q_OBJECT
 
 public:
-    explicit NewGameDialog(QWidget *parent = nullptr);
+    explicit NewGameDialog(QWidget* parent = nullptr);
     ~NewGameDialog();
 
 private slots:
@@ -20,7 +19,7 @@ private slots:
     void on_play_clicked();
 
 private:
-    Ui::NewGameDialog *ui;
+    Ui::NewGameDialog* ui;
 };
 
-#endif // NEW_GAME_DIALOG_H
+#endif  // NEW_GAME_DIALOG_H

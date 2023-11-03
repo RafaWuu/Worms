@@ -1,12 +1,8 @@
 #include "client_command.h"
 #include <vector>
 
-class Move: public Command {
-private:
-    int dir;
-
+class StopMoving : public Command {
 public:
-    enum Direction { Left = 1, Right = 2 };
-    explicit Move(int dir);
+    StopMoving();
     std::vector<uint8_t> serialize(ClientProtocol& protocol) override;
 };

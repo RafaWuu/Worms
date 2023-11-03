@@ -1,8 +1,9 @@
 #ifndef COMMON_COMMAND_H
 #define COMMON_COMMAND_H
 
-#include <vector>
 #include <string>
+#include <vector>
+
 #include "../client_protocol.h"
 
 class Command {

@@ -7,12 +7,11 @@ namespace Ui {
 class JoinGameDialog;
 }
 
-class JoinGameDialog : public QDialog
-{
+class JoinGameDialog: public QDialog {
     Q_OBJECT
 
 public:
-    explicit JoinGameDialog(QWidget *parent = nullptr);
+    explicit JoinGameDialog(QWidget* parent = nullptr);
     ~JoinGameDialog();
 
 private slots:
@@ -20,7 +19,7 @@ private slots:
     void on_join_clicked();
 
 private:
-    Ui::JoinGameDialog *ui;
+    Ui::JoinGameDialog* ui;
 };
 
-#endif // JOIN_GAME_DIALOG_H
+#endif  // JOIN_GAME_DIALOG_H
