@@ -3,8 +3,9 @@
 #include <string>
 
 #include "client_client.h"
-
-int main(int argc, char const* argv[]) {
+#include "lobby/mainwindow.h"
+#include <QApplication>
+int main(int argc, char *argv[]) {
 
     if (argc != 3)
     {
@@ -13,6 +14,11 @@ int main(int argc, char const* argv[]) {
     }
     
     Client client(argv[1], argv[2]);
+    // lobby QT
+		QApplication app(argc, argv);
+		MainWindow w; // pasar ref de client y manejar desde lobby (crear/unir)
+		w.show();
+		app.exec();
 
     return client.start();
 }

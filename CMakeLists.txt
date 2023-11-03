@@ -13,6 +13,8 @@ cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
 project(worms LANGUAGES CXX)
 
 find_package(SDL2pp REQUIRED)
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
 set(BOX2D_LIBRARY_PATH "${CMAKE_SOURCE_DIR}/libbox2d.a")  
 set(BOX2D_INCLUDE_PATH "${CMAKE_SOURCE_DIR}/Box2D") 
@@ -22,7 +24,22 @@ set(CMAKE_CXX_STANDARD 17)
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
 include_directories(${SDL2PP_INCLUDE_DIRS})
 include_directories(PRIVATE ${BOX2D_INCLUDE_PATH})
+# Find the QtWidgets library
 
+qt5_wrap_ui(UIS_HEADERS
+  src/client/lobby/join_game_dialog.ui
+  src/client/lobby/mainwindow.ui 
+  src/client/lobby/new_game_dialog.ui
+)
+# Habilito el automoc para poder hacer autoconnect de señales
+set(CMAKE_AUTOMOC on)
+# Habilito autorcc para manejar automaticamente los QResources
+set(CMAKE_AUTORCC ON)
+
+message("Headers generados: ${UIS_HEADERS}")
+# Agrego la carpeta con los headers autogenerados a los includes
+message("Agregando '${PROJECT_BINARY_DIR}' como directorio de includes")
+include_directories(${PROJECT_BINARY_DIR})
 
 add_executable(client 
 	src/client/client_main.cpp
@@ -37,6 +54,11 @@ add_executable(client
 	src/common/common_baseprotocol.cpp
 	src/client/commands/client_move.cpp
 	src/client/commands/client_command.cpp
+	# lobby QT
+	src/client/lobby/join_game_dialog.cpp
+	src/client/lobby/mainwindow.cpp
+	src/client/lobby/new_game_dialog.cpp
+	${UIS_HEADERS}
 )
 
 add_executable(server
@@ -68,7 +90,11 @@ target_include_directories(client PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/common
     ${CMAKE_CURRENT_SOURCE_DIR}/src/client
     ${CMAKE_CURRENT_SOURCE_DIR}/src/server
+
 )
 
 # define targets
-target_link_libraries(client PUBLIC ${BOX2D_LIBRARY_PATH}  SDL2pp::SDL2pp)
+target_link_libraries(client PUBLIC ${BOX2D_LIBRARY_PATH}  
+					SDL2pp::SDL2pp 
+					Qt5::Widgets
+					Qt5::Core)

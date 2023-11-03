@@ -53,6 +53,7 @@ void Client::kill() {
 }
 
 int Client::start() {
+
     int frame_delay = 1000 / 60;
 
     SDL sdl(SDL_INIT_VIDEO); //--->crear clase que maneje la vista
