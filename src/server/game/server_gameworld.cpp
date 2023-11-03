@@ -121,17 +121,19 @@ Worm* GameWorld::get_worm(uint8_t worm_id) {
 std::vector<WormInfo> GameWorld::get_worms_info() {
     std::vector<WormInfo> w;
 
-    std::transform(worm_map.begin(), worm_map.end(), w.begin(),
-                   [](const auto& worm_pair) { return WormInfo(worm_pair.second); });
+    for(auto& worm: worm_map){
+        w.emplace_back(worm.second);
+    }
 
     return std::move(w);
 }
 
 std::vector<BeamInfo> GameWorld::get_beams_info() {
     std::vector<BeamInfo> b;
-
-    std::transform(beam_vec.begin(), beam_vec.end(), b.begin(),
-                   [](const auto& g) { return BeamInfo(g); });
+        
+    for(auto& beam: beam_vec){
+        b.emplace_back(beam);
+    }
 
     return std::move(b);
 }
