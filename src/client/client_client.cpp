@@ -29,8 +29,7 @@ Client::Client(const std::string& hostname, const std::string& servicename):
     sender = new ClientSender(protocol, messages_to_send);
     receiver = new ClientReceiver(protocol, messages_received);
 
-    sender->start();
-    receiver->start();
+
 }
 
 Client::~Client() { kill(); }
@@ -49,19 +48,26 @@ void Client::kill() {
     delete sender;
     delete receiver;
 }
-
-void Client::crear_partida(std::string& escenario) {
+// lobby
+LobbyState Client::crear_partida(std::string& escenario) {
     protocol.send_create_game(escenario);
-    try {
-        int16_t id = protocol.receive_confirmation_create();
-        std::cout << "El id es " << id << std::endl;
-    } catch (ErrorLobby& e) {
-        throw(e);
-    }
+    return protocol.receive_confirmation();
+}
+LobbyState Client::join_game(int& id) {
+    protocol.send_join_game(id);
+    return protocol.receive_confirmation();
+}
+LobbyState Client::request_game_list() {
+    protocol.request_game_list();
+    return protocol.receive_game_list();
 }
 
+void Client::start_game(){
+    protocol.send_start_game();
+}
 int Client::start() {
-
+    sender->start();
+    receiver->start();
     int frame_delay = 1000 / 60;
 
     SDL sdl(SDL_INIT_VIDEO);  //--->crear clase que maneje la vista

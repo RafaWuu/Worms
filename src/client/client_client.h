@@ -44,7 +44,10 @@ public:
     void kill();
     int start();
 
-    void crear_partida(std::string& escenario);
+    LobbyState crear_partida(std::string& escenario);
+    LobbyState join_game(int& id);
+    LobbyState request_game_list();
+    void start_game();
 
     void move_left();
     void move_right();

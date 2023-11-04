@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>531</width>
+    <height>389</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,8 +16,8 @@
   <widget class="QPushButton" name="join">
    <property name="geometry">
     <rect>
-     <x>240</x>
-     <y>210</y>
+     <x>400</x>
+     <y>310</y>
      <width>89</width>
      <height>25</height>
     </rect>
@@ -29,10 +29,10 @@
   <widget class="QLabel" name="msg_validacion">
    <property name="geometry">
     <rect>
-     <x>40</x>
-     <y>160</y>
+     <x>100</x>
+     <y>310</y>
      <width>281</width>
-     <height>17</height>
+     <height>21</height>
     </rect>
    </property>
    <property name="text">
@@ -42,9 +42,9 @@
   <widget class="QTextEdit" name="id_partida">
    <property name="geometry">
     <rect>
-     <x>140</x>
-     <y>110</y>
-     <width>211</width>
+     <x>170</x>
+     <y>250</y>
+     <width>321</width>
      <height>31</height>
     </rect>
    </property>
@@ -52,8 +52,8 @@
   <widget class="QLabel" name="label_escenario">
    <property name="geometry">
     <rect>
-     <x>50</x>
-     <y>120</y>
+     <x>80</x>
+     <y>260</y>
      <width>67</width>
      <height>17</height>
     </rect>
@@ -63,6 +63,16 @@
    </property>
    <property name="alignment">
     <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
+  <widget class="QListView" name="game_list">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>20</y>
+     <width>461</width>
+     <height>201</height>
+    </rect>
    </property>
   </widget>
  </widget>

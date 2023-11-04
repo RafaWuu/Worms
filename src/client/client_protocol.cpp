@@ -12,7 +12,7 @@
 #include <string.h>
 
 #include "game/estado_juego.h"
-
+#include "lobby/lobby_state.h"
 #define SUCCESS 0
 #define FAILURE 1
 
@@ -22,11 +22,17 @@
 #define LOBBY_SENDING 88
 
 #define CREATE_CODE 1
+#define JOIN_CODE 2
+#define GAME_LIST_CODE 3
+
+#define START_GAME_CODE 1
+
 #define MOVE_CODE 1
 #define STOP_MOVE 3
 
-ClientProtocol::ClientProtocol(Socket socket): BaseProtocol(std::move(socket)) {}
 
+ClientProtocol::ClientProtocol(Socket socket): BaseProtocol(std::move(socket)) {}
+// lobby
 void ClientProtocol::send_create_game(std::string& escenario) {
     send_1byte_number(LOBBY_SENDING);
     send_1byte_number(CREATE_CODE);
@@ -37,13 +43,13 @@ void ClientProtocol::send_create_game(std::string& escenario) {
     send_char_vector(nombre_escenario);
 }
 
-int16_t ClientProtocol::receive_confirmation_create() {
+LobbyState ClientProtocol::receive_confirmation() {
     // error 
     // 89 01 x -> x 1byte (code de error)
 
     // partida creada/ unida correctamente
     // 89 02 id -> id 2 bytes 
-
+    LobbyState l;
     uint8_t lobby_receive_code;
     recv_1byte_number(lobby_receive_code);
 
@@ -51,17 +57,62 @@ int16_t ClientProtocol::receive_confirmation_create() {
     recv_1byte_number(action_code);
     if (action_code == 1) {
         uint8_t error_code;
-        recv_1byte_number(error_code);
+        recv_1byte_number(error_code); // no deberia chequear quien lo llama?
         throw ErrorLobby();
     }
 
     uint16_t id;
     recv_2byte_number(id);
 
-    int16_t id_ = id;
-    return id_;
+    l.id = id;
+    return l;
+}
+void ClientProtocol::send_join_game(int& id){
+    send_1byte_number(LOBBY_SENDING);
+    send_1byte_number(JOIN_CODE);
+    send_1byte_number(id);
 }
 
+void ClientProtocol::request_game_list(){
+    send_1byte_number(LOBBY_SENDING);
+    send_1byte_number(GAME_LIST_CODE);
+}
+LobbyState ClientProtocol::receive_game_list(){
+    LobbyState l;
+
+    uint8_t lobby_receive_code;
+    recv_1byte_number(lobby_receive_code);
+
+    uint8_t action_code;
+    recv_1byte_number(action_code);
+
+    uint16_t games_list_size;
+    recv_2byte_number(games_list_size);
+
+    for (int i = 0; i < games_list_size; i++) {
+
+        uint16_t game_id;
+        recv_2byte_number(game_id);
+
+        uint16_t scenario_len;
+        recv_2byte_number(game_id);
+
+        std::vector<char> buff(scenario_len);
+        recv_char_vector(buff);
+
+        std::string scenario(scenario.begin(), scenario.end());
+
+        std::pair<uint16_t, std::string> partida(game_id, scenario);
+        l.game_list.emplace_back(partida);
+    }
+
+    return l;
+}
+void ClientProtocol::send_start_game() {
+    send_1byte_number(GAME_SENDING);
+    send_1byte_number(START_GAME_CODE);
+}
+// game
 void ClientProtocol::recv_worm(std::vector<Worm>& worms) {
     uint8_t id;
     float x;

@@ -15,10 +15,17 @@ int main(int argc, char* argv[]) {
 
     Client client(argv[1], argv[2]);
     // lobby QT
-    QApplication app(argc, argv);
-    MainWindow w(client);  // pasar ref de client y manejar desde lobby (crear/unir)
-    w.show();
-    app.exec();
-
+    try
+    {   
+        QApplication app(argc, argv);
+        MainWindow w(client);
+        w.show();
+        if(app.exec() == 1) return 1;
+    }
+    catch(const std::exception& e)
+    {   //debug
+        std::cerr << e.what() << std::endl;
+    }
+    
     return client.start();
 }

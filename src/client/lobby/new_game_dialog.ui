@@ -17,7 +17,7 @@
    <property name="geometry">
     <rect>
      <x>50</x>
-     <y>140</y>
+     <y>130</y>
      <width>67</width>
      <height>17</height>
     </rect>
@@ -29,8 +29,8 @@
   <widget class="QTextEdit" name="nom_escenario">
    <property name="geometry">
     <rect>
-     <x>150</x>
-     <y>130</y>
+     <x>130</x>
+     <y>120</y>
      <width>211</width>
      <height>31</height>
     </rect>
@@ -40,9 +40,9 @@
    <property name="geometry">
     <rect>
      <x>60</x>
-     <y>180</y>
+     <y>166</y>
      <width>281</width>
-     <height>17</height>
+     <height>31</height>
     </rect>
    </property>
    <property name="text">
@@ -59,30 +59,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>Play</string>
-   </property>
-  </widget>
-  <widget class="QTextEdit" name="id_partida">
-   <property name="geometry">
-    <rect>
-     <x>150</x>
-     <y>90</y>
-     <width>211</width>
-     <height>31</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_id">
-   <property name="geometry">
-    <rect>
-     <x>50</x>
-     <y>100</y>
-     <width>67</width>
-     <height>17</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>ID</string>
+    <string>Create</string>
    </property>
   </widget>
  </widget>

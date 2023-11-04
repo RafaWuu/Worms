@@ -9,6 +9,7 @@
 #include "../common/common_baseprotocol.h"
 #include "../common/common_socket.h"
 #include "game/estado_juego.h"
+#include "lobby/lobby_state.h"
 
 struct ErrorLobby: public std::runtime_error {
     ErrorLobby(): std::runtime_error("Error occurred joining/creating game") {}
@@ -26,8 +27,13 @@ public:
     void recv_worm(std::vector<Worm>& worms);
 
     void send_create_game(std::string& escenario);
+    void send_join_game(int& id);
+    LobbyState receive_confirmation();
 
-    int16_t receive_confirmation_create();
+    void request_game_list();
+    LobbyState receive_game_list(); 
+
+    void send_start_game();
 
     /* Shutdown y close del socket */
     void close();

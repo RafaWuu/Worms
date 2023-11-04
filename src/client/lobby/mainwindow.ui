@@ -31,7 +31,7 @@
     <property name="geometry">
      <rect>
       <x>60</x>
-      <y>350</y>
+      <y>300</y>
       <width>221</width>
       <height>61</height>
      </rect>
@@ -54,6 +54,19 @@
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="start_game">
+    <property name="geometry">
+     <rect>
+      <x>60</x>
+      <y>400</y>
+      <width>221</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Start</string>
     </property>
    </widget>
   </widget>
