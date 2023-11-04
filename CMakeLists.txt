@@ -63,6 +63,8 @@ add_executable(client
 	src/client/lobby/mainwindow.cpp
 	src/client/lobby/new_game_dialog.cpp
 	${UIS_HEADERS}
+        src/common/common_log.cpp
+        src/common/common_log.h
 )
 
 add_executable(server
@@ -89,14 +91,16 @@ add_executable(server
 	src/server/game/server_statusbroadcast_monitor.cpp
 	src/server/game/server_event_handler.cpp
 	src/server/game/server_gamestatus.cpp
-	src/server/game/server_worm.cpp
+        src/server/game/entities/server_worm.cpp
 	src/server/game/server_gameworld.cpp
 	src/server/game/server_scenario_file_handler.cpp
-	src/server/game/server_beam.cpp
-	src/server/game/server_worm_info.cpp
-	src/server/game/server_worm_info.h
-	src/server/game/server_beam_info.cpp
-	src/server/game/server_beam_info.h
+        src/server/game/entities/server_beam.cpp
+        src/server/game/entities/server_worm_info.cpp
+        src/server/game/entities/server_worm_info.h
+        src/server/game/entities/server_beam_info.cpp
+        src/server/game/entities/server_beam_info.h
+        src/common/common_log.cpp
+        src/common/common_log.h
 
 )
 

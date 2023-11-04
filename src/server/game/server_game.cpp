@@ -34,20 +34,25 @@ void Game::run() {
     while (is_alive) {
         try {
             std::shared_ptr<GameEvent> event;
-            bool queue_is_empty = !event_queue.try_pop(event);
+            size_t n_events = event_queue.get_size();
 
-            while (!queue_is_empty) {
-                event->execute(this->eventHandler);
-                queue_is_empty = !event_queue.try_pop(event);
+            for (size_t i = 0; i < n_events; ++i) {
+                bool queue_is_empty = !event_queue.try_pop(event);
+
+                if (!queue_is_empty) {
+                    event->execute(this->eventHandler);
+                }
             }
 
             if (had_started) {
                 game_world.update_worms();
-                game_world.step(120);
+                game_world.step(30);
 
                 broadcastMonitor.send_status_toall(
                         std::make_shared<GameStatusRunning>(0, game_world));
             }
+
+            std::this_thread::sleep_for(std::chrono::milliseconds(500));
 
         } catch (ClosedSocket& e) {
             is_alive = false;

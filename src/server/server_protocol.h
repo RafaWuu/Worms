@@ -11,9 +11,11 @@
 
 #include "../common/common_baseprotocol.h"
 #include "../common/common_socket.h"
-#include "game/server_beam_info.h"
+#include "game/entities/server_beam_info.h"
+#include "game/entities/server_worm_info.h"
 #include "game/server_gameinfo.h"
-#include "game/server_worm_info.h"
+
+#include "common_log.h"
 
 struct InvalidMsg: public std::runtime_error {
     InvalidMsg(): std::runtime_error("The message is invalid") {}
@@ -23,6 +25,9 @@ class LobbyRequest;
 class GameEvent;
 
 class ServerProtocol: public BaseProtocol {
+protected:
+    Log& getLog();
+
 private:
     std::unique_ptr<LobbyRequest> recv_create_game();
     std::unique_ptr<LobbyRequest> recv_join_game();

@@ -5,8 +5,9 @@
 #ifndef WORMS_SERVER_WORM_H
 #define WORMS_SERVER_WORM_H
 
+#include "game/server_move.h"
+
 #include "b2_body.h"
-#include "server_move.h"
 
 class Worm {
 private:

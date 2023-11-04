@@ -10,12 +10,12 @@
 #include <vector>
 
 #include "../../Box2D/b2_world.h"
+#include "game/entities/server_beam.h"
+#include "game/entities/server_beam_info.h"
+#include "game/entities/server_worm.h"
+#include "game/entities/server_worm_info.h"
 
-#include "server_beam.h"
-#include "server_beam_info.h"
 #include "server_scenario_file_handler.h"
-#include "server_worm.h"
-#include "server_worm_info.h"
 
 class GameWorld {
 private:

@@ -11,9 +11,8 @@
 #include "../../Box2D/b2_body.h"
 #include "../../Box2D/b2_fixture.h"
 #include "../../Box2D/b2_polygon_shape.h"
-
-#include "server_beam_info.h"
-#include "server_worm_info.h"
+#include "entities/server_beam_info.h"
+#include "entities/server_worm_info.h"
 
 GameWorld::GameWorld(const std::string& scenario_name):
         b2_world(b2Vec2(.0, -9.8)), worm_map(), beam_vec(), file_handler(scenario_name) {
@@ -121,7 +120,8 @@ Worm* GameWorld::get_worm(uint8_t worm_id) {
 std::vector<WormInfo> GameWorld::get_worms_info() {
     std::vector<WormInfo> w;
 
-    for(auto& worm: worm_map){
+    for (auto& worm: worm_map) {
+        //  cppcheck-suppress useStlAlgorithm
         w.emplace_back(worm.second);
     }
 
@@ -130,8 +130,9 @@ std::vector<WormInfo> GameWorld::get_worms_info() {
 
 std::vector<BeamInfo> GameWorld::get_beams_info() {
     std::vector<BeamInfo> b;
-        
-    for(auto& beam: beam_vec){
+
+    for (auto& beam: beam_vec) {
+        // cppcheck-suppress useStlAlgorithm
         b.emplace_back(beam);
     }
 

@@ -9,10 +9,10 @@
 #include <stdexcept>
 #include <vector>
 
-#include "game/server_beam_info.h"
+#include "game/entities/server_beam_info.h"
+#include "game/entities/server_worm_info.h"
 #include "game/server_gameevent.h"
 #include "game/server_gameinfo.h"
-#include "game/server_worm_info.h"
 #include "lobby/server_lobby_request.h"
 
 #include "server_protocol_constants.h"
@@ -47,6 +47,8 @@ std::unique_ptr<LobbyRequest> ServerProtocol::recv_lobby_msg() {
         case Request::JOIN_GAME:
             return recv_join_game();
         case Request::LIST_GAMES:
+            getLog().write("Server recibe pedido de listar partidas");
+
             return std::make_unique<LobbyRequestListGames>();
         default:
             return nullptr;
@@ -61,12 +63,16 @@ std::unique_ptr<LobbyRequest> ServerProtocol::recv_create_game() {
     recv_char_vector(v);
 
     std::string s(v.data(), l);
+    getLog().write("Server recibe creacion de partida, escenario %s\n", s.c_str());
+
     return std::make_unique<LobbyRequestNewGame>(s);
 }
 
 std::unique_ptr<LobbyRequest> ServerProtocol::recv_join_game() {
     uint16_t id;
     recv_2byte_number(id);
+    getLog().write("Server recibe union a partida, id %hu\n", id);
+
     return std::make_unique<LobbyRequestJoinGame>(id);
 }
 
@@ -74,12 +80,16 @@ void ServerProtocol::send_lobby_errormessage(uint8_t error_code) {
     send_1byte_number(LOBBY_SENDING);
     send_1byte_number(LOBBY_ERROR);
     send_1byte_number(error_code);
+
+    getLog().write("Server enviando codigo de error %hhu \n", error_code);
 }
 
 void ServerProtocol::send_gameid_message(uint16_t game_id) {
     send_1byte_number(LOBBY_SENDING);
     send_1byte_number(LOBBY_GAMEJOINING);
     send_2byte_number(game_id);
+
+    getLog().write("Server enviando id de partidas %hu \n", game_id);
 }
 
 void ServerProtocol::send_gameslist(std::vector<GameInfo>& games_vec) {
@@ -87,6 +97,8 @@ void ServerProtocol::send_gameslist(std::vector<GameInfo>& games_vec) {
     send_1byte_number(LOBBY_GAMELISTING);
 
     send_2byte_number(games_vec.size());
+
+    getLog().write("Server enviando lista de %hu partidas \n", games_vec.size());
 
     for (auto& game: games_vec) {
         send_2byte_number(game.id);
@@ -109,6 +121,10 @@ std::unique_ptr<GameEvent> ServerProtocol::recv_game_msg(uint16_t id_client) {
 
     switch (status) {
         case Event::START_GAME:
+            getLog().write("Server recibiendo de  %hu "
+                           "pedido de iniciar partida \n",
+                           id_client);
+
             return std::make_unique<GameEventStartGame>(id_client);
         case Event::MOVE:
             return recv_move(id_client);
@@ -124,6 +140,10 @@ std::unique_ptr<GameEvent> ServerProtocol::recv_move(uint16_t id_client) {
     recv_1byte_number(code);
 
     MovementEnum type = serialize_move(code);
+
+    getLog().write("Server recibiendo de  %hu "
+                   "pedido de mover %hhu. code(%hhu)\n",
+                   id_client, id_worm, code);
 
     return std::make_unique<GameEventMove>(id_client, id_worm, type);
 }
@@ -170,18 +190,20 @@ void ServerProtocol::send_scenario(std::vector<BeamInfo>& beams_vec,
         send_1byte_number(worm.state);
         send_1byte_number(worm.health);
     }
+    getLog().write("Server enviando escenario \n");
 }
 
 void ServerProtocol::send_worms_list(std::vector<WormInfo>& worms_vec) {
     send_1byte_number(GAME_SENDING);
     send_1byte_number(GAME_LIST_WORMS);
 
-    send_1byte_number(worms_vec.size());
+    send_1byte_number((uint8_t)worms_vec.size());
 
     for (auto& worm: worms_vec) {
         send_1byte_number(worm.id);
         send_2byte_number(worm.client_id);
     }
+    getLog().write("Server enviando lista de %hhu gusanos \n", (uint8_t)worms_vec.size());
 }
 
 void ServerProtocol::send_status(uint8_t current_worm, std::vector<WormInfo>& worms_vec) {
@@ -199,4 +221,11 @@ void ServerProtocol::send_status(uint8_t current_worm, std::vector<WormInfo>& wo
         send_1byte_number(worm.state);
         send_1byte_number(worm.health);
     }
+
+    getLog().write("Server enviando estado de partida, %hhu gusanos vivos \n", worms_vec.size());
+}
+
+Log& ServerProtocol::getLog() {
+    static Log log_("../log/serverprotocol_log.txt");
+    return log_;
 }

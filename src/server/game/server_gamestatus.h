@@ -8,10 +8,11 @@
 
 #include <vector>
 
-#include "server_beam_info.h"
+#include "game/entities/server_beam_info.h"
+#include "game/entities/server_worm_info.h"
+
 #include "server_gameworld.h"
 #include "server_protocol.h"
-#include "server_worm_info.h"
 
 class ServerProtocol;
 

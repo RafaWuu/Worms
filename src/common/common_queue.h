@@ -41,6 +41,11 @@ public:
 
     bool is_closed() { return closed; }
 
+    size_t get_size() {
+        std::unique_lock<std::mutex> lck(mtx);
+        return q.size();
+    }
+
     bool try_push(T const& val) {
         std::unique_lock<std::mutex> lck(mtx);
 
@@ -129,6 +134,7 @@ public:
         is_not_empty.notify_all();
     }
 
+
 private:
     Queue(const Queue&) = delete;
     Queue& operator=(const Queue&) = delete;
@@ -149,6 +155,10 @@ private:
 public:
     explicit Queue(const unsigned int max_size): max_size(max_size), closed(false) {}
 
+    size_t get_size() {
+        std::unique_lock<std::mutex> lck(mtx);
+        return q.size();
+    }
 
     bool try_push(void* const& val) {
         std::unique_lock<std::mutex> lck(mtx);

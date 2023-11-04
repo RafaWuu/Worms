@@ -27,7 +27,7 @@
 
 #define START_GAME_CODE 1
 
-#define MOVE_CODE 1
+#define MOVE_CODE 2
 #define STOP_MOVE 3
 
 
@@ -39,16 +39,18 @@ void ClientProtocol::send_create_game(std::string& escenario) {
 
     send_2byte_number(escenario.length());
 
+    getLog().write("Cliente crea partida\n");
+
     std::vector<char> nombre_escenario(escenario.begin(), escenario.end());
     send_char_vector(nombre_escenario);
 }
 
 LobbyState ClientProtocol::receive_confirmation() {
-    // error 
+    // error
     // 89 01 x -> x 1byte (code de error)
 
     // partida creada/ unida correctamente
-    // 89 02 id -> id 2 bytes 
+    // 89 02 id -> id 2 bytes
     LobbyState l;
     uint8_t lobby_receive_code;
     recv_1byte_number(lobby_receive_code);
@@ -57,27 +59,31 @@ LobbyState ClientProtocol::receive_confirmation() {
     recv_1byte_number(action_code);
     if (action_code == 1) {
         uint8_t error_code;
-        recv_1byte_number(error_code); // no deberia chequear quien lo llama?
+        recv_1byte_number(error_code);  // no deberia chequear quien lo llama?
+
+        getLog().write("Cliente recibe error al crear partida\n");
         throw ErrorLobby();
     }
 
     uint16_t id;
     recv_2byte_number(id);
 
+    getLog().write("Cliente recibe creacion de partida %hu exitosa \n", id);
+
     l.id = id;
     return l;
 }
-void ClientProtocol::send_join_game(int& id){
+void ClientProtocol::send_join_game(const int& id) {
     send_1byte_number(LOBBY_SENDING);
     send_1byte_number(JOIN_CODE);
     send_1byte_number(id);
 }
 
-void ClientProtocol::request_game_list(){
+void ClientProtocol::request_game_list() {
     send_1byte_number(LOBBY_SENDING);
     send_1byte_number(GAME_LIST_CODE);
 }
-LobbyState ClientProtocol::receive_game_list(){
+LobbyState ClientProtocol::receive_game_list() {
     LobbyState l;
 
     uint8_t lobby_receive_code;
@@ -100,7 +106,7 @@ LobbyState ClientProtocol::receive_game_list(){
         std::vector<char> buff(scenario_len);
         recv_char_vector(buff);
 
-        std::string scenario(scenario.begin(), scenario.end());
+        std::string scenario(buff.begin(), buff.end());
 
         std::pair<uint16_t, std::string> partida(game_id, scenario);
         l.game_list.emplace_back(partida);
@@ -128,6 +134,8 @@ void ClientProtocol::recv_worm(std::vector<Worm>& worms) {
 
     Worm worm(id, x, y, state, health);
     worms.push_back(worm);
+
+    getLog().write("Cliente recibe gusano: id %hhu \n", id);
 }
 
 EstadoJuego ClientProtocol::recv_msg() {
@@ -145,6 +153,8 @@ EstadoJuego ClientProtocol::recv_msg() {
         recv_worm(worms);
     }
 
+    getLog().write("Cliente recibe estado de partida: %hhu gusanos vivos \n", worms_number);
+
     EstadoJuego estado(worms);
     return estado;
 }
@@ -153,12 +163,23 @@ std::vector<uint8_t> ClientProtocol::serialize_move(int dir) {
     uint8_t direction = dir;
 
     // Falta enviar el worm_id
-    std::vector<uint8_t> serialized_command = {GAME_SENDING, MOVE_CODE, direction};
+    std::vector<uint8_t> serialized_command = {GAME_SENDING, MOVE_CODE, 0, direction};
+
+    getLog().write("Cliente serializando movimiento %hhu \n", direction);
+
     return serialized_command;
 }
 
 std::vector<uint8_t> ClientProtocol::serialize_stop_move() {
     // Falta enviar el worm_id
-    std::vector<uint8_t> serialized_command = {GAME_SENDING, MOVE_CODE, STOP_MOVE};
+    std::vector<uint8_t> serialized_command = {GAME_SENDING, MOVE_CODE, 0, STOP_MOVE};
+
+    getLog().write("Cliente serializando movimiento %hhu \n", STOP_MOVE);
+
     return serialized_command;
+}
+
+Log& ClientProtocol::getLog() {
+    static Log log_("../log/clientprotocol_log.txt");
+    return log_;
 }

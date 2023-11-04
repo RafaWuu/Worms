@@ -13,7 +13,7 @@ void Sender::run() {
     while (is_alive) {
         try {
             auto status = outgoing_q.pop();
-            status.get()->serialize(game_protocol);
+            status->serialize(game_protocol);
 
         } catch (ClosedSocket& e) {
             is_alive = false;
