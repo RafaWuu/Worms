@@ -50,6 +50,16 @@ void Client::kill() {
     delete receiver;
 }
 
+void Client::crear_partida(std::string& escenario) {
+    protocol.send_create_game(escenario);
+    try {
+        int16_t id = protocol.receive_confirmation_create();
+        std::cout << "El id es " << id << std::endl;
+    } catch (ErrorLobby& e) {
+        throw(e);
+    }
+}
+
 int Client::start() {
 
     int frame_delay = 1000 / 60;

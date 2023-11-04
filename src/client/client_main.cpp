@@ -16,7 +16,7 @@ int main(int argc, char* argv[]) {
     Client client(argv[1], argv[2]);
     // lobby QT
     QApplication app(argc, argv);
-    MainWindow w;  // pasar ref de client y manejar desde lobby (crear/unir)
+    MainWindow w(client);  // pasar ref de client y manejar desde lobby (crear/unir)
     w.show();
     app.exec();
 

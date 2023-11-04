@@ -1,3 +1,6 @@
+#ifndef CLIENT_SENDER_H
+#define CLIENT_SENDER_H
+
 #include "../common/common_queue.h"
 #include "../common/common_socket.h"
 #include "../common/common_thread.h"
@@ -25,3 +28,5 @@ public:
     bool is_dead();
     void kill();
 };
+
+#endif

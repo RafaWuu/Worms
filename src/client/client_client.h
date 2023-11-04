@@ -1,3 +1,6 @@
+#ifndef CLIENT_CLIENT_H
+#define CLIENT_CLIENT_H
+
 #include <string>
 
 #include <SDL2pp/SDL2pp.hh>
@@ -39,9 +42,13 @@ public:
     void render(SDL2pp::Renderer& renderer);
 
     void kill();
-
     int start();
+
+    void crear_partida(std::string& escenario);
+
     void move_left();
     void move_right();
     void stop_moving();
 };
+
+#endif

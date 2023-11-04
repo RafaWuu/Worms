@@ -2,8 +2,8 @@
 
 #include "./ui_mainwindow.h"
 
-MainWindow::MainWindow(QWidget* parent):
-        QMainWindow(parent), ui(new Ui::MainWindow), new_game(nullptr), join_game(nullptr) {
+MainWindow::MainWindow(Client& client, QWidget* parent):
+        QMainWindow(parent), client(client), ui(new Ui::MainWindow), new_game(nullptr), join_game(nullptr) {
     ui->setupUi(this);
 }
 
@@ -16,7 +16,7 @@ MainWindow::~MainWindow() {
 }
 void MainWindow::closeEvent(QCloseEvent* event) { QApplication::exit(1); }
 void MainWindow::on_new_game_button_clicked() {
-    new_game = new NewGameDialog();
+    new_game = new NewGameDialog(client, this);
     new_game->show();
 }
 

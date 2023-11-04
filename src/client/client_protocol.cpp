@@ -19,10 +19,48 @@
 #define BYTE 1
 
 #define GAME_SENDING 86
+#define LOBBY_SENDING 88
+
+#define CREATE_CODE 1
 #define MOVE_CODE 1
 #define STOP_MOVE 3
 
 ClientProtocol::ClientProtocol(Socket socket): BaseProtocol(std::move(socket)) {}
+
+void ClientProtocol::send_create_game(std::string& escenario) {
+    send_1byte_number(LOBBY_SENDING);
+    send_1byte_number(CREATE_CODE);
+
+    send_2byte_number(escenario.length());
+
+    std::vector<char> nombre_escenario(escenario.begin(), escenario.end());
+    send_char_vector(nombre_escenario);
+}
+
+int16_t ClientProtocol::receive_confirmation_create() {
+    // error 
+    // 89 01 x -> x 1byte (code de error)
+
+    // partida creada/ unida correctamente
+    // 89 02 id -> id 2 bytes 
+
+    uint8_t lobby_receive_code;
+    recv_1byte_number(lobby_receive_code);
+
+    uint8_t action_code;
+    recv_1byte_number(action_code);
+    if (action_code == 1) {
+        uint8_t error_code;
+        recv_1byte_number(error_code);
+        throw ErrorLobby();
+    }
+
+    uint16_t id;
+    recv_2byte_number(id);
+
+    int16_t id_ = id;
+    return id_;
+}
 
 void ClientProtocol::recv_worm(std::vector<Worm>& worms) {
     uint8_t id;
