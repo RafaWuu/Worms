@@ -28,8 +28,6 @@ Client::Client(const std::string& hostname, const std::string& servicename):
 
     sender = new ClientSender(protocol, messages_to_send);
     receiver = new ClientReceiver(protocol, messages_received);
-
-
 }
 
 Client::~Client() { kill(); }
@@ -62,9 +60,9 @@ LobbyState Client::request_game_list() {
     return protocol.receive_game_list();
 }
 
-void Client::start_game(){
-    protocol.send_start_game();
-}
+Scenario Client::receive_scenario() { return protocol.receive_scenario(); }
+
+void Client::start_game() { protocol.send_start_game(); }
 int Client::start() {
     sender->start();
     receiver->start();

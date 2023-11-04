@@ -13,6 +13,7 @@
 #include "client_protocol.h"
 #include "client_receiver.h"
 #include "client_sender.h"
+#include "game/scenario.h"
 #include <memory>
 
 
@@ -47,6 +48,7 @@ public:
     LobbyState crear_partida(std::string& escenario);
     LobbyState join_game(int& id);
     LobbyState request_game_list();
+    Scenario receive_scenario();
     void start_game();
 
     void move_left();

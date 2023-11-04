@@ -18,6 +18,8 @@
 
 #define BYTE 1
 
+#define GAME_RECEIVING 87
+#define LOBBY_RECEIVING 89
 #define GAME_SENDING 86
 #define LOBBY_SENDING 88
 
@@ -73,6 +75,50 @@ LobbyState ClientProtocol::receive_confirmation() {
     l.id = id;
     return l;
 }
+
+void ClientProtocol::receive_beam(std::vector<Beam> beams) {
+    float x;
+    float y;
+    float height;
+    float width;
+    float angle;
+
+    recv_4byte_float(x);
+    recv_4byte_float(y);
+    recv_4byte_float(height);
+    recv_4byte_float(width);
+    recv_4byte_float(angle);
+
+    Beam beam(x, y, height, width, angle);
+    beams.push_back(beam);
+
+    getLog().write("Cliente recibe beam. x=%lf y=%lf\n", x, y);
+}
+
+Scenario ClientProtocol::receive_scenario() {
+    uint8_t game_receiving_code;
+    uint8_t scenario_receiving_code;
+    recv_1byte_number(game_receiving_code);
+    recv_1byte_number(scenario_receiving_code);
+
+    uint8_t beams_number;
+    recv_1byte_number(beams_number);
+    std::vector<Beam> beams;
+    for (int i = 0; i < beams_number; i++) {
+        receive_beam(beams);
+    }
+
+    uint8_t worms_number;
+    recv_1byte_number(worms_number);
+    std::vector<Worm> worms;
+    for (int i = 0; i < worms_number; i++) {
+        receive_worm(worms);
+    }
+
+    Scenario scenario(beams, worms);
+    return scenario;
+}
+
 void ClientProtocol::send_join_game(const int& id) {
     send_1byte_number(LOBBY_SENDING);
     send_1byte_number(JOIN_CODE);
@@ -119,7 +165,7 @@ void ClientProtocol::send_start_game() {
     send_1byte_number(START_GAME_CODE);
 }
 // game
-void ClientProtocol::recv_worm(std::vector<Worm>& worms) {
+void ClientProtocol::receive_worm(std::vector<Worm>& worms) {
     uint8_t id;
     float x;
     float y;
@@ -150,7 +196,7 @@ EstadoJuego ClientProtocol::recv_msg() {
     uint8_t worms_number;
     recv_1byte_number(worms_number);
     for (int i = 0; i < worms_number; i++) {
-        recv_worm(worms);
+        receive_worm(worms);
     }
 
     getLog().write("Cliente recibe estado de partida: %hhu gusanos vivos \n", worms_number);

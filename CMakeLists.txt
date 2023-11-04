@@ -57,6 +57,8 @@ add_executable(client
 	src/client/commands/client_stop_moving.cpp
 	src/client/game/estado_juego.cpp
 	src/client/game/worm.cpp
+	src/client/game/beam.cpp
+	src/client/game/scenario.cpp
 	src/client/lobby/lobby_state.cpp
 	# lobby QT
 	src/client/lobby/join_game_dialog.cpp

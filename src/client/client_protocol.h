@@ -10,6 +10,7 @@
 #include "../common/common_baseprotocol.h"
 #include "../common/common_socket.h"
 #include "game/estado_juego.h"
+#include "game/scenario.h"
 #include "lobby/lobby_state.h"
 
 #include "common_log.h"
@@ -29,11 +30,15 @@ public:
     std::vector<uint8_t> serialize_stop_move();
 
     EstadoJuego recv_msg();
-    void recv_worm(std::vector<Worm>& worms);
+    void receive_worm(std::vector<Worm>& worms);
 
     void send_create_game(std::string& escenario);
     void send_join_game(const int& id);
     LobbyState receive_confirmation();
+
+    Scenario receive_scenario();
+    void receive_beam(std::vector<Beam> beams);
+
 
     void request_game_list();
     LobbyState receive_game_list();
