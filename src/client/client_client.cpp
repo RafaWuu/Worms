@@ -14,7 +14,7 @@
 
 #include "client_protocol.h"
 
-using SDL2pp;
+using namespace SDL2pp;
 
 #define SUCCESS 0
 #define FAILURE 1
