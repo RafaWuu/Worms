@@ -32,6 +32,14 @@ enum Event {
 
 ServerProtocol::ServerProtocol(Socket skt): BaseProtocol(std::move(skt)) {}
 
+void ServerProtocol::send_lobby_newclient(uint16_t id) {
+    send_1byte_number(LOBBY_SENDING);
+    send_1byte_number(LOBBY_NEWCLIENT);
+    send_2byte_number(id);
+
+    getLog().write("Server enviando id de cliente %hu \n", id);
+}
+
 std::unique_ptr<LobbyRequest> ServerProtocol::recv_lobby_msg() {
     u_int8_t status = 0;
     recv_1byte_number(status);

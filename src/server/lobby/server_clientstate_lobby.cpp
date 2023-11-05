@@ -19,6 +19,7 @@ LobbyClientState::LobbyClientState(uint16_t id, LobbyMonitor& lobby, ServerProto
 std::unique_ptr<ClientState> LobbyClientState::run() {
     while (is_alive) {
         try {
+            gp.send_lobby_newclient(client_id);
             std::unique_ptr<LobbyRequest> request = gp.recv_lobby_msg();
             game = request->execute(lobby, gp, client_id);
 

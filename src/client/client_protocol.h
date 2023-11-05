@@ -1,10 +1,11 @@
 #ifndef CLIENT_PROTOCOL_H
 #define CLIENT_PROTOCOL_H
 
+#include <map>
 #include <stdexcept>
 #include <string>
 #include <vector>
-#include <map>
+
 #include <string.h>
 
 #include "../common/common_baseprotocol.h"
@@ -48,6 +49,8 @@ public:
 
     /* Shutdown y close del socket */
     void close();
+
+    void get_my_id(uint16_t& id);
 };
 
 #endif

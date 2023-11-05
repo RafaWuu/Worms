@@ -1,6 +1,7 @@
 #ifndef CLIENT_CLIENT_H
 #define CLIENT_CLIENT_H
 
+#include <memory>
 #include <string>
 
 #include <SDL2pp/SDL2pp.hh>
@@ -9,12 +10,11 @@
 #include "../common/common_queue.h"
 #include "../common/common_socket.h"
 #include "commands/client_command.h"
+#include "game/scenario.h"
 
 #include "client_protocol.h"
 #include "client_receiver.h"
 #include "client_sender.h"
-#include "game/scenario.h"
-#include <memory>
 
 
 class Client {
@@ -31,10 +31,12 @@ private:
     ClientReceiver* receiver;
 
     uint8_t id_assigned_worm;
-
+    uint16_t my_id;
     // Por ahora que sea un array de chars, despues cambiarlo a una clase propia
     Queue<std::shared_ptr<Command>> messages_to_send;
     Queue<std::shared_ptr<EstadoJuego>> messages_received;
+
+    uint8_t get_id_assigned_worm(std::map<uint8_t, uint16_t>& distribution);
 
 public:
     Client(const std::string& hostname, const std::string& servicename);

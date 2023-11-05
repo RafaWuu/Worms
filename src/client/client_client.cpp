@@ -28,6 +28,8 @@ Client::Client(const std::string& hostname, const std::string& servicename):
 
     sender = new ClientSender(protocol, messages_to_send);
     receiver = new ClientReceiver(protocol, messages_received);
+
+    protocol.get_my_id(my_id);  // Reubicar
 }
 
 Client::~Client() { kill(); }
@@ -60,20 +62,19 @@ LobbyState Client::request_game_list() {
     return protocol.receive_game_list();
 }
 
-Scenario Client::receive_scenario() { 
+Scenario Client::receive_scenario() {
     Scenario received_scenario = protocol.receive_scenario();
     this->scenario = std::make_unique<Scenario>(received_scenario);
 
     // Hace falta que lo devuelva? El Lobby despues lo manejara?
-    return received_scenario; 
+    return received_scenario;
 }
 
-static uint8_t get_id_assigned_worm(std::map<uint8_t, uint16_t>& distribution) {
+uint8_t Client::get_id_assigned_worm(std::map<uint8_t, uint16_t>& distribution) {
     // Cual es el id del cliente? Hardcodeo un 0 por ahora para probarlo
-    uint16_t my_id = 0;
     uint8_t assigned_worm = -1;
-    
-    for (auto pair : distribution) {
+
+    for (auto pair: distribution) {
         if (pair.second == my_id) {
             assigned_worm = pair.first;
             break;
@@ -83,8 +84,8 @@ static uint8_t get_id_assigned_worm(std::map<uint8_t, uint16_t>& distribution) {
     return assigned_worm;
 }
 
-void Client::start_game() { 
-    protocol.send_start_game(); 
+void Client::start_game() {
+    protocol.send_start_game();
 
     // Que worm le corresponde a cada cliente (id_worm, id_client)
     std::map<uint8_t, uint16_t> distribution = protocol.receive_worms_distribution();
@@ -172,10 +173,10 @@ void Client::render(Renderer& renderer) {
         for (int i = 0; i < worms.size(); i++) {
             // Hardcodeado; cada worm deberia hacer su propio render
             // Hay que convertir las posiciones a pixeles
-            float x = worms[i].get_pos_x();
-            float y = worms[i].get_pos_y();
+            uint16_t x = (worms[i].get_pos_x() * 320 / 20) + 320;
+            uint16_t y = (-worms[i].get_pos_y() * 240 / 20) + 240;
             std::cout << "x: " << x << " y: " << y << std::endl;
-            SDL_Rect rect = {x, y, 100, 100};
+            SDL_Rect rect = {x, y, 30, 30};
             SDL_SetRenderDrawColor(renderer.Get(), 255, 0, 0, 255);
             SDL_RenderFillRect(renderer.Get(), &rect);
         }

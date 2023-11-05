@@ -52,7 +52,7 @@ LobbyState ClientProtocol::receive_confirmation() {
     // 89 01 x -> x 1byte (code de error)
 
     // partida creada/ unida correctamente
-    // 89 02 id -> id 2 bytes
+    // 89 03 id -> id 2 bytes
     LobbyState l;
     uint8_t lobby_receive_code;
     recv_1byte_number(lobby_receive_code);
@@ -260,4 +260,15 @@ std::vector<uint8_t> ClientProtocol::serialize_stop_move() {
 Log& ClientProtocol::getLog() {
     static Log log_("../log/clientprotocol_log.txt");
     return log_;
+}
+
+void ClientProtocol::get_my_id(uint16_t& id) {
+    uint8_t lobby_receiving_code;
+    uint8_t id_receiving_code;
+    recv_1byte_number(lobby_receiving_code);
+    recv_1byte_number(id_receiving_code);
+
+    recv_2byte_number(id);
+
+    getLog().write("Cliente recibiendo id %hu \n", id);
 }

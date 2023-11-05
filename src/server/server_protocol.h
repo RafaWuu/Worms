@@ -59,6 +59,8 @@ public:
     void send_worms_list(std::vector<WormInfo>& worms_vec);
 
     void send_game_errormessage(uint8_t code);
+
+    void send_lobby_newclient(uint16_t id);
 };
 
 #endif  // SOCKETS_2023C2_ABRAIDA_SERVER_PROTOCOL_GAMEINTERFACE_H
