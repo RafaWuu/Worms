@@ -39,6 +39,10 @@ Worm::Worm(uint8_t id, b2World* b2world, float pos_x, float pos_y):
     body->CreateFixture(&fixtureDef);
 
     getLog().write("Creando gusano %hhu, x: %f, y %f: \n", id, pos_x, pos_y);
+
+    numFootContacts = 0;
+    remaining_jumpingb_steps = 0;
+    remaining_jumpingf_steps = 0;
 }
 
 void Worm::set_client_id(uint16_t id_) { this->client_id = id_; }
@@ -48,23 +52,24 @@ void Worm::update(b2World* world) {
         jumpTimeout--;
 
     if (remaining_jumpingf_steps > 0) {
-        body->ApplyForce(b2Vec2(15, 25), body->GetWorldCenter(), false);
+        body->ApplyForce(b2Vec2(15, 25), body->GetWorldCenter(), true);
         remaining_jumpingf_steps--;
         return;
     }
 
     if (remaining_jumpingb_steps > 0) {
-        body->ApplyForce(b2Vec2(-25, 15), body->GetWorldCenter(), false);
+        body->ApplyForce(b2Vec2(-25, 15), body->GetWorldCenter(), true);
         remaining_jumpingb_steps--;
         return;
     }
 
     b2Vec2 vel = body->GetLinearVelocity();
-    getLog().write("Gusano %hhu, su velocidad es%f %f\n", id, vel.x, vel.y);
+    getLog().write("Actualizando Gusano %hhu, su velocidad es%f %f\n", id, vel.x, vel.y);
 
     switch (move_state) {
         case Left:
             desiredXVel = -.2;
+            getLog().write("Gusano %hhu, moviendo a la izquierda\n", id);
 
             break;
         case Right:
@@ -97,9 +102,9 @@ void Worm::update(b2World* world) {
 
     float impulse_x = body->GetMass() * velChange_x;
 
-    getLog().write("Gusano %hhu, aplicando impulso %f %f\n", impulse_x, 0);
+    getLog().write("Gusano %hhu, aplicando impulso %f %f\n", id, impulse_x, 0);
 
-    body->ApplyLinearImpulse(b2Vec2(impulse_x, 0), body->GetWorldCenter(), false);
+    body->ApplyLinearImpulse(b2Vec2(impulse_x, 0), body->GetWorldCenter(), true);
 }
 
 void Worm::set_movement(uint16_t id_, MovementEnum move) {
@@ -113,12 +118,11 @@ void Worm::set_movement(uint16_t id_, MovementEnum move) {
                 return;
 
             if (move == JumpB || move == JumpF) {
-                if (numFootContacts < 1)
-                    return;
+
                 if (jumpTimeout > 0)
                     return;
             }
-            getLog().write("Gusano %hhu, aplicando movimiento %%hu\n", id, move);
+            getLog().write("Gusano %hhu, cambiando estado a %hhu\n", id, move);
 
             move_state = move;
             break;
@@ -131,7 +135,7 @@ void Worm::set_movement(uint16_t id_, MovementEnum move) {
                 if (jumpTimeout > 0)
                     return;
             }
-            getLog().write("Gusano %hhu, aplicando movimiento %hhu\n", id, move);
+            getLog().write("Gusano %hhu, cambiando estado a %hhu\n", id, move);
 
             move_state = move;
             break;
@@ -146,7 +150,7 @@ void Worm::set_movement(uint16_t id_, MovementEnum move) {
                     return;
             }
 
-            getLog().write("Gusano %hhu, aplicando movimiento %%hu\n", id, move);
+            getLog().write("Gusano %hhu, cambiando estado a %hhu\n", id, move);
             move_state = move;
 
             break;
