@@ -10,7 +10,7 @@ private:
     float  pos_x;
     float  pos_y;
     int8_t state;
-    int8_t  health;   
+    int8_t health;   
 
 public: 
     Worm(int8_t id, float pos_x, float pos_y, int8_t state, int8_t health);

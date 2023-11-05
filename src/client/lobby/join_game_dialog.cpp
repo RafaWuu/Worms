@@ -50,6 +50,10 @@ void JoinGameDialog::on_join_clicked()
         QString msg = QString("Se ha unido a partida %1").arg(id);
         ui->msg_validacion->setText(msg);
 
+        // recv_scenario() tiene que devolver el scenario? 
+        // o lo maneja el cliente directamente todo
+        Scenario scenario = client.receive_scenario();
+
     }catch (ErrorLobby& e) {
         QString msg = QString(e.what());
         ui->msg_validacion->setText(msg);

@@ -22,12 +22,15 @@ private:
     std::string hostname;
     std::string servicename;
 
-    // Descomentar cuando este el server y se pueda conectar
     Socket socket;
     ClientProtocol protocol;
 
+    std::unique_ptr<Scenario> scenario;
+
     ClientSender* sender;
     ClientReceiver* receiver;
+
+    uint8_t id_assigned_worm;
 
     // Por ahora que sea un array de chars, despues cambiarlo a una clase propia
     Queue<std::shared_ptr<Command>> messages_to_send;

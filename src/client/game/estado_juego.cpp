@@ -3,4 +3,4 @@
 
 EstadoJuego::EstadoJuego(const std::vector<Worm>& worms): worms(worms) {}
 
-std::vector<Worm> EstadoJuego::get_worms() { return std::vector<Worm>(); }
+std::vector<Worm> EstadoJuego::get_worms() { return worms; }

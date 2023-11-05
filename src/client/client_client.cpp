@@ -60,9 +60,39 @@ LobbyState Client::request_game_list() {
     return protocol.receive_game_list();
 }
 
-Scenario Client::receive_scenario() { return protocol.receive_scenario(); }
+Scenario Client::receive_scenario() { 
+    Scenario received_scenario = protocol.receive_scenario();
+    this->scenario = std::make_unique<Scenario>(received_scenario);
 
-void Client::start_game() { protocol.send_start_game(); }
+    // Hace falta que lo devuelva? El Lobby despues lo manejara?
+    return received_scenario; 
+}
+
+static uint8_t get_id_assigned_worm(std::map<uint8_t, uint16_t>& distribution) {
+    // Cual es el id del cliente? Hardcodeo un 0 por ahora para probarlo
+    uint16_t my_id = 0;
+    uint8_t assigned_worm = -1;
+    
+    for (auto pair : distribution) {
+        if (pair.second == my_id) {
+            assigned_worm = pair.first;
+            break;
+        }
+    }
+
+    return assigned_worm;
+}
+
+void Client::start_game() { 
+    protocol.send_start_game(); 
+
+    // Que worm le corresponde a cada cliente (id_worm, id_client)
+    std::map<uint8_t, uint16_t> distribution = protocol.receive_worms_distribution();
+
+    uint8_t assigned_worm = get_id_assigned_worm(distribution);
+    id_assigned_worm = assigned_worm;
+}
+
 int Client::start() {
     sender->start();
     receiver->start();
@@ -144,6 +174,7 @@ void Client::render(Renderer& renderer) {
             // Hay que convertir las posiciones a pixeles
             float x = worms[i].get_pos_x();
             float y = worms[i].get_pos_y();
+            std::cout << "x: " << x << " y: " << y << std::endl;
             SDL_Rect rect = {x, y, 100, 100};
             SDL_SetRenderDrawColor(renderer.Get(), 255, 0, 0, 255);
             SDL_RenderFillRect(renderer.Get(), &rect);

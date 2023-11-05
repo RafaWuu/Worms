@@ -95,6 +95,30 @@ void ClientProtocol::receive_beam(std::vector<Beam> beams) {
     getLog().write("Cliente recibe beam. x=%lf y=%lf\n", x, y);
 }
 
+std::map<uint8_t, uint16_t> ClientProtocol::receive_worms_distribution() {
+    // 87 03 n_worms [... {worm_id, client_id} ...]
+
+    std::map<uint8_t, uint16_t> distribution;
+
+    uint8_t game_receiving_code;
+    uint8_t distribution_receiving_code;
+    recv_1byte_number(game_receiving_code);
+    recv_1byte_number(distribution_receiving_code);
+
+    uint8_t worms_number;
+    recv_1byte_number(worms_number);
+    for (int i = 0; i < worms_number; i++) {
+        uint8_t id_worm;
+        uint16_t id_client;
+        recv_1byte_number(id_worm);
+        recv_2byte_number(id_client);
+
+        distribution.insert({id_worm, id_client});
+    }    
+
+    return distribution;
+}
+
 Scenario ClientProtocol::receive_scenario() {
     uint8_t game_receiving_code;
     uint8_t scenario_receiving_code;
@@ -122,7 +146,7 @@ Scenario ClientProtocol::receive_scenario() {
 void ClientProtocol::send_join_game(const int& id) {
     send_1byte_number(LOBBY_SENDING);
     send_1byte_number(JOIN_CODE);
-    send_1byte_number(id);
+    send_2byte_number(id);
 }
 
 void ClientProtocol::request_game_list() {
