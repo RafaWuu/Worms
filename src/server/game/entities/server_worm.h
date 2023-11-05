@@ -8,28 +8,38 @@
 #include "game/server_move.h"
 
 #include "b2_body.h"
+#include "server_gameobject.h"
 
-class Worm {
+class Worm: public GameObject {
 private:
-    MovementEnum move_state;
-    uint16_t client_id;
     uint8_t id;
-    int8_t health = 100;
+    uint16_t client_id;
+
+    float pos_x;
+    float pos_y;
+    int8_t health;
+
+    MovementEnum move_state;
     b2Body* body;
 
-    int remaining_jumpingf_steps = 0;
-    int remaining_jumpingb_steps = 0;
-    float desiredXVel = 0;
+    int remaining_jumpingf_steps;
+    int remaining_jumpingb_steps;
+    float desiredXVel;
+    int numFootContacts;
+    int jumpTimeout;
 
 public:
     friend class WormInfo;
+    friend class WormSensor;
 
-    explicit Worm(uint8_t id, b2Body* body);
+    Worm(uint8_t id, b2World* b2world, float pos_x, float pos_y);
 
     void set_client_id(uint16_t id_);
 
     void update(b2World* world);
 
     void set_movement(uint16_t id_, MovementEnum move);
+
+    ObjectType get_id() override;
 };
 #endif  // WORMS_SERVER_WORM_H

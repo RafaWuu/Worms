@@ -5,6 +5,8 @@
 
 #include "../game/server_gameinfo.h"
 
+#include "server_error.h"
+
 //
 // Created by xguss on 31/10/23.
 //
@@ -18,13 +20,14 @@ uint16_t LobbyMonitor::create_game(std::string scenario, uint16_t client_id) {
     return id - 1;
 }
 
-std::shared_ptr<Game> LobbyMonitor::join_game(uint16_t game_id, uint16_t client_id) {
+std::shared_ptr<Game> LobbyMonitor::join_game(uint16_t client_id, uint16_t game_id) {
     std::lock_guard<std::mutex> lock(mutex);
     auto it = games_map.find(game_id);
     if (it == games_map.end())
-        throw InvalidGameID();
+        throw InvalidGameIDLobbyError(game_id);
 
     it->second->add_player(client_id);
+
     return it->second;
 }
 

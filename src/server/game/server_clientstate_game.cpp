@@ -27,14 +27,14 @@ std::unique_ptr<ClientState> GameClientState::run() {
                 is_alive = false;
             }
             game.push_event(std::move(event));
+        } catch (InvalidMsg& e) {
+            std::cerr << e.what() << std::endl;
         } catch (ClosedSocket& e) {
             is_alive = false;
         } catch (ClosedQueue& e) {
             if (is_alive) {
-                // Inesperado, dejo que run_expecting loggee,
-                // podria ser que el broadcaste cerro mi queue por lenta
                 is_alive = false;
-                throw(e);
+                std::cerr << e.what() << std::endl;
             }
         }
     }

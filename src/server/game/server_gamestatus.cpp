@@ -6,6 +6,11 @@
 
 GameStatus::GameStatus(GameWorld& world): worm_info(world.get_worms_info()) {}
 
+GameStatusError::GameStatusError(uint8_t code, GameWorld& world): code(code), GameStatus(world) {}
+
+void GameStatusError::serialize(ServerProtocol& protocol) { protocol.send_game_errormessage(code); }
+
+
 GameStatusScenario::GameStatusScenario(GameWorld& world):
         beam_info(world.get_beams_info()), GameStatus(world) {}
 

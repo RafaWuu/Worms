@@ -13,54 +13,35 @@ LobbyRequestNewGame::LobbyRequestNewGame(const std::string& s): scenario(s) {}
 
 std::shared_ptr<Game> LobbyRequestNewGame::execute(LobbyMonitor& lobby, ServerProtocol& gp,
                                                    uint16_t client_id) {
-    try {
-        uint16_t id = lobby.create_game(this->scenario, client_id);
-        auto game = lobby.join_game(id, client_id);
 
-        auto answer = LobbyAnswerGame(id);
-        answer.send(gp);
+    uint16_t id = lobby.create_game(this->scenario, client_id);
+    auto game = lobby.join_game(client_id, id);
 
-        return game;
-    } catch (std::exception& e) {
-        auto answer = LobbyAnswerError(1);
-        answer.send(gp);
+    auto answer = LobbyAnswerGame(id);
+    answer.send(gp);
 
-        return nullptr;
-    }
+    return game;
 }
 
 LobbyRequestJoinGame::LobbyRequestJoinGame(uint16_t id): id(id) {}
 
 std::shared_ptr<Game> LobbyRequestJoinGame::execute(LobbyMonitor& lobby, ServerProtocol& gp,
                                                     uint16_t client_id) {
-    try {
-        auto game = lobby.join_game(id, client_id);
+    auto game = lobby.join_game(client_id, id);
 
-        auto answer = LobbyAnswerGame(id);
-        answer.send(gp);
+    auto answer = LobbyAnswerGame(id);
+    answer.send(gp);
 
-        return game;
-    } catch (std::exception& e) {
-        auto answer = LobbyAnswerError(1);
-        answer.send(gp);
-
-        return nullptr;
-    }
+    return game;
 }
 
 std::shared_ptr<Game> LobbyRequestListGames::execute(LobbyMonitor& lobby, ServerProtocol& gp,
                                                      uint16_t client_id) {
-    try {
-        auto games = lobby.list_games();
 
-        auto answer = LobbyAnswerGamesList(games);
-        answer.send(gp);
+    auto games = lobby.list_games();
 
-        return nullptr;
-    } catch (std::exception& e) {
-        auto answer = LobbyAnswerError(1);
-        answer.send(gp);
+    auto answer = LobbyAnswerGamesList(games);
+    answer.send(gp);
 
-        return nullptr;
-    }
+    return nullptr;
 }

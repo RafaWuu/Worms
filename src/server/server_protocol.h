@@ -15,10 +15,11 @@
 #include "game/entities/server_worm_info.h"
 #include "game/server_gameinfo.h"
 
+#include "common_liberror.h"
 #include "common_log.h"
 
-struct InvalidMsg: public std::runtime_error {
-    InvalidMsg(): std::runtime_error("The message is invalid") {}
+struct InvalidMsg: public LibError {
+    InvalidMsg(): LibError(EBADRQC, "The message is invalid") {}
 };
 
 class LobbyRequest;
@@ -56,6 +57,8 @@ public:
     void send_scenario(std::vector<BeamInfo>& beams_vec, std::vector<WormInfo>& worms_vec);
 
     void send_worms_list(std::vector<WormInfo>& worms_vec);
+
+    void send_game_errormessage(uint8_t code);
 };
 
 #endif  // SOCKETS_2023C2_ABRAIDA_SERVER_PROTOCOL_GAMEINTERFACE_H

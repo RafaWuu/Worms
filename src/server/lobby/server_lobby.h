@@ -15,10 +15,8 @@ class Game;
 #include "../game/server_game.h"
 #include "../game/server_gameinfo.h"
 
+#include "common_liberror.h"
 
-struct InvalidGameID: public std::runtime_error {
-    InvalidGameID(): std::runtime_error("The requested game with specified id was not found") {}
-};
 
 class LobbyMonitor {
 private:
@@ -32,7 +30,7 @@ public:
     LobbyMonitor& operator=(const LobbyMonitor&) = delete;
 
     uint16_t create_game(std::string name, uint16_t client_id);
-    std::shared_ptr<Game> join_game(uint16_t game_id, uint16_t client_id);
+    std::shared_ptr<Game> join_game(uint16_t client_id, uint16_t game_id);
 
     std::vector<GameInfo> list_games();
 };

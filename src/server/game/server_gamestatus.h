@@ -26,6 +26,17 @@ public:
     virtual void serialize(ServerProtocol& protocol) = 0;
 };
 
+class GameStatusError: public GameStatus {
+private:
+    std::vector<BeamInfo> beam_info;
+    uint8_t code;
+
+public:
+    explicit GameStatusError(uint8_t code, GameWorld& world);
+
+    void serialize(ServerProtocol& protocol) override;
+};
+
 class GameStatusScenario: public GameStatus {
 private:
     std::vector<BeamInfo> beam_info;

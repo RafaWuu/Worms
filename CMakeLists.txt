@@ -98,11 +98,16 @@ add_executable(server
 	src/server/game/server_scenario_file_handler.cpp
         src/server/game/entities/server_beam.cpp
         src/server/game/entities/server_worm_info.cpp
-        src/server/game/entities/server_worm_info.h
         src/server/game/entities/server_beam_info.cpp
-        src/server/game/entities/server_beam_info.h
         src/common/common_log.cpp
-        src/common/common_log.h
+        src/server/game/entities/server_gameobject.cpp
+        src/server/game/entities/server_gameobject.h
+		src/server/game/entities/server_onfloor_contactlistener.cpp
+		src/server/game/entities/server_onfloor_contactlistener.h
+        src/server/game/entities/server_worm_sensor.cpp
+        src/server/game/entities/server_worm_sensor.h
+		src/server/game/entities/server_ground.cpp
+		src/server/game/entities/server_ground.h
 
 )
 

@@ -114,7 +114,7 @@ std::map<uint8_t, uint16_t> ClientProtocol::receive_worms_distribution() {
         recv_2byte_number(id_client);
 
         distribution.insert({id_worm, id_client});
-    }    
+    }
 
     return distribution;
 }
@@ -147,11 +147,15 @@ void ClientProtocol::send_join_game(const int& id) {
     send_1byte_number(LOBBY_SENDING);
     send_1byte_number(JOIN_CODE);
     send_2byte_number(id);
+
+    getLog().write("Cliente se une a partida %hu  \n", id);
 }
 
 void ClientProtocol::request_game_list() {
     send_1byte_number(LOBBY_SENDING);
     send_1byte_number(GAME_LIST_CODE);
+
+    getLog().write("Cliente solicita lista de partidas\n");
 }
 LobbyState ClientProtocol::receive_game_list() {
     LobbyState l;
@@ -182,11 +186,15 @@ LobbyState ClientProtocol::receive_game_list() {
         l.game_list.emplace_back(partida);
     }
 
+    getLog().write("Cliente recibe lista de partidas\n");
+
     return l;
 }
 void ClientProtocol::send_start_game() {
     send_1byte_number(GAME_SENDING);
     send_1byte_number(START_GAME_CODE);
+
+    getLog().write("Cliente inicia la partidas\n");
 }
 // game
 void ClientProtocol::receive_worm(std::vector<Worm>& worms) {
@@ -205,7 +213,7 @@ void ClientProtocol::receive_worm(std::vector<Worm>& worms) {
     Worm worm(id, x, y, state, health);
     worms.push_back(worm);
 
-    getLog().write("Cliente recibe gusano: id %hhu \n", id);
+    getLog().write("Cliente recibe gusano: id %hhu, x: %f, y: %f \n", id, x, y);
 }
 
 EstadoJuego ClientProtocol::recv_msg() {

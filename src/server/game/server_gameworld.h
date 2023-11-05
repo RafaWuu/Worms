@@ -6,12 +6,15 @@
 #define WORMS_SERVER_GAMEWORLD_H
 
 #include <map>
+#include <memory>
 #include <string>
 #include <vector>
 
 #include "../../Box2D/b2_world.h"
+#include "entities/server_onfloor_contactlistener.h"
 #include "game/entities/server_beam.h"
 #include "game/entities/server_beam_info.h"
+#include "game/entities/server_ground.h"
 #include "game/entities/server_worm.h"
 #include "game/entities/server_worm_info.h"
 
@@ -25,8 +28,12 @@ private:
     std::map<uint16_t, Worm> worm_map;
     std::vector<Beam> beam_vec;
 
+    b2ContactListener listener;
+    Ground ground;
+
 public:
     explicit GameWorld(const std::string& scenario_name);
+
     void step(int steps);
 
     void update_worms();

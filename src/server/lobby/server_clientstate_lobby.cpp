@@ -9,6 +9,8 @@
 #include "../server_protocol.h"
 
 #include "memory"
+#include "server_error.h"
+#include "server_lobby_answer.h"
 #include "server_lobby_request.h"
 
 LobbyClientState::LobbyClientState(uint16_t id, LobbyMonitor& lobby, ServerProtocol& gameProtocol):
@@ -24,6 +26,10 @@ std::unique_ptr<ClientState> LobbyClientState::run() {
                 return std::make_unique<GameClientState>(client_id, gp, *game);
             }
         } catch (InvalidMsg& e) {
+            std::cerr << e.what() << std::endl;
+        } catch (LobbyError& e) {
+            std::cerr << e.what() << std::endl;
+            e.send(gp);
         } catch (ClosedSocket& e) {
             is_alive = false;
         }

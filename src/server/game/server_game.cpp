@@ -12,6 +12,7 @@
 
 #include "../../common/common_socket.h"
 
+#include "server_error.h"
 #include "server_statusbroadcast_monitor.h"
 
 Game::Game(uint16_t game_id, std::string& scenario, uint16_t owner_id_):
@@ -25,14 +26,18 @@ Game::Game(uint16_t game_id, std::string& scenario, uint16_t owner_id_):
         is_alive(true),
         had_started(false),
         name(scenario) {
-    id_lists.push_back(owner_id);
 
     this->start();
 }
 
 void Game::run() {
+    auto frame_delay = std::chrono::milliseconds(1000 / 60);
+
     while (is_alive) {
         try {
+            auto frame_start = std::chrono::system_clock::now();
+
+
             std::shared_ptr<GameEvent> event;
             size_t n_events = event_queue.get_size();
 
@@ -46,16 +51,23 @@ void Game::run() {
 
             if (had_started) {
                 game_world.update_worms();
-                game_world.step(30);
+                game_world.step(1);
 
                 broadcastMonitor.send_status_toall(
                         std::make_shared<GameStatusRunning>(0, game_world));
             }
 
-            std::this_thread::sleep_for(std::chrono::milliseconds(500));
+            auto frame_time = std::chrono::system_clock::now() - frame_start;
+            if (frame_delay > frame_time) {
+                std::this_thread::sleep_for(frame_delay - frame_time);
+            }
 
+        } catch (GameError& e) {
+            std::cerr << e.what() << std::endl;
+            broadcastMonitor.send_status(e.client_id,
+                                         std::make_shared<GameStatusError>(e.code, game_world));
         } catch (ClosedSocket& e) {
-            is_alive = false;
+            std::cerr << e.what() << std::endl;
         }
     }
 }
@@ -73,6 +85,11 @@ void Game::subscribe_queue(Queue<std::shared_ptr<GameStatus>>& queue, uint16_t c
 
 void Game::add_player(uint16_t client_id) {
     std::lock_guard<std::mutex> lock(mutex);
+
+    auto it = std::find(id_lists.begin(), id_lists.end(), client_id);
+
+    if (it != id_lists.end())
+        throw ClientAlreadyInGameLobbyError(client_id, game_id);
 
     id_lists.push_back(client_id);
 }

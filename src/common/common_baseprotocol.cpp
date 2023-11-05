@@ -36,8 +36,9 @@ void BaseProtocol::recv_4byte_number(uint32_t& number) {
 }
 
 void BaseProtocol::send_4byte_float(float number) {
+    float a = number;
 
-    uint32_t num = htonl((uint32_t)number);
+    uint32_t num = htonl(*((uint32_t*)((char*)(&a))));
     send_throw(&num, sizeof(uint32_t));
 }
 
@@ -47,7 +48,8 @@ void BaseProtocol::recv_4byte_float(float& number) {
     num = ntohl(num);
 
 
-    number = (float)(*(char*)&num);
+    // cppcheck-suppress invalidPointerCast
+    number = *((float*)((char*)(&num)));
 }
 
 void BaseProtocol::recv_2byte_number(uint16_t& number) {

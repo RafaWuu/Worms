@@ -26,8 +26,8 @@ enum Request {
 };
 
 enum Event {
-    START_GAME = LOBBY_CREATE_GAME,
-    MOVE = LOBBY_JOIN_GAME,
+    START_GAME = GAME_START_GAME,
+    MOVE = GAME_MOVE,
 };
 
 ServerProtocol::ServerProtocol(Socket skt): BaseProtocol(std::move(skt)) {}
@@ -59,6 +59,9 @@ std::unique_ptr<LobbyRequest> ServerProtocol::recv_create_game() {
     uint16_t l;
     recv_2byte_number(l);
     std::vector<char> v(l);
+
+    if (l == 0)
+        throw InvalidMsg();
 
     recv_char_vector(v);
 
@@ -129,7 +132,7 @@ std::unique_ptr<GameEvent> ServerProtocol::recv_game_msg(uint16_t id_client) {
         case Event::MOVE:
             return recv_move(id_client);
         default:
-            return nullptr;
+            throw InvalidMsg();
     }
 }
 
@@ -165,6 +168,15 @@ MovementEnum ServerProtocol::serialize_move(uint8_t code) {
             throw InvalidMsg();
     }
 }
+
+void ServerProtocol::send_game_errormessage(uint8_t error_code) {
+    send_1byte_number(GAME_SENDING);
+    send_1byte_number(GAME_ERROR);
+    send_1byte_number(error_code);
+
+    getLog().write("Server juego enviando codigo de error %hhu \n", error_code);
+}
+
 
 void ServerProtocol::send_scenario(std::vector<BeamInfo>& beams_vec,
                                    std::vector<WormInfo>& worms_vec) {
@@ -222,10 +234,10 @@ void ServerProtocol::send_status(uint8_t current_worm, std::vector<WormInfo>& wo
         send_1byte_number(worm.health);
     }
 
-    getLog().write("Server enviando estado de partida, %hhu gusanos vivos \n", worms_vec.size());
+    // getLog().write("Server enviando estado de partida, %hhu gusanos vivos \n", worms_vec.size());
 }
 
 Log& ServerProtocol::getLog() {
-    static Log log_("../log/serverprotocol_log.txt");
+    static Log log_(SERVERPROTOCOL_LOG_SRC);
     return log_;
 }

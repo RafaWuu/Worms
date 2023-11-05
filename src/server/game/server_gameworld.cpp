@@ -6,6 +6,7 @@
 
 #include <algorithm>
 #include <iostream>
+#include <memory>
 #include <utility>
 
 #include "../../Box2D/b2_body.h"
@@ -13,77 +14,29 @@
 #include "../../Box2D/b2_polygon_shape.h"
 #include "entities/server_beam_info.h"
 #include "entities/server_worm_info.h"
+#include "game/entities/server_onfloor_contactlistener.h"
+#include "game/entities/server_worm_sensor.h"
 
 GameWorld::GameWorld(const std::string& scenario_name):
-        b2_world(b2Vec2(.0, -9.8)), worm_map(), beam_vec(), file_handler(scenario_name) {
-
-    // Define the ground body.
-    b2BodyDef groundBodyDef;
-    groundBodyDef.position.Set(0.0f, -10.0f);
-
-    // Call the body factory which allocates memory for the ground body
-    // from a pool and creates the ground box shape (also from a pool).
-    // The body is also added to the world.
-    b2Body* groundBody = b2_world.CreateBody(&groundBodyDef);
-
-    // Define the ground box shape.
-    b2PolygonShape groundBox;
-
-    // The extents are the half-widths of the box.
-    groundBox.SetAsBox(50.0f, 10.0f);
-
-    // Add the ground fixture to the ground body.
-    groundBody->CreateFixture(&groundBox, 0.0f);
+        b2_world(b2Vec2(.0, -9.8)),
+        worm_map(),
+        beam_vec(),
+        file_handler(scenario_name),
+        listener(),
+        ground(&b2_world) {
 
 
     for (int i = 0; i < 1; ++i) {
-        b2BodyDef bodyDef;
-        bodyDef.type = b2_staticBody;
-        bodyDef.position.Set(-10.0f + (float)i * 20, 14.0f);
-        b2Body* body = b2_world.CreateBody(&bodyDef);
-
-        b2PolygonShape beam;
-        beam.SetAsBox(20.0f, 2.0f);
-        // Define the dynamic body fixture.
-        b2FixtureDef fixtureDef;
-        fixtureDef.shape = &beam;
-
-        // Set the box density to be non-zero, so it will be dynamic.
-        fixtureDef.density = 1.0f;
-
-        // Override the default friction.
-        fixtureDef.friction = 0.3f;
-
-        // Add the shape to the body.
-        body->CreateFixture(&fixtureDef);
-        beam_vec.emplace_back(body, 40, 4, 0);
+        beam_vec.emplace_back(&b2_world, -3, 6, 6, .8, 15);
     }
 
     for (int i = 0; i < 2; ++i) {
-        b2BodyDef bodyDef;
-        bodyDef.type = b2_dynamicBody;
-        bodyDef.position.Set(-10.0f + (float)i * 20, 4.0f);
-        b2Body* body = b2_world.CreateBody(&bodyDef);
-
-        // Define another box shape for our dynamic body.
-        b2PolygonShape dynamicBox;
-        dynamicBox.SetAsBox(1.0f, 1.0f);
-
-        // Define the dynamic body fixture.
-        b2FixtureDef fixtureDef;
-        fixtureDef.shape = &dynamicBox;
-
-        // Set the box density to be non-zero, so it will be dynamic.
-        fixtureDef.density = 1.0f;
-
-        // Override the default friction.
-        fixtureDef.friction = 0.3f;
-
-        // Add the shape to the body.
-        body->CreateFixture(&fixtureDef);
-
-        worm_map.emplace(i, Worm(i, body));
+        auto worm = new Worm(i, &b2_world, -10.3f + (float)i * 20.f, 4.11);
+        auto worm_sensor = std::make_shared<WormSensor>(worm);
+        worm_map.insert({i, std::move(*worm)});
     }
+
+    b2_world.SetContactListener(&listener);
 }
 
 void GameWorld::step(int steps) {
@@ -104,8 +57,9 @@ void GameWorld::set_clients_to_worms(std::vector<uint16_t> client_vec) {
     int i = 0;
 
     for (auto& worm: worm_map) {
-        worm.second.set_client_id(client_vec[i]);
+        worm.second.set_client_id(client_vec[i % client_vec.size()]);
         std::cout << "Worm :" << worm.first << ", Client: " << client_vec[i] << "\n";
+        i++;
     }
 }
 
