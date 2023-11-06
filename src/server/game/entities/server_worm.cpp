@@ -109,7 +109,7 @@ void Worm::update(b2World* world) {
 
 void Worm::set_movement(uint16_t id_, MovementEnum move) {
     if (this->client_id != id_)
-        throw InvalidWormIdGameError(client_id);
+        throw InvalidWormIdGameError(id);
 
     switch (move_state) {
 

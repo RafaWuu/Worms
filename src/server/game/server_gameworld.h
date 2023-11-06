@@ -25,7 +25,7 @@ private:
     ScenarioFileHandler file_handler;
     b2World b2_world;
 
-    std::map<uint16_t, Worm> worm_map;
+    std::map<uint16_t, Worm*> worm_map;
     std::vector<Beam> beam_vec;
 
     b2ContactListener listener;
@@ -33,6 +33,7 @@ private:
 
 public:
     explicit GameWorld(const std::string& scenario_name);
+    ~GameWorld();
 
     void step(int steps);
 

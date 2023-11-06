@@ -84,6 +84,14 @@ uint8_t Client::get_id_assigned_worm(std::map<uint8_t, uint16_t>& distribution) 
     return assigned_worm;
 }
 
+void Client::start_joined_game() {
+    // Que worm le corresponde a cada cliente (id_worm, id_client)
+    std::map<uint8_t, uint16_t> distribution = protocol.receive_worms_distribution();
+
+    uint8_t assigned_worm = get_id_assigned_worm(distribution);
+    id_assigned_worm = assigned_worm;
+}
+
 void Client::start_game() {
     protocol.send_start_game();
 
@@ -95,6 +103,8 @@ void Client::start_game() {
 }
 
 int Client::start() {
+    protocol.set_worm_id(id_assigned_worm);  // Reubicar
+
     sender->start();
     receiver->start();
     int frame_delay = 1000 / 60;

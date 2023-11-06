@@ -241,7 +241,7 @@ std::vector<uint8_t> ClientProtocol::serialize_move(int dir) {
     uint8_t direction = dir;
 
     // Falta enviar el worm_id
-    std::vector<uint8_t> serialized_command = {GAME_SENDING, MOVE_CODE, 0, direction};
+    std::vector<uint8_t> serialized_command = {GAME_SENDING, MOVE_CODE, worm_id, direction};
 
     getLog().write("Cliente serializando movimiento %hhu \n", direction);
 
@@ -250,7 +250,7 @@ std::vector<uint8_t> ClientProtocol::serialize_move(int dir) {
 
 std::vector<uint8_t> ClientProtocol::serialize_stop_move() {
     // Falta enviar el worm_id
-    std::vector<uint8_t> serialized_command = {GAME_SENDING, MOVE_CODE, 0, STOP_MOVE};
+    std::vector<uint8_t> serialized_command = {GAME_SENDING, MOVE_CODE, worm_id, STOP_MOVE};
 
     getLog().write("Cliente serializando movimiento %hhu \n", STOP_MOVE);
 
@@ -272,3 +272,5 @@ void ClientProtocol::get_my_id(uint16_t& id) {
 
     getLog().write("Cliente recibiendo id %hu \n", id);
 }
+
+void ClientProtocol::set_worm_id(uint16_t i) { worm_id = i; }

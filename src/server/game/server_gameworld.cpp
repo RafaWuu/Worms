@@ -31,9 +31,9 @@ GameWorld::GameWorld(const std::string& scenario_name):
     }
 
     for (int i = 0; i < 2; ++i) {
-        auto worm = new Worm(i, &b2_world, -10.3f + (float)i * 20.f, 4.11);
+        auto* worm = new Worm(i, &b2_world, -10.3f + (float)i * 20.f, 4.11);
         auto worm_sensor = std::make_shared<WormSensor>(worm);
-        worm_map.insert({i, std::move(*worm)});
+        worm_map.insert({i, worm});
     }
 
     b2_world.SetContactListener(&listener);
@@ -49,7 +49,7 @@ void GameWorld::step(int steps) {
 
 void GameWorld::update_worms() {
     for (auto& worm: worm_map) {
-        worm.second.update(&b2_world);
+        worm.second->update(&b2_world);
     }
 }
 
@@ -57,8 +57,9 @@ void GameWorld::set_clients_to_worms(std::vector<uint16_t> client_vec) {
     int i = 0;
 
     for (auto& worm: worm_map) {
-        worm.second.set_client_id(client_vec[i % client_vec.size()]);
-        std::cout << "Worm :" << worm.first << ", Client: " << client_vec[i] << "\n";
+        worm.second->set_client_id(client_vec[i % client_vec.size()]);
+        std::cout << "Worm :" << worm.first << ", Client: " << client_vec[i % worm_map.size()]
+                  << "\n";
         i++;
     }
 }
@@ -68,7 +69,7 @@ Worm* GameWorld::get_worm(uint8_t worm_id) {
     if (it == worm_map.end())
         return nullptr;
 
-    return &it->second;
+    return it->second;
 }
 
 std::vector<WormInfo> GameWorld::get_worms_info() {
@@ -76,7 +77,7 @@ std::vector<WormInfo> GameWorld::get_worms_info() {
 
     for (auto& worm: worm_map) {
         //  cppcheck-suppress useStlAlgorithm
-        w.emplace_back(worm.second);
+        w.emplace_back(*worm.second);
     }
 
     return std::move(w);
@@ -91,4 +92,10 @@ std::vector<BeamInfo> GameWorld::get_beams_info() {
     }
 
     return std::move(b);
+}
+
+GameWorld::~GameWorld() {
+    for (auto& w: worm_map) {
+        delete w.second;
+    }
 }

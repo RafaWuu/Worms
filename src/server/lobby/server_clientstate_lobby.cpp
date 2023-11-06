@@ -14,12 +14,13 @@
 #include "server_lobby_request.h"
 
 LobbyClientState::LobbyClientState(uint16_t id, LobbyMonitor& lobby, ServerProtocol& gameProtocol):
-        lobby(lobby), game(nullptr), ClientState(id, gameProtocol) {}
+        lobby(lobby), game(nullptr), ClientState(id, gameProtocol) {
+    gp.send_lobby_newclient(client_id);
+}
 
 std::unique_ptr<ClientState> LobbyClientState::run() {
     while (is_alive) {
         try {
-            gp.send_lobby_newclient(client_id);
             std::unique_ptr<LobbyRequest> request = gp.recv_lobby_msg();
             game = request->execute(lobby, gp, client_id);
 

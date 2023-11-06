@@ -59,6 +59,8 @@ public:
     void move_left();
     void move_right();
     void stop_moving();
+
+    void start_joined_game();
 };
 
 #endif

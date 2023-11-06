@@ -51,6 +51,10 @@ public:
     void close();
 
     void get_my_id(uint16_t& id);
+
+    void set_worm_id(uint16_t i);
+
+    uint16_t worm_id = 0;
 };
 
 #endif
