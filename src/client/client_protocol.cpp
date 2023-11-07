@@ -201,19 +201,22 @@ void ClientProtocol::receive_worm(std::vector<Worm>& worms) {
     uint8_t id;
     float x;
     float y;
-    uint8_t state;
+    uint8_t dir;
+    uint16_t state;
     uint8_t health;
 
     recv_1byte_number(id);
     recv_4byte_float(x);
     recv_4byte_float(y);
-    recv_1byte_number(state);
+    recv_1byte_number(dir);
+
+    recv_2byte_number(state);
     recv_1byte_number(health);
 
-    Worm worm(id, x, y, state, health);
+    Worm worm(id, x, y, dir, state, health);
     worms.push_back(worm);
 
-    getLog().write("Cliente recibe gusano: id %hhu, x: %f, y: %f \n", id, x, y);
+    getLog().write("Cliente recibe gusano: id %hhu, x: %f, y: %f. Estado %hu \n", id, x, y, state);
 }
 
 EstadoJuego ClientProtocol::recv_msg() {

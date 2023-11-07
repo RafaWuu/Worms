@@ -113,6 +113,13 @@ add_executable(server
         src/server/game/entities/server_worm_sensor.h
 		src/server/game/entities/server_ground.cpp
 		src/server/game/entities/server_ground.h
+		src/server/game/states/server_state_manager.cpp
+		src/server/game/states/server_state_manager.h
+		src/server/game/states/server_state_walking.cpp
+		src/server/game/states/server_state_walking.h
+		src/server/game/states/server_state.cpp
+		src/server/game/states/server_state.h
+        src/server/game/states/server_state_enum.h
 
 )
 

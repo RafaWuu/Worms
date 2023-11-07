@@ -33,7 +33,7 @@ private:
     std::unique_ptr<LobbyRequest> recv_create_game();
     std::unique_ptr<LobbyRequest> recv_join_game();
     std::unique_ptr<GameEvent> recv_move(uint16_t id_client);
-    MovementEnum serialize_move(uint8_t code);
+    InputEnum serialize_move(uint8_t code);
 
 public:
     explicit ServerProtocol(Socket skt);

@@ -26,6 +26,6 @@ public:
 
     void create_game(uint16_t client_id);
 
-    void move_worm(uint16_t client_id, uint8_t worm_id, MovementEnum code);
+    void move_worm(uint16_t client_id, uint8_t worm_id, InputEnum code);
 };
 #endif  // WORMS_SERVER_EVENT_HANDLER_H

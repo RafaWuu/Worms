@@ -7,21 +7,15 @@
 
 #include "common_log.h"
 
-enum ObjectType {
-    BOUNDARIE = 1,
-    BEAM = 2,
-    WORM = 3,
-    WORM_SENSOR = 4,
-    PROJECTIL = 5,
-    BOX = 6
-};
+enum ObjectType { BOUNDARIE = 1, BEAM = 2, WORM = 3, WORM_SENSOR = 4, PROJECTIL = 5, BOX = 6 };
 
 class GameObject {
-protected:
-    Log& getLog();
+public:
+    static Log& getLog();
+
 public:
     GameObject();
 
     virtual ObjectType get_id();
 };
-#endif //WORMS_SERVER_GAMEOBJECT_H
+#endif  // WORMS_SERVER_GAMEOBJECT_H

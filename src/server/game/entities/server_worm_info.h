@@ -17,7 +17,8 @@ public:
     uint16_t client_id;
     float x;
     float y;
-    int8_t state;
-    int8_t health;
+    uint8_t dir;
+    uint16_t state;
+    uint8_t health;
 };
 #endif  // WORMS_SERVER_WORM_INFO_H

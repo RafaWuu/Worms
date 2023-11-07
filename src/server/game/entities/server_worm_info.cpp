@@ -11,6 +11,8 @@ WormInfo::WormInfo(const Worm& worm) {
     client_id = worm.client_id;
     x = worm.body->GetPosition().x;
     y = worm.body->GetPosition().y;
-    state = worm.move_state;
+    dir = worm.facing_right;
+
+    state = worm.get_state();
     health = worm.health;
 }
