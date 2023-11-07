@@ -64,6 +64,11 @@ add_executable(client
 	src/client/lobby/join_game_dialog.cpp
 	src/client/lobby/mainwindow.cpp
 	src/client/lobby/new_game_dialog.cpp
+	# graphics
+	src/client/graphics/animation.cpp
+	src/client/graphics/player.cpp
+	src/client/graphics/textureController.cpp
+	src/client/graphics/worldview.cpp
 	${UIS_HEADERS}
         src/common/common_log.cpp
         src/common/common_log.h

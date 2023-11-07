@@ -11,6 +11,7 @@
 #include "../common/common_socket.h"
 #include "commands/client_command.h"
 #include "game/scenario.h"
+#include "graphics/worldview.h"
 
 #include "client_protocol.h"
 #include "client_receiver.h"
@@ -46,6 +47,7 @@ public:
 
     bool handle_events();
     void render(SDL2pp::Renderer& renderer);
+    void update(WorldView& worldview);
 
     void kill();
     int start();

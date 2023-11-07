@@ -6,3 +6,15 @@ Worm::Worm(int8_t id, float pos_x, float pos_y, int8_t state, int8_t vida):
 float Worm::get_pos_x() { return pos_x; }
 
 float Worm::get_pos_y() { return pos_y; }
+
+int Worm::get_health() {
+    return health;
+}
+
+int Worm::get_state() {
+    return state;
+}
+
+int Worm::get_id() const {
+    return id;
+}

@@ -11,6 +11,7 @@
 #include "../common/common_socket.h"
 #include "commands/client_move.h"
 #include "commands/client_stop_moving.h"
+#include "graphics/worldview.h"
 
 #include "client_protocol.h"
 
@@ -116,12 +117,16 @@ int Client::start() {
                   SDL_WINDOW_RESIZABLE);
     Renderer renderer(window, -1, SDL_RENDERER_ACCELERATED);
 
+    TextureController texture_controller(renderer);
+    WorldView worldview(texture_controller, scenario->get_worms());
+
     bool running = true;
     while (running) {
         uint32_t frame_start = SDL_GetTicks();
 
         running = handle_events();
-        render(renderer);
+        update(worldview);
+        worldview.render(renderer);
 
         int frame_time = SDL_GetTicks() - frame_start;
         if (frame_delay > frame_time) {
@@ -135,6 +140,14 @@ int Client::start() {
     return SUCCESS;
 }
 
+void Client::update(WorldView& worldview) {
+    std::shared_ptr<EstadoJuego> estado;
+    if (messages_received.try_pop(estado)) {
+        std::vector<Worm> worms = estado->get_worms();
+        worldview.update(worms);
+    }
+}
+
 bool Client::handle_events() {
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
@@ -146,22 +159,18 @@ bool Client::handle_events() {
                 case SDLK_q:
                     return false;
                 case SDLK_LEFT:
-                    std::cout << "LEFT" << std::endl;
                     move_left();
                     break;
                 case SDLK_RIGHT:
-                    std::cout << "RIGHT" << std::endl;
                     move_right();
                     break;
             }
         } else if (event.type == SDL_KEYUP) {
             switch (event.key.keysym.sym) {
                 case SDLK_LEFT:
-                    std::cout << "STOP LEFT" << std::endl;
                     stop_moving();
                     break;
                 case SDLK_RIGHT:
-                    std::cout << "STOP RIGHT" << std::endl;
                     stop_moving();
                     break;
             }
