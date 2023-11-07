@@ -17,7 +17,7 @@ EventHandler::EventHandler(GameWorld& game_world, StatusBroadcastMonitor& broadc
         broadcast(broadcast),
         game_owner(game_owner) {}
 
-void EventHandler::move_worm(uint16_t client_id, uint8_t worm_id, MovementEnum code) {
+void EventHandler::move_worm(uint16_t client_id, uint8_t worm_id, InputEnum code) {
     if (!had_started)
         throw GameHasNotStartedGameError(client_id);
 
@@ -26,7 +26,7 @@ void EventHandler::move_worm(uint16_t client_id, uint8_t worm_id, MovementEnum c
     if (!worm)
         throw InvalidWormIdGameError(client_id);
 
-    worm->set_movement(client_id, code);
+    worm->handle_input(client_id, code);
 }
 
 void EventHandler::create_game(uint16_t client_id) {

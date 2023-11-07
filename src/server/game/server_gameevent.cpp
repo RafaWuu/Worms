@@ -8,7 +8,7 @@ void GameEventStartGame::execute(EventHandler& e) { e.create_game(this->client_i
 
 GameEventStartGame::GameEventStartGame(uint16_t client_id): GameEvent(client_id) {}
 
-GameEventMove::GameEventMove(uint16_t client_id, uint8_t worm_id, MovementEnum code):
+GameEventMove::GameEventMove(uint16_t client_id, uint8_t worm_id, InputEnum code):
         worm_id(worm_id), code(code), GameEvent(client_id) {}
 
 void GameEventMove::execute(EventHandler& e) {

@@ -54,7 +54,7 @@ public:
 
     void set_worm_id(uint16_t i);
 
-    uint16_t worm_id = 0;
+    uint8_t worm_id = 0;
 };
 
 #endif

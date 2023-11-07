@@ -30,11 +30,11 @@ public:
 class GameEventMove: public GameEvent {
 
 public:
-    GameEventMove(uint16_t client_id, uint8_t worm_id, MovementEnum code);
+    GameEventMove(uint16_t client_id, uint8_t worm_id, InputEnum code);
     void execute(EventHandler& e) override;
 
 private:
-    MovementEnum code;
+    InputEnum code;
     uint8_t worm_id;
 };
 

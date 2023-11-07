@@ -150,7 +150,7 @@ std::unique_ptr<GameEvent> ServerProtocol::recv_move(uint16_t id_client) {
     uint8_t code;
     recv_1byte_number(code);
 
-    MovementEnum type = serialize_move(code);
+    InputEnum type = serialize_move(code);
 
     getLog().write("Server recibiendo de  %hu "
                    "pedido de mover %hhu. code(%hhu)\n",
@@ -160,18 +160,18 @@ std::unique_ptr<GameEvent> ServerProtocol::recv_move(uint16_t id_client) {
 }
 
 
-MovementEnum ServerProtocol::serialize_move(uint8_t code) {
+InputEnum ServerProtocol::serialize_move(uint8_t code) {
     switch (code) {
         case 01:
-            return MovementEnum::Left;
+            return InputEnum::Left;
         case 02:
-            return MovementEnum::Right;
+            return InputEnum::Right;
         case 03:
-            return MovementEnum::Stop;
+            return InputEnum::Stop;
         case 04:
-            return MovementEnum::JumpF;
+            return InputEnum::JumpF;
         case 05:
-            return MovementEnum::JumpB;
+            return InputEnum::JumpB;
         default:
             throw InvalidMsg();
     }
@@ -207,7 +207,8 @@ void ServerProtocol::send_scenario(std::vector<BeamInfo>& beams_vec,
         send_1byte_number(worm.id);
         send_4byte_float(worm.x);
         send_4byte_float(worm.y);
-        send_1byte_number(worm.state);
+        send_1byte_number(worm.dir);
+        send_2byte_number(worm.state);
         send_1byte_number(worm.health);
     }
     getLog().write("Server enviando escenario \n");
@@ -238,7 +239,8 @@ void ServerProtocol::send_status(uint8_t current_worm, std::vector<WormInfo>& wo
         send_1byte_number(worm.id);
         send_4byte_float(worm.x);
         send_4byte_float(worm.y);
-        send_1byte_number(worm.state);
+        send_1byte_number(worm.dir);
+        send_2byte_number(worm.state);
         send_1byte_number(worm.health);
     }
 
