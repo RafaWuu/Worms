@@ -19,8 +19,6 @@ Animation::Animation(std::shared_ptr<SDL2pp::Texture> texture,TextureController&
     
     assert(this->numFrames > 0);
     assert(this->size > 0);
-
-    state = AnimationState::IDLE;
 }
 
 Animation::~Animation() {}
@@ -61,6 +59,8 @@ void Animation::change_texture(AnimationState new_state)
     SDL2pp::Texture const& my_texture = *texture;
     numFrames = my_texture.GetHeight() / my_texture.GetWidth();
     size = my_texture.GetWidth();
+
+    currentFrame = 0;
 }
 
 void Animation::advanceFrame() {
