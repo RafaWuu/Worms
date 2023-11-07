@@ -24,7 +24,7 @@ void OnFloorContactListener::BeginContact(b2Contact* contact) {
     }
 
     if (game_objectB->get_id() == WORM_SENSOR) {
-        auto worm_sensor = dynamic_cast<WormSensor*>(game_objectA);
+        auto* worm_sensor = dynamic_cast<WormSensor*>(game_objectB);
         worm_sensor->handle_begin_floor_contact(game_objectA);
     }
 }
@@ -47,7 +47,7 @@ void OnFloorContactListener::EndContact(b2Contact* contact) {
     }
 
     if (game_objectB->get_id() == WORM_SENSOR) {
-        auto worm_sensor = dynamic_cast<WormSensor*>(game_objectA);
+        auto worm_sensor = dynamic_cast<WormSensor*>(game_objectB);
         worm_sensor->handle_end_floor_contact(game_objectA);
     }
 }

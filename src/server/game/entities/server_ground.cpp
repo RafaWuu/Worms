@@ -21,5 +21,10 @@ Ground::Ground(b2World* world): GameObject() {
     fixtureDef.shape = &groundBox;
     fixtureDef.userData.pointer = reinterpret_cast<uintptr_t>(this);
 
-    groundBody->CreateFixture(&groundBox, 0.0f);
+    groundBody->CreateFixture(&fixtureDef);
 }
+
+ObjectType Ground::get_id(){
+    return BEAM;
+}
+

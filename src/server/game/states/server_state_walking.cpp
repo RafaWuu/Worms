@@ -12,7 +12,10 @@ AliveState::AliveState() {
     requiring = Standing | Walking | Jumping | Rolling;
 }
 
-void AliveState::update(Worm& worm) {}
+bool AliveState::update(Worm& worm) {
+    return true;
+
+}
 
 WalkingState::WalkingState() {
     code = Walking;
@@ -22,7 +25,7 @@ WalkingState::WalkingState() {
     requiring = 0;
 }
 
-void WalkingState::update(Worm& worm) {
+bool WalkingState::update(Worm& worm) {
     float desired_vel = .4;
 
     if (!worm.facing_right)
@@ -36,6 +39,8 @@ void WalkingState::update(Worm& worm) {
     float impulse_x = worm.body->GetMass() * vel_change_x;
 
     worm.body->ApplyLinearImpulse(b2Vec2(impulse_x, 0), worm.body->GetWorldCenter(), true);
+    return true;
+
 }
 
 StandingState::StandingState() {
@@ -46,7 +51,7 @@ StandingState::StandingState() {
     requiring = 0;
 }
 
-void StandingState::update(Worm& worm) {
+bool StandingState::update(Worm& worm) {
     b2Vec2 vel = worm.body->GetLinearVelocity();
     float desired_vel = vel.x * 0.990f;
 
@@ -55,6 +60,7 @@ void StandingState::update(Worm& worm) {
     float impulse_x = worm.body->GetMass() * vel_change_x;
 
     worm.body->ApplyLinearImpulse(b2Vec2(impulse_x, 0), worm.body->GetWorldCenter(), true);
+    return true;
 }
 
 JumpingState::JumpingState() {
@@ -67,9 +73,14 @@ JumpingState::JumpingState() {
     remaining_frames = 0;
 }
 
-void JumpingState::update(Worm& worm) {
+void JumpingState::on_activated(Worm& worm) {
+    remaining_frames = 8;
+    worm.jumpTimeout = 12;
+}
+
+bool JumpingState::update(Worm& worm) {
     if (remaining_frames == 0)
-        return;
+        return false;
 
     float force_x = 15;
 
@@ -78,11 +89,8 @@ void JumpingState::update(Worm& worm) {
 
     worm.body->ApplyForce(b2Vec2(force_x, 25), worm.body->GetWorldCenter(), true);
     remaining_frames--;
-}
+    return true;
 
-void JumpingState::on_activated(Worm& worm) {
-    remaining_frames = 8;
-    worm.jumpTimeout = 12;
 }
 
 bool JumpingState::can_be_activated(Worm& worm) {
@@ -99,9 +107,14 @@ RollingState::RollingState() {
     remaining_frames = 0;
 }
 
-void RollingState::update(Worm& worm) {
+void RollingState::on_activated(Worm& worm) {
+    remaining_frames = 8;
+    worm.jumpTimeout = 12;
+}
+
+bool RollingState::update(Worm& worm) {
     if (remaining_frames == 0)
-        return;
+        return false;
 
     float force_x = -25;
 
@@ -110,11 +123,7 @@ void RollingState::update(Worm& worm) {
 
     worm.body->ApplyForce(b2Vec2(force_x, 15), worm.body->GetWorldCenter(), true);
     remaining_frames--;
-}
-
-void RollingState::on_activated(Worm& worm) {
-    remaining_frames = 8;
-    worm.jumpTimeout = 12;
+    return true;
 }
 
 bool RollingState::can_be_activated(Worm& worm) {

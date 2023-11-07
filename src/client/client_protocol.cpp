@@ -260,6 +260,16 @@ std::vector<uint8_t> ClientProtocol::serialize_stop_move() {
     return serialized_command;
 }
 
+std::vector<uint8_t> ClientProtocol::serialize_jump(uint8_t type) {
+
+    // Falta enviar el worm_id
+    std::vector<uint8_t> serialized_command = {GAME_SENDING, MOVE_CODE, worm_id, type};
+
+    getLog().write("Cliente serializando salto %hhu \n", type);
+
+    return serialized_command;
+}
+
 Log& ClientProtocol::getLog() {
     static Log log_("../log/clientprotocol_log.txt");
     return log_;

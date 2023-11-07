@@ -18,26 +18,31 @@ StateManager::StateManager(uint16_t starting): current(starting), registeredStat
 
 void StateManager::update(Worm& worm) {
     for (auto& state: registeredStates) {
-        if (is_active(*state.second))
-            state.second->update(worm);
+        if (is_active(*state.second)){
+            bool deactivate_state = state.second->update(worm);
+            if(!deactivate_state)
+                deactivate(*state.second);
+        }
     }
 }
 
-void StateManager::try_activate(StateEnum state_code, Worm& worm) {
+bool StateManager::try_activate(StateEnum state_code, Worm& worm) {
 
     auto it = registeredStates.find(state_code);
     if (it == registeredStates.end())
-        return;
+        return false;
 
     if (!is_activable(*it->second))
-        return;
+        return false;
 
     if (!it->second->can_be_activated(worm))
-        return;
+        return false;
 
     deactivate_states(it->second->get_states_to_terminate());
     current |= it->second->get_code();
     it->second->on_activated(worm);
+
+    return true;
 }
 
 bool StateManager::is_activable(const WormState& state) const {
@@ -74,7 +79,7 @@ void StateManager::deactivate_states(uint16_t states_code) {
 }
 
 void StateManager::deactivate(const WormState& state) {
-    current &= !state.get_code();
+    current &= ~state.get_code();
     // state.OnDeactivated();
     // deactivate_states(state.get_states_requiring());
 }

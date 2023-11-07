@@ -11,5 +11,6 @@
 class Ground: public GameObject {
 public:
     explicit Ground(b2World* world);
+    ObjectType get_id() override;
 };
 #endif  // WORMS_SERVER_GROUND_H

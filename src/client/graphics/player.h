@@ -24,6 +24,9 @@ private:
     Animation an;
     bool facingLeft;
     bool moving;
+    bool jumping;
+    bool rolling;
+
     int x;
     int y;
     int id;

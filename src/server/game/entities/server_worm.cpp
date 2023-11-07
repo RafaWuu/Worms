@@ -62,15 +62,15 @@ void Worm::handle_input(uint16_t id_, InputEnum input) {
 
     switch (input) {
         case Left:
-            facing_right = false;
-            state_manager.try_activate(StateEnum::Walking, *this);
+            if (state_manager.try_activate(StateEnum::Walking, *this))
+                facing_right = false;
 
             getLog().write("Gusano %hhu, jugador avanza a la izquierda\n", id);
 
             break;
         case Right:
-            facing_right = true;
-            state_manager.try_activate(StateEnum::Walking, *this);
+            if(state_manager.try_activate(StateEnum::Walking, *this))
+                facing_right = true;
 
             getLog().write("Gusano %hhu, jugador avanza  a la derecha\n", id);
 

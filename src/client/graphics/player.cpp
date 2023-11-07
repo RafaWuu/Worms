@@ -7,6 +7,8 @@ Player::Player(TextureController& controller, int id):
         an(texture_controller.get_texture(AnimationState::IDLE), texture_controller),
         facingLeft(false),
         moving(false),
+        jumping(false),
+        rolling(false),
         x(300),
         y(300),
         id(id) {}
@@ -24,13 +26,22 @@ void Player::update_info(Worm& worm) {
 
     // Hay que cambiar la textura si empieza a moverse o para de moverse
     bool is_moving_now = (new_state & 0x0004) ? true : false;
+    bool is_jumping_now = (new_state & 0x0008) != 0 ;
+    bool is_rolling_now = (new_state & 0x0010) != 0;
+
     if (!moving && is_moving_now) {
         an.change_texture(AnimationState::WALK);
-    } else if (moving && !is_moving_now) {
+    }  else if (!jumping && is_jumping_now) {
+        an.change_texture(AnimationState::JUMPING);
+    } else if (!rolling && is_rolling_now) {
+        an.change_texture(AnimationState::ROLLING);
+    } else if ((moving && !is_moving_now) || (jumping && !is_jumping_now) || (rolling && !is_rolling_now)) {
         an.change_texture(AnimationState::IDLE);
     }
 
     moving = is_moving_now;
+    jumping = is_jumping_now;
+    rolling = is_rolling_now;
 
     if (dir == 1)
         facingLeft = false;
@@ -43,9 +54,8 @@ void Player::update_info(Worm& worm) {
  * Esto les va a resultar muy util.
  */
 void Player::update(float dt) {
-    if (moving) {
+    if(moving || rolling || jumping)
         an.update(dt);
-    }
 }
 
 void Player::render(SDL2pp::Renderer& renderer) {

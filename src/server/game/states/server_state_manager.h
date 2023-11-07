@@ -34,7 +34,7 @@ private:
 
 public:
     explicit StateManager(uint16_t starting);
-    void try_activate(StateEnum state_code, Worm& worm);
+    bool try_activate(StateEnum state_code, Worm& worm);
 
     void update(Worm& worm);
 

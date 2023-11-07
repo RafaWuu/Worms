@@ -26,7 +26,7 @@ protected:
 public:
     WormState() = default;
     virtual bool can_be_activated(Worm& worm);
-    virtual void update(Worm& worm) = 0;
+    virtual bool update(Worm& worm) = 0;
 
 
     uint16_t get_states_blocking_me() const;  // Me bloquean

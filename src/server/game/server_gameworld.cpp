@@ -20,6 +20,7 @@
 GameWorld::GameWorld(const std::string& scenario_name):
         b2_world(b2Vec2(.0, -9.8)),
         worm_map(),
+        worm_sensor_map(),
         beam_vec(),
         file_handler(scenario_name),
         listener(),
@@ -32,8 +33,9 @@ GameWorld::GameWorld(const std::string& scenario_name):
 
     for (int i = 0; i < 2; ++i) {
         auto* worm = new Worm(i, &b2_world, -10.3f + (float)i * 20.f, 4.11);
-        auto worm_sensor = std::make_shared<WormSensor>(worm);
+        auto* sensor = new WormSensor(worm);
         worm_map.insert({i, worm});
+        worm_sensor_map.insert({i, sensor});
     }
 
     b2_world.SetContactListener(&listener);
@@ -96,6 +98,10 @@ std::vector<BeamInfo> GameWorld::get_beams_info() {
 
 GameWorld::~GameWorld() {
     for (auto& w: worm_map) {
+        delete w.second;
+    }
+
+    for (auto& w: worm_sensor_map) {
         delete w.second;
     }
 }

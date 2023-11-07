@@ -55,6 +55,8 @@ public:
     void set_worm_id(uint16_t i);
 
     uint8_t worm_id = 0;
+
+    std::vector<uint8_t> serialize_jump(uint8_t type);
 };
 
 #endif

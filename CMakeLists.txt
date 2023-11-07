@@ -72,6 +72,8 @@ add_executable(client
 	${UIS_HEADERS}
         src/common/common_log.cpp
         src/common/common_log.h
+        src/client/commands/client_jump.cpp
+		src/client/commands/client_jump.h
 )
 
 add_executable(server

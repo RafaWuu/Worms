@@ -9,6 +9,8 @@ enum AnimationState {
     WALK,
     // Standing still
     IDLE,
+    JUMPING,
+    ROLLING
 };
 
 class TextureController {

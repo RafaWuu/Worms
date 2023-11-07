@@ -13,19 +13,19 @@
 class AliveState: public WormState {
 public:
     AliveState();
-    void update(Worm& worm) override;
+    bool update(Worm& worm) override;
 };
 
 class StandingState: public WormState {
 public:
     StandingState();
-    void update(Worm& worm) override;
+    bool update(Worm& worm) override;
 };
 
 class WalkingState: public WormState {
 public:
     WalkingState();
-    void update(Worm& worm) override;
+    bool update(Worm& worm) override;
 };
 
 class JumpingState: public WormState {
@@ -34,7 +34,7 @@ private:
 
 public:
     JumpingState();
-    void update(Worm& worm) override;
+    bool update(Worm& worm) override;
     void on_activated(Worm& worm) override;
     bool can_be_activated(Worm& worm) override;
 };
@@ -45,7 +45,7 @@ private:
 
 public:
     RollingState();
-    void update(Worm& worm) override;
+    bool update(Worm& worm) override;
     void on_activated(Worm& worm) override;
     bool can_be_activated(Worm& worm) override;
 };

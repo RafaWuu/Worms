@@ -14,8 +14,6 @@ public:
     static Log& getLog();
 
 public:
-    GameObject();
-
-    virtual ObjectType get_id();
+    virtual ObjectType get_id() = 0;
 };
 #endif  // WORMS_SERVER_GAMEOBJECT_H

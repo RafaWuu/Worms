@@ -14,6 +14,7 @@
 #include "graphics/worldview.h"
 
 #include "client_protocol.h"
+#include "commands/client_jump.h"
 
 using namespace SDL2pp;
 
@@ -158,6 +159,11 @@ bool Client::handle_events() {
                 case SDLK_ESCAPE:
                 case SDLK_q:
                     return false;
+                case SDLK_a:
+                    jump(Jump::Type::Forward);
+                    break;
+                case SDLK_s:
+                    jump(Jump::Type::Backwards);
                 case SDLK_LEFT:
                     move_left();
                     break;
@@ -221,6 +227,13 @@ void Client::move_right() {
 void Client::stop_moving() {
     std::shared_ptr<StopMoving> stop_moving = std::make_shared<StopMoving>();
     std::shared_ptr<Command> command = stop_moving;
+
+    messages_to_send.push(command);
+}
+
+void Client::jump(Jump::Type type){
+    std::shared_ptr<Jump> jump_command = std::make_shared<Jump>(type);
+    std::shared_ptr<Command> command = jump_command;
 
     messages_to_send.push(command);
 }

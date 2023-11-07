@@ -16,6 +16,7 @@
 #include "client_protocol.h"
 #include "client_receiver.h"
 #include "client_sender.h"
+#include "commands/client_jump.h"
 
 
 class Client {
@@ -61,8 +62,12 @@ public:
     void move_left();
     void move_right();
     void stop_moving();
+    void jump(Jump::Type type);
 
     void start_joined_game();
+
+
+
 };
 
 #endif

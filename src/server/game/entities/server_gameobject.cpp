@@ -6,13 +6,8 @@
 
 #define OBJECT_LOG_SRC "../log/object_log.txt"
 
-ObjectType GameObject::get_id(){
-    return BOUNDARIE;
-}
 
 Log &GameObject::getLog(){
     static Log log_(OBJECT_LOG_SRC);
     return log_;
 }
-
-GameObject::GameObject()= default;

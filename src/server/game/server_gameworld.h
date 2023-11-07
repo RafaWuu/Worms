@@ -19,6 +19,7 @@
 #include "game/entities/server_worm_info.h"
 
 #include "server_scenario_file_handler.h"
+#include "game/entities/server_worm_sensor.h"
 
 class GameWorld {
 private:
@@ -26,9 +27,11 @@ private:
     b2World b2_world;
 
     std::map<uint16_t, Worm*> worm_map;
+    std::map<uint16_t, WormSensor*> worm_sensor_map;
+
     std::vector<Beam> beam_vec;
 
-    b2ContactListener listener;
+    OnFloorContactListener listener;
     Ground ground;
 
 public:
