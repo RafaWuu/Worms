@@ -67,7 +67,7 @@ add_executable(client
 	# graphics
 	src/client/graphics/animation.cpp
 	src/client/graphics/player.cpp
-	src/client/graphics/textureController.cpp
+	src/client/graphics/texture_controller.cpp
 	src/client/graphics/worldview.cpp
 	${UIS_HEADERS}
         src/common/common_log.cpp

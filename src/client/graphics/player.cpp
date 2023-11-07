@@ -4,7 +4,7 @@
 
 Player::Player(TextureController& controller, int id):
         texture_controller(controller),
-        an(texture_controller.get_walking_sprite()),
+        an(texture_controller.get_texture(AnimationState::IDLE), texture_controller),
         facingLeft(false),
         moving(false),
         x(300),
@@ -14,17 +14,23 @@ Player::Player(TextureController& controller, int id):
 Player::~Player() {}
 
 void Player::update_info(Worm& worm) {
-    moving = false;
     health = worm.get_health();
 
     x = (worm.get_pos_x() * 320 / 20) + 320;
     y = (-worm.get_pos_y() * 240 / 20) + 240;
 
     uint8_t dir = worm.get_dir();
-    uint16_t state = worm.get_state();
+    uint16_t new_state = worm.get_state();
 
-    if (state & 0x0004)
-        moving = true;
+    // Hay que cambiar la textura si empieza a moverse o para de moverse
+    bool is_moving_now = (new_state & 0x0004) ? true : false;
+    if (!moving && is_moving_now) {
+        an.change_texture(AnimationState::WALK);
+    } else if (moving && !is_moving_now) {
+        an.change_texture(AnimationState::IDLE);
+    }
+
+    moving = is_moving_now;
 
     if (dir == 1)
         facingLeft = false;

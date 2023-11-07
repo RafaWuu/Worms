@@ -7,6 +7,7 @@
 #define __ANIMATION_H__
 
 #include <SDL2pp/SDL2pp.hh>
+#include "texture_controller.h"
 
 #define FRAME_RATE 1000000.0f/25.0f
 
@@ -15,16 +16,16 @@ class Area;
 
 class Animation {
    public:
-    Animation(SDL2pp::Texture& texture);
+    Animation(std::shared_ptr<SDL2pp::Texture> texture, TextureController& controller);
     ~Animation();
     void update(float dt);
     void render(SDL2pp::Renderer &renderer, const SDL2pp::Rect dest, SDL_RendererFlip &flipType);
-
+    void change_texture(AnimationState new_state);
 
    private:
     void advanceFrame();
     /** SDL texture of the raw image. */
-    SDL2pp::Texture &texture;
+    std::shared_ptr<SDL2pp::Texture> texture;
     /** Current animation frame. */
     int currentFrame;
     /** Total number of frames in the sprite. */
@@ -33,6 +34,10 @@ class Animation {
     int size;
     /** Time elapsed since last update. */
     float elapsed;
+
+    AnimationState state;
+
+    TextureController& texture_controller;
 };
 
 #endif  //__ANIMATION_H__

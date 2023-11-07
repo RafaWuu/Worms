@@ -2,7 +2,7 @@
 #define __PLAYER_H__
 
 #include <SDL2pp/SDL2pp.hh>
-#include "textureController.h"
+#include "texture_controller.h"
 #include "animation.h"
 #include "../game/worm.h"
 #include <vector>

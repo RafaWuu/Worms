@@ -11,11 +11,16 @@
 
 #include "animation.h"
 
-Animation::Animation(SDL2pp::Texture& texture) : texture(texture), currentFrame(0),
-                                                  numFrames(this->texture.GetHeight() / this->texture.GetWidth()),
-                                                  size(this->texture.GetWidth()), elapsed(0.0f) {
+Animation::Animation(std::shared_ptr<SDL2pp::Texture> texture,TextureController& controller) : texture_controller(controller), texture(texture), currentFrame(0),
+                                                   elapsed(0.0f) {
+    SDL2pp::Texture const& my_texture = *texture;
+    numFrames = my_texture.GetHeight() / my_texture.GetWidth();
+    size = my_texture.GetWidth();
+    
     assert(this->numFrames > 0);
     assert(this->size > 0);
+
+    state = AnimationState::IDLE;
 }
 
 Animation::~Animation() {}
@@ -36,15 +41,26 @@ void Animation::update(float dt) {
  * @param x X coordinate.
  * @param y Y corrdinate.
  */
-void Animation::render(SDL2pp::Renderer &renderer, const SDL2pp::Rect dst, SDL_RendererFlip &flipType) {
+void Animation::render(SDL2pp::Renderer &renderer, const SDL2pp::Rect dst, SDL_RendererFlip &flipType) {    
     renderer.Copy(
-            texture,
+            *texture,
             SDL2pp::Rect(0, 1 + (1 + this->size) * this->currentFrame, this->size, this->size),
             dst,
             0.0,                // don't rotate
             SDL2pp::NullOpt,    // rotation center - not needed
             flipType
         );
+}
+
+void Animation::change_texture(AnimationState new_state)
+{
+    std::shared_ptr<SDL2pp::Texture> new_texture = texture_controller.get_texture(new_state);
+    texture = new_texture;
+
+    // Los sprites pueden tener distintas dimensiones
+    SDL2pp::Texture const& my_texture = *texture;
+    numFrames = my_texture.GetHeight() / my_texture.GetWidth();
+    size = my_texture.GetWidth();
 }
 
 void Animation::advanceFrame() {
