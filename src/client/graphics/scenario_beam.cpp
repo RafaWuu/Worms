@@ -27,13 +27,15 @@ ScenarioBeam::~ScenarioBeam() {}
 void ScenarioBeam::render(SDL2pp::Renderer& renderer) {
     //segun el juego, hay una viga en (-3,6)
     //harcodeado, hay q pasar escalar dimensiones
-    
+    SDL2pp::Point center;
+    center.x = 150/2;  //widht*escala /2
+    center.y = 50/2;   //height*escala /2
     renderer.Copy(
             *texture,
             SDL2pp::Rect(0, 0,(*texture).GetWidth(),(*texture).GetHeight()),
             SDL2pp::Rect(x*(320/20)+320, y* (240 / 20) + 240, 150,50),
             angle,
-            SDL2pp::NullOpt,
+            center,
             0);
 
 }

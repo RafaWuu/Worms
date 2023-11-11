@@ -12,3 +12,4 @@ _deps\
 .vscode/
 AtoB.dump
 BtoA.dump
+build

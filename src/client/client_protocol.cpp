@@ -78,7 +78,7 @@ LobbyState ClientProtocol::receive_confirmation() {
     return l;
 }
 
-void ClientProtocol::receive_beam(std::vector<Beam> beams) {
+void ClientProtocol::receive_beam(std::vector<Beam>& beams) {
     float x;
     float y;
     float height;
