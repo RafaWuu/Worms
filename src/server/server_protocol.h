@@ -18,9 +18,7 @@
 #include "common_liberror.h"
 #include "common_log.h"
 
-struct InvalidMsg: public LibError {
-    InvalidMsg(): LibError(EBADRQC, "The message is invalid") {}
-};
+
 
 class LobbyRequest;
 class GameEvent;
@@ -33,7 +31,7 @@ private:
     std::unique_ptr<LobbyRequest> recv_create_game();
     std::unique_ptr<LobbyRequest> recv_join_game();
     std::unique_ptr<GameEvent> recv_move(uint16_t id_client);
-    InputEnum serialize_move(uint8_t code);
+    MoveEnum serialize_move(uint8_t code);
 
 public:
     explicit ServerProtocol(Socket skt);
@@ -61,6 +59,17 @@ public:
     void send_game_errormessage(uint8_t code);
 
     void send_lobby_newclient(uint16_t id);
+
+    std::unique_ptr<GameEvent> recv_rollback(uint16_t id_client);
+
+    std::unique_ptr<GameEvent> recv_jump(uint16_t id_client);
+
+    std::unique_ptr<GameEvent> recv_fire(uint16_t id_client);
+
+    std::unique_ptr<GameEvent> recv_aim(uint16_t id_client);
+
+    std::unique_ptr<GameEvent> recv_power(uint16_t id_client);
 };
+
 
 #endif  // SOCKETS_2023C2_ABRAIDA_SERVER_PROTOCOL_GAMEINTERFACE_H

@@ -4,10 +4,12 @@
 
 #include "client_jump.h"
 
-Jump::Jump(Type type): type(type) {}
-
 std::vector<uint8_t> Jump::serialize(ClientProtocol& protocol) {
-    return protocol.serialize_jump(type);
+    return protocol.serialize_jump();
+}
+
+Jump::Jump(){
+
 }
 
 

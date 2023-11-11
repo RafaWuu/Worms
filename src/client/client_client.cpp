@@ -15,6 +15,7 @@
 
 #include "client_protocol.h"
 #include "commands/client_jump.h"
+#include "commands/client_rollback.h"
 
 using namespace SDL2pp;
 
@@ -160,10 +161,10 @@ bool Client::handle_events() {
                 case SDLK_q:
                     return false;
                 case SDLK_a:
-                    jump(Jump::Type::Forward);
+                    jump();
                     break;
                 case SDLK_s:
-                    jump(Jump::Type::Backwards);
+                    rollback();
                 case SDLK_LEFT:
                     move_left();
                     break;
@@ -231,9 +232,16 @@ void Client::stop_moving() {
     messages_to_send.push(command);
 }
 
-void Client::jump(Jump::Type type){
-    std::shared_ptr<Jump> jump_command = std::make_shared<Jump>(type);
+void Client::jump(){
+    std::shared_ptr<Jump> jump_command = std::make_shared<Jump>();
     std::shared_ptr<Command> command = jump_command;
+
+    messages_to_send.push(command);
+}
+
+void Client::rollback(){
+    std::shared_ptr<Rollback> roll_command = std::make_shared<Rollback>();
+    std::shared_ptr<Command> command = roll_command;
 
     messages_to_send.push(command);
 }

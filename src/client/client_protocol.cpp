@@ -32,6 +32,8 @@
 #define MOVE_CODE 2
 #define STOP_MOVE 3
 
+#define JUMP_CODE 3
+#define ROLLBACK_CODE 4
 
 ClientProtocol::ClientProtocol(Socket socket): BaseProtocol(std::move(socket)) {}
 // lobby
@@ -260,15 +262,25 @@ std::vector<uint8_t> ClientProtocol::serialize_stop_move() {
     return serialized_command;
 }
 
-std::vector<uint8_t> ClientProtocol::serialize_jump(uint8_t type) {
+std::vector<uint8_t> ClientProtocol::serialize_jump(){
 
     // Falta enviar el worm_id
-    std::vector<uint8_t> serialized_command = {GAME_SENDING, MOVE_CODE, worm_id, type};
+    std::vector<uint8_t> serialized_command = {GAME_SENDING, JUMP_CODE, worm_id};
 
-    getLog().write("Cliente serializando salto %hhu \n", type);
+    getLog().write("Cliente serializando salto \n");
 
     return serialized_command;
 }
+
+std::vector<uint8_t> ClientProtocol::serialize_rollback(){
+    // Falta enviar el worm_id
+    std::vector<uint8_t> serialized_command = {GAME_SENDING, ROLLBACK_CODE, worm_id};
+
+    getLog().write("Cliente serializando salto hacia atras \n");
+
+    return serialized_command;
+}
+
 
 Log& ClientProtocol::getLog() {
     static Log log_("../log/clientprotocol_log.txt");
@@ -287,3 +299,4 @@ void ClientProtocol::get_my_id(uint16_t& id) {
 }
 
 void ClientProtocol::set_worm_id(uint16_t i) { worm_id = i; }
+

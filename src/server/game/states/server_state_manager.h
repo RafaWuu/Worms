@@ -9,7 +9,7 @@
 #include <map>
 #include <memory>
 
-#include "game/server_move.h"
+#include "game/server_inputs.h"
 
 #include "server_state_enum.h"
 
@@ -28,16 +28,19 @@ private:
 
     bool is_active(const WormState& state) const;
 
-    void deactivate_states(uint16_t states_code);
-
-    void deactivate(const WormState& state);
+    void deactivate(WormState& state, Worm &worm);
 
 public:
+
     explicit StateManager(uint16_t starting);
+
     bool try_activate(StateEnum state_code, Worm& worm);
+    void deactivate_states(uint16_t states_code, Worm& worm);
 
     void update(Worm& worm);
 
     uint16_t current;
+
+    void activate_states(uint16_t states_code, Worm &worm);
 };
 #endif  // WORMS_SERVER_STATE_MANAGER_H

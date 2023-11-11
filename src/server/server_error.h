@@ -13,6 +13,12 @@
 #include "server_protocol.h"
 #include "server_protocol_constants.h"
 
+struct InvalidMsg: public LibError {
+    explicit InvalidMsg(): LibError(EBADRQC, "The message is invalid") {}
+
+    void send(ServerProtocol& protocol) { protocol.send_lobby_errormessage(0); }
+
+};
 
 struct LobbyError: public LibError {
     LobbyError(uint8_t code, const char* fmt, uint16_t a): code(code), LibError(0, fmt, a) {}

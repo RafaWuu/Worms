@@ -49,6 +49,9 @@ void Worm::update(b2World* world) {
     if (jumpTimeout > 0)
         jumpTimeout--;
 
+    if (numFootContacts < 1)
+        state_manager.try_activate(StateEnum::Falling, *this);
+
     getLog().write("Gusano %hhu actualizandose, x: %f, y %f: \n", id, body->GetPosition().x,
                    body->GetPosition().y);
 
@@ -56,43 +59,72 @@ void Worm::update(b2World* world) {
     state_manager.update(*this);
 }
 
-void Worm::handle_input(uint16_t id_, InputEnum input) {
-    if (this->client_id != id_)
-        throw InvalidWormIdGameError(id);
-
-    switch (input) {
-        case Left:
-            if (state_manager.try_activate(StateEnum::Walking, *this))
-                facing_right = false;
-
-            getLog().write("Gusano %hhu, jugador avanza a la izquierda\n", id);
-
-            break;
-        case Right:
-            if(state_manager.try_activate(StateEnum::Walking, *this))
-                facing_right = true;
-
-            getLog().write("Gusano %hhu, jugador avanza  a la derecha\n", id);
-
-            break;
-        case Stop:
-            state_manager.try_activate(StateEnum::Standing, *this);
-
-            getLog().write("Gusano %hhu, jugador frenando\n", id);
-            break;
-        case JumpF:
-            state_manager.try_activate(StateEnum::Jumping, *this);
-            getLog().write("Gusano %hhu,jugador  saltando\n", id);
-
-            break;
-        case JumpB:
-            state_manager.try_activate(StateEnum::Rolling, *this);
-            getLog().write("Gusano %hhu, jugador dando una vuelta\n", id);
-
-            break;
+void Worm::move(MoveDir direction) {
+    if(state_manager.try_activate(StateEnum::Walking, *this)){
+        facing_right = direction == DirRight;
+        getLog().write("Gusano %hhu, jugador avanza a la %s\n",
+                       facing_right ? "derecha" : "izquierda");
     }
 }
+
+void Worm::stop_move() {
+    bool r = state_manager.try_activate(StateEnum::Standing, *this);
+
+    if(r)
+        getLog().write("Gusano %hhu, jugador frenando\n", id);
+}
+
+void Worm::jump() {
+    bool r = state_manager.try_activate(StateEnum::Jumping, *this);
+    if (r)
+        getLog().write("Gusano %hhu,jugador  saltando\n", id);
+}
+
+void Worm::roll_back() {
+    bool r =  state_manager.try_activate(StateEnum::Rolling, *this);
+
+    if (r)
+        getLog().write("Gusano %hhu, jugador dando una vuelta\n", id);
+}
+
 
 ObjectType Worm::get_id() { return WORM; }
 
 uint16_t Worm::get_state() const { return state_manager.current; }
+
+bool Worm::validate_client(uint16_t id_) const{
+    return id_ == this->client_id;
+}
+
+void Worm::fire(){
+    //this->active_gun->fire();
+}
+
+void Worm::aim(float x, float y){
+    this->aim_x = x;
+    this->aim_x = y;
+
+    getLog().write("Gusano %hhu, jugador apunta hacia %f, %f\n",
+                   x, y);
+
+    state_manager.try_activate(StateEnum::Aiming, *this);
+}
+
+void Worm::stop_aim(){
+    state_manager.deactivate_states(StateEnum::Aiming, *this);
+    getLog().write("Gusano %hhu, jugador deja de apuntar\n");
+}
+
+void Worm::power(bool increasing){
+    if(state_manager.try_activate(StateEnum::Powering, *this)){
+        increasing_power = increasing;
+        getLog().write("Gusano %hhu, jugador %s su ataque\n",
+                       aiming_up ? "potencia" : "des-potencia");
+    }
+}
+
+void Worm::stop_power(){
+    state_manager.deactivate_states(StateEnum::Powering, *this);
+    getLog().write("Gusano %hhu, jugador deja de cambiar la potencia de su ataque\n");
+
+}

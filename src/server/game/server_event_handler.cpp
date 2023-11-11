@@ -8,6 +8,7 @@
 #include <vector>
 
 #include "server_error.h"
+#include "server_gameevent.h"
 
 EventHandler::EventHandler(GameWorld& game_world, StatusBroadcastMonitor& broadcast,
                            std::vector<uint16_t>& id_list, bool& had_started, uint16_t& game_owner):
@@ -17,17 +18,13 @@ EventHandler::EventHandler(GameWorld& game_world, StatusBroadcastMonitor& broadc
         broadcast(broadcast),
         game_owner(game_owner) {}
 
-void EventHandler::move_worm(uint16_t client_id, uint8_t worm_id, InputEnum code) {
-    if (!had_started)
-        throw GameHasNotStartedGameError(client_id);
 
-    Worm* worm = game_world.get_worm(worm_id);
+Worm& EventHandler::get_worm(uint8_t worm_id, uint16_t client_id){
+    Worm& worm = game_world.get_worm(worm_id, client_id);
 
-    if (!worm)
-        throw InvalidWormIdGameError(client_id);
-
-    worm->handle_input(client_id, code);
+    return worm;
 }
+
 
 void EventHandler::create_game(uint16_t client_id) {
     if (client_id != game_owner)

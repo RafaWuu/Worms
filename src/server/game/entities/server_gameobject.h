@@ -7,7 +7,12 @@
 
 #include "common_log.h"
 
-enum ObjectType { BOUNDARIE = 1, BEAM = 2, WORM = 3, WORM_SENSOR = 4, PROJECTIL = 5, BOX = 6 };
+enum ObjectType { BOUNDARIE = 0x001,
+        BEAM = 0x002,
+        WORM = 0x004,
+        WORM_SENSOR = 0x008,
+        PROJECTIL = 0x0010,
+        BOX = 0x0020 };
 
 class GameObject {
 public:

@@ -5,7 +5,7 @@
 
 #include <SDL2pp/SDL2pp.hh>
 
-enum WORM_STATE { Left = 1, Right = 2, Stop = 3, JumpF = 4, JumpB = 5 };
+enum WORM_STATE { DirLeft = 1, DirRight = 2, Stop = 3, JumpF = 4, JumpB = 5 };
 
 class Worm {
 private:

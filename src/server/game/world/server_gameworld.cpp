@@ -9,13 +9,14 @@
 #include <memory>
 #include <utility>
 
-#include "../../Box2D/b2_body.h"
-#include "../../Box2D/b2_fixture.h"
-#include "../../Box2D/b2_polygon_shape.h"
-#include "entities/server_beam_info.h"
-#include "entities/server_worm_info.h"
-#include "game/entities/server_onfloor_contactlistener.h"
+#include "b2_body.h"
+#include "b2_fixture.h"
+#include "b2_polygon_shape.h"
+#include "game/entities/server_beam_info.h"
+#include "game/entities/server_worm_info.h"
+#include "game/listeners/server_onfloor_contactlistener.h"
 #include "game/entities/server_worm_sensor.h"
+#include "server_error.h"
 
 GameWorld::GameWorld(const std::string& scenario_name):
         b2_world(b2Vec2(.0, -9.8)),
@@ -66,12 +67,14 @@ void GameWorld::set_clients_to_worms(std::vector<uint16_t> client_vec) {
     }
 }
 
-Worm* GameWorld::get_worm(uint8_t worm_id) {
+Worm& GameWorld::get_worm(uint8_t worm_id, uint16_t client_id) {
     auto it = worm_map.find(worm_id);
     if (it == worm_map.end())
-        return nullptr;
+        throw InvalidWormIdGameError(client_id);
+    if(!it->second->validate_client(client_id))
+        throw InvalidWormIdGameError(client_id);
 
-    return it->second;
+    return *it->second;
 }
 
 std::vector<WormInfo> GameWorld::get_worms_info() {

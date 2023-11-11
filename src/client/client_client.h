@@ -39,7 +39,9 @@ private:
     Queue<std::shared_ptr<EstadoJuego>> messages_received;
 
     uint8_t get_id_assigned_worm(std::map<uint8_t, uint16_t>& distribution);
+    void jump();
 
+    void rollback();
 public:
     Client(const std::string& hostname, const std::string& servicename);
     ~Client();
@@ -62,7 +64,6 @@ public:
     void move_left();
     void move_right();
     void stop_moving();
-    void jump(Jump::Type type);
 
     void start_joined_game();
 

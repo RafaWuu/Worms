@@ -11,7 +11,7 @@
 #include "game/entities/server_beam_info.h"
 #include "game/entities/server_worm_info.h"
 
-#include "server_gameworld.h"
+#include "game/world/server_gameworld.h"
 #include "server_protocol.h"
 
 class ServerProtocol;

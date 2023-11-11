@@ -29,6 +29,7 @@ std::unique_ptr<ClientState> LobbyClientState::run() {
             }
         } catch (InvalidMsg& e) {
             std::cerr << e.what() << std::endl;
+            e.send(gp);
         } catch (LobbyError& e) {
             std::cerr << e.what() << std::endl;
             e.send(gp);

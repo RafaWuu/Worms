@@ -10,11 +10,9 @@
 
 class Jump: public Command {
 private:
-    int type;
 
 public:
-    enum Type { Forward = 4, Backwards = 5 };
-    explicit Jump(Type type);
+    Jump();
     std::vector<uint8_t> serialize(ClientProtocol& protocol) override;
 };
 

@@ -4,8 +4,8 @@
 
 #include "server_onfloor_contactlistener.h"
 
-#include "server_gameobject.h"
-#include "server_worm_sensor.h"
+#include "game/entities/server_gameobject.h"
+#include "game/entities/server_worm_sensor.h"
 
 void OnFloorContactListener::BeginContact(b2Contact* contact) {
 

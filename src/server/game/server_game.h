@@ -17,7 +17,7 @@
 #include "server_event_handler.h"
 #include "server_gameevent.h"
 #include "server_gameinfo.h"
-#include "server_gameworld.h"
+#include "game/world/server_gameworld.h"
 #include "server_statusbroadcast_monitor.h"
 
 class Game: Thread {

@@ -17,3 +17,7 @@ uint16_t WormState::get_code() const { return code; }
 uint16_t WormState::get_states_requiring() { return requiring; }
 
 void WormState::on_activated(Worm& worm) {}
+
+uint16_t WormState::on_deactivated(Worm &worm){
+    return 0;
+}

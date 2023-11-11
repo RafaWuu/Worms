@@ -74,6 +74,8 @@ add_executable(client
         src/common/common_log.h
         src/client/commands/client_jump.cpp
 		src/client/commands/client_jump.h
+        src/client/commands/client_rollback.cpp
+        src/client/commands/client_rollback.h
 )
 
 add_executable(server
@@ -101,7 +103,7 @@ add_executable(server
 	src/server/game/server_event_handler.cpp
 	src/server/game/server_gamestatus.cpp
         src/server/game/entities/server_worm.cpp
-	src/server/game/server_gameworld.cpp
+		src/server/game/world/server_gameworld.cpp
 	src/server/game/server_scenario_file_handler.cpp
         src/server/game/entities/server_beam.cpp
         src/server/game/entities/server_worm_info.cpp
@@ -109,16 +111,16 @@ add_executable(server
         src/common/common_log.cpp
         src/server/game/entities/server_gameobject.cpp
         src/server/game/entities/server_gameobject.h
-		src/server/game/entities/server_onfloor_contactlistener.cpp
-		src/server/game/entities/server_onfloor_contactlistener.h
+		src/server/game/listeners/server_onfloor_contactlistener.cpp
+		src/server/game/listeners/server_onfloor_contactlistener.h
         src/server/game/entities/server_worm_sensor.cpp
         src/server/game/entities/server_worm_sensor.h
 		src/server/game/entities/server_ground.cpp
 		src/server/game/entities/server_ground.h
 		src/server/game/states/server_state_manager.cpp
 		src/server/game/states/server_state_manager.h
-		src/server/game/states/server_state_walking.cpp
-		src/server/game/states/server_state_walking.h
+        src/server/game/states/server_states.cpp
+		src/server/game/states/server_states.h
 		src/server/game/states/server_state.cpp
 		src/server/game/states/server_state.h
         src/server/game/states/server_state_enum.h

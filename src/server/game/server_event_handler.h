@@ -8,7 +8,7 @@
 #include <cstdint>
 #include <vector>
 
-#include "server_gameworld.h"
+#include "game/world/server_gameworld.h"
 #include "server_statusbroadcast_monitor.h"
 
 class EventHandler {
@@ -26,6 +26,6 @@ public:
 
     void create_game(uint16_t client_id);
 
-    void move_worm(uint16_t client_id, uint8_t worm_id, InputEnum code);
+    Worm &get_worm(uint8_t worm_id, uint16_t client_id);
 };
 #endif  // WORMS_SERVER_EVENT_HANDLER_H

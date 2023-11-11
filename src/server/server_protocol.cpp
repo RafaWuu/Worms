@@ -17,6 +17,7 @@
 
 #include "server_protocol_constants.h"
 #include "utility"
+#include "server_error.h"
 
 
 enum Request {
@@ -25,10 +26,7 @@ enum Request {
     LIST_GAMES = LOBBY_LIST_GAMES,
 };
 
-enum Event {
-    START_GAME = GAME_START_GAME,
-    MOVE = GAME_MOVE,
-};
+
 
 ServerProtocol::ServerProtocol(Socket skt): BaseProtocol(std::move(skt)) {}
 
@@ -131,14 +129,31 @@ std::unique_ptr<GameEvent> ServerProtocol::recv_game_msg(uint16_t id_client) {
     recv_1byte_number(status);
 
     switch (status) {
-        case Event::START_GAME:
+        case Input::StartGame:
             getLog().write("Server recibiendo de  %hu "
                            "pedido de iniciar partida \n",
                            id_client);
 
             return std::make_unique<GameEventStartGame>(id_client);
-        case Event::MOVE:
+        case Input::Move:
             return recv_move(id_client);
+        case Input::Jump:
+            return recv_jump(id_client);
+        case Input::Rollback:
+            return recv_rollback(id_client);
+        case Input::Fire:
+            return recv_fire(id_client);
+        case Input::Aim:
+            return recv_aim(id_client);
+        case Input::Power:
+            return recv_power(id_client);
+        case Input::DirAttack:
+            return recv_aim(id_client);
+        case Input::CountDown:
+            return recv_move(id_client);
+        case Input::SelectGun:
+            return recv_move(id_client);
+
         default:
             throw InvalidMsg();
     }
@@ -150,32 +165,85 @@ std::unique_ptr<GameEvent> ServerProtocol::recv_move(uint16_t id_client) {
     uint8_t code;
     recv_1byte_number(code);
 
-    InputEnum type = serialize_move(code);
-
     getLog().write("Server recibiendo de  %hu "
                    "pedido de mover %hhu. code(%hhu)\n",
                    id_client, id_worm, code);
 
-    return std::make_unique<GameEventMove>(id_client, id_worm, type);
-}
-
-
-InputEnum ServerProtocol::serialize_move(uint8_t code) {
     switch (code) {
-        case 01:
-            return InputEnum::Left;
-        case 02:
-            return InputEnum::Right;
-        case 03:
-            return InputEnum::Stop;
-        case 04:
-            return InputEnum::JumpF;
-        case 05:
-            return InputEnum::JumpB;
+        case MoveEnum::MoveLeft:
+            return std::make_unique<GameEventMove>(id_client, id_worm, DirLeft);
+        case MoveEnum::MoveRight:
+            return std::make_unique<GameEventMove>(id_client, id_worm, DirRight);
+        case MoveEnum::StopMove:
+            return std::make_unique<GameEventStop>(id_client, id_worm);
         default:
             throw InvalidMsg();
     }
 }
+
+std::unique_ptr<GameEvent> ServerProtocol::recv_jump(uint16_t id_client){
+    uint8_t id_worm;
+    recv_1byte_number(id_worm);
+
+    return std::make_unique<GameEventJump>(id_client, id_worm);
+}
+
+std::unique_ptr<GameEvent> ServerProtocol::recv_rollback(uint16_t id_client){
+    uint8_t id_worm;
+    recv_1byte_number(id_worm);
+
+    return std::make_unique<GameEventRollBack>(id_client, id_worm);
+}
+
+std::unique_ptr<GameEvent> ServerProtocol::recv_fire(uint16_t id_client){
+    uint8_t id_worm;
+    recv_1byte_number(id_worm);
+
+    return std::make_unique<GameEventFireGun>(id_client, id_worm);
+}
+
+std::unique_ptr<GameEvent> ServerProtocol::recv_aim(uint16_t id_client){
+    uint8_t id_worm;
+    recv_1byte_number(id_worm);
+
+    uint8_t how;
+    recv_1byte_number(how);
+
+    switch(how){
+        case AimType::AimUp:
+            float x;
+            float y;
+
+            recv_4byte_float(x);
+            recv_4byte_float(y);
+
+            return std::make_unique<GameEventAim>(id_client, id_worm, x, y);
+        case AimType::AimStop:
+            return std::make_unique<GameEventAimStop>(id_client, id_worm);
+        default:
+            throw InvalidMsg();
+    }
+}
+
+std::unique_ptr<GameEvent> ServerProtocol::recv_power(uint16_t id_client){
+    uint8_t id_worm;
+    recv_1byte_number(id_worm);
+
+    uint8_t how;
+    recv_1byte_number(how);
+
+    switch(how){
+        case PowerType::PowerUp:
+            return std::make_unique<GameEventPower>(id_client, id_worm, true);
+        case PowerType::PowerDown:
+            return std::make_unique<GameEventPower>(id_client,id_worm, false);
+        case PowerType::PowerStop:
+            return std::make_unique<GameEventPowerStop>(id_client, id_worm);
+        default:
+            throw InvalidMsg();
+    }
+}
+
 
 void ServerProtocol::send_game_errormessage(uint8_t error_code) {
     send_1byte_number(GAME_SENDING);

@@ -8,6 +8,7 @@
 #include <utility>
 
 #include "server_game.h"
+#include "server_error.h"
 
 GameClientState::GameClientState(uint16_t client_id, ServerProtocol& gameProtocol, Game& game):
         game(game),
@@ -29,6 +30,7 @@ std::unique_ptr<ClientState> GameClientState::run() {
             game.push_event(std::move(event));
         } catch (InvalidMsg& e) {
             std::cerr << e.what() << std::endl;
+            e.send(gp);
         } catch (ClosedSocket& e) {
             is_alive = false;
         } catch (ClosedQueue& e) {

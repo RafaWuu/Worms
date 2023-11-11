@@ -8,7 +8,7 @@
 #include <cstdint>
 
 #include "game/entities/server_worm.h"
-#include "game/server_move.h"
+#include "game/server_inputs.h"
 
 class Worm;
 
@@ -40,5 +40,7 @@ public:
     uint16_t get_code() const;
 
     virtual void on_activated(Worm& worm);
+    virtual uint16_t on_deactivated(Worm& worm); // Devuelve estados que deben activarse
+
 };
 #endif  // WORMS_SERVER_STATE_H

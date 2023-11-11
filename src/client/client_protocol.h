@@ -56,7 +56,9 @@ public:
 
     uint8_t worm_id = 0;
 
-    std::vector<uint8_t> serialize_jump(uint8_t type);
+    std::vector<uint8_t> serialize_jump();
+
+    std::vector<uint8_t> serialize_rollback();
 };
 
 #endif
