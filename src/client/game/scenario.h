@@ -13,6 +13,7 @@ public:
     Scenario(std::vector<Beam> beams, std::vector<Worm> worms);
 
     std::vector<Worm> get_worms();
+    std::vector<Beam> get_beams();
 };
 
 #endif

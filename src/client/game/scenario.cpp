@@ -6,3 +6,6 @@ Scenario::Scenario(std::vector<Beam> beams, std::vector<Worm> worms) : beams(bea
 std::vector<Worm> Scenario::get_worms() {
     return worms;
 }
+std::vector<Beam> Scenario::get_beams() {
+    return beams;
+}
