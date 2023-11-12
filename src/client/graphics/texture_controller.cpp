@@ -17,6 +17,12 @@ TextureController::TextureController(SDL2pp::Renderer& renderer_) : renderer(ren
 
     SDL2pp::Texture rolling(renderer,SDL2pp::Surface("../assets/wbackflp.png").SetColorKey(true, color_key));
     textures.emplace(AnimationState::ROLLING, std::make_shared<SDL2pp::Texture>(std::move(rolling)));
+
+    SDL2pp::Texture beam_3m(renderer,SDL2pp::Surface("../assets/beam_3m.png").SetColorKey(true, color_key));
+    textures.emplace(AnimationState::SCENARIO_BEAM_3M, std::make_shared<SDL2pp::Texture>(std::move(beam_3m)));
+
+    SDL2pp::Texture beam_6m(renderer,SDL2pp::Surface("../assets/beam_6m.png").SetColorKey(true, color_key));
+    textures.emplace(AnimationState::SCENARIO_BEAM_6M, std::make_shared<SDL2pp::Texture>(std::move(beam_6m)));
 }
 
 std::shared_ptr<SDL2pp::Texture> TextureController::get_texture(AnimationState state) {

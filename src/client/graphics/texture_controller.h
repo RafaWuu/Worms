@@ -10,7 +10,11 @@ enum AnimationState {
     // Standing still
     IDLE,
     JUMPING,
-    ROLLING
+    ROLLING,
+    // Scenario
+    SCENARIO_BEAM_3M,
+    SCENARIO_BEAM_6M,
+    SCENARIO_GROUND
 };
 
 class TextureController {

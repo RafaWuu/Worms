@@ -38,7 +38,7 @@ public:
     LobbyState receive_confirmation();
 
     Scenario receive_scenario();
-    void receive_beam(std::vector<Beam> beams);
+    void receive_beam(std::vector<Beam>& beams);
 
     std::map<uint8_t, uint16_t> receive_worms_distribution();
 

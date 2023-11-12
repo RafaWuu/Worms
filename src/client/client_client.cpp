@@ -27,7 +27,8 @@ Client::Client(const std::string& hostname, const std::string& servicename):
         servicename(servicename),
         socket(hostname.c_str(), servicename.c_str()),
         protocol(std::move(socket)),
-        messages_to_send(1000) {
+        messages_to_send(1000),
+        messages_received(1000) {
 
     sender = new ClientSender(protocol, messages_to_send);
     receiver = new ClientReceiver(protocol, messages_received);
@@ -118,9 +119,10 @@ int Client::start() {
     Window window("Worms", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480,
                   SDL_WINDOW_RESIZABLE);
     Renderer renderer(window, -1, SDL_RENDERER_ACCELERATED);
+    //renderer.SetLogicalSize(1920,1080);
 
     TextureController texture_controller(renderer);
-    WorldView worldview(texture_controller, scenario->get_worms());
+    WorldView worldview(texture_controller, std::move(this->scenario));
 
     bool running = true;
     while (running) {
