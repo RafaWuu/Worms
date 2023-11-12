@@ -3,6 +3,8 @@
 
 #include <QDialog>
 #include "../client_client.h"
+#include <memory>
+
 namespace Ui {
 class NewGameDialog;
 }
@@ -12,7 +14,7 @@ class NewGameDialog : public QDialog
     Q_OBJECT
 
 public:
-    NewGameDialog(Client& client, QWidget *parent = nullptr);
+    NewGameDialog(std::shared_ptr<Client> client, QWidget *parent = nullptr);
     ~NewGameDialog();
 
 private slots:
@@ -21,7 +23,7 @@ private slots:
 
 private:
     Ui::NewGameDialog *ui;
-    Client& client;
+    std::shared_ptr<Client> client;
 };
 
 #endif // NEW_GAME_DIALOG_H

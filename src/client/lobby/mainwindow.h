@@ -5,6 +5,8 @@
 #include "new_game_dialog.h"
 #include "join_game_dialog.h"
 #include "../client_client.h"
+#include <memory>
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -14,7 +16,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    MainWindow(Client& client, QWidget *parent = nullptr);
+    MainWindow(std::shared_ptr<Client>, QWidget *parent = nullptr);
     ~MainWindow();
 
 private slots:
@@ -31,6 +33,6 @@ private:
     Ui::MainWindow *ui;
     NewGameDialog* new_game;
     JoinGameDialog* join_game;
-    Client& client;
+    std::shared_ptr<Client> client;
 };
 #endif // MAINWINDOW_H

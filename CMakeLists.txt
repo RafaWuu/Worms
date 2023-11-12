@@ -30,6 +30,7 @@ qt5_wrap_ui(UIS_HEADERS
   src/client/lobby/join_game_dialog.ui
   src/client/lobby/mainwindow.ui
   src/client/lobby/new_game_dialog.ui
+  src/client/lobby/connectdialog.ui
 )
 # Habilito el automoc para poder hacer autoconnect de señales
 set(CMAKE_AUTOMOC on)
@@ -64,6 +65,7 @@ add_executable(client
 	src/client/lobby/join_game_dialog.cpp
 	src/client/lobby/mainwindow.cpp
 	src/client/lobby/new_game_dialog.cpp
+	src/client/lobby/connectdialog.cpp
 	# graphics
 	src/client/graphics/animation.cpp
 	src/client/graphics/player.cpp

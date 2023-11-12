@@ -2,7 +2,7 @@
 
 #include "ui_join_game_dialog.h"
 
-JoinGameDialog::JoinGameDialog(Client& client, QWidget* parent):
+JoinGameDialog::JoinGameDialog(std::shared_ptr<Client> client, QWidget* parent):
         QDialog(parent), ui(new Ui::JoinGameDialog), client(client) {
     ui->setupUi(this);
     /*
@@ -36,7 +36,7 @@ void JoinGameDialog::on_join_clicked() {
         ui->msg_validacion->setText(msg);
     } else {
         try {
-            LobbyState l = client.join_game(id);
+            LobbyState l = client->join_game(id);
 
             QString id = QString::number(l.id);
             QString msg = QString("Se ha unido a partida %1").arg(id);
@@ -44,10 +44,9 @@ void JoinGameDialog::on_join_clicked() {
 
             // recv_scenario() tiene que devolver el scenario?
             // o lo maneja el cliente directamente todo
-            Scenario scenario = client.receive_scenario();
+            Scenario scenario = client->receive_scenario();
             QApplication::exit();
-            client.start_joined_game();
-
+            client->start_joined_game();
         } catch (ErrorLobby& e) {
             QString msg = QString(e.what());
             ui->msg_validacion->setText(msg);

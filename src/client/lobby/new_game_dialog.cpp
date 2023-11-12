@@ -3,8 +3,9 @@
 #include "game/scenario.h"
 
 #include <iostream>
+#include <memory>
 
-NewGameDialog::NewGameDialog(Client& client, QWidget *parent) :
+NewGameDialog::NewGameDialog(std::shared_ptr<Client> client, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::NewGameDialog),
     client(client)
@@ -29,7 +30,7 @@ void NewGameDialog::on_play_clicked()
         return;
     }
     try{
-        LobbyState l = client.crear_partida(escenario);
+        LobbyState l = client->crear_partida(escenario);
 
         QString id = QString::number(l.id);
         QString msg = QString("Partida creada, el id es: %1").arg(id);
@@ -37,7 +38,7 @@ void NewGameDialog::on_play_clicked()
 
         // recv_scenario() tiene que devolver el scenario? 
         // o lo maneja el cliente directamente todo
-        Scenario scenario = client.receive_scenario();
+        Scenario scenario = client->receive_scenario();
 
     }catch (ErrorLobby& e) {
         QString msg = QString(e.what());
