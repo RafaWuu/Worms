@@ -26,6 +26,14 @@ include_directories(${SDL2PP_INCLUDE_DIRS})
 include_directories(PRIVATE ${BOX2D_INCLUDE_PATH})
 # Find the QtWidgets library
 
+include(FetchContent)
+FetchContent_Declare(
+		googletest
+		URL https://github.com/google/googletest/archive/b10fad38c4026a29ea6561ab15fc4818170d1c10.zip
+)
+
+FetchContent_MakeAvailable(googletest)
+
 qt5_wrap_ui(UIS_HEADERS
   src/client/lobby/join_game_dialog.ui
   src/client/lobby/mainwindow.ui
@@ -74,35 +82,20 @@ add_executable(client
 	src/client/graphics/worldview.cpp
 	${UIS_HEADERS}
         src/common/common_log.cpp
-        src/common/common_log.h
         src/client/commands/client_jump.cpp
-		src/client/commands/client_jump.h
         src/client/commands/client_rollback.cpp
-        src/client/commands/client_rollback.h
-		src/client/game/ground.h
         src/client/game/ground.cpp
 		src/client/graphics/entity.cpp
-		src/client/graphics/entity.h
 		src/client/game/entity_info.cpp
-		src/client/game/entity_info.h
 		src/client/game/ground.cpp
-		src/client/game/ground.h
         src/client/graphics/entities_factory.cpp
-        src/client/graphics/entities_factory.h
 		src/client/graphics/debug_entity.cpp
-		src/client/graphics/debug_entity.h
 		src/client/client_event_handler.cpp
-		src/client/client_event_handler.h
         src/client/commands/client_aim.cpp
-        src/client/commands/client_aim.h
 		src/client/commands/client_stop_aim.cpp
-		src/client/commands/client_stop_aim.h
 		src/client/commands/client_fire.cpp
-		src/client/commands/client_fire.h
 		src/client/game/proyectil.cpp
-		src/client/game/proyectil.h
 		src/client/graphics/proyectil_entity.cpp
-		src/client/graphics/proyectil_entity.h
 )
 
 add_executable(server
@@ -137,45 +130,32 @@ add_executable(server
         src/server/game/entities/server_beam_info.cpp
         src/common/common_log.cpp
         src/server/game/entities/server_gameobject.cpp
-        src/server/game/entities/server_gameobject.h
 		src/server/game/listeners/server_onfloor_contactlistener.cpp
-		src/server/game/listeners/server_onfloor_contactlistener.h
         src/server/game/entities/server_worm_sensor.cpp
-        src/server/game/entities/server_worm_sensor.h
 		src/server/game/entities/server_ground.cpp
-		src/server/game/entities/server_ground.h
 		src/server/game/states/server_state_manager.cpp
-		src/server/game/states/server_state_manager.h
         src/server/game/states/server_states.cpp
-		src/server/game/states/server_states.h
 		src/server/game/states/server_state.cpp
-		src/server/game/states/server_state.h
-        src/server/game/states/server_state_enum.h
         src/server/game/entities/server_gameobject_info.cpp
-        src/server/game/entities/server_gameobject_info.h
 		src/server/game/entities/server_ground_info.cpp
-		src/server/game/entities/server_ground_info.h
 		src/server/game/entities/server_worm_sensor_info.cpp
-		src/server/game/entities/server_worm_sensor_info.h
-		src/server/game/weapons/server_weapon.h
 		src/server/game/weapons/server_weapon.cpp
 		src/server/game/weapons/server_bazooka_proyectil.cpp
-		src/server/game/weapons/server_bazooka_proyectil.h
 		src/server/game/weapons/bazooka_proyectil_info.cpp
-		src/server/game/weapons/bazooka_proyectil_info.h
-
 )
 
 target_include_directories(client PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/common
     ${CMAKE_CURRENT_SOURCE_DIR}/src/client
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/server
+	${CMAKE_CURRENT_SOURCE_DIR}/test
 
 )
 
 target_include_directories(server PUBLIC
 		${CMAKE_CURRENT_SOURCE_DIR}/src/common
 		${CMAKE_CURRENT_SOURCE_DIR}/src/server
+		${CMAKE_CURRENT_SOURCE_DIR}/test
+
 )
 
 
@@ -185,3 +165,7 @@ target_link_libraries(client PUBLIC ${BOX2D_LIBRARY_PATH}
 					Qt5::Widgets
 					Qt5::Core)
 target_link_libraries(server PUBLIC ${BOX2D_LIBRARY_PATH})
+
+add_executable(hello_test test/hello_test.cc)
+target_link_libraries(hello_test GTest::gtest_main)
+add_test(NAME asd COMMAND hello_test)
