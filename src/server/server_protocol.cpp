@@ -4,20 +4,18 @@
 
 #include "server_protocol.h"
 
-#include <iostream>
 #include <memory>
 #include <stdexcept>
 #include <vector>
 
-#include "game/entities/server_beam_info.h"
 #include "game/entities/server_worm_info.h"
 #include "game/server_gameevent.h"
 #include "game/server_gameinfo.h"
 #include "lobby/server_lobby_request.h"
 
-#include "server_protocol_constants.h"
-#include "utility"
+#include "../common/common_protocol_constants.h"
 #include "server_error.h"
+#include "utility"
 
 
 enum Request {
@@ -254,62 +252,49 @@ void ServerProtocol::send_game_errormessage(uint8_t error_code) {
 }
 
 
-void ServerProtocol::send_scenario(std::vector<BeamInfo>& beams_vec,
-                                   std::vector<WormInfo>& worms_vec) {
+void ServerProtocol::send_scenario(std::map<uint16_t, std::shared_ptr<GameObjectInfo>>& entities,
+                                   float height, float width) {
     send_1byte_number(GAME_SENDING);
     send_1byte_number(GAME_SCENARIO);
 
-    send_1byte_number(beams_vec.size());
+    send_4byte_float(height);
+    send_4byte_float(width);
 
-    for (auto& beam: beams_vec) {
-        send_4byte_float(beam.x);
-        send_4byte_float(beam.y);
-        send_4byte_float(beam.height);
-        send_4byte_float(beam.width);
-        send_4byte_float(beam.angle);
+    send_2byte_number(entities.size());
+
+    for (auto& e: entities) {
+        send_2byte_number(e.first);
+        e.second->serialize_scenario(*this);
     }
 
-    send_1byte_number(worms_vec.size());
-
-    for (auto& worm: worms_vec) {
-        send_1byte_number(worm.id);
-        send_4byte_float(worm.x);
-        send_4byte_float(worm.y);
-        send_1byte_number(worm.dir);
-        send_2byte_number(worm.state);
-        send_1byte_number(worm.health);
-    }
     getLog().write("Server enviando escenario \n");
 }
 
-void ServerProtocol::send_worms_list(std::vector<WormInfo>& worms_vec) {
+void ServerProtocol::send_worms_list(const std::map<uint16_t, std::shared_ptr<WormInfo>>& worms) {
     send_1byte_number(GAME_SENDING);
     send_1byte_number(GAME_LIST_WORMS);
 
-    send_1byte_number((uint8_t)worms_vec.size());
+    send_2byte_number(worms.size());
 
-    for (auto& worm: worms_vec) {
-        send_1byte_number(worm.id);
-        send_2byte_number(worm.client_id);
+    for (auto& e: worms) {
+        e.second->serialize_start(*this);
     }
-    getLog().write("Server enviando lista de %hhu gusanos \n", (uint8_t)worms_vec.size());
+
+    getLog().write("Server enviando lista de gusanos \n");
 }
 
-void ServerProtocol::send_status(uint8_t current_worm, std::vector<WormInfo>& worms_vec) {
+void ServerProtocol::send_status(uint16_t current_worm,
+                                 std::map<uint16_t, std::shared_ptr<GameObjectInfo>> entities) {
     send_1byte_number(GAME_SENDING);
     send_1byte_number(GAME_STATUS);
 
-    send_1byte_number(current_worm);
+    send_2byte_number(current_worm);
 
-    send_1byte_number(worms_vec.size());
+    send_2byte_number(entities.size());
 
-    for (auto& worm: worms_vec) {
-        send_1byte_number(worm.id);
-        send_4byte_float(worm.x);
-        send_4byte_float(worm.y);
-        send_1byte_number(worm.dir);
-        send_2byte_number(worm.state);
-        send_1byte_number(worm.health);
+    for (auto& e: entities) {
+        send_2byte_number(e.first);
+        e.second->serialize_status(*this);
     }
 
     // getLog().write("Server enviando estado de partida, %hhu gusanos vivos \n", worms_vec.size());

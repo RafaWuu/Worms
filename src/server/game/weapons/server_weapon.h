@@ -5,11 +5,19 @@
 #ifndef WORMS_SERVER_WEAPON_H
 #define WORMS_SERVER_WEAPON_H
 
-class Weapon{
 
+#include <memory>
+
+#include "b2_math.h"
+class GameWorld;
+class BazookaProyectil;
+
+class Weapon{
+private:
+    GameWorld& world;
 public:
-    Weapon();
-    virtual void create_projectil() = 0;
+    explicit Weapon(GameWorld& world);
+    void fire_proyectil(b2Vec2 pos, float angle);
 
 };
 #endif //WORMS_SERVER_WEAPON_H

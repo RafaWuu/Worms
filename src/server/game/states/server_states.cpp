@@ -186,7 +186,15 @@ FiringState::FiringState() {
 
 
 bool FiringState::update(Worm& worm) {
-    worm.fire();
+    b2Vec2 source = b2Vec2(1.5,0);
+
+    if (!worm.facing_right){
+        source.x = -source.x;
+    }
+
+
+    worm.current_gun.fire_proyectil(worm.body->GetWorldPoint( source), worm.desiredAngle);
+
     return false;
 }
 
@@ -199,7 +207,18 @@ AimingState::AimingState() {
 }
 
 bool AimingState::update(Worm& worm) {
+    b2Vec2 toTarget = worm.body->GetLocalPoint(b2Vec2(worm.aim_x, worm.aim_y));
+    float angle = atan2f( toTarget.y, toTarget.x );
+
+    if (angle > M_PI){
+        angle = M_PI;
+    } else if (angle < -M_PI){
+        angle = -M_PI;
+    }
+
+    worm.desiredAngle = angle;
     return true;
+
 }
 
 PoweringState::PoweringState() {

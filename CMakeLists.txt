@@ -79,6 +79,30 @@ add_executable(client
 		src/client/commands/client_jump.h
         src/client/commands/client_rollback.cpp
         src/client/commands/client_rollback.h
+		src/client/game/ground.h
+        src/client/game/ground.cpp
+		src/client/graphics/entity.cpp
+		src/client/graphics/entity.h
+		src/client/game/entity_info.cpp
+		src/client/game/entity_info.h
+		src/client/game/ground.cpp
+		src/client/game/ground.h
+        src/client/graphics/entities_factory.cpp
+        src/client/graphics/entities_factory.h
+		src/client/graphics/debug_entity.cpp
+		src/client/graphics/debug_entity.h
+		src/client/client_event_handler.cpp
+		src/client/client_event_handler.h
+        src/client/commands/client_aim.cpp
+        src/client/commands/client_aim.h
+		src/client/commands/client_stop_aim.cpp
+		src/client/commands/client_stop_aim.h
+		src/client/commands/client_fire.cpp
+		src/client/commands/client_fire.h
+		src/client/game/proyectil.cpp
+		src/client/game/proyectil.h
+		src/client/graphics/proyectil_entity.cpp
+		src/client/graphics/proyectil_entity.h
 )
 
 add_executable(server
@@ -127,6 +151,18 @@ add_executable(server
 		src/server/game/states/server_state.cpp
 		src/server/game/states/server_state.h
         src/server/game/states/server_state_enum.h
+        src/server/game/entities/server_gameobject_info.cpp
+        src/server/game/entities/server_gameobject_info.h
+		src/server/game/entities/server_ground_info.cpp
+		src/server/game/entities/server_ground_info.h
+		src/server/game/entities/server_worm_sensor_info.cpp
+		src/server/game/entities/server_worm_sensor_info.h
+		src/server/game/weapons/server_weapon.h
+		src/server/game/weapons/server_weapon.cpp
+		src/server/game/weapons/server_bazooka_proyectil.cpp
+		src/server/game/weapons/server_bazooka_proyectil.h
+		src/server/game/weapons/bazooka_proyectil_info.cpp
+		src/server/game/weapons/bazooka_proyectil_info.h
 
 )
 

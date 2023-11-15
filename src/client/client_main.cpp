@@ -6,7 +6,7 @@
 
 #include "lobby/mainwindow.h"
 #include "lobby/connectdialog.h"
-#include "src/common/common_liberror.h"
+#include "../common/common_liberror.h"
 
 #include "client_client.h"
 

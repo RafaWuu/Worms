@@ -4,7 +4,7 @@
 
 #include "client_rollback.h"
 
-std::vector<uint8_t> Rollback::serialize(ClientProtocol& protocol) {
+void Rollback::serialize(ClientProtocol& protocol) {
     return protocol.serialize_rollback();
 }
 

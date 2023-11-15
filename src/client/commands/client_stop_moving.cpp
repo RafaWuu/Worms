@@ -2,6 +2,6 @@
 
 StopMoving::StopMoving() {}
 
-std::vector<uint8_t> StopMoving::serialize(ClientProtocol& protocol) {
+void StopMoving::serialize(ClientProtocol& protocol) {
     return protocol.serialize_stop_move();
 }

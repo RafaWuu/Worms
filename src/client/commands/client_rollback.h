@@ -14,7 +14,7 @@ private:
 
 public:
     Rollback();
-    std::vector<uint8_t> serialize(ClientProtocol& protocol) override;
+    void serialize(ClientProtocol& protocol) override;
 };
 
 #endif //WORMS_CLIENT_ROLLBACK_H

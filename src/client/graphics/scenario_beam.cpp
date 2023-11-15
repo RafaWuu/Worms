@@ -33,7 +33,7 @@ void ScenarioBeam::render(SDL2pp::Renderer& renderer) {
     renderer.Copy(
             *texture,
             SDL2pp::Rect(0, 0,(*texture).GetWidth(),(*texture).GetHeight()),
-            SDL2pp::Rect(x*(320/20)+320, y* (240 / 20) + 240, 150,50),
+            SDL2pp::Rect(x*(640.0/20.0), -y* (480.0 / 20.0) + 480.0 + 50.0, (6*640.0/20.0),(.8*480.0 / 20.0)),
             angle,
             center,
             0);

@@ -1,16 +1,21 @@
 #ifndef ESTADO_JUEGO_H
 #define ESTADO_JUEGO_H
 
+#include <map>
 #include <vector>
+
+#include "entity_info.h"
 #include "worm.h"
 
 class EstadoJuego {
 private:
     std::vector<Worm> worms;
+    std::map<uint16_t, std::unique_ptr<EntityInfo>> entities_info;
 public:
-    explicit EstadoJuego(const std::vector<Worm>& worms);
+    explicit EstadoJuego(std::map<uint16_t, std::unique_ptr<EntityInfo>>&& entities);
 
-    std::vector<Worm> get_worms();
+    std::map<uint16_t, std::unique_ptr<EntityInfo>>& get_updated_info();
+
 };
 
 #endif

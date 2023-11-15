@@ -10,8 +10,8 @@
 #include "game/server_statusbroadcast_monitor.h"
 
 #include "common_liberror.h"
+#include "common_protocol_constants.h"
 #include "server_protocol.h"
-#include "server_protocol_constants.h"
 
 struct InvalidMsg: public LibError {
     explicit InvalidMsg(): LibError(EBADRQC, "The message is invalid") {}

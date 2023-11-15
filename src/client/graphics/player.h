@@ -1,23 +1,24 @@
 #ifndef __PLAYER_H__
 #define __PLAYER_H__
 
-#include <SDL2pp/SDL2pp.hh>
-#include "texture_controller.h"
-#include "animation.h"
-#include "../game/worm.h"
 #include <vector>
 
-class Player {
+#include <SDL2pp/SDL2pp.hh>
+
+#include "animation.h"
+#include "entity.h"
+#include "texture_controller.h"
+
+class Player : public Entity{
 public:
     Player(TextureController& texture_controller, int id);
     ~Player();
-    void update(float dt);
-    void render(SDL2pp::Renderer &renderer);
-    void moveRigth();
-    void moveLeft();
-    void stopMoving();
-    int get_id() const;
-    void update_info(Worm& worm);
+
+    void update_info(EntityInfo* info) override;
+    void update(float dt) override;
+    void render(SDL2pp::Renderer &renderer) override;
+
+    uint16_t get_id() const override;
 
 private:
     TextureController& texture_controller;

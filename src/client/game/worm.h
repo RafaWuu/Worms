@@ -5,11 +5,13 @@
 
 #include <SDL2pp/SDL2pp.hh>
 
+#include "entity_info.h"
+
 enum WORM_STATE { DirLeft = 1, DirRight = 2, Stop = 3, JumpF = 4, JumpB = 5 };
 
-class Worm {
+class Worm : public EntityInfo {
 private:
-    uint8_t id;
+    uint16_t id;
     float pos_x;
     float pos_y;
     uint8_t dir;
@@ -17,18 +19,20 @@ private:
     uint8_t health;
 
 public:
-    Worm(uint8_t id, float pos_x, float pos_y, uint8_t dir, uint16_t state, uint8_t health);
+    Worm(uint16_t id, float pos_x, float pos_y, uint8_t dir, uint16_t state, uint8_t health);
 
     void set_position(float x, float y);
     void set_health(int8_t health);
 
-    float get_pos_x();
-    float get_pos_y();
+    float get_pos_x() const override;
+    float get_pos_y() const override;
     int get_health();
     int get_state();
-    int get_id() const;
+    uint16_t get_id() const override;
 
     uint8_t get_dir() const;
+
+    std::unique_ptr<Entity> create(TextureController &controller) override;
 };
 
 #endif

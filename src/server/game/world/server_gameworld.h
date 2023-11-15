@@ -10,44 +10,48 @@
 #include <string>
 #include <vector>
 
-#include "b2_world.h"
-#include "game/listeners/server_onfloor_contactlistener.h"
 #include "game/entities/server_beam.h"
-#include "game/entities/server_beam_info.h"
 #include "game/entities/server_ground.h"
-#include "game/entities/server_worm.h"
-#include "game/entities/server_worm_info.h"
-
-#include "game/server_scenario_file_handler.h"
 #include "game/entities/server_worm_sensor.h"
+#include "game/listeners/server_onfloor_contactlistener.h"
+#include "game/server_scenario_file_handler.h"
+#include "game/weapons/server_weapon.h"
+#include "game/weapons/server_bazooka_proyectil.h"
+
+#include "b2_world.h"
+
+class Weapon;
 
 class GameWorld {
 private:
     ScenarioFileHandler file_handler;
-    b2World b2_world;
+    std::map<uint16_t, std::shared_ptr<Worm>> worm_map;
 
-    std::map<uint16_t, Worm*> worm_map;
-    std::map<uint16_t, WormSensor*> worm_sensor_map;
-
-    std::vector<Beam> beam_vec;
-
+    std::map<uint16_t, std::shared_ptr<GameObject>> entities_map;
+    uint16_t entity_id;
+    Weapon* bazooka;
     OnFloorContactListener listener;
-    Ground ground;
 
 public:
+
+    b2World b2_world;
     explicit GameWorld(const std::string& scenario_name);
     ~GameWorld();
 
     void step(int steps);
 
-    void update_worms();
+    void update_entities();
 
     void set_clients_to_worms(std::vector<uint16_t> client_vec);
 
-    std::vector<WormInfo> get_worms_info();
-
-    std::vector<BeamInfo> get_beams_info();
-
     Worm &get_worm(uint8_t worm_id, uint16_t client_id);
+    std::map<uint16_t, std::shared_ptr<GameObjectInfo>>  get_entities_info();
+    std::map<uint16_t, std::shared_ptr<WormInfo>> get_worms_info();
+
+    void get_dimensions(float* h, float* w);
+
+    double height;
+    double width;
+    void add_proyectil(std::shared_ptr<BazookaProyectil>proyectil);
 };
 #endif  // WORMS_SERVER_GAMEWORLD_H

@@ -6,7 +6,7 @@
 
 #include "b2_fixture.h"
 #include "b2_polygon_shape.h"
-
+#include "server_worm_sensor_info.h"
 
 WormSensor::WormSensor(Worm* worm): worm(worm), GameObject() {
     b2PolygonShape dynamicBox;
@@ -22,14 +22,18 @@ WormSensor::WormSensor(Worm* worm): worm(worm), GameObject() {
 }
 
 
-ObjectType WormSensor::get_id() { return WORM_SENSOR; }
 
 void WormSensor::handle_begin_floor_contact(GameObject* other) {
-    if (other->get_id() == BEAM)
+    if ((other->get_id() & (BEAM | GROUND)) != 0)
         worm->numFootContacts++;
 }
 
 void WormSensor::handle_end_floor_contact(GameObject* other) {
-    if (other->get_id() == BEAM)
+    if ((other->get_id() & (BEAM | GROUND)) != 0)
         worm->numFootContacts--;
+}
+ObjectType WormSensor::get_id() const { return WORM_SENSOR; }
+
+std::unique_ptr<GameObjectInfo> WormSensor::get_status() const {
+    return std::make_unique<WormSensorInfo>(*this);
 }

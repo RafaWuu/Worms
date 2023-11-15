@@ -36,9 +36,7 @@ void NewGameDialog::on_play_clicked()
         QString msg = QString("Partida creada, el id es: %1").arg(id);
         ui->msg_validacion->setText(msg);
 
-        // recv_scenario() tiene que devolver el scenario? 
-        // o lo maneja el cliente directamente todo
-        Scenario scenario = client->receive_scenario();
+        client->receive_scenario();
 
     }catch (ErrorLobby& e) {
         QString msg = QString(e.what());

@@ -2,12 +2,15 @@
 #define __DESKTOP_WORMS_SRC_CLIENT_GRAPHICS_BEAM_H_
 
 
-# include "texture_controller.h"
-#include <SDL2pp/SDL2pp.hh>
-#include "texture_controller.h"
 #include <vector>
 
-class ScenarioBeam
+#include <SDL2pp/SDL2pp.hh>
+
+#include "entity.h"
+#include "game/entity_info.h"
+#include "texture_controller.h"
+
+class ScenarioBeam : public Entity
 {
 private:
     TextureController& texture_controller;
@@ -21,7 +24,6 @@ public:
     ScenarioBeam(TextureController& texture_controller,
         float x, float y, float width, float height, float angle);
     ~ScenarioBeam();
-    void render(SDL2pp::Renderer& renderer);
-
+    void render(SDL2pp::Renderer& renderer) override;
 };
 #endif // __DESKTOP_WORMS_SRC_CLIENT_GRAPHICS_BEAM_H_

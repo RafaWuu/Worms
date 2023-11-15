@@ -11,9 +11,7 @@ void ClientSender::run() {
     while (keep_talking) {
         try {
             std::shared_ptr<Command> command = messages_to_send.pop();
-
-            std::vector<uint8_t> serialized_command = command->serialize(protocol);
-            protocol.send_uint_vector(serialized_command);
+            command->serialize(protocol);
 
         } catch (ClosedSocket& e) {
             is_alive = keep_talking = false;

@@ -10,33 +10,39 @@
 #include <utility>
 
 #include "b2_body.h"
-#include "b2_fixture.h"
-#include "b2_polygon_shape.h"
+
 #include "game/entities/server_beam_info.h"
 #include "game/entities/server_worm_info.h"
-#include "game/listeners/server_onfloor_contactlistener.h"
 #include "game/entities/server_worm_sensor.h"
 #include "server_error.h"
 
 GameWorld::GameWorld(const std::string& scenario_name):
         b2_world(b2Vec2(.0, -9.8)),
         worm_map(),
-        worm_sensor_map(),
-        beam_vec(),
+        entities_map(),
         file_handler(scenario_name),
-        listener(),
-        ground(&b2_world) {
+        listener()
+{
 
+    bazooka = new Weapon(*this);
 
-    for (int i = 0; i < 1; ++i) {
-        beam_vec.emplace_back(&b2_world, -3, 6, 6, .8, 15);
-    }
+    entity_id = 0;
+
+    height = 20.0;
+    width = 20.0;
+
+    entities_map.emplace(entity_id++, std::make_shared<Ground>(&b2_world));
+
+    entities_map.emplace(entity_id++, std::make_shared<Beam>(&b2_world, 15, 10, 6, .8, 0));
+    entities_map.emplace(entity_id++, std::make_shared<Beam>(&b2_world, 2, 5, 6, .8, 0));
+
 
     for (int i = 0; i < 2; ++i) {
-        auto* worm = new Worm(i, &b2_world, -10.3f + (float)i * 20.f, 4.11);
-        auto* sensor = new WormSensor(worm);
-        worm_map.insert({i, worm});
-        worm_sensor_map.insert({i, sensor});
+        auto worm = std::make_shared<Worm>(entity_id, &b2_world, 2.0 + (float)i * 13.f, 15, *bazooka);
+        entities_map.emplace(entity_id, worm);
+        worm_map.emplace(entity_id++, worm);
+
+        entities_map.emplace(entity_id++, std::make_shared<WormSensor>(worm.get()));
     }
 
     b2_world.SetContactListener(&listener);
@@ -50,9 +56,9 @@ void GameWorld::step(int steps) {
     }
 }
 
-void GameWorld::update_worms() {
-    for (auto& worm: worm_map) {
-        worm.second->update(&b2_world);
+void GameWorld::update_entities() {
+    for (auto& e: entities_map) {
+        e.second->update(b2_world);
     }
 }
 
@@ -61,7 +67,7 @@ void GameWorld::set_clients_to_worms(std::vector<uint16_t> client_vec) {
 
     for (auto& worm: worm_map) {
         worm.second->set_client_id(client_vec[i % client_vec.size()]);
-        std::cout << "Worm :" << worm.first << ", Client: " << client_vec[i % worm_map.size()]
+        std::cout << "Worm :" << worm.first << ", Client: " << client_vec[i % client_vec.size()]
                   << "\n";
         i++;
     }
@@ -77,34 +83,35 @@ Worm& GameWorld::get_worm(uint8_t worm_id, uint16_t client_id) {
     return *it->second;
 }
 
-std::vector<WormInfo> GameWorld::get_worms_info() {
-    std::vector<WormInfo> w;
+std::map<uint16_t, std::shared_ptr<GameObjectInfo>> GameWorld::get_entities_info() {
+    std::map<uint16_t, std::shared_ptr<GameObjectInfo>> map;
 
-    for (auto& worm: worm_map) {
+    for (auto& e: entities_map) {
         //  cppcheck-suppress useStlAlgorithm
-        w.emplace_back(*worm.second);
+        map.emplace(e.first, e.second->get_status());
     }
 
-    return std::move(w);
-}
-
-std::vector<BeamInfo> GameWorld::get_beams_info() {
-    std::vector<BeamInfo> b;
-
-    for (auto& beam: beam_vec) {
-        // cppcheck-suppress useStlAlgorithm
-        b.emplace_back(beam);
-    }
-
-    return std::move(b);
+    return std::move(map);
 }
 
 GameWorld::~GameWorld() {
-    for (auto& w: worm_map) {
-        delete w.second;
+    delete bazooka;
+}
+std::map<uint16_t, std::shared_ptr<WormInfo>> GameWorld::get_worms_info() {
+    std::map<uint16_t, std::shared_ptr<WormInfo>> map;
+
+    for (auto& e: worm_map) {
+        //  cppcheck-suppress useStlAlgorithm
+        map.emplace(e.first, e.second->get_worminfo());
     }
 
-    for (auto& w: worm_sensor_map) {
-        delete w.second;
-    }
+    return std::move(map);
+}
+void GameWorld::get_dimensions(float* h, float* w) {
+    *h = this->height;
+    *w = this->width;
+
+}
+void GameWorld::add_proyectil(std::shared_ptr<BazookaProyectil> proyectil) {
+    entities_map.emplace(entity_id++, proyectil);
 }

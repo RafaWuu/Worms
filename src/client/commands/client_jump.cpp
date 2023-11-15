@@ -4,7 +4,7 @@
 
 #include "client_jump.h"
 
-std::vector<uint8_t> Jump::serialize(ClientProtocol& protocol) {
+void Jump::serialize(ClientProtocol& protocol) {
     return protocol.serialize_jump();
 }
 

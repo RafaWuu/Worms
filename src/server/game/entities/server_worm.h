@@ -9,24 +9,25 @@
 
 #include "game/server_inputs.h"
 #include "game/states/server_state_manager.h"
+#include "game/world/server_gameworld.h"
 
 #include "b2_body.h"
 #include "server_gameobject.h"
 
 class StateManager;
+class Weapon;
 
 class Worm: public GameObject {
 private:
-    uint8_t id;
+    uint16_t id;
     uint16_t client_id;
 
     float pos_x;
     float pos_y;
 
 
-    void* current_gun;
-
     uint8_t health;
+
     StateManager state_manager;
 
 public:
@@ -35,19 +36,18 @@ public:
 
     int numFootContacts;
     int jumpTimeout;
-    float aim_angle;
     float aim_power;
 
-    Worm(uint8_t id, b2World* b2world, float pos_x, float pos_y);
+    Worm(uint8_t id, b2World* b2world, float pos_x, float pos_y, Weapon& weapon);
 
     void set_client_id(uint16_t id_);
 
-    void update(b2World* world);
+    void update(b2World& world) override;
 
 
     b2Body* body;
 
-    ObjectType get_id() override;
+    ObjectType get_id() const override ;
 
     bool facing_right = true;
 
@@ -77,5 +77,12 @@ public:
     void aim(float x, float y);
 
     float aim_x;
+    float aim_y;
+
+    std::unique_ptr<GameObjectInfo> get_status() const override;
+    std::unique_ptr<WormInfo> get_worminfo() const;
+    uint8_t ammo;
+    Weapon& current_gun;
+    float desiredAngle;
 };
 #endif  // WORMS_SERVER_WORM_H

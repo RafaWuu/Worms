@@ -10,8 +10,7 @@ void ClientReceiver::run() {
     is_alive = keep_talking = true;
 
     while (keep_talking) {
-        EstadoJuego estado = protocol.recv_msg();
-        std::shared_ptr<EstadoJuego> game_status = std::make_shared<EstadoJuego>(estado);
+        std::shared_ptr<EstadoJuego> game_status = protocol.recv_msg();
         messages_received.push(game_status);
     }
 

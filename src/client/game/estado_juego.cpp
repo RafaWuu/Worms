@@ -1,6 +1,10 @@
 #include "estado_juego.h"
 
 
-EstadoJuego::EstadoJuego(const std::vector<Worm>& worms): worms(worms) {}
+EstadoJuego::EstadoJuego(std::map<uint16_t, std::unique_ptr<EntityInfo>>&& entities):
+        entities_info(std::move(entities)) {}
 
-std::vector<Worm> EstadoJuego::get_worms() { return worms; }
+
+std::map<uint16_t, std::unique_ptr<EntityInfo>>& EstadoJuego::get_updated_info() {
+    return entities_info;
+}

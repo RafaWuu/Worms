@@ -15,14 +15,16 @@ Player::Player(TextureController& controller, int id):
 
 Player::~Player() {}
 
-void Player::update_info(Worm& worm) {
-    health = worm.get_health();
+void Player::update_info(EntityInfo* info) {
+    auto worm = dynamic_cast<Worm*>(info); // feo?
 
-    x = (worm.get_pos_x() * 320 / 20) + 320;
-    y = (-worm.get_pos_y() * 240 / 20) + 240;
+    health = worm->get_health();
 
-    uint8_t dir = worm.get_dir();
-    uint16_t new_state = worm.get_state();
+    x = (worm->get_pos_x() * 640 / 20);
+    y = (-worm->get_pos_y() * 480 / 20 + 480);
+
+    uint8_t dir = worm->get_dir();
+    uint16_t new_state = worm->get_state();
 
     // Hay que cambiar la textura si empieza a moverse o para de moverse
     bool is_moving_now = (new_state & 0x0004) ? true : false;
@@ -63,16 +65,4 @@ void Player::render(SDL2pp::Renderer& renderer) {
     an.render(renderer, SDL2pp::Rect(x, y, 100, 100), flip);
 }
 
-void Player::moveRigth() {
-    moving = true;
-    facingLeft = false;
-}
-
-void Player::moveLeft() {
-    moving = true;
-    facingLeft = true;
-}
-
-void Player::stopMoving() { moving = false; }
-
-int Player::get_id() const { return id; }
+uint16_t Player::get_id() const { return id; }

@@ -11,6 +11,8 @@
 #include "../common/common_baseprotocol.h"
 #include "../common/common_socket.h"
 #include "game/estado_juego.h"
+#include "game/ground.h"
+#include "game/proyectil.h"
 #include "game/scenario.h"
 #include "lobby/lobby_state.h"
 
@@ -27,38 +29,41 @@ protected:
 public:
     explicit ClientProtocol(Socket socket);
 
-    std::vector<uint8_t> serialize_move(int dir);
-    std::vector<uint8_t> serialize_stop_move();
+    void serialize_move(int dir);
+    void serialize_stop_move();
+    void serialize_jump();
+    void serialize_rollback();
+    void serialize_aim(float x, float y);
+    void serialize_stop_aim();
+    void serialize_fire();
 
-    EstadoJuego recv_msg();
-    void receive_worm(std::vector<Worm>& worms);
 
-    void send_create_game(std::string& escenario);
-    void send_join_game(const int& id);
+    std::shared_ptr<EstadoJuego> recv_msg();
+    std::map<uint16_t, uint16_t> receive_worms_distribution();
+    std::unique_ptr<Scenario> receive_scenario();
+
+    std::unique_ptr<Worm> receive_worm();
+    std::unique_ptr<Beam> receive_beam();
+    std::unique_ptr<Ground>  receive_ground();
+    std::unique_ptr<Proyectil> receive_proyectil();
+
+    void get_my_id(uint16_t& id);
+    void set_worm_id(uint16_t i);
+
     LobbyState receive_confirmation();
 
-    Scenario receive_scenario();
-    void receive_beam(std::vector<Beam>& beams);
-
-    std::map<uint8_t, uint16_t> receive_worms_distribution();
-
-    void request_game_list();
     LobbyState receive_game_list();
+    void send_join_game(const int& id);
+    void send_create_game(std::string& escenario);
+    void request_game_list();
 
     void send_start_game();
 
-    /* Shutdown y close del socket */
-    void close();
-
-    void get_my_id(uint16_t& id);
-
-    void set_worm_id(uint16_t i);
 
     uint8_t worm_id = 0;
 
-    std::vector<uint8_t> serialize_jump();
-
-    std::vector<uint8_t> serialize_rollback();
+    /* Shutdown y close del socket */
+    void close();
 };
 
 #endif

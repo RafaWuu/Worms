@@ -15,10 +15,13 @@ private:
 public:
     explicit WormSensor(Worm* worm);
 
-    ObjectType get_id() override;
+    ObjectType get_id() const override;
+
+    std::unique_ptr<GameObjectInfo> get_status() const override;
 
     void handle_begin_floor_contact(GameObject* other);
 
     void handle_end_floor_contact(GameObject* pObject);
+
 };
 #endif  // WORMS_SERVER_WORM_SENSOR_H

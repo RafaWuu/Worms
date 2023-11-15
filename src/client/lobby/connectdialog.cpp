@@ -1,6 +1,6 @@
 #include "connectdialog.h"
 #include "ui_connectdialog.h"
-#include "src/common/common_liberror.h"
+#include "../common/common_liberror.h"
 #include <exception>
 
 ConnectDialog::ConnectDialog(QWidget *parent)

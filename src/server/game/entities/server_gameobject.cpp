@@ -11,3 +11,6 @@ Log &GameObject::getLog(){
     static Log log_(OBJECT_LOG_SRC);
     return log_;
 }
+void GameObject::update(b2World& world) {
+
+}

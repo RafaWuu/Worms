@@ -8,7 +8,6 @@
 #include <cstdint>
 #include <vector>
 
-#include "game/world/server_gameworld.h"
 #include "server_statusbroadcast_monitor.h"
 
 class EventHandler {

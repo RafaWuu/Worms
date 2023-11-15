@@ -8,9 +8,6 @@
 
 #include <vector>
 
-#include "game/entities/server_beam_info.h"
-#include "game/entities/server_worm_info.h"
-
 #include "game/world/server_gameworld.h"
 #include "server_protocol.h"
 
@@ -19,7 +16,7 @@ class ServerProtocol;
 class GameStatus {
 
 protected:
-    std::vector<WormInfo> worm_info;
+    std::map<uint16_t, std::shared_ptr<GameObjectInfo>>  entities_info;
 
 public:
     explicit GameStatus(GameWorld& world);
@@ -28,7 +25,6 @@ public:
 
 class GameStatusError: public GameStatus {
 private:
-    std::vector<BeamInfo> beam_info;
     uint8_t code;
 
 public:
@@ -39,8 +35,8 @@ public:
 
 class GameStatusScenario: public GameStatus {
 private:
-    std::vector<BeamInfo> beam_info;
-
+    float height;
+    float width;
 public:
     explicit GameStatusScenario(GameWorld& world);
     void serialize(ServerProtocol& protocol) override;
@@ -48,6 +44,8 @@ public:
 
 class GameStatusStart: public GameStatus {
 private:
+    std::map<uint16_t, std::shared_ptr<WormInfo>>  worms_info;
+
 public:
     explicit GameStatusStart(GameWorld& world);
     void serialize(ServerProtocol& protocol) override;

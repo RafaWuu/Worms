@@ -1,18 +1,16 @@
 #include "client_protocol.h"
 
-#include <algorithm>
 #include <iomanip>
-#include <iostream>
-#include <sstream>
 #include <string>
 #include <utility>
 #include <vector>
 
-#include <arpa/inet.h>
-#include <string.h>
-
+#include "game/entity_info.h"
 #include "game/estado_juego.h"
+#include "game/ground.h"
+#include "game/proyectil.h"
 #include "lobby/lobby_state.h"
+
 #define SUCCESS 0
 #define FAILURE 1
 
@@ -34,6 +32,15 @@
 
 #define JUMP_CODE 3
 #define ROLLBACK_CODE 4
+#define FIRE_CODE 5
+#define AIM_CODE 6
+
+enum ObjectType { GROUND = 0x001, // habria que ponerlo en common
+                  BEAM = 0x002,
+                  WORM = 0x004,
+                  WORM_SENSOR = 0x008,
+    PROYECTIL = 0x0010,
+                  BOX = 0x0020 };
 
 ClientProtocol::ClientProtocol(Socket socket): BaseProtocol(std::move(socket)) {}
 // lobby
@@ -76,73 +83,6 @@ LobbyState ClientProtocol::receive_confirmation() {
 
     l.id = id;
     return l;
-}
-
-void ClientProtocol::receive_beam(std::vector<Beam>& beams) {
-    float x;
-    float y;
-    float height;
-    float width;
-    float angle;
-
-    recv_4byte_float(x);
-    recv_4byte_float(y);
-    recv_4byte_float(height);
-    recv_4byte_float(width);
-    recv_4byte_float(angle);
-
-    Beam beam(x, y, height, width, angle);
-    beams.push_back(beam);
-
-    getLog().write("Cliente recibe beam. x=%lf y=%lf\n", x, y);
-}
-
-std::map<uint8_t, uint16_t> ClientProtocol::receive_worms_distribution() {
-    // 87 03 n_worms [... {worm_id, client_id} ...]
-
-    std::map<uint8_t, uint16_t> distribution;
-
-    uint8_t game_receiving_code;
-    uint8_t distribution_receiving_code;
-    recv_1byte_number(game_receiving_code);
-    recv_1byte_number(distribution_receiving_code);
-
-    uint8_t worms_number;
-    recv_1byte_number(worms_number);
-    for (int i = 0; i < worms_number; i++) {
-        uint8_t id_worm;
-        uint16_t id_client;
-        recv_1byte_number(id_worm);
-        recv_2byte_number(id_client);
-
-        distribution.insert({id_worm, id_client});
-    }
-
-    return distribution;
-}
-
-Scenario ClientProtocol::receive_scenario() {
-    uint8_t game_receiving_code;
-    uint8_t scenario_receiving_code;
-    recv_1byte_number(game_receiving_code);
-    recv_1byte_number(scenario_receiving_code);
-
-    uint8_t beams_number;
-    recv_1byte_number(beams_number);
-    std::vector<Beam> beams;
-    for (int i = 0; i < beams_number; i++) {
-        receive_beam(beams);
-    }
-
-    uint8_t worms_number;
-    recv_1byte_number(worms_number);
-    std::vector<Worm> worms;
-    for (int i = 0; i < worms_number; i++) {
-        receive_worm(worms);
-    }
-
-    Scenario scenario(beams, worms);
-    return scenario;
 }
 
 void ClientProtocol::send_join_game(const int& id) {
@@ -199,15 +139,15 @@ void ClientProtocol::send_start_game() {
     getLog().write("Cliente inicia la partidas\n");
 }
 // game
-void ClientProtocol::receive_worm(std::vector<Worm>& worms) {
-    uint8_t id;
+std::unique_ptr<Worm> ClientProtocol::receive_worm() {
+    uint16_t id;
     float x;
     float y;
     uint8_t dir;
     uint16_t state;
     uint8_t health;
 
-    recv_1byte_number(id);
+    recv_2byte_number(id);
     recv_4byte_float(x);
     recv_4byte_float(y);
     recv_1byte_number(dir);
@@ -215,34 +155,156 @@ void ClientProtocol::receive_worm(std::vector<Worm>& worms) {
     recv_2byte_number(state);
     recv_1byte_number(health);
 
-    Worm worm(id, x, y, dir, state, health);
-    worms.push_back(worm);
-
     getLog().write("Cliente recibe gusano: id %hhu, x: %f, y: %f. Estado %hu \n", id, x, y, state);
+
+    return std::make_unique<Worm>(id, x, y, dir, state, health);
 }
 
-EstadoJuego ClientProtocol::recv_msg() {
+std::unique_ptr<Ground> ClientProtocol::receive_ground() {
+    float x;
+    float y;
+    float h;
+    float w;
+
+    recv_4byte_float(x);
+    recv_4byte_float(y);
+    recv_4byte_float(h);
+    recv_4byte_float(w);
+
+    return std::make_unique<Ground>(x,y,h,w);
+}
+
+std::unique_ptr<Beam> ClientProtocol::receive_beam() {
+    float x;
+    float y;
+    float height;
+    float width;
+    float angle;
+
+    recv_4byte_float(x);
+    recv_4byte_float(y);
+    recv_4byte_float(height);
+    recv_4byte_float(width);
+    recv_4byte_float(angle);
+
+    getLog().write("Cliente recibe beam. x=%lf y=%lf\n", x, y);
+    return std::make_unique<Beam>(x,y,height,width, angle);
+}
+
+std::unique_ptr<Proyectil> ClientProtocol::receive_proyectil() {
+    uint8_t type;
+    float x;
+    float y;
+
+    recv_1byte_number(type);
+    recv_4byte_float(x);
+    recv_4byte_float(y);
+
+    return std::make_unique<Proyectil>(type, x,y);
+}
+
+std::map<uint16_t, uint16_t> ClientProtocol::receive_worms_distribution() {
+    // 87 03 n_worms [... {worm_id, client_id} ...]
+
+    std::map<uint16_t, uint16_t> distribution;
+
+    uint8_t game_receiving_code;
+    uint8_t distribution_receiving_code;
+    recv_1byte_number(game_receiving_code);
+    recv_1byte_number(distribution_receiving_code);
+
+    uint16_t worms_number;
+    recv_2byte_number(worms_number);
+
+    for (int i = 0; i < worms_number; i++) {
+        uint16_t id_worm;
+        uint16_t id_client;
+        recv_2byte_number(id_worm);
+        recv_2byte_number(id_client);
+
+        distribution.insert({id_worm, id_client});
+    }
+
+    return std::move(distribution);
+}
+
+std::unique_ptr<Scenario> ClientProtocol::receive_scenario() {
+    uint8_t game_receiving_code;
+    uint8_t scenario_receiving_code;
+    recv_1byte_number(game_receiving_code);
+    recv_1byte_number(scenario_receiving_code);
+
+    float h;
+    float w;
+
+    recv_4byte_float(h);
+    recv_4byte_float(w);
+
+    uint16_t entities_number;
+    recv_2byte_number(entities_number);
+
+    std::map<uint16_t, std::unique_ptr<EntityInfo>> entities;
+
+    uint16_t entity_id;
+    uint8_t entity_type;
+
+    for (int i = 0; i < entities_number; i++) {
+        recv_2byte_number(entity_id);
+        recv_1byte_number(entity_type);
+        switch (entity_type) {
+            case ObjectType::BEAM:
+                entities.emplace(entity_id, receive_beam());
+                break;
+            case ObjectType::WORM:
+                entities.emplace(entity_id, receive_worm());
+                break;
+            case ObjectType::GROUND:
+                entities.emplace(entity_id, receive_ground());
+                break;
+            default:
+                break;
+        }
+    }
+
+    return std::make_unique<Scenario>(std::move(entities), h, w);
+}
+
+std::shared_ptr<EstadoJuego> ClientProtocol::recv_msg() {
     uint8_t game_sending;
     recv_1byte_number(game_sending);
     uint8_t game_status;
     recv_1byte_number(game_status);
-    uint8_t current_worm;
-    recv_1byte_number(current_worm);
+    uint16_t current_worm;
+    recv_2byte_number(current_worm);
 
-    std::vector<Worm> worms;
-    uint8_t worms_number;
-    recv_1byte_number(worms_number);
-    for (int i = 0; i < worms_number; i++) {
-        receive_worm(worms);
+    uint16_t entities_number;
+    recv_2byte_number(entities_number);
+
+    std::map<uint16_t, std::unique_ptr<EntityInfo>> entities;
+
+    uint16_t entity_id;
+    uint8_t entity_type;
+
+    for (int i = 0; i < entities_number; i++) {
+        recv_2byte_number(entity_id);
+        recv_1byte_number(entity_type);
+        switch (entity_type) {
+            case ObjectType::WORM:
+                entities.emplace(entity_id, receive_worm());
+                break;
+            case ObjectType::PROYECTIL:
+                entities.emplace(entity_id, receive_proyectil());
+            default:
+                break;
+        }
     }
 
-    getLog().write("Cliente recibe estado de partida: %hhu gusanos vivos \n", worms_number);
+    getLog().write("Cliente recibe estado de partida \n");
 
-    EstadoJuego estado(worms);
-    return estado;
+    return std::make_shared<EstadoJuego>(std::move(entities));
 }
 
-std::vector<uint8_t> ClientProtocol::serialize_move(int dir) {
+void ClientProtocol::serialize_move(int dir) {
     uint8_t direction = dir;
 
     // Falta enviar el worm_id
@@ -250,37 +312,62 @@ std::vector<uint8_t> ClientProtocol::serialize_move(int dir) {
 
     getLog().write("Cliente serializando movimiento %hhu \n", direction);
 
-    return serialized_command;
+    send_uint_vector(serialized_command);
 }
 
-std::vector<uint8_t> ClientProtocol::serialize_stop_move() {
+void ClientProtocol::serialize_stop_move() {
     // Falta enviar el worm_id
     std::vector<uint8_t> serialized_command = {GAME_SENDING, MOVE_CODE, worm_id, STOP_MOVE};
 
     getLog().write("Cliente serializando movimiento %hhu \n", STOP_MOVE);
 
-    return serialized_command;
+    send_uint_vector(serialized_command);
 }
 
-std::vector<uint8_t> ClientProtocol::serialize_jump(){
+void ClientProtocol::serialize_jump(){
 
     // Falta enviar el worm_id
     std::vector<uint8_t> serialized_command = {GAME_SENDING, JUMP_CODE, worm_id};
 
     getLog().write("Cliente serializando salto \n");
 
-    return serialized_command;
+    send_uint_vector(serialized_command);
 }
 
-std::vector<uint8_t> ClientProtocol::serialize_rollback(){
+void ClientProtocol::serialize_rollback(){
     // Falta enviar el worm_id
     std::vector<uint8_t> serialized_command = {GAME_SENDING, ROLLBACK_CODE, worm_id};
 
     getLog().write("Cliente serializando salto hacia atras \n");
 
-    return serialized_command;
+    send_uint_vector(serialized_command);
 }
 
+void ClientProtocol::serialize_aim(float x, float y) {
+    std::vector<uint8_t> serialized_command = {GAME_SENDING, AIM_CODE, worm_id, 1};
+
+    getLog().write("Cliente apuntando hacia %x %y \n",x, y);
+
+    send_uint_vector(serialized_command);
+    send_4byte_float(x);
+    send_4byte_float(y);
+}
+
+void ClientProtocol::serialize_stop_aim() {
+    std::vector<uint8_t> serialized_command = {GAME_SENDING, AIM_CODE, worm_id, 2};
+
+    getLog().write("Cliente dejando de apuntar \n");
+
+    send_uint_vector(serialized_command);
+}
+
+void ClientProtocol::serialize_fire() {
+    std::vector<uint8_t> serialized_command = {GAME_SENDING, FIRE_CODE, worm_id};
+
+    getLog().write("Cliente disparando \n");
+
+    send_uint_vector(serialized_command);
+}
 
 Log& ClientProtocol::getLog() {
     static Log log_("../log/clientprotocol_log.txt");

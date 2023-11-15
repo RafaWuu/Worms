@@ -50,7 +50,7 @@ void Game::run() {
             }
 
             if (had_started) {
-                game_world.update_worms();
+                game_world.update_entities();
                 game_world.step(1);
 
                 broadcastMonitor.send_status_toall(

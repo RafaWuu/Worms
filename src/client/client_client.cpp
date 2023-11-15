@@ -28,7 +28,8 @@ Client::Client(const std::string& hostname, const std::string& servicename):
         socket(hostname.c_str(), servicename.c_str()),
         protocol(std::move(socket)),
         messages_to_send(1000),
-        messages_received(1000) {
+        messages_received(1000),
+        event_handler() {
 
     sender = new ClientSender(protocol, messages_to_send);
     receiver = new ClientReceiver(protocol, messages_received);
@@ -66,17 +67,13 @@ LobbyState Client::request_game_list() {
     return protocol.receive_game_list();
 }
 
-Scenario Client::receive_scenario() {
-    Scenario received_scenario = protocol.receive_scenario();
-    this->scenario = std::make_unique<Scenario>(received_scenario);
-
-    // Hace falta que lo devuelva? El Lobby despues lo manejara?
-    return received_scenario;
+void Client::receive_scenario() {
+    this->scenario = protocol.receive_scenario();
 }
 
-uint8_t Client::get_id_assigned_worm(std::map<uint8_t, uint16_t>& distribution) {
+uint16_t Client::get_id_assigned_worm(std::map<uint16_t, uint16_t>& distribution) {
     // Cual es el id del cliente? Hardcodeo un 0 por ahora para probarlo
-    uint8_t assigned_worm = -1;
+    uint16_t assigned_worm = -1;
 
     for (auto pair: distribution) {
         if (pair.second == my_id) {
@@ -90,9 +87,9 @@ uint8_t Client::get_id_assigned_worm(std::map<uint8_t, uint16_t>& distribution) 
 
 void Client::start_joined_game() {
     // Que worm le corresponde a cada cliente (id_worm, id_client)
-    std::map<uint8_t, uint16_t> distribution = protocol.receive_worms_distribution();
+    std::map<uint16_t, uint16_t> distribution = protocol.receive_worms_distribution();
 
-    uint8_t assigned_worm = get_id_assigned_worm(distribution);
+    uint16_t assigned_worm = get_id_assigned_worm(distribution);
     id_assigned_worm = assigned_worm;
 }
 
@@ -100,9 +97,9 @@ void Client::start_game() {
     protocol.send_start_game();
 
     // Que worm le corresponde a cada cliente (id_worm, id_client)
-    std::map<uint8_t, uint16_t> distribution = protocol.receive_worms_distribution();
+    std::map<uint16_t, uint16_t> distribution = protocol.receive_worms_distribution();
 
-    uint8_t assigned_worm = get_id_assigned_worm(distribution);
+    uint16_t assigned_worm = get_id_assigned_worm(distribution);
     id_assigned_worm = assigned_worm;
 }
 
@@ -147,103 +144,22 @@ int Client::start() {
 void Client::update(WorldView& worldview) {
     std::shared_ptr<EstadoJuego> estado;
     if (messages_received.try_pop(estado)) {
-        std::vector<Worm> worms = estado->get_worms();
-        worldview.update(worms);
+        std::map<uint16_t, std::unique_ptr<EntityInfo>>&  updated_states = estado->get_updated_info();
+        worldview.update(updated_states);
     }
 }
 
 bool Client::handle_events() {
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
-        if (event.type == SDL_QUIT) {
+        try {
+            auto c = event_handler.handle(event);
+            if (c != nullptr)
+                messages_to_send.push(c);
+        } catch (QuitGameClientInput& e){
             return false;
-        } else if (event.type == SDL_KEYDOWN) {
-            switch (event.key.keysym.sym) {
-                case SDLK_ESCAPE:
-                case SDLK_q:
-                    return false;
-                case SDLK_a:
-                    jump();
-                    break;
-                case SDLK_s:
-                    rollback();
-                case SDLK_LEFT:
-                    move_left();
-                    break;
-                case SDLK_RIGHT:
-                    move_right();
-                    break;
-            }
-        } else if (event.type == SDL_KEYUP) {
-            switch (event.key.keysym.sym) {
-                case SDLK_LEFT:
-                    stop_moving();
-                    break;
-                case SDLK_RIGHT:
-                    stop_moving();
-                    break;
-            }
         }
     }
 
     return true;
-}
-
-void Client::render(Renderer& renderer) {
-    // actualizar vista harcodeado
-    SDL_SetRenderDrawColor(renderer.Get(), 0, 0, 0, 255);
-    SDL_RenderClear(renderer.Get());
-
-    std::shared_ptr<EstadoJuego> estado;
-    if (messages_received.try_pop(estado)) {
-        std::vector<Worm> worms = estado->get_worms();
-
-        for (int i = 0; i < worms.size(); i++) {
-            // Hardcodeado; cada worm deberia hacer su propio render
-            // Hay que convertir las posiciones a pixeles
-            uint16_t x = (worms[i].get_pos_x() * 320 / 20) + 320;
-            uint16_t y = (-worms[i].get_pos_y() * 240 / 20) + 240;
-            std::cout << "x: " << x << " y: " << y << std::endl;
-            SDL_Rect rect = {x, y, 30, 30};
-            SDL_SetRenderDrawColor(renderer.Get(), 255, 0, 0, 255);
-            SDL_RenderFillRect(renderer.Get(), &rect);
-        }
-
-        SDL_RenderPresent(renderer.Get());
-    }
-}
-
-void Client::move_left() {
-    std::shared_ptr<Move> move_command = std::make_shared<Move>(Move::Direction::Left);
-    std::shared_ptr<Command> command = move_command;
-
-    messages_to_send.push(command);
-}
-
-void Client::move_right() {
-    std::shared_ptr<Move> move_command = std::make_shared<Move>(Move::Direction::Right);
-    std::shared_ptr<Command> command = move_command;
-
-    messages_to_send.push(command);
-}
-
-void Client::stop_moving() {
-    std::shared_ptr<StopMoving> stop_moving = std::make_shared<StopMoving>();
-    std::shared_ptr<Command> command = stop_moving;
-
-    messages_to_send.push(command);
-}
-
-void Client::jump(){
-    std::shared_ptr<Jump> jump_command = std::make_shared<Jump>();
-    std::shared_ptr<Command> command = jump_command;
-
-    messages_to_send.push(command);
-}
-
-void Client::rollback(){
-    std::shared_ptr<Rollback> roll_command = std::make_shared<Rollback>();
-    std::shared_ptr<Command> command = roll_command;
-
-    messages_to_send.push(command);
 }

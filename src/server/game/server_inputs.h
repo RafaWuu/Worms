@@ -5,7 +5,7 @@
 #ifndef WORMS_SERVER_INPUTS_H
 #define WORMS_SERVER_INPUTS_H
 
-#include "server_protocol_constants.h"
+#include "common_protocol_constants.h"
 
 enum Input {
     StartGame = GAME_START_GAME,

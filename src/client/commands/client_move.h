@@ -8,5 +8,5 @@ private:
 public:
     enum Direction { Left = 1, Right = 2 };
     explicit Move(int dir);
-    std::vector<uint8_t> serialize(ClientProtocol& protocol) override;
+    void serialize(ClientProtocol& protocol) override;
 };

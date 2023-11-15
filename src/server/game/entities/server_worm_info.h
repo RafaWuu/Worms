@@ -7,18 +7,19 @@
 
 #include <cstdint>
 
-#include "server_worm.h"
+#include "server_gameobject_info.h"
 
-class WormInfo {
+class Worm;
+
+class WormInfo : public GameObjectInfo{
 
 public:
     explicit WormInfo(const Worm& worm);
-    uint8_t id;
-    uint16_t client_id;
-    float x;
-    float y;
-    uint8_t dir;
-    uint16_t state;
-    uint8_t health;
+
+    const Worm& worm;
+
+    void serialize_status(ServerProtocol &gp) override;
+    void serialize_scenario(ServerProtocol &gp) override;
+    void serialize_start(ServerProtocol &gp);
 };
 #endif  // WORMS_SERVER_WORM_INFO_H

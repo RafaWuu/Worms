@@ -9,7 +9,7 @@
 class Command {
 public:
     Command();
-    virtual std::vector<uint8_t> serialize(ClientProtocol& protocol) = 0;
+    virtual void serialize(ClientProtocol& protocol) = 0;
 };
 
 #endif

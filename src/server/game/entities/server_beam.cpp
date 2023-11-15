@@ -7,6 +7,7 @@
 #include "b2_body.h"
 #include "b2_fixture.h"
 #include "b2_polygon_shape.h"
+#include "server_beam_info.h"
 
 Beam::Beam(b2World* b2_world, float center_x, float center_y, float width, float height,
            float angle):
@@ -31,4 +32,8 @@ Beam::Beam(b2World* b2_world, float center_x, float center_y, float width, float
     body->CreateFixture(&fixtureDef);
 }
 
-ObjectType Beam::get_id() { return BEAM; }
+ObjectType Beam::get_id() const { return BEAM; }
+
+std::unique_ptr<GameObjectInfo> Beam::get_status() const {
+    return std::make_unique<BeamInfo>(*this);
+}
