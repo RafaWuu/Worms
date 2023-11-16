@@ -48,6 +48,7 @@ public:
     std::map<uint16_t, std::shared_ptr<GameObjectInfo>>  get_entities_info();
     std::map<uint16_t, std::shared_ptr<WormInfo>> get_worms_info();
 
+    void set_dimensions();
     void get_dimensions(float* h, float* w);
 
     double height;

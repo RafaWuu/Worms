@@ -10,6 +10,7 @@
 #include <utility>
 
 #include "b2_body.h"
+#include "b2_edge_shape.h"
 
 #include "game/entities/server_beam_info.h"
 #include "game/entities/server_worm_info.h"
@@ -30,9 +31,10 @@ GameWorld::GameWorld(const std::string& scenario_name):
 
     height = 20.0;
     width = 20.0;
-
+    
+    set_dimensions();
     entities_map.emplace(entity_id++, std::make_shared<Ground>(&b2_world));
-
+    
     entities_map.emplace(entity_id++, std::make_shared<Beam>(&b2_world, 15, 10, 6, .8, 0));
     entities_map.emplace(entity_id++, std::make_shared<Beam>(&b2_world, 2, 5, 6, .8, 0));
 
@@ -115,3 +117,41 @@ void GameWorld::get_dimensions(float* h, float* w) {
 void GameWorld::add_proyectil(std::shared_ptr<BazookaProyectil> proyectil) {
     entities_map.emplace(entity_id++, proyectil);
 }
+
+//  limit 4to cuadrante x>=0 , y<=0
+ void GameWorld::set_dimensions(){
+    b2Vec2 top_left(0, 0);
+	b2Vec2 top_right(width, 0);
+    b2Vec2 bottom_left(0, -height);
+	b2Vec2 bottom_right(width, -height);
+	
+
+	b2BodyDef body_def;
+	b2FixtureDef fixture_def;
+	body_def.type = b2_staticBody;
+	body_def.position.Set(0, 0);
+
+    b2EdgeShape edge_shape;
+
+	b2Body* edge_1 = b2_world.CreateBody(&body_def);
+	edge_shape.SetTwoSided(top_left, top_right );
+	fixture_def.shape = &edge_shape;
+	edge_1->CreateFixture(&fixture_def);
+
+	b2Body* edge_2 = b2_world.CreateBody(&body_def);
+	edge_shape.SetTwoSided(top_left, bottom_left );
+	fixture_def.shape = &edge_shape;
+	edge_2->CreateFixture(&fixture_def);
+
+	b2Body* edge_3 = b2_world.CreateBody(&body_def);
+	edge_shape.SetTwoSided(top_right, bottom_right );
+	fixture_def.shape = &edge_shape;
+	edge_3->CreateFixture(&fixture_def);
+
+	b2Body* edge_4 = b2_world.CreateBody(&body_def);
+	edge_shape.SetTwoSided(bottom_left, bottom_right );
+	fixture_def.shape = &edge_shape;
+	edge_4->CreateFixture(&fixture_def);
+
+    }
+
