@@ -8,14 +8,15 @@
 #include "animation.h"
 #include "entity.h"
 
-class ProyectilEntity : public Entity{
+class ProyectilEntity: public Entity {
 public:
-    ProyectilEntity(TextureController& texture_controller);
+    explicit ProyectilEntity(TextureController& texture_controller);
     ~ProyectilEntity();
 
     void update_info(EntityInfo* info) override;
     void update(float dt) override;
-    void render(SDL2pp::Renderer &renderer) override;
+    void render(SDL2pp::Renderer& renderer, SDL2pp::Rect& camera) override;
+
 private:
     TextureController& texture_controller;
     Animation an;

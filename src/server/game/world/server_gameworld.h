@@ -15,8 +15,8 @@
 #include "game/entities/server_worm_sensor.h"
 #include "game/listeners/server_onfloor_contactlistener.h"
 #include "game/server_scenario_file_handler.h"
-#include "game/weapons/server_weapon.h"
 #include "game/weapons/server_bazooka_proyectil.h"
+#include "game/weapons/server_weapon.h"
 
 #include "b2_world.h"
 
@@ -33,7 +33,6 @@ private:
     OnFloorContactListener listener;
 
 public:
-
     b2World b2_world;
     explicit GameWorld(const std::string& scenario_name);
     ~GameWorld();
@@ -44,8 +43,8 @@ public:
 
     void set_clients_to_worms(std::vector<uint16_t> client_vec);
 
-    Worm &get_worm(uint8_t worm_id, uint16_t client_id);
-    std::map<uint16_t, std::shared_ptr<GameObjectInfo>>  get_entities_info();
+    Worm& get_worm(uint8_t worm_id, uint16_t client_id);
+    std::map<uint16_t, std::shared_ptr<GameObjectInfo>> get_entities_info();
     std::map<uint16_t, std::shared_ptr<WormInfo>> get_worms_info();
 
     void set_dimensions();
@@ -53,6 +52,6 @@ public:
 
     double height;
     double width;
-    void add_proyectil(std::shared_ptr<BazookaProyectil>proyectil);
+    void add_proyectil(std::shared_ptr<BazookaProyectil> proyectil);
 };
 #endif  // WORMS_SERVER_GAMEWORLD_H

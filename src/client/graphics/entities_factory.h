@@ -12,8 +12,9 @@
 class EntityFactory {
 private:
     TextureController& controller;
+
 public:
-    EntityFactory(TextureController& controller);
+    explicit EntityFactory(TextureController& controller);
     std::unique_ptr<Entity> create(EntityInfo& info);
 };
 #endif  // WORMS_ENTITIES_FACTORY_H

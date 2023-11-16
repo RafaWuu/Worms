@@ -16,7 +16,7 @@ Player::Player(TextureController& controller, int id):
 Player::~Player() {}
 
 void Player::update_info(EntityInfo* info) {
-    auto worm = dynamic_cast<Worm*>(info); // feo?
+    auto worm = dynamic_cast<Worm*>(info);  // feo?
 
     health = worm->get_health();
 
@@ -28,16 +28,17 @@ void Player::update_info(EntityInfo* info) {
 
     // Hay que cambiar la textura si empieza a moverse o para de moverse
     bool is_moving_now = (new_state & 0x0004) ? true : false;
-    bool is_jumping_now = (new_state & 0x0008) != 0 ;
+    bool is_jumping_now = (new_state & 0x0008) != 0;
     bool is_rolling_now = (new_state & 0x0010) != 0;
 
     if (!moving && is_moving_now) {
         an.change_texture(AnimationState::WALK);
-    }  else if (!jumping && is_jumping_now) {
+    } else if (!jumping && is_jumping_now) {
         an.change_texture(AnimationState::JUMPING);
     } else if (!rolling && is_rolling_now) {
         an.change_texture(AnimationState::ROLLING);
-    } else if ((moving && !is_moving_now) || (jumping && !is_jumping_now) || (rolling && !is_rolling_now)) {
+    } else if ((moving && !is_moving_now) || (jumping && !is_jumping_now) ||
+               (rolling && !is_rolling_now)) {
         an.change_texture(AnimationState::IDLE);
     }
 
@@ -56,11 +57,11 @@ void Player::update_info(EntityInfo* info) {
  * Esto les va a resultar muy util.
  */
 void Player::update(float dt) {
-    if(moving || rolling || jumping)
+    if (moving || rolling || jumping)
         an.update(dt);
 }
 
-void Player::render(SDL2pp::Renderer& renderer) {
+void Player::render(SDL2pp::Renderer& renderer, SDL2pp::Rect& camera) {
     SDL_RendererFlip flip = facingLeft ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL;
     an.render(renderer, SDL2pp::Rect(x, y, 100, 100), flip);
 }

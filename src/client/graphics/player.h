@@ -9,14 +9,14 @@
 #include "entity.h"
 #include "texture_controller.h"
 
-class Player : public Entity{
+class Player: public Entity {
 public:
     Player(TextureController& texture_controller, int id);
     ~Player();
 
     void update_info(EntityInfo* info) override;
     void update(float dt) override;
-    void render(SDL2pp::Renderer &renderer) override;
+    void render(SDL2pp::Renderer& renderer, SDL2pp::Rect& camera) override;
 
     uint16_t get_id() const override;
 
@@ -34,4 +34,4 @@ private:
     int health;
 };
 
-#endif // __PLAYER_H__
+#endif  // __PLAYER_H__

@@ -17,14 +17,17 @@ private:
     TextureController& texture_controller;
     EntityFactory entity_factory;
     std::map<uint16_t, std::shared_ptr<Entity>> entities;
+    SDL2pp::Rect camera;
+    void render_background(SDL2pp::Renderer& renderer);
+
 public:
-    WorldView(TextureController& texture_controller,
-    std::unique_ptr<Scenario> scenario);
+    WorldView(TextureController& texture_controller, std::unique_ptr<Scenario> scenario);
 
     void update(std::map<uint16_t, std::unique_ptr<EntityInfo>>& updated_info);
 
-
     void render(SDL2pp::Renderer& renderer);
+
+    void update_camera(float& x, float& y, float& w, float& h);
 };
 
 #endif

@@ -15,20 +15,17 @@ class Entity {
 private:
     float x = 0, y = 0;
     uint16_t id = 0;
+
 public:
-    virtual void update_info(EntityInfo* info) {
+    virtual void update_info(EntityInfo* info){
 
     };
-    virtual void update(float dt) {
+    virtual void update(float dt){
 
     };
 
-    virtual void render(SDL2pp::Renderer& renderer) = 0;
+    virtual void render(SDL2pp::Renderer& renderer, SDL2pp::Rect& camera) = 0;
 
-    virtual uint16_t get_id() const {
-            return 0;
-    };
-
-
+    virtual uint16_t get_id() const { return 0; };
 };
 #endif  // WORMS_ENTITY_H

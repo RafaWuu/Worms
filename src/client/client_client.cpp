@@ -9,13 +9,13 @@
 
 #include "../common/common_liberror.h"
 #include "../common/common_socket.h"
+#include "commands/client_jump.h"
 #include "commands/client_move.h"
+#include "commands/client_rollback.h"
 #include "commands/client_stop_moving.h"
 #include "graphics/worldview.h"
 
 #include "client_protocol.h"
-#include "commands/client_jump.h"
-#include "commands/client_rollback.h"
 
 using namespace SDL2pp;
 
@@ -67,9 +67,7 @@ LobbyState Client::request_game_list() {
     return protocol.receive_game_list();
 }
 
-void Client::receive_scenario() {
-    this->scenario = protocol.receive_scenario();
-}
+void Client::receive_scenario() { this->scenario = protocol.receive_scenario(); }
 
 uint16_t Client::get_id_assigned_worm(std::map<uint16_t, uint16_t>& distribution) {
     // Cual es el id del cliente? Hardcodeo un 0 por ahora para probarlo
@@ -116,7 +114,6 @@ int Client::start() {
     Window window("Worms", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480,
                   SDL_WINDOW_RESIZABLE);
     Renderer renderer(window, -1, SDL_RENDERER_ACCELERATED);
-    //renderer.SetLogicalSize(1920,1080);
 
     TextureController texture_controller(renderer);
     WorldView worldview(texture_controller, std::move(this->scenario));
@@ -135,16 +132,14 @@ int Client::start() {
         }
     }
 
-    SDL_DestroyRenderer(renderer.Get());
-    SDL_DestroyWindow(window.Get());
-    SDL_Quit();
     return SUCCESS;
 }
 
 void Client::update(WorldView& worldview) {
     std::shared_ptr<EstadoJuego> estado;
     if (messages_received.try_pop(estado)) {
-        std::map<uint16_t, std::unique_ptr<EntityInfo>>&  updated_states = estado->get_updated_info();
+        std::map<uint16_t, std::unique_ptr<EntityInfo>>& updated_states =
+                estado->get_updated_info();
         worldview.update(updated_states);
     }
 }
@@ -156,7 +151,7 @@ bool Client::handle_events() {
             auto c = event_handler.handle(event);
             if (c != nullptr)
                 messages_to_send.push(c);
-        } catch (QuitGameClientInput& e){
+        } catch (QuitGameClientInput& e) {
             return false;
         }
     }
