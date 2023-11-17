@@ -37,6 +37,7 @@ private:
 
 
 public:
+    friend class GameInfo;
     explicit Game(uint16_t game_id, std::string& scenario, uint16_t owner_id_);
 
     void run() override;
@@ -53,6 +54,6 @@ public:
 
     void exit_game(uint16_t client_id);
 
-    GameInfo get_info();
+    GameInfo get_info() const;
 };
 #endif  // WORMS_SERVER_GAME_H

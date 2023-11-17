@@ -1,35 +1,31 @@
 #include "new_game_dialog.h"
-#include "ui_new_game_dialog.h"
-#include "game/scenario.h"
 
 #include <iostream>
 #include <memory>
+#include <string>
 
-NewGameDialog::NewGameDialog(std::shared_ptr<Client> client, QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::NewGameDialog),
-    client(client)
-{
+#include "game/scenario.h"
+
+#include "ui_new_game_dialog.h"
+
+NewGameDialog::NewGameDialog(std::shared_ptr<Client> client, QWidget* parent):
+        QDialog(parent), ui(new Ui::NewGameDialog), client(client) {
     ui->setupUi(this);
 }
 
-NewGameDialog::~NewGameDialog()
-{
-    delete ui;
-}
+NewGameDialog::~NewGameDialog() { delete ui; }
 
-void NewGameDialog::on_play_clicked()
-{
+void NewGameDialog::on_play_clicked() {
 
     std::string escenario = this->ui->nom_escenario->toPlainText().toStdString();
 
     // label validacion
-    if(escenario.empty()){
+    if (escenario.empty()) {
         QString msg = QString("entrada no valido");
         ui->msg_validacion->setText(msg);
         return;
     }
-    try{
+    try {
         LobbyState l = client->crear_partida(escenario);
 
         QString id = QString::number(l.id);
@@ -37,10 +33,9 @@ void NewGameDialog::on_play_clicked()
         ui->msg_validacion->setText(msg);
 
         client->receive_scenario();
-
-    }catch (ErrorLobby& e) {
+    } catch (ErrorLobby& e) {
         QString msg = QString(e.what());
         ui->msg_validacion->setText(msg);
-        std::cerr<<e.what()<<std::endl;
+        std::cerr << e.what() << std::endl;
     }
 }

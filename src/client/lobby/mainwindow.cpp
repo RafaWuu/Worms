@@ -24,18 +24,20 @@ void MainWindow::closeEvent(QCloseEvent* event) { QApplication::exit(1); }
 void MainWindow::on_new_game_button_clicked() {
     new_game = new NewGameDialog(this->client);
     new_game->show();
-
 }
 
 void MainWindow::on_join_game_button_clicked() {
     join_game = new JoinGameDialog(this->client);
-    join_game->show();
-
+    if (join_game->exec() == 1) {
+        close();
+        QApplication::closeAllWindows();
+        client->start();
+    }
 }
 
 void MainWindow::on_start_game_clicked() {
     client->start_game();
+    close();
+    QApplication::closeAllWindows();
     client->start();
-    QApplication::exit();
-
 }

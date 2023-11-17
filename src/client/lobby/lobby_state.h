@@ -2,13 +2,16 @@
 #define LOBBY_STATE_H
 
 #include <string>
-#include <vector>
 #include <utility>
+#include <vector>
+
+#include "gameinfo.h"
+
 class LobbyState {
 public:
-    explicit LobbyState();
+    LobbyState();
     int id;
     int valid;
-    std::vector<std::pair<uint16_t, std::string>> game_list;
+    std::vector<GameInfo> game_list;
 };
-#endif  
+#endif

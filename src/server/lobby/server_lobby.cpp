@@ -32,10 +32,12 @@ std::shared_ptr<Game> LobbyMonitor::join_game(uint16_t client_id, uint16_t game_
 }
 
 std::vector<GameInfo> LobbyMonitor::list_games() {
-    std::vector<GameInfo> v;
+    std::vector<GameInfo> v{};
 
-    std::transform(games_map.begin(), games_map.end(), v.begin(),
-                   [](const auto& g) { return g.second.get()->get_info(); });
+    for (auto& game: games_map) {
+        //  cppcheck-suppress useStlAlgorithm
+        v.emplace_back(game.second->get_info());
+    }
 
     return v;
 }

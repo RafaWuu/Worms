@@ -100,12 +100,7 @@ void ServerProtocol::send_gameslist(std::vector<GameInfo>& games_vec) {
     getLog().write("Server enviando lista de %hu partidas \n", games_vec.size());
 
     for (auto& game: games_vec) {
-        baseProtocol.send_2byte_number(game.id);
-        baseProtocol.send_2byte_number(game.scenario.length());
-
-        std::vector<char> buffer(game.scenario.c_str(),
-                                 game.scenario.c_str() + game.scenario.length());
-        baseProtocol.send_char_vector(buffer);
+        game.serialize(baseProtocol);
     }
 }
 
@@ -113,8 +108,10 @@ std::unique_ptr<GameEvent> ServerProtocol::recv_game_msg(uint16_t id_client) {
     u_int8_t status = 0;
     baseProtocol.recv_1byte_number(status);
 
-    if (status != GAME_RECEIVING)
+    if (status != GAME_RECEIVING) {
+
         throw InvalidMsg();
+    }
 
     baseProtocol.recv_1byte_number(status);
 

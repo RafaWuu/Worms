@@ -10,6 +10,7 @@
 #include "game/estado_juego.h"
 #include "game/ground.h"
 #include "game/proyectil.h"
+#include "lobby/gameinfo.h"
 #include "lobby/lobby_state.h"
 
 #define SUCCESS 0
@@ -121,15 +122,23 @@ LobbyState ClientProtocol::receive_game_list() {
         baseProtocol.recv_2byte_number(game_id);
 
         uint16_t scenario_len;
-        baseProtocol.recv_2byte_number(game_id);
+        baseProtocol.recv_2byte_number(scenario_len);
 
         std::vector<char> buff(scenario_len);
         baseProtocol.recv_char_vector(buff);
 
         std::string scenario(buff.begin(), buff.end());
 
-        std::pair<uint16_t, std::string> partida(game_id, scenario);
-        l.game_list.emplace_back(partida);
+        uint8_t current_players;
+        uint8_t max_players;
+        uint8_t status;
+
+        baseProtocol.recv_1byte_number(current_players);
+        baseProtocol.recv_1byte_number(max_players);
+        baseProtocol.recv_1byte_number(status);
+
+
+        l.game_list.emplace_back(game_id, scenario, current_players, max_players, status);
     }
 
     getLog().write("Cliente recibe lista de partidas\n");

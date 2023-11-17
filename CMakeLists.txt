@@ -98,6 +98,10 @@ add_executable(client
 		src/client/graphics/proyectil_entity.cpp
 		src/common/common_baseprotocol.cpp
 		src/common/common_baseprotocol.h
+		src/client/lobby/gameinfo.cpp
+		src/client/lobby/gameinfo.h
+		src/client/lobby/gameinfo_view.cpp
+		src/client/lobby/gameinfo_view.h
 )
 
 add_executable(server

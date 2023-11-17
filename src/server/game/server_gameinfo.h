@@ -7,10 +7,20 @@
 
 #include <string>
 
+#include "common_baseprotocol.h"
+
+class Game;
+
 class GameInfo {
-public:
-    GameInfo(size_t id, const std::string& scenario);
+private:
     size_t id;
     std::string scenario;
+    uint8_t players;
+    uint8_t max_players;
+    bool status;
+
+public:
+    explicit GameInfo(const Game& game);
+    void serialize(BaseProtocol& bp);
 };
 #endif  // WORMS_SERVER_GAMEINFO_H

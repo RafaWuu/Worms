@@ -105,8 +105,13 @@ void Game::exit_game(uint16_t client_id) {
         id_lists.erase(it);
     }
 
+    if (id_lists.empty()) {
+        kill();
+        return;
+    }
+
     if (owner_id == client_id)
         owner_id = id_lists[0];
 }
 
-GameInfo Game::get_info() { return GameInfo(this->game_id, this->name); }
+GameInfo Game::get_info() const { return std::move(GameInfo(*this)); }
