@@ -153,6 +153,7 @@ add_executable(server
 	src/server/game/weapons/server_weapon.cpp
 	src/server/game/weapons/server_bazooka_proyectil.cpp
 	src/server/game/weapons/bazooka_proyectil_info.cpp
+	src/server/server_game_reaper.cpp src/server/server_game_reaper.h
 )
 
 target_include_directories(client PUBLIC

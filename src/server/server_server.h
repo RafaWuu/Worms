@@ -8,14 +8,20 @@
 #include <string>
 
 #include "server_accepter.h"
+#include "server_game_reaper.h"
 #include "server_protocol.h"
 
 class Server {
 private:
     Socket sk;
+    LobbyMonitor lobby;
+    Queue<uint16_t> reap_queue;
+    Acceptor acc;
+    GameReaper game_reaper;
 
 public:
     explicit Server(const std::string& port);
+    ~Server();
     Server(const Server&) = delete;
     Server& operator=(const Server&) = delete;
 

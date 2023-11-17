@@ -10,11 +10,11 @@
 //
 // Created by xguss on 31/10/23.
 //
-LobbyMonitor::LobbyMonitor(): id(1) {}
+LobbyMonitor::LobbyMonitor(Queue<uint16_t>& reap_queue): reap_queue(reap_queue), id(1) {}
 
 uint16_t LobbyMonitor::create_game(std::string scenario, uint16_t client_id) {
     std::lock_guard<std::mutex> lock(mutex);
-    games_map.emplace(id, std::make_shared<Game>(id, scenario, client_id));
+    games_map.emplace(id, std::make_shared<Game>(id, scenario, client_id, reap_queue));
     this->id++;
 
     return id - 1;
@@ -40,4 +40,23 @@ std::vector<GameInfo> LobbyMonitor::list_games() {
     }
 
     return v;
+}
+
+void LobbyMonitor::close_game(uint16_t id) {
+    std::lock_guard<std::mutex> lock(mutex);
+    auto it = games_map.find(id);
+    if (it == games_map.end())
+        throw InvalidGameIDLobbyError(id);
+
+    it->second->kill();
+    it->second->join();
+    games_map.erase(it);
+}
+
+void LobbyMonitor::close_all() {
+    std::lock_guard<std::mutex> lock(mutex);
+    for (auto& game: games_map) {
+        game.second->kill();
+        game.second->join();
+    }
 }

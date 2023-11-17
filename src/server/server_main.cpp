@@ -9,8 +9,7 @@
 // caso de error o cierre prematuro
 int main(int argc, char* argv[]) {
     if (argc != 2) {
-        std::cerr << "Error: Expected " << argv[0] << " <puertoservicename>"
-                  << " <escenarios>\n";
+        std::cerr << "Error: Expected " << argv[0] << " <puertoservicename>\n";
         return ERROR_BADARGUMENTS;
     }
 

@@ -11,14 +11,23 @@
 #include "server_protocol.h"
 #define CLOSE_CHAR 'q'
 
-Server::Server(const std::string& port): sk(port.c_str()) {}
+Server::Server(const std::string& port):
+        sk(port.c_str()),
+        reap_queue(),
+        lobby(reap_queue),
+        game_reaper(lobby, reap_queue),
+        acc(std::move(sk), lobby) {}
 
 void Server::run() {
-    Acceptor acceptor(std::move(sk));
-    acceptor.start();
-
+    acc.start();
+    game_reaper.start();
     while (std::cin.get() != CLOSE_CHAR) {}
+}
 
-    acceptor.kill();
-    acceptor.join();
+Server::~Server() {
+    acc.kill();
+    game_reaper.kill();
+
+    acc.join();
+    game_reaper.join();
 }

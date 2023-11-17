@@ -18,7 +18,7 @@
 class Acceptor: public Thread {
 private:
     Socket& sk_acceptor;
-    LobbyMonitor lobby;
+    LobbyMonitor& lobby;
     std::list<Client> clients_list;
 
     std::atomic<bool> is_alive;
@@ -28,7 +28,7 @@ private:
     size_t client_ids;
 
 public:
-    explicit Acceptor(Socket&& sk);
+    Acceptor(Socket&& sk, LobbyMonitor& lobby);
     Acceptor(const Acceptor&) = delete;
 
     Acceptor& operator=(const Acceptor&) = delete;

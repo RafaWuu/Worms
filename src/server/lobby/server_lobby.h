@@ -20,12 +20,13 @@ class Game;
 
 class LobbyMonitor {
 private:
+    Queue<uint16_t>& reap_queue;
     std::mutex mutex;
     std::map<uint8_t, std::shared_ptr<Game>> games_map;
     uint16_t id;
 
 public:
-    LobbyMonitor();
+    explicit LobbyMonitor(Queue<uint16_t>& reap_queue);
     LobbyMonitor(const LobbyMonitor&) = delete;
     LobbyMonitor& operator=(const LobbyMonitor&) = delete;
 
@@ -33,6 +34,10 @@ public:
     std::shared_ptr<Game> join_game(uint16_t client_id, uint16_t game_id);
 
     std::vector<GameInfo> list_games();
+
+    void close_game(uint16_t id);
+
+    void close_all();
 };
 
 #endif  // WORMS_SERVER_LOBBY_H

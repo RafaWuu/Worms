@@ -20,7 +20,7 @@
 #include "server_gameinfo.h"
 #include "server_statusbroadcast_monitor.h"
 
-class Game: Thread {
+class Game: public Thread {
 private:
     std::mutex mutex;
     GameWorld game_world;
@@ -31,14 +31,15 @@ private:
     Queue<std::shared_ptr<GameEvent>> event_queue;
     StatusBroadcastMonitor broadcastMonitor;
     EventHandler eventHandler;
-
+    Queue<uint16_t>& reaper_queue;
     std::atomic<bool> is_alive;
     bool had_started;
 
 
 public:
     friend class GameInfo;
-    explicit Game(uint16_t game_id, std::string& scenario, uint16_t owner_id_);
+    explicit Game(uint16_t game_id, std::string& scenario, uint16_t owner_id_,
+                  Queue<uint16_t>& reap_queue);
 
     void run() override;
     void kill();

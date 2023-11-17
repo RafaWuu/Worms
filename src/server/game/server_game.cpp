@@ -15,7 +15,8 @@
 #include "server_error.h"
 #include "server_statusbroadcast_monitor.h"
 
-Game::Game(uint16_t game_id, std::string& scenario, uint16_t owner_id_):
+Game::Game(uint16_t game_id, std::string& scenario, uint16_t owner_id_,
+           Queue<uint16_t>& reap_queue):
         game_world(scenario),
         game_id(game_id),
         owner_id(owner_id_),
@@ -23,6 +24,7 @@ Game::Game(uint16_t game_id, std::string& scenario, uint16_t owner_id_):
         event_queue(),
         broadcastMonitor(),
         eventHandler(game_world, broadcastMonitor, id_lists, had_started, owner_id),
+        reaper_queue(reap_queue),
         is_alive(true),
         had_started(false),
         name(scenario) {
@@ -107,6 +109,7 @@ void Game::exit_game(uint16_t client_id) {
 
     if (id_lists.empty()) {
         kill();
+        reaper_queue.push(game_id);
         return;
     }
 

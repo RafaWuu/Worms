@@ -10,7 +10,8 @@
 
 #include "lobby/server_lobby.h"
 
-Acceptor::Acceptor(Socket&& sk): sk_acceptor(sk), lobby(), is_alive(true), client_ids(0) {}
+Acceptor::Acceptor(Socket&& sk, LobbyMonitor& lobby):
+        sk_acceptor(sk), lobby(lobby), is_alive(true), client_ids(0) {}
 
 Acceptor::~Acceptor() { kill_all(); }
 
