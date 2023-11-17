@@ -1,7 +1,5 @@
 #include "client_receiver.h"
 
-#define MOVE_CODE 1
-
 ClientReceiver::ClientReceiver(ClientProtocol& protocol,
                                Queue<std::shared_ptr<EstadoJuego>>& messages_received):
         protocol(protocol), messages_received(messages_received) {}

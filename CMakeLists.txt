@@ -45,13 +45,8 @@ set(CMAKE_AUTOMOC on)
 # Habilito autorcc para manejar automaticamente los QResources
 set(CMAKE_AUTORCC ON)
 
-message("Headers generados: ${UIS_HEADERS}")
-# Agrego la carpeta con los headers autogenerados a los includes
-message("Agregando '${PROJECT_BINARY_DIR}' como directorio de includes")
-include_directories(${PROJECT_BINARY_DIR})
-
-add_executable(client 
-	src/client/client_main.cpp
+# Source files del cliente menos el main
+set(CLIENT_SOURCE
 	src/client/client_client.cpp
 	src/client/client_protocol.cpp
 	src/client/client_sender.cpp
@@ -60,7 +55,7 @@ add_executable(client
 	src/common/common_resolver.cpp
 	src/common/common_resolvererror.cpp
 	src/common/common_socket.cpp
-		src/common/common_baseprotocol_socket.cpp
+	src/common/common_baseprotocol_socket.cpp
 	src/client/commands/client_move.cpp
 	src/client/commands/client_command.cpp
 	src/client/commands/client_stop_moving.cpp
@@ -81,27 +76,37 @@ add_executable(client
 	src/client/graphics/texture_controller.cpp
 	src/client/graphics/worldview.cpp
 	${UIS_HEADERS}
-        src/common/common_log.cpp
-        src/client/commands/client_jump.cpp
-        src/client/commands/client_rollback.cpp
-        src/client/game/ground.cpp
-		src/client/graphics/entity.cpp
-		src/client/game/entity_info.cpp
-		src/client/game/ground.cpp
-        src/client/graphics/entities_factory.cpp
-		src/client/graphics/debug_entity.cpp
-		src/client/client_event_handler.cpp
-        src/client/commands/client_aim.cpp
-		src/client/commands/client_stop_aim.cpp
-		src/client/commands/client_fire.cpp
-		src/client/game/proyectil.cpp
-		src/client/graphics/proyectil_entity.cpp
-		src/common/common_baseprotocol.cpp
-		src/common/common_baseprotocol.h
-		src/client/lobby/gameinfo.cpp
-		src/client/lobby/gameinfo.h
-		src/client/lobby/gameinfo_view.cpp
-		src/client/lobby/gameinfo_view.h
+	src/common/common_log.cpp
+	src/client/commands/client_jump.cpp
+	src/client/commands/client_rollback.cpp
+	src/client/game/ground.cpp
+	src/client/graphics/entity.cpp
+	src/client/game/entity_info.cpp
+	src/client/game/ground.cpp
+	src/client/graphics/entities_factory.cpp
+	src/client/graphics/debug_entity.cpp
+	src/client/client_event_handler.cpp
+	src/client/commands/client_aim.cpp
+	src/client/commands/client_stop_aim.cpp
+	src/client/commands/client_fire.cpp
+	src/client/game/proyectil.cpp
+	src/client/graphics/proyectil_entity.cpp
+	src/common/common_baseprotocol.cpp
+	src/common/common_baseprotocol.h
+	src/client/lobby/gameinfo.cpp
+	src/client/lobby/gameinfo.h
+	src/client/lobby/gameinfo_view.cpp
+	src/client/lobby/gameinfo_view.h	
+	)
+
+message("Headers generados: ${UIS_HEADERS}")
+# Agrego la carpeta con los headers autogenerados a los includes
+message("Agregando '${PROJECT_BINARY_DIR}' como directorio de includes")
+include_directories(${PROJECT_BINARY_DIR})
+
+add_executable(client 
+	src/client/client_main.cpp
+	${CLIENT_SOURCE}
 )
 
 add_executable(server
@@ -229,3 +234,20 @@ target_include_directories(hello_test PUBLIC
 		${CMAKE_CURRENT_SOURCE_DIR}/test
 )
 add_test(NAME asd COMMAND hello_test)
+
+
+# Tests del cliente
+add_executable(client_test
+	test/client_test.cc
+	${CLIENT_SOURCE}
+)
+
+target_include_directories(client_test PUBLIC
+		${CMAKE_CURRENT_SOURCE_DIR}/src/common
+		${CMAKE_CURRENT_SOURCE_DIR}/src/client
+		${CMAKE_CURRENT_SOURCE_DIR}/test
+)
+
+target_link_libraries(client_test PUBLIC GTest::gtest_main GTest::gmock SDL2pp::SDL2pp Qt5::Widgets Qt5::Core)
+
+add_test(NAME ClientTest COMMAND client_test)
