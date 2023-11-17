@@ -10,7 +10,8 @@
 #include <memory>
 #include <mutex>
 
-#include "common_queue.h"
+#include "../../common/common_queue.h"
+
 #include "server_gamestatus.h"
 
 class StatusBroadcastMonitor {

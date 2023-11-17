@@ -1,6 +1,7 @@
 #include "client_client.h"
 
 #include <iostream>
+#include <map>
 #include <string>
 #include <utility>
 #include <vector>
@@ -17,7 +18,6 @@
 
 #include "client_protocol.h"
 
-using namespace SDL2pp;
 
 #define SUCCESS 0
 #define FAILURE 1
@@ -26,7 +26,8 @@ Client::Client(const std::string& hostname, const std::string& servicename):
         hostname(hostname),
         servicename(servicename),
         socket(hostname.c_str(), servicename.c_str()),
-        protocol(std::move(socket)),
+        bp(std::move(socket)),
+        protocol(bp),
         messages_to_send(1000),
         messages_received(1000),
         event_handler() {
@@ -35,6 +36,7 @@ Client::Client(const std::string& hostname, const std::string& servicename):
     receiver = new ClientReceiver(protocol, messages_received);
 
     protocol.get_my_id(my_id);  // Reubicar
+    id_assigned_worm = 0;
 }
 
 Client::~Client() { kill(); }
@@ -43,7 +45,7 @@ void Client::kill() {
     messages_to_send.close();
     messages_received.close();
 
-    protocol.kill();
+    protocol.close();
     sender->kill();
     receiver->kill();
 
@@ -58,7 +60,7 @@ LobbyState Client::crear_partida(std::string& escenario) {
     protocol.send_create_game(escenario);
     return protocol.receive_confirmation();
 }
-LobbyState Client::join_game(int& id) {
+LobbyState Client::join_game(const int& id) {
     protocol.send_join_game(id);
     return protocol.receive_confirmation();
 }
@@ -69,18 +71,15 @@ LobbyState Client::request_game_list() {
 
 void Client::receive_scenario() { this->scenario = protocol.receive_scenario(); }
 
-uint16_t Client::get_id_assigned_worm(std::map<uint16_t, uint16_t>& distribution) {
+uint16_t Client::get_id_assigned_worm(const std::map<uint16_t, uint16_t>& distribution) {
     // Cual es el id del cliente? Hardcodeo un 0 por ahora para probarlo
     uint16_t assigned_worm = -1;
+    uint16_t id = my_id;
 
-    for (auto pair: distribution) {
-        if (pair.second == my_id) {
-            assigned_worm = pair.first;
-            break;
-        }
-    }
+    auto it = std::find_if(distribution.begin(), distribution.end(),
+                           [id](const auto& p) { return p.second == id; });
 
-    return assigned_worm;
+    return it->first;
 }
 
 void Client::start_joined_game() {
@@ -108,12 +107,13 @@ int Client::start() {
     receiver->start();
     int frame_delay = 1000 / 60;
 
-    SDL sdl(SDL_INIT_VIDEO);  //--->crear clase que maneje la vista
+    SDL2pp::SDL sdl(SDL_INIT_VIDEO);  //--->crear clase que maneje la vista
 
     // Create main window: 640x480 dimensions, resizable, "SDL2pp demo" title
-    Window window("Worms", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480,
-                  SDL_WINDOW_RESIZABLE);
-    Renderer renderer(window, -1, SDL_RENDERER_ACCELERATED);
+    SDL2pp::Window window("Worms", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480,
+                          SDL_WINDOW_RESIZABLE);
+    SDL2pp::Renderer renderer(window, -1, SDL_RENDERER_ACCELERATED);
+    // renderer.SetLogicalSize(1920,1080);
 
     TextureController texture_controller(renderer);
     WorldView worldview(texture_controller, std::move(this->scenario));
@@ -132,6 +132,9 @@ int Client::start() {
         }
     }
 
+    SDL_DestroyRenderer(renderer.Get());
+    SDL_DestroyWindow(window.Get());
+    SDL_Quit();
     return SUCCESS;
 }
 

@@ -11,15 +11,15 @@
 
 class Worm;
 
-class WormInfo : public GameObjectInfo{
+class WormInfo: public GameObjectInfo {
 
 public:
     explicit WormInfo(const Worm& worm);
 
     const Worm& worm;
 
-    void serialize_status(ServerProtocol &gp) override;
-    void serialize_scenario(ServerProtocol &gp) override;
-    void serialize_start(ServerProtocol &gp);
+    void serialize_status(BaseProtocol& bp) override;
+    void serialize_scenario(BaseProtocol& bp) override;
+    void serialize_start(BaseProtocol& bp);
 };
 #endif  // WORMS_SERVER_WORM_INFO_H

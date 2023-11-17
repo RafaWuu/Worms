@@ -60,7 +60,7 @@ add_executable(client
 	src/common/common_resolver.cpp
 	src/common/common_resolvererror.cpp
 	src/common/common_socket.cpp
-	src/common/common_baseprotocol.cpp
+		src/common/common_baseprotocol_socket.cpp
 	src/client/commands/client_move.cpp
 	src/client/commands/client_command.cpp
 	src/client/commands/client_stop_moving.cpp
@@ -96,6 +96,8 @@ add_executable(client
 		src/client/commands/client_fire.cpp
 		src/client/game/proyectil.cpp
 		src/client/graphics/proyectil_entity.cpp
+		src/common/common_baseprotocol.cpp
+		src/common/common_baseprotocol.h
 )
 
 add_executable(server
@@ -109,7 +111,7 @@ add_executable(server
 	src/common/common_resolver.cpp
 	src/common/common_resolvererror.cpp
 	src/common/common_socket.cpp
-	src/common/common_baseprotocol.cpp
+	src/common/common_baseprotocol_socket.cpp
 	src/server/game/server_game.cpp
 	src/server/lobby/server_lobby.cpp
 	src/server/server_clientstate.cpp
@@ -122,26 +124,26 @@ add_executable(server
 	src/server/game/server_statusbroadcast_monitor.cpp
 	src/server/game/server_event_handler.cpp
 	src/server/game/server_gamestatus.cpp
-        src/server/game/entities/server_worm.cpp
-		src/server/game/world/server_gameworld.cpp
+	src/server/game/entities/server_worm.cpp
+	src/server/game/world/server_gameworld.cpp
 	src/server/game/server_scenario_file_handler.cpp
-        src/server/game/entities/server_beam.cpp
-        src/server/game/entities/server_worm_info.cpp
-        src/server/game/entities/server_beam_info.cpp
-        src/common/common_log.cpp
-        src/server/game/entities/server_gameobject.cpp
-		src/server/game/listeners/server_onfloor_contactlistener.cpp
-        src/server/game/entities/server_worm_sensor.cpp
-		src/server/game/entities/server_ground.cpp
-		src/server/game/states/server_state_manager.cpp
-        src/server/game/states/server_states.cpp
-		src/server/game/states/server_state.cpp
-        src/server/game/entities/server_gameobject_info.cpp
-		src/server/game/entities/server_ground_info.cpp
-		src/server/game/entities/server_worm_sensor_info.cpp
-		src/server/game/weapons/server_weapon.cpp
-		src/server/game/weapons/server_bazooka_proyectil.cpp
-		src/server/game/weapons/bazooka_proyectil_info.cpp
+	src/server/game/entities/server_beam.cpp
+	src/server/game/entities/server_worm_info.cpp
+	src/server/game/entities/server_beam_info.cpp
+	src/common/common_log.cpp
+	src/server/game/entities/server_gameobject.cpp
+	src/server/game/listeners/server_onfloor_contactlistener.cpp
+	src/server/game/entities/server_worm_sensor.cpp
+	src/server/game/entities/server_ground.cpp
+	src/server/game/states/server_state_manager.cpp
+	src/server/game/states/server_states.cpp
+	src/server/game/states/server_state.cpp
+	src/server/game/entities/server_gameobject_info.cpp
+	src/server/game/entities/server_ground_info.cpp
+	src/server/game/entities/server_worm_sensor_info.cpp
+	src/server/game/weapons/server_weapon.cpp
+	src/server/game/weapons/server_bazooka_proyectil.cpp
+	src/server/game/weapons/bazooka_proyectil_info.cpp
 )
 
 target_include_directories(client PUBLIC
@@ -166,6 +168,60 @@ target_link_libraries(client PUBLIC ${BOX2D_LIBRARY_PATH}
 					Qt5::Core)
 target_link_libraries(server PUBLIC ${BOX2D_LIBRARY_PATH})
 
-add_executable(hello_test test/hello_test.cc)
-target_link_libraries(hello_test GTest::gtest_main)
+add_executable(hello_test
+		test/hello_test.cc
+		src/common/common_baseprotocol_mock.cpp
+
+		src/server/server_protocol.cpp
+		src/server/lobby/server_lobby_request.cpp
+		src/server/server_server.cpp
+		src/server/server_protocol.cpp
+		src/server/server_client.cpp
+		src/server/game/server_sender.cpp
+		src/server/server_accepter.cpp
+		src/common/common_liberror.cpp
+		src/common/common_resolver.cpp
+		src/common/common_resolvererror.cpp
+		src/common/common_socket.cpp
+		src/common/common_baseprotocol_socket.cpp
+		src/server/game/server_game.cpp
+		src/server/lobby/server_lobby.cpp
+		src/server/server_clientstate.cpp
+		src/server/game/server_clientstate_game.cpp
+		src/server/lobby/server_clientstate_lobby.cpp
+		src/server/lobby/server_lobby_request.cpp
+		src/server/lobby/server_lobby_answer.cpp
+		src/server/game/server_gameinfo.cpp
+		src/server/game/server_gameevent.cpp
+		src/server/game/server_statusbroadcast_monitor.cpp
+		src/server/game/server_event_handler.cpp
+		src/server/game/server_gamestatus.cpp
+		src/server/game/entities/server_worm.cpp
+		src/server/game/world/server_gameworld.cpp
+		src/server/game/server_scenario_file_handler.cpp
+		src/server/game/entities/server_beam.cpp
+		src/server/game/entities/server_worm_info.cpp
+		src/server/game/entities/server_beam_info.cpp
+		src/common/common_log.cpp
+		src/server/game/entities/server_gameobject.cpp
+		src/server/game/listeners/server_onfloor_contactlistener.cpp
+		src/server/game/entities/server_worm_sensor.cpp
+		src/server/game/entities/server_ground.cpp
+		src/server/game/states/server_state_manager.cpp
+		src/server/game/states/server_states.cpp
+		src/server/game/states/server_state.cpp
+		src/server/game/entities/server_gameobject_info.cpp
+		src/server/game/entities/server_ground_info.cpp
+		src/server/game/entities/server_worm_sensor_info.cpp
+		src/server/game/weapons/server_weapon.cpp
+		src/server/game/weapons/server_bazooka_proyectil.cpp
+		src/server/game/weapons/bazooka_proyectil_info.cpp)
+
+target_link_libraries(hello_test GTest::gtest_main GTest::gmock ${BOX2D_LIBRARY_PATH})
+
+target_include_directories(hello_test PUBLIC
+		${CMAKE_CURRENT_SOURCE_DIR}/src/common
+		${CMAKE_CURRENT_SOURCE_DIR}/src/server
+		${CMAKE_CURRENT_SOURCE_DIR}/test
+)
 add_test(NAME asd COMMAND hello_test)

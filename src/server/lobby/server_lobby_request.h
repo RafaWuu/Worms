@@ -15,18 +15,21 @@
 class LobbyRequest {
 public:
     LobbyRequest() = default;
+    virtual ~LobbyRequest() = default;
     virtual std::shared_ptr<Game> execute(LobbyMonitor& lobby, ServerProtocol& gp,
                                           uint16_t client_id) = 0;
 };
 
 class LobbyRequestNewGame: public LobbyRequest {
-private:
-    std::string scenario;
 
 public:
     explicit LobbyRequestNewGame(const std::string& s);
+    ~LobbyRequestNewGame() override = default;
+
     std::shared_ptr<Game> execute(LobbyMonitor& lobby, ServerProtocol& gp,
                                   uint16_t client_id) override;
+
+    std::string scenario;
 };
 
 class LobbyRequestJoinGame: public LobbyRequest {
@@ -35,6 +38,8 @@ private:
 
 public:
     explicit LobbyRequestJoinGame(uint16_t id);
+    ~LobbyRequestJoinGame() override = default;
+
     std::shared_ptr<Game> execute(LobbyMonitor& lobby, ServerProtocol& gp,
                                   uint16_t client_id) override;
 };
@@ -44,6 +49,7 @@ class LobbyRequestListGames: public LobbyRequest {
 private:
 public:
     LobbyRequestListGames() = default;
+    ~LobbyRequestListGames() override = default;
 
     std::shared_ptr<Game> execute(LobbyMonitor& lobby, ServerProtocol& gp,
                                   uint16_t client_id) override;

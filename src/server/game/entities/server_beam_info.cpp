@@ -4,19 +4,15 @@
 
 #include "server_beam_info.h"
 
-BeamInfo::BeamInfo(const Beam& beam) : beam(beam) {
-}
+BeamInfo::BeamInfo(const Beam& beam): beam(beam) {}
 
-void BeamInfo::serialize_scenario(ServerProtocol& gp) {
-    gp.send_1byte_number(beam.get_id());
-    gp.send_4byte_float(beam.body->GetPosition().x);
-    gp.send_4byte_float(beam.body->GetPosition().y);
+void BeamInfo::serialize_scenario(BaseProtocol& bp) {
+    bp.send_1byte_number(beam.get_id());
+    bp.send_4byte_float(beam.body->GetPosition().x);
+    bp.send_4byte_float(beam.body->GetPosition().y);
 
-    gp.send_4byte_float(beam.height);
-    gp.send_4byte_float(beam.width);
-    gp.send_4byte_float(beam.angle);
-
+    bp.send_4byte_float(beam.height);
+    bp.send_4byte_float(beam.width);
+    bp.send_4byte_float(beam.angle);
 }
-void BeamInfo::serialize_status(ServerProtocol& gp) {
-    gp.send_1byte_number(beam.get_id());
-}
+void BeamInfo::serialize_status(BaseProtocol& bp) { bp.send_1byte_number(beam.get_id()); }

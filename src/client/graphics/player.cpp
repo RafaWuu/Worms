@@ -11,7 +11,9 @@ Player::Player(TextureController& controller, int id):
         rolling(false),
         x(300),
         y(300),
-        id(id) {}
+        id(id) {
+    health = 100;
+}
 
 Player::~Player() {}
 
@@ -21,7 +23,7 @@ void Player::update_info(EntityInfo* info) {
     health = worm->get_health();
 
     x = (worm->get_pos_x() * 640 / 20);
-    y = (-worm->get_pos_y() * 480 / 20 + 480);
+    y = (480 - worm->get_pos_y() * 480 / 20);
 
     uint8_t dir = worm->get_dir();
     uint16_t new_state = worm->get_state();

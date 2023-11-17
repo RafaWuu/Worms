@@ -7,13 +7,13 @@
 
 #include "server_gameobject_info.h"
 #include "server_ground.h"
-class GroundInfo : public GameObjectInfo {
+class GroundInfo: public GameObjectInfo {
 public:
     explicit GroundInfo(const Ground& ground);
     const Ground& ground;
 
-    void serialize_scenario(ServerProtocol &gp) override;
-    void serialize_status(ServerProtocol &gp) override;
+    void serialize_scenario(BaseProtocol& bp) override;
+    void serialize_status(BaseProtocol& bp) override;
 };
 
 #endif  // WORMS_SERVER_GROUND_INFO_H

@@ -4,16 +4,13 @@
 
 #include "bazooka_proyectil_info.h"
 BazookaProyectilInfo::BazookaProyectilInfo(const BazookaProyectil& proyectil):
-        proyectil(proyectil) {
-
-}
-void BazookaProyectilInfo::serialize_status(ServerProtocol& gp) {
+        proyectil(proyectil) {}
+void BazookaProyectilInfo::serialize_status(BaseProtocol& gp) {
     gp.send_1byte_number(proyectil.get_id());
     gp.send_1byte_number(1);
     gp.send_4byte_float(proyectil.body->GetPosition().x);
     gp.send_4byte_float(proyectil.body->GetPosition().y);
 }
-void BazookaProyectilInfo::serialize_scenario(ServerProtocol& gp) {
+void BazookaProyectilInfo::serialize_scenario(BaseProtocol& gp) {
     gp.send_1byte_number(proyectil.get_id());
-
 }

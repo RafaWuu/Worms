@@ -11,7 +11,8 @@
 #include "utility"
 
 Client::Client(uint16_t id, Socket socket, LobbyMonitor& lobby):
-        game_protocol(std::move(socket)),
+        bp(std::move(socket)),
+        game_protocol(bp),
         lobby(lobby),
         state(std::make_unique<LobbyClientState>(id, lobby, game_protocol)),
         is_alive(true),
@@ -32,7 +33,7 @@ void Client::kill_connection() {
 
     if (state)
         this->state->kill();
-    game_protocol.kill();
+    bp.kill();
 }
 
 void Client::reap_connection() {

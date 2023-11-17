@@ -12,12 +12,12 @@
 #include <vector>
 
 #include "../../common/common_queue.h"
+#include "../../common/common_thread.h"
+#include "game/world/server_gameworld.h"
 
-#include "common_thread.h"
 #include "server_event_handler.h"
 #include "server_gameevent.h"
 #include "server_gameinfo.h"
-#include "game/world/server_gameworld.h"
 #include "server_statusbroadcast_monitor.h"
 
 class Game: Thread {

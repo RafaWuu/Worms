@@ -10,13 +10,13 @@
 #include <string>
 #include <vector>
 
-#include "../common/common_baseprotocol.h"
+#include "../common/common_baseprotocol_socket.h"
+#include "../common/common_liberror.h"
+#include "../common/common_log.h"
+#include "../common/common_protocol_constants.h"
 #include "../common/common_socket.h"
 #include "game/entities/server_gameobject_info.h"
 #include "game/server_gameinfo.h"
-
-#include "common_liberror.h"
-#include "common_log.h"
 
 class GameObjectInfo;
 class WormInfo;
@@ -24,17 +24,25 @@ class WormInfo;
 class LobbyRequest;
 class GameEvent;
 
-class ServerProtocol: public BaseProtocol {
+enum Request {
+    CREATE_GAME = LOBBY_CREATE_GAME,
+    JOIN_GAME = LOBBY_JOIN_GAME,
+    LIST_GAMES = LOBBY_LIST_GAMES,
+};
+
+class ServerProtocol {
 protected:
     Log& getLog();
 
 private:
+    BaseProtocol& baseProtocol;
+
     std::unique_ptr<LobbyRequest> recv_create_game();
     std::unique_ptr<LobbyRequest> recv_join_game();
     std::unique_ptr<GameEvent> recv_move(uint16_t id_client);
 
 public:
-    explicit ServerProtocol(Socket skt);
+    explicit ServerProtocol(BaseProtocol& bp);
 
     ServerProtocol(const ServerProtocol&) = delete;
     ServerProtocol& operator=(const ServerProtocol&) = delete;

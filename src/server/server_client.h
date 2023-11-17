@@ -23,6 +23,7 @@
 
 class Client: public Thread {
 private:
+    SocketBaseProtocol bp;
     ServerProtocol game_protocol;
     LobbyMonitor& lobby;
     std::unique_ptr<ClientState> state;

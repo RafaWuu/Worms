@@ -2,13 +2,14 @@
 #define CLIENT_PROTOCOL_H
 
 #include <map>
+#include <memory>
 #include <stdexcept>
 #include <string>
 #include <vector>
 
 #include <string.h>
 
-#include "../common/common_baseprotocol.h"
+#include "../common/common_baseprotocol_socket.h"
 #include "../common/common_socket.h"
 #include "game/estado_juego.h"
 #include "game/ground.h"
@@ -22,13 +23,15 @@ struct ErrorLobby: public std::runtime_error {
     ErrorLobby(): std::runtime_error("Error occurred joining/creating game") {}
 };
 
-class ClientProtocol: public BaseProtocol {
+class ClientProtocol {
+private:
+    BaseProtocol& baseProtocol;
+
 protected:
     Log& getLog();
 
 public:
-    explicit ClientProtocol(Socket socket);
-
+    explicit ClientProtocol(BaseProtocol& bp);
     void serialize_move(int dir);
     void serialize_stop_move();
     void serialize_jump();
@@ -44,7 +47,7 @@ public:
 
     std::unique_ptr<Worm> receive_worm();
     std::unique_ptr<Beam> receive_beam();
-    std::unique_ptr<Ground>  receive_ground();
+    std::unique_ptr<Ground> receive_ground();
     std::unique_ptr<Proyectil> receive_proyectil();
 
     void get_my_id(uint16_t& id);

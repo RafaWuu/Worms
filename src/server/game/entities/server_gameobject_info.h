@@ -5,16 +5,16 @@
 #ifndef WORMS_SERVER_GAMEOBJECT_INFO_H
 #define WORMS_SERVER_GAMEOBJECT_INFO_H
 
-#include "server_protocol.h"
+#include "../src/server/server_protocol.h"
 
 class ServerProtocol;
 
-class GameObjectInfo{
+class GameObjectInfo {
 
 public:
-    virtual void serialize_status(ServerProtocol& gp);
+    virtual void serialize_status(BaseProtocol& gp);
 
-    virtual void serialize_scenario(ServerProtocol& gp);
+    virtual void serialize_scenario(BaseProtocol& gp);
 };
 
 #endif  // WORMS_SERVER_GAMEOBJECT_INFO_H

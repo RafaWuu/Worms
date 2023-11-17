@@ -9,14 +9,10 @@ AliveState::AliveState() {
     required = 0;
     blocking_me = 0;
     terminate = 0;
-    requiring = Standing | Walking | Jumping | Rolling |
-            Falling | Firing | Aiming | Powering;
+    requiring = Standing | Walking | Jumping | Rolling | Falling | Firing | Aiming | Powering;
 }
 
-bool AliveState::update(Worm& worm) {
-    return true;
-
-}
+bool AliveState::update(Worm& worm) { return true; }
 
 WalkingState::WalkingState() {
     code = Walking;
@@ -41,7 +37,6 @@ bool WalkingState::update(Worm& worm) {
 
     worm.body->ApplyLinearImpulse(b2Vec2(impulse_x, 0), worm.body->GetWorldCenter(), true);
     return true;
-
 }
 
 StandingState::StandingState() {
@@ -98,16 +93,13 @@ bool JumpingState::update(Worm& worm) {
 
     remaining_frames--;
     return true;
-
 }
 
 bool JumpingState::can_be_activated(Worm& worm) {
     return worm.jumpTimeout == 0 && worm.numFootContacts > 0;
 }
 
-uint16_t JumpingState::on_deactivated(Worm &worm){
-    return NoState;
-}
+uint16_t JumpingState::on_deactivated(Worm& worm) { return NoState; }
 
 RollingState::RollingState() {
     code = Rolling;
@@ -118,7 +110,6 @@ RollingState::RollingState() {
 
     remaining_frames = 0;
     last_moving_state = NoState;
-
 }
 
 void RollingState::on_activated(Worm& worm) {
@@ -146,9 +137,7 @@ bool RollingState::can_be_activated(Worm& worm) {
     return worm.jumpTimeout == 0 && worm.numFootContacts > 0;
 }
 
-uint16_t RollingState::on_deactivated(Worm &worm){
-    return NoState;
-}
+uint16_t RollingState::on_deactivated(Worm& worm) { return NoState; }
 
 FallingState::FallingState() {
     code = Falling;
@@ -160,19 +149,17 @@ FallingState::FallingState() {
     max_y = 0;
 }
 
-void FallingState::on_activated(Worm& worm) {
-    max_y = worm.body->GetPosition().y;
-}
+void FallingState::on_activated(Worm& worm) { max_y = worm.body->GetPosition().y; }
 
 bool FallingState::update(Worm& worm) {
-    if(worm.body->GetPosition().y > max_y)
+    if (worm.body->GetPosition().y > max_y)
         max_y = worm.body->GetPosition().y;
 
     return worm.numFootContacts < 1;
 }
 
 uint16_t FallingState::on_deactivated(Worm& worm) {
-    //worm.process_fall(max_y - worm.body->GetPosition().y);
+    // worm.process_fall(max_y - worm.body->GetPosition().y);
     return Standing;
 }
 
@@ -186,14 +173,14 @@ FiringState::FiringState() {
 
 
 bool FiringState::update(Worm& worm) {
-    b2Vec2 source = b2Vec2(1.5,0);
+    b2Vec2 source = b2Vec2(1.5, .5);
 
-    if (!worm.facing_right){
+    if (!worm.facing_right) {
         source.x = -source.x;
     }
 
 
-    worm.current_gun.fire_proyectil(worm.body->GetWorldPoint( source), worm.desiredAngle);
+    worm.current_gun.fire_proyectil(worm.body->GetWorldPoint(source), worm.desiredAngle);
 
     return false;
 }
@@ -208,17 +195,16 @@ AimingState::AimingState() {
 
 bool AimingState::update(Worm& worm) {
     b2Vec2 toTarget = worm.body->GetLocalPoint(b2Vec2(worm.aim_x, worm.aim_y));
-    float angle = atan2f( toTarget.y, toTarget.x );
+    float angle = atan2f(toTarget.y, toTarget.x);
 
-    if (angle > M_PI){
+    if (angle > M_PI) {
         angle = M_PI;
-    } else if (angle < -M_PI){
+    } else if (angle < -M_PI) {
         angle = -M_PI;
     }
 
     worm.desiredAngle = angle;
     return true;
-
 }
 
 PoweringState::PoweringState() {

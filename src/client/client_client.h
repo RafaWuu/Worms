@@ -1,6 +1,7 @@
 #ifndef CLIENT_CLIENT_H
 #define CLIENT_CLIENT_H
 
+#include <map>
 #include <memory>
 #include <string>
 
@@ -12,9 +13,9 @@
 #include "commands/client_command.h"
 #include "commands/client_jump.h"
 #include "game/scenario.h"
-#include "client_event_handler.h"
 #include "graphics/worldview.h"
 
+#include "client_event_handler.h"
 #include "client_protocol.h"
 #include "client_receiver.h"
 #include "client_sender.h"
@@ -26,6 +27,7 @@ private:
     std::string servicename;
 
     Socket socket;
+    SocketBaseProtocol bp;
     ClientProtocol protocol;
 
     std::unique_ptr<Scenario> scenario;
@@ -39,7 +41,7 @@ private:
     Queue<std::shared_ptr<Command>> messages_to_send;
     Queue<std::shared_ptr<EstadoJuego>> messages_received;
 
-    uint16_t get_id_assigned_worm(std::map<uint16_t, uint16_t>& distribution);
+    uint16_t get_id_assigned_worm(const std::map<uint16_t, uint16_t>& distribution);
 
 public:
     Client(const std::string& hostname, const std::string& servicename);
@@ -54,11 +56,10 @@ public:
     int start();
 
     LobbyState crear_partida(std::string& escenario);
-    LobbyState join_game(int& id);
+    LobbyState join_game(const int& id);
     LobbyState request_game_list();
     void receive_scenario();
     void start_game();
-
 
 
     void start_joined_game();
