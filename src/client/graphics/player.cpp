@@ -34,7 +34,7 @@ void Player::update_info(EntityInfo* info) {
     bool is_rolling_now = (new_state & 0x0010) != 0;
 
     if (!moving && is_moving_now) {
-        an.change_texture(AnimationState::WALK);
+        an.change_texture(AnimationState::WALKING);
     } else if (!jumping && is_jumping_now) {
         an.change_texture(AnimationState::JUMPING);
     } else if (!rolling && is_rolling_now) {

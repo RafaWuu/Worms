@@ -8,7 +8,7 @@
 
 #include "client_constants.h"
 enum AnimationState {
-    WALK,
+    WALKING,
     // Standing still
     IDLE,
     JUMPING,
@@ -27,6 +27,7 @@ private:
 public:
     explicit TextureController(SDL2pp::Renderer& renderer);
     std::shared_ptr<SDL2pp::Texture> get_texture(AnimationState state);
+    void load_texture(AnimationState state, const std::string& file_name, Uint32 color_key);
 };
 
 #endif
