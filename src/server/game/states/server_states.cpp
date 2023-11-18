@@ -12,7 +12,11 @@ AliveState::AliveState() {
     requiring = Standing | Walking | Jumping | Rolling | Falling | Firing | Aiming | Powering;
 }
 
-bool AliveState::update(Worm& worm) { return true; }
+bool AliveState::update(Worm& worm) {
+    if (worm.health > 0)
+        return true;
+    return false;
+}
 
 WalkingState::WalkingState() {
     code = Walking;
@@ -159,7 +163,7 @@ bool FallingState::update(Worm& worm) {
 }
 
 uint16_t FallingState::on_deactivated(Worm& worm) {
-    // worm.process_fall(max_y - worm.body->GetPosition().y);
+    worm.process_fall(max_y - worm.body->GetPosition().y);
     worm.jumpTimeout = 3;
     return Standing;
 }
@@ -180,7 +184,6 @@ bool FiringState::update(Worm& worm) {
         source.x = -source.x;
     }
 
-
     worm.current_gun.fire_proyectil(worm.body->GetWorldPoint(source), worm.desiredAngle);
 
     return false;
@@ -196,15 +199,19 @@ AimingState::AimingState() {
 
 bool AimingState::update(Worm& worm) {
     b2Vec2 toTarget = worm.body->GetLocalPoint(b2Vec2(worm.aim_x, worm.aim_y));
-    float angle = atan2f(toTarget.y, toTarget.x);
 
-    if (angle > M_PI) {
-        angle = M_PI;
-    } else if (angle < -M_PI) {
-        angle = -M_PI;
+    if (worm.facing_right && toTarget.x < 0) {
+        worm.desiredAngle = (toTarget.y > 0) ? M_PI_2f32 : -M_PI_2f32;
+        return true;
     }
 
-    worm.desiredAngle = angle;
+    if (!worm.facing_right && toTarget.x > 0) {
+        worm.desiredAngle = (toTarget.y > 0) ? M_PI_2f32 : -M_PI_2f32;
+        return true;
+    }
+
+    worm.desiredAngle = atan2f(toTarget.y, toTarget.x);
+
     return true;
 }
 

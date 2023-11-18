@@ -28,8 +28,6 @@ private:
     float pos_y;
 
 
-    uint8_t health;
-
     StateManager state_manager;
 
 public:
@@ -89,5 +87,9 @@ public:
     float desiredAngle;
 
     void get_hit(float d);
+
+    void process_fall(float distance);
+
+    uint8_t health;
 };
 #endif  // WORMS_SERVER_WORM_H

@@ -4,6 +4,7 @@
 
 #include "server_worm.h"
 
+#include <algorithm>
 #include <memory>
 #include <utility>
 
@@ -53,6 +54,13 @@ Worm::Worm(uint8_t id, b2World* b2world, float pos_x, float pos_y, Weapon& weapo
     increasing_power = false;
     desiredAngle = 0;
     ammo = 0;
+}
+
+void Worm::process_fall(float distance) {
+    double max = fmax(25, health);
+
+    if (distance > 2)
+        health -= (uint8_t)fmin(distance, max);
 }
 
 void Worm::set_client_id(uint16_t id_) { this->client_id = id_; }
@@ -142,4 +150,4 @@ std::unique_ptr<GameObjectInfo> Worm::get_status() const {
 
 std::unique_ptr<WormInfo> Worm::get_worminfo() const { return std::make_unique<WormInfo>(*this); }
 
-void Worm::get_hit(float d) {}
+void Worm::get_hit(float d) { health -= (uint8_t)fmin(d, health); }
