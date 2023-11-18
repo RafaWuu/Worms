@@ -37,6 +37,10 @@ public:
 
     uint8_t get_dir() const;
 
+    uint8_t get_current_weapon();
+
+    float get_aim_angle();
+
     std::unique_ptr<Entity> create(TextureController& controller) override;
 };
 

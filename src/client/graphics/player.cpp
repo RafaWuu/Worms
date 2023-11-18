@@ -4,14 +4,16 @@
 
 Player::Player(TextureController& controller, int id):
         texture_controller(controller),
-        an(texture_controller.get_texture(AnimationState::IDLE), texture_controller),
+        an(texture_controller.get_texture(AnimationState::BAZOOKA_IDLE), texture_controller),
         facingLeft(false),
         moving(false),
         jumping(false),
         rolling(false),
+        aiming(false),
         x(300),
         y(300),
         id(id) {
+    current_weapon = std::make_unique<Bazooka>();
     health = 100;
 }
 
@@ -28,10 +30,14 @@ void Player::update_info(EntityInfo* info) {
     uint8_t dir = worm->get_dir();
     uint16_t new_state = worm->get_state();
 
+    current_weapon = weapon_factory.create_weapon(worm->get_current_weapon());
+    
     // Hay que cambiar la textura si empieza a moverse o para de moverse
     bool is_moving_now = (new_state & 0x0004) ? true : false;
     bool is_jumping_now = (new_state & 0x0008) != 0;
     bool is_rolling_now = (new_state & 0x0010) != 0;
+
+    // TODO: cambiar textura cuando apunta y elegir frame segun el angulo 
 
     if (!moving && is_moving_now) {
         an.change_texture(AnimationState::WALKING);
@@ -41,7 +47,7 @@ void Player::update_info(EntityInfo* info) {
         an.change_texture(AnimationState::ROLLING);
     } else if ((moving && !is_moving_now) || (jumping && !is_jumping_now) ||
                (rolling && !is_rolling_now)) {
-        an.change_texture(AnimationState::IDLE);
+        an.change_texture(current_weapon->get_idle_texture_state());
     }
 
     moving = is_moving_now;

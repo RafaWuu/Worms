@@ -26,6 +26,10 @@ uint16_t Worm::get_id() const { return id; }
 
 uint8_t Worm::get_dir() const { return dir; }
 
+uint8_t Worm::get_current_weapon() { return current_weapon; }
+
+float Worm::get_aim_angle() { return aim_angle; }
+
 std::unique_ptr<Entity> Worm::create(TextureController& controller) {
     return std::make_unique<Player>(controller, get_id());
 }

@@ -13,6 +13,8 @@ TextureController::TextureController(SDL2pp::Renderer& renderer_) : renderer(ren
         {AnimationState::ROLLING, "wbackflp.png"},
         {AnimationState::SCENARIO_BEAM_3M, "beam_3m.png"},
         {AnimationState::SCENARIO_BEAM_6M, "beam_6m.png"},
+        {AnimationState::BAZOOKA_IDLE, "wbazbak.png"}, // Quiza usar el mismo sprite para idle/aiming?
+        {AnimationState::BAZOOKA_AIMING, "wbaz.png"},
     };
 
     for (auto const& texture : textures_to_load) {

@@ -99,6 +99,9 @@ set(CLIENT_SOURCE
 	src/client/lobby/gameinfo_view.h
 	src/client/commands/client_power_attack.cpp
 	src/client/commands/client_power_attack.h
+	src/client/graphics/weapons/weapon.cpp
+	src/client/graphics/weapons/bazooka.cpp
+	src/client/graphics/weapons/weapon_factory.cpp
 	)
 
 message("Headers generados: ${UIS_HEADERS}")
@@ -227,7 +230,9 @@ add_executable(hello_test
 		src/server/game/entities/server_worm_sensor_info.cpp
 		src/server/game/weapons/server_weapon.cpp
 		src/server/game/weapons/server_bazooka_proyectil.cpp
-		src/server/game/weapons/bazooka_proyectil_info.cpp)
+		src/server/game/weapons/bazooka_proyectil_info.cpp
+		src/server/server_game_reaper.cpp src/server/server_game_reaper.h
+)
 
 target_link_libraries(hello_test GTest::gtest_main GTest::gmock ${BOX2D_LIBRARY_PATH})
 
