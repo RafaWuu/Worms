@@ -4,13 +4,15 @@
 
 #include "server_worm_sensor.h"
 
+#include <memory>
+
 #include "b2_fixture.h"
 #include "b2_polygon_shape.h"
 #include "server_worm_sensor_info.h"
 
 WormSensor::WormSensor(Worm* worm): worm(worm), GameObject() {
     b2PolygonShape dynamicBox;
-    dynamicBox.SetAsBox(0.45, 0.2, b2Vec2(0, -.2), 0);
+    dynamicBox.SetAsBox(0.45, 0.3, b2Vec2(0, -.25), 0);
 
     b2FixtureDef fixtureDef;
     fixtureDef.shape = &dynamicBox;
@@ -20,7 +22,6 @@ WormSensor::WormSensor(Worm* worm): worm(worm), GameObject() {
 
     worm->body->CreateFixture(&fixtureDef);
 }
-
 
 
 void WormSensor::handle_begin_floor_contact(GameObject* other) {
