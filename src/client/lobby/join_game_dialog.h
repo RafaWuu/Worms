@@ -13,6 +13,8 @@ namespace Ui {
 class JoinGameDialog;
 }
 
+#define JOIN_GAME_SUCCESS 1
+
 class JoinGameDialog: public QDialog {
     Q_OBJECT
 

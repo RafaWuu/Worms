@@ -2,6 +2,8 @@
 
 #include "ui_join_game_dialog.h"
 
+
+
 JoinGameDialog::JoinGameDialog(std::shared_ptr<Client> client, QWidget* parent):
         QDialog(parent), ui(new Ui::JoinGameDialog), client(client) {
     ui->setupUi(this);
@@ -41,8 +43,7 @@ void JoinGameDialog::on_join_clicked() {
 
             client->receive_scenario();
             client->start_joined_game();
-            done(1);
-
+            done(JOIN_GAME_SUCCESS);
         } catch (ErrorLobby& e) {
             QString msg = QString(e.what());
             ui->msg_validacion->setText(msg);

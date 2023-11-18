@@ -33,6 +33,7 @@ void NewGameDialog::on_play_clicked() {
         ui->msg_validacion->setText(msg);
 
         client->receive_scenario();
+        done(NEW_GAME_SUCCESS);
     } catch (ErrorLobby& e) {
         QString msg = QString(e.what());
         ui->msg_validacion->setText(msg);

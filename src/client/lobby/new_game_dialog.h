@@ -10,6 +10,8 @@ namespace Ui {
 class NewGameDialog;
 }
 
+#define NEW_GAME_SUCCESS 1
+
 class NewGameDialog: public QDialog {
     Q_OBJECT
 
