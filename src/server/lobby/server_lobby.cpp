@@ -48,7 +48,6 @@ void LobbyMonitor::close_game(uint16_t id) {
     if (it == games_map.end())
         throw InvalidGameIDLobbyError(id);
 
-    it->second->kill();
     it->second->join();
     games_map.erase(it);
 }
