@@ -76,10 +76,17 @@ void Player::update(float dt) {
 void Player::render(SDL2pp::Renderer& renderer, SDL2pp::Rect& camera) {
     SDL_RendererFlip flip = facingLeft ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL;
     an.render(renderer, SDL2pp::Rect(x, y, 100, 100), flip);
-
+    //render barra de vida
+    int bar_width = (health*50)/ 100.0;  
+    SDL2pp::Rect health_bar = { x -25 , y-3 -5 , bar_width, 10 };
+    renderer.SetDrawColor(color);
+    renderer.FillRect(health_bar);
     if (aiming) {
         crosshair.render_crosshair(renderer, x, y, aim_angle);
     }
 }
 
 uint16_t Player::get_id() const { return id; }
+void Player::set_color(SDL2pp::Color& color){
+    color = color;
+}

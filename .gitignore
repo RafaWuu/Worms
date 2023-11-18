@@ -14,3 +14,17 @@ AtoB.dump
 BtoA.dump
 build
 _deps/
+
+client
+client_autogen/
+client_test
+client_test_autogen/
+hello_test
+hello_test_autogen/
+lib/
+server
+server_autogen/
+ui_connectdialog.h
+ui_join_game_dialog.h
+ui_mainwindow.h
+ui_new_game_dialog.h

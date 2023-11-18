@@ -1,11 +1,23 @@
 #include "worldview.h"
 
-WorldView::WorldView(TextureController& texture_controller, std::unique_ptr<Scenario> scenario):
-        texture_controller(texture_controller), entity_factory(texture_controller), entities() {
+WorldView::WorldView(TextureController& texture_controller,
+                    std::unique_ptr<Scenario> scenario,
+                    std::map<uint16_t, SDL2pp::Color>& color_map):
+        texture_controller(texture_controller),
+        entity_factory(texture_controller), 
+        entities(){
     camera = SDL2pp::Rect{0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
 
     for (auto& entity_info: scenario->get_entities_info()) {
-        entities.emplace(entity_info.first, entity_factory.create(*entity_info.second));
+        
+        auto entity = entity_factory.create(*entity_info.second);
+
+        if (Player* player = dynamic_cast<Player*>(entity.get())) { 
+            auto color = color_map[player->get_id()];
+            player->set_color(color);
+        }
+
+        entities.emplace(entity_info.first, std::move(entity) );
     }
 }
 

@@ -29,7 +29,7 @@ public:
     AnimationState get_idle_texture();
 
     void render_crosshair(SDL2pp::Renderer& renderer);
-
+       void set_color(SDL2pp::Color& color);
 private:
     TextureController& texture_controller;
     Animation an;
@@ -47,7 +47,7 @@ private:
     std::unique_ptr<Weapon> current_weapon;
 
     WeaponFactory weapon_factory;
-
+    SDL2pp::Color color;
     Crosshair crosshair;
 };
 

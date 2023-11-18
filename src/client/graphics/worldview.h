@@ -21,7 +21,8 @@ private:
     void render_background(SDL2pp::Renderer& renderer);
 
 public:
-    WorldView(TextureController& texture_controller, std::unique_ptr<Scenario> scenario);
+    WorldView(TextureController& texture_controller, std::unique_ptr<Scenario> scenario,
+            std::map<uint16_t, SDL2pp::Color>& color_map);
 
     void update(std::map<uint16_t, std::unique_ptr<EntityInfo>>& updated_info);
 

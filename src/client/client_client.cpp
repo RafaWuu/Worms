@@ -81,21 +81,29 @@ uint16_t Client::get_id_assigned_worm(const std::map<uint16_t, uint16_t>& distri
 
     return it->first;
 }
-
+void Client::assign_worms_color(std::map<uint16_t, uint16_t>& distribution){
+        for (auto& map : distribution){
+        color_map[map.second]= SDL2pp::Color(
+        map.second *100 %255,
+        map.second *100 %255 +255,
+        map.second *100 %255,
+        255);
+    }
+}
 void Client::start_joined_game() {
     // Que worm le corresponde a cada cliente (id_worm, id_client)
     std::map<uint16_t, uint16_t> distribution = protocol.receive_worms_distribution();
-
+    assign_worms_color(distribution);
     uint16_t assigned_worm = get_id_assigned_worm(distribution);
     id_assigned_worm = assigned_worm;
 }
 
 void Client::start_game() {
     protocol.send_start_game();
-
+    
     // Que worm le corresponde a cada cliente (id_worm, id_client)
     std::map<uint16_t, uint16_t> distribution = protocol.receive_worms_distribution();
-
+    assign_worms_color(distribution); // puede ir en world_view
     uint16_t assigned_worm = get_id_assigned_worm(distribution);
     id_assigned_worm = assigned_worm;
 }
@@ -113,10 +121,9 @@ int Client::start() {
     SDL2pp::Window window("Worms", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480,
                           SDL_WINDOW_RESIZABLE);
     SDL2pp::Renderer renderer(window, -1, SDL_RENDERER_ACCELERATED);
-    // renderer.SetLogicalSize(1920,1080);
 
     TextureController texture_controller(renderer);
-    WorldView worldview(texture_controller, std::move(this->scenario));
+    WorldView worldview(texture_controller, std::move(this->scenario),color_map);
 
     bool running = true;
     while (running) {
@@ -132,9 +139,7 @@ int Client::start() {
         }
     }
 
-    SDL_DestroyRenderer(renderer.Get());
-    SDL_DestroyWindow(window.Get());
-    SDL_Quit();
+
     return SUCCESS;
 }
 
