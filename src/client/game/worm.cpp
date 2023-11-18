@@ -2,8 +2,17 @@
 
 #include "graphics/player.h"
 
-Worm::Worm(uint16_t id, float pos_x, float pos_y, uint8_t dir, uint16_t state, uint8_t vida):
-        dir(dir), id(id), pos_x(pos_x), pos_y(pos_y), state(state), health(vida) {}
+Worm::Worm(uint16_t id, float pos_x, float pos_y, uint8_t dir, uint16_t state, uint8_t health,
+           uint8_t current_weapon, float aim_angle, uint8_t attack_power):
+        dir(dir),
+        id(id),
+        pos_x(pos_x),
+        pos_y(pos_y),
+        state(state),
+        health(health),
+        current_weapon(current_weapon),
+        aim_angle(aim_angle),
+        attack_power(attack_power) {}
 
 float Worm::get_pos_x() const { return pos_x; }
 

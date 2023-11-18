@@ -5,12 +5,13 @@
 #ifndef WORMS_CLIENT_EVENT_HANDLER_H
 #define WORMS_CLIENT_EVENT_HANDLER_H
 
-#include "commands/client_command.h"
+#include <memory>
 
 #include "../common/common_liberror.h"
+#include "commands/client_command.h"
 
 struct QuitGameClientInput: public LibError {
-    explicit QuitGameClientInput(): LibError(EBADRQC, "Exiting game") {}
+    QuitGameClientInput(): LibError(EBADRQC, "Exiting game") {}
 };
 
 class EventHandler {
@@ -23,11 +24,14 @@ private:
     bool moving_right;
     bool moving_left;
     bool aiming;
+
 public:
     EventHandler();
-    std::shared_ptr<Command> handle(SDL_Event& event);
+    std::shared_ptr<Command> handle(const SDL_Event& event);
     std::shared_ptr<Command> aim(int x, int y);
     std::shared_ptr<Command> fire();
     std::shared_ptr<Command> stop_aim();
+
+    std::shared_ptr<Command> power_attack();
 };
 #endif  // WORMS_CLIENT_EVENT_HANDLER_H

@@ -16,6 +16,9 @@ class LobbyRequest {
 public:
     LobbyRequest() = default;
     virtual ~LobbyRequest() = default;
+    LobbyRequest(const LobbyRequest&) = delete;
+    LobbyRequest& operator=(const LobbyRequest&) = delete;
+
     virtual std::shared_ptr<Game> execute(LobbyMonitor& lobby, ServerProtocol& gp,
                                           uint16_t client_id) = 0;
 };

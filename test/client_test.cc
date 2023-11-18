@@ -82,6 +82,9 @@ TEST(ClientGameProtocol, ReceiveWorm) {
     uint8_t dir = 0;
     uint16_t state = 0x004;
     uint8_t health = 10;
+    uint8_t current_weapon = 1;
+    float angle = M_PI;
+    uint8_t power = 255;
 
     EXPECT_CALL(protocol, recv_2byte_number)
         .WillOnce(SetArgReferee<0, uint16_t>(1))
@@ -89,11 +92,14 @@ TEST(ClientGameProtocol, ReceiveWorm) {
 
     EXPECT_CALL(protocol, recv_4byte_float)
         .WillOnce(SetArgReferee<0, float>(2.0f))
-        .WillOnce(SetArgReferee<0, float>(4.0f));
+        .WillOnce(SetArgReferee<0, float>(4.0f))
+            .WillOnce(SetArgReferee<0, float>(M_PI));
 
     EXPECT_CALL(protocol, recv_1byte_number)
         .WillOnce(SetArgReferee<0, uint8_t>(0))
-        .WillOnce(SetArgReferee<0, uint8_t>(10));
+        .WillOnce(SetArgReferee<0, uint8_t>(10))
+        .WillOnce(SetArgReferee<0, uint8_t>(1))
+        .WillOnce(SetArgReferee<0, uint8_t>(255));
 
     ClientProtocol client_protocol(protocol);
     Worm worm = *client_protocol.receive_worm();

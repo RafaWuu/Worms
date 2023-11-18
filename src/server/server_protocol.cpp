@@ -221,9 +221,7 @@ std::unique_ptr<GameEvent> ServerProtocol::recv_power(uint16_t id_client) {
 
     switch (how) {
         case PowerType::PowerUp:
-            return std::make_unique<GameEventPower>(id_client, id_worm, true);
-        case PowerType::PowerDown:
-            return std::make_unique<GameEventPower>(id_client, id_worm, false);
+            return std::make_unique<GameEventPower>(id_client, id_worm);
         case PowerType::PowerStop:
             return std::make_unique<GameEventPowerStop>(id_client, id_worm);
         default:

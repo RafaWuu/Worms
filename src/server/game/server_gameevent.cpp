@@ -68,15 +68,12 @@ void GameEventAimStop::execute(EventHandler& e) {
     worm.stop_aim();
 }
 
-GameEventPower::GameEventPower(uint16_t client_id, uint8_t worm_id, bool increasing):
-        worm_id(worm_id), GameEvent(client_id) {
-
-    this->increasing = increasing;
-}
+GameEventPower::GameEventPower(uint16_t client_id, uint8_t worm_id):
+        worm_id(worm_id), GameEvent(client_id) {}
 
 void GameEventPower::execute(EventHandler& e) {
     Worm& worm = e.get_worm(this->worm_id, this->client_id);
-    worm.power(increasing);
+    worm.power();
 }
 
 GameEventPowerStop::GameEventPowerStop(uint16_t client_id, uint8_t worm_id):

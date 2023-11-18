@@ -4,16 +4,26 @@
 
 #include "client_event_handler.h"
 
+#include <memory>
+
 #include "commands/client_aim.h"
 #include "commands/client_fire.h"
 #include "commands/client_jump.h"
 #include "commands/client_move.h"
+#include "commands/client_power_attack.h"
 #include "commands/client_rollback.h"
 #include "commands/client_stop_aim.h"
 #include "commands/client_stop_moving.h"
-std::shared_ptr<Command> EventHandler::handle(SDL_Event& event) {
+
+EventHandler::EventHandler() {
+    moving_left = false;
+    moving_right = false;
+    aiming = false;
+}
+
+std::shared_ptr<Command> EventHandler::handle(const SDL_Event& event) {
     if (event.type == SDL_QUIT) {
-        throw (QuitGameClientInput());
+        throw(QuitGameClientInput());
     }
 
     if (event.type == SDL_KEYDOWN) {
@@ -41,19 +51,23 @@ std::shared_ptr<Command> EventHandler::handle(SDL_Event& event) {
         }
     }
 
-    if (event.type == SDL_MOUSEBUTTONDOWN){
-        if (event.button.button == SDL_BUTTON_LEFT)
-            return aim(event.button.x, event.button.y);
-        if (event.button.button == SDL_BUTTON_RIGHT)
+    if (event.type == SDL_MOUSEBUTTONDOWN) {
+        if (event.button.button == SDL_BUTTON_LEFT) {
+            if (!aiming)
+                return aim(event.button.x, event.button.y);
+        }
+        if (event.button.button == SDL_BUTTON_RIGHT && aiming)
+            return power_attack();
+    }
+
+    if (event.type == SDL_MOUSEBUTTONUP) {
+        if (event.button.button == SDL_BUTTON_LEFT && aiming)
+            return stop_aim();
+        if (event.button.button == SDL_BUTTON_RIGHT && aiming)
             return fire();
     }
 
-    if (event.type == SDL_MOUSEBUTTONUP){
-        if (event.button.button == SDL_BUTTON_LEFT)
-            return stop_aim();
-    }
-
-    if(aiming){
+    if (aiming) {
         int x;
         int y;
         SDL_GetMouseState(&x, &y);
@@ -65,12 +79,11 @@ std::shared_ptr<Command> EventHandler::handle(SDL_Event& event) {
 }
 
 std::shared_ptr<Command> EventHandler::move_left() {
-    if(!moving_right) {
+    if (!moving_right) {
         moving_right = true;
         return std::make_shared<Move>(Move::Direction::Left);
     }
     return nullptr;
-
 }
 
 std::shared_ptr<Command> EventHandler::move_right() {
@@ -83,7 +96,7 @@ std::shared_ptr<Command> EventHandler::move_right() {
 }
 
 std::shared_ptr<Command> EventHandler::stop_moving() {
-    if(moving_right) {
+    if (moving_right) {
         moving_right = false;
         return std::make_shared<StopMoving>();
     }
@@ -96,21 +109,18 @@ std::shared_ptr<Command> EventHandler::stop_moving() {
     return nullptr;
 }
 
-std::shared_ptr<Command> EventHandler::jump(){
-    return std::make_shared<Jump>();
-}
+std::shared_ptr<Command> EventHandler::jump() { return std::make_shared<Jump>(); }
 
-std::shared_ptr<Command> EventHandler::rollback(){
-    return std::make_shared<Rollback>();
-}
+std::shared_ptr<Command> EventHandler::rollback() { return std::make_shared<Rollback>(); }
 std::shared_ptr<Command> EventHandler::aim(int x, int y) {
     aiming = true;
     return std::make_shared<Aim>(x, y);
 }
 
 std::shared_ptr<Command> EventHandler::fire() {
-    return std::make_shared<Fire>();
+    return aiming ? std::make_shared<Fire>() : nullptr;
 }
+
 std::shared_ptr<Command> EventHandler::stop_aim() {
     if (aiming) {
         aiming = false;
@@ -119,8 +129,7 @@ std::shared_ptr<Command> EventHandler::stop_aim() {
 
     return nullptr;
 }
-EventHandler::EventHandler() {
-    moving_left = false;
-    moving_right = false;
-    aiming = false;
+
+std::shared_ptr<Command> EventHandler::power_attack() {
+    return aiming ? std::make_shared<PowerAttack>() : nullptr;
 }

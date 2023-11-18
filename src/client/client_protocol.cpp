@@ -12,6 +12,7 @@
 #include "game/proyectil.h"
 #include "lobby/gameinfo.h"
 #include "lobby/lobby_state.h"
+
 #include "client_constants.h"
 
 #define SUCCESS 0
@@ -141,6 +142,9 @@ std::unique_ptr<Worm> ClientProtocol::receive_worm() {
     uint8_t dir;
     uint16_t state;
     uint8_t health;
+    uint8_t current_weapon;
+    float aim_angle;
+    uint8_t attack_power;
 
     baseProtocol.recv_2byte_number(id);
     baseProtocol.recv_4byte_float(x);
@@ -149,10 +153,15 @@ std::unique_ptr<Worm> ClientProtocol::receive_worm() {
 
     baseProtocol.recv_2byte_number(state);
     baseProtocol.recv_1byte_number(health);
+    baseProtocol.recv_1byte_number(current_weapon);
+    baseProtocol.recv_4byte_float(aim_angle);
+    baseProtocol.recv_1byte_number(attack_power);
 
     getLog().write("Cliente recibe gusano: id %hhu, x: %f, y: %f. Estado %hu \n", id, x, y, state);
 
-    return std::make_unique<Worm>(id, x, y, dir, state, health);
+    // quedaria mejor si el constructor recibe el protocolo y se construye a sí mismo?
+    return std::make_unique<Worm>(id, x, y, dir, state, health, current_weapon, aim_angle,
+                                  attack_power);
 }
 
 std::unique_ptr<Ground> ClientProtocol::receive_ground() {
@@ -360,6 +369,14 @@ void ClientProtocol::serialize_fire() {
     std::vector<uint8_t> serialized_command = {GAME_SENDING, FIRE_CODE, worm_id};
 
     getLog().write("Cliente disparando \n");
+
+    baseProtocol.send_uint_vector(serialized_command);
+}
+
+void ClientProtocol::serialize_power_attack() {
+    std::vector<uint8_t> serialized_command = {GAME_SENDING, POWER_CODE, worm_id, 1};
+
+    getLog().write("Cliente potenciando ataque \n");
 
     baseProtocol.send_uint_vector(serialized_command);
 }

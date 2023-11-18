@@ -1,6 +1,7 @@
 #ifndef WORM_H
 #define WORM_H
 
+#include <memory>
 #include <string>
 
 #include <SDL2pp/SDL2pp.hh>
@@ -9,7 +10,7 @@
 
 enum WORM_STATE { DirLeft = 1, DirRight = 2, Stop = 3, JumpF = 4, JumpB = 5 };
 
-class Worm : public EntityInfo {
+class Worm: public EntityInfo {
 private:
     uint16_t id;
     float pos_x;
@@ -17,9 +18,13 @@ private:
     uint8_t dir;
     uint16_t state;
     uint8_t health;
+    uint8_t current_weapon;
+    float aim_angle;
+    uint8_t attack_power;
 
 public:
-    Worm(uint16_t id, float pos_x, float pos_y, uint8_t dir, uint16_t state, uint8_t health);
+    Worm(uint16_t id, float pos_x, float pos_y, uint8_t dir, uint16_t state, uint8_t health,
+         uint8_t current_weapon, float aim_angle, uint8_t attack_power);
 
     void set_position(float x, float y);
     void set_health(int8_t health);
@@ -32,7 +37,7 @@ public:
 
     uint8_t get_dir() const;
 
-    std::unique_ptr<Entity> create(TextureController &controller) override;
+    std::unique_ptr<Entity> create(TextureController& controller) override;
 };
 
 #endif

@@ -13,6 +13,9 @@
 class LobbyAnswer {
 public:
     LobbyAnswer() = default;
+    LobbyAnswer(const LobbyAnswer&) = delete;
+    LobbyAnswer& operator=(const LobbyAnswer&) = delete;
+
     virtual void send(ServerProtocol& gp) = 0;
 };
 

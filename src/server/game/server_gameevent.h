@@ -11,7 +11,6 @@
 #include "server_inputs.h"
 
 
-
 class GameEvent {
 protected:
     uint16_t client_id;
@@ -102,12 +101,11 @@ private:
 
 class GameEventPower: public GameEvent {
 public:
-    GameEventPower(uint16_t client_id, uint8_t worm_id, bool increasing);
+    GameEventPower(uint16_t client_id, uint8_t worm_id);
     void execute(EventHandler& e) override;
 
 private:
     uint8_t worm_id;
-    bool increasing;
 };
 
 

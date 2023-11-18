@@ -19,6 +19,9 @@ private:
 
 public:
     LobbyClientState(uint16_t id, LobbyMonitor& lobby, ServerProtocol& gameProtocol);
+    LobbyClientState(const LobbyClientState&) = delete;
+    LobbyClientState& operator=(const LobbyClientState&) = delete;
+
     std::unique_ptr<ClientState> run() override;
     void kill() override;
     bool is_dead() override;

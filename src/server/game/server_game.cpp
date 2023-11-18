@@ -74,7 +74,10 @@ void Game::run() {
     }
 }
 
-void Game::kill() { is_alive = false; }
+void Game::kill() {
+    is_alive = false;
+    reaper_queue.push(game_id);
+}
 
 bool Game::is_dead() { return !is_alive; }
 
@@ -109,7 +112,6 @@ void Game::exit_game(uint16_t client_id) {
 
     if (id_lists.empty()) {
         kill();
-        reaper_queue.push(game_id);
         return;
     }
 

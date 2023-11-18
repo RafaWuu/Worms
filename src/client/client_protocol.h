@@ -67,6 +67,8 @@ public:
 
     /* Shutdown y close del socket */
     void close();
+
+    void serialize_power_attack();
 };
 
 #endif

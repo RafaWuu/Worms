@@ -5,6 +5,8 @@
 #ifndef WORMS_SERVER_WORM_H
 #define WORMS_SERVER_WORM_H
 
+#include <memory>
+#include <utility>
 #include <vector>
 
 #include "game/server_inputs.h"
@@ -47,7 +49,7 @@ public:
 
     b2Body* body;
 
-    ObjectType get_id() const override ;
+    ObjectType get_id() const override;
 
     bool facing_right = true;
 
@@ -67,11 +69,10 @@ public:
 
     void stop_aim();
 
-    void power(bool increasing);
+    void power();
 
     void stop_power();
 
-    bool aiming_up;
     bool increasing_power;
 
     void aim(float x, float y);

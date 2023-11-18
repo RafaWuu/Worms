@@ -39,7 +39,6 @@ public:
     void on_activated(Worm& worm) override;
     bool can_be_activated(Worm& worm) override;
     uint16_t on_deactivated(Worm& worm) override;
-
 };
 
 class RollingState: public WormState {
@@ -53,12 +52,12 @@ public:
     void on_activated(Worm& worm) override;
     bool can_be_activated(Worm& worm) override;
     uint16_t on_deactivated(Worm& worm) override;
-
 };
 
 class FallingState: public WormState {
 private:
     float max_y;
+
 public:
     FallingState();
     bool update(Worm& worm) override;
@@ -82,6 +81,7 @@ class PoweringState: public WormState {
 public:
     PoweringState();
     bool update(Worm& worm) override;
+    uint16_t on_deactivated(Worm& worm) override;
 };
 
 #endif  // WORMS_SERVER_STATES_H

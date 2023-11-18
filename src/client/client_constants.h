@@ -29,5 +29,6 @@
 #define ROLLBACK_CODE 4
 #define FIRE_CODE 5
 #define AIM_CODE 6
+#define POWER_CODE 7
 
 #endif  // __DESKTOP_WORMS_SRC_CLIENT_CLIENT_CONSTANTS_H_

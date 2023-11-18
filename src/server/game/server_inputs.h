@@ -20,22 +20,15 @@ enum Input {
     SelectGun = GAME_GUNSELECT
 };
 
-enum MoveEnum { MoveLeft = 1, MoveRight = 2, StopMove = 3};
+enum MoveEnum { MoveLeft = 1, MoveRight = 2, StopMove = 3 };
 
-enum MoveDir {
-    DirLeft = 1,
-    DirRight = 2
-};
+enum MoveDir { DirLeft = 1, DirRight = 2 };
 
 enum AimType {
     AimUp = 1,
     AimStop = 2,
 };
 
-enum PowerType {
-    PowerStop = 1,
-    PowerUp = 2,
-    PowerDown = 3
-};
+enum PowerType { PowerUp = 1, PowerStop = 2 };
 
 #endif  // WORMS_SERVER_INPUTS_H

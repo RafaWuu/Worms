@@ -4,12 +4,14 @@
 
 #include "server_worm.h"
 
+#include <memory>
+#include <utility>
+
 #include "game/states/server_state_enum.h"
 
 #include "b2_fixture.h"
 #include "b2_polygon_shape.h"
 #include "server_error.h"
-
 #include "server_worm_info.h"
 
 Worm::Worm(uint8_t id, b2World* b2world, float pos_x, float pos_y, Weapon& weapon):
@@ -56,15 +58,15 @@ void Worm::update(b2World& world) {
     if (numFootContacts < 1)
         state_manager.try_activate(StateEnum::Falling, *this);
 
-    //getLog().write("Gusano %hhu actualizandose, x: %f, y %f: \n", id, body->GetPosition().x,
-      //             body->GetPosition().y);
+    // getLog().write("Gusano %hhu actualizandose, x: %f, y %f: \n", id, body->GetPosition().x,
+    //              body->GetPosition().y);
 
 
     state_manager.update(*this);
 }
 
 void Worm::move(MoveDir direction) {
-    if(state_manager.try_activate(StateEnum::Walking, *this)){
+    if (state_manager.try_activate(StateEnum::Walking, *this)) {
         facing_right = direction == DirRight;
         getLog().write("Gusano %hhu, jugador avanza a la %s\n",
                        facing_right ? "derecha" : "izquierda");
@@ -74,7 +76,7 @@ void Worm::move(MoveDir direction) {
 void Worm::stop_move() {
     bool r = state_manager.try_activate(StateEnum::Standing, *this);
 
-    if(r)
+    if (r)
         getLog().write("Gusano %hhu, jugador frenando\n", id);
 }
 
@@ -85,7 +87,7 @@ void Worm::jump() {
 }
 
 void Worm::roll_back() {
-    bool r =  state_manager.try_activate(StateEnum::Rolling, *this);
+    bool r = state_manager.try_activate(StateEnum::Rolling, *this);
 
     if (r)
         getLog().write("Gusano %hhu, jugador dando una vuelta\n", id);
@@ -96,50 +98,40 @@ ObjectType Worm::get_id() const { return WORM; }
 
 uint16_t Worm::get_state() const { return state_manager.current; }
 
-bool Worm::validate_client(uint16_t id_) const{
-    return id_ == this->client_id;
-}
+bool Worm::validate_client(uint16_t id_) const { return id_ == this->client_id; }
 
-void Worm::fire(){
-    bool r =  state_manager.try_activate(StateEnum::Firing, *this);
+void Worm::fire() {
+    bool r = state_manager.try_activate(StateEnum::Firing, *this);
     if (r)
         ammo--;
-
-
 }
 
-void Worm::aim(float x, float y){
+void Worm::aim(float x, float y) {
     this->aim_x = x;
     this->aim_y = y;
 
-    getLog().write("Gusano %hhu, jugador apunta hacia %f, %f\n",
-                   x, y);
+    getLog().write("Gusano %hhu, jugador apunta hacia %f, %f\n", id, x, y);
 
     state_manager.try_activate(StateEnum::Aiming, *this);
 }
 
-void Worm::stop_aim(){
+void Worm::stop_aim() {
     state_manager.deactivate_states(StateEnum::Aiming, *this);
-    getLog().write("Gusano %hhu, jugador deja de apuntar\n");
+    getLog().write("Gusano %hhu, jugador deja de apuntar\n", id);
 }
 
-void Worm::power(bool increasing){
-    if(state_manager.try_activate(StateEnum::Powering, *this)){
-        increasing_power = increasing;
-        getLog().write("Gusano %hhu, jugador %s su ataque\n",
-                       aiming_up ? "potencia" : "des-potencia");
+void Worm::power() {
+    if (state_manager.try_activate(StateEnum::Powering, *this)) {
+        getLog().write("Gusano %hhu, jugador potenciando su ataque\n", id);
     }
 }
 
-void Worm::stop_power(){
+void Worm::stop_power() {
     state_manager.deactivate_states(StateEnum::Powering, *this);
-    getLog().write("Gusano %hhu, jugador deja de cambiar la potencia de su ataque\n");
-
+    getLog().write("Gusano %hhu, jugador deja de cambiar la potencia de su ataque\n", id);
 }
 std::unique_ptr<GameObjectInfo> Worm::get_status() const {
     return std::make_unique<WormInfo>(*this);
 }
 
-std::unique_ptr<WormInfo> Worm::get_worminfo() const {
-    return std::make_unique<WormInfo>(*this);
-}
+std::unique_ptr<WormInfo> Worm::get_worminfo() const { return std::make_unique<WormInfo>(*this); }

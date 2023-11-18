@@ -18,10 +18,13 @@ protected:
 
 public:
     ClientState(uint16_t client_id, ServerProtocol& gp);
+    ClientState(const ClientState&) = delete;
+    ClientState& operator=(const ClientState&) = delete;
+
+    virtual ~ClientState() = default;
     virtual std::unique_ptr<ClientState> run() = 0;
     virtual void kill() = 0;
     virtual bool is_dead() = 0;
-    virtual ~ClientState() = default;
 };
 
 

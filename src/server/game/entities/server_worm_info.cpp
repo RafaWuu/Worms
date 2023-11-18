@@ -16,6 +16,9 @@ void WormInfo::serialize_scenario(BaseProtocol& bp) {
     bp.send_1byte_number(worm.facing_right);
     bp.send_2byte_number(worm.get_state());
     bp.send_1byte_number(worm.health);
+    bp.send_1byte_number(1);  // arma
+    bp.send_4byte_float(worm.desiredAngle);
+    bp.send_1byte_number(worm.aim_power * 255);
 }
 void WormInfo::serialize_status(BaseProtocol& bp) {
     bp.send_1byte_number(worm.get_id());
@@ -25,6 +28,9 @@ void WormInfo::serialize_status(BaseProtocol& bp) {
     bp.send_1byte_number(worm.facing_right);
     bp.send_2byte_number(worm.get_state());
     bp.send_1byte_number(worm.health);
+    bp.send_1byte_number(1);  // arma
+    bp.send_4byte_float(worm.desiredAngle);
+    bp.send_1byte_number(worm.aim_power * 255);
 }
 
 void WormInfo::serialize_start(BaseProtocol& bp) {

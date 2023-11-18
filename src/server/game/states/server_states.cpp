@@ -165,15 +165,15 @@ uint16_t FallingState::on_deactivated(Worm& worm) {
 
 FiringState::FiringState() {
     code = Firing;
-    required = Aiming;
+    required = Powering;
     blocking_me = NoState;
-    terminate = Aiming;
+    terminate = Aiming | Powering;
     requiring = NoState;
 }
 
 
 bool FiringState::update(Worm& worm) {
-    b2Vec2 source = b2Vec2(1.5, .5);
+    b2Vec2 source = b2Vec2(1.5, .2);
 
     if (!worm.facing_right) {
         source.x = -source.x;
@@ -190,7 +190,7 @@ AimingState::AimingState() {
     required = Alive;
     blocking_me = Jumping | Rolling | Falling;
     terminate = Walking;
-    requiring = Firing | Powering;
+    requiring = Powering;
 }
 
 bool AimingState::update(Worm& worm) {
@@ -212,11 +212,20 @@ PoweringState::PoweringState() {
     required = Aiming;
     blocking_me = NoState;
     terminate = NoState;
-    requiring = NoState;
+    requiring = Firing;
 }
 
-
 bool PoweringState::update(Worm& worm) {
-    worm.aim_power += (worm.increasing_power) ? 0.01 : -0.01;
+    worm.aim_power += 0.01;
+
+    if (worm.aim_power > 1) {
+        worm.aim_power = 1;
+        return false;
+    }
     return true;
+}
+
+uint16_t PoweringState::on_deactivated(Worm& worm) {
+    worm.aim_power = 0;
+    return Firing;
 }

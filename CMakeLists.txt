@@ -96,7 +96,9 @@ set(CLIENT_SOURCE
 	src/client/lobby/gameinfo.cpp
 	src/client/lobby/gameinfo.h
 	src/client/lobby/gameinfo_view.cpp
-	src/client/lobby/gameinfo_view.h	
+	src/client/lobby/gameinfo_view.h
+	src/client/commands/client_power_attack.cpp
+	src/client/commands/client_power_attack.h
 	)
 
 message("Headers generados: ${UIS_HEADERS}")
