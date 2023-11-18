@@ -83,7 +83,7 @@ uint16_t Client::get_id_assigned_worm(const std::map<uint16_t, uint16_t>& distri
 }
 void Client::assign_worms_color(std::map<uint16_t, uint16_t>& distribution){
         for (auto& map : distribution){
-        color_map[map.second]= SDL2pp::Color(
+        color_map[map.first]= SDL2pp::Color(
         map.second *100 %255,
         map.second *100 %255 +255,
         map.second *100 %255,
@@ -138,7 +138,6 @@ int Client::start() {
             SDL_Delay(frame_delay - frame_time);
         }
     }
-
 
     return SUCCESS;
 }

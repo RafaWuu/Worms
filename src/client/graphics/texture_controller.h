@@ -17,6 +17,7 @@ enum AnimationState {
     SCENARIO_BEAM_3M,
     SCENARIO_BEAM_6M,
     SCENARIO_GROUND,
+    SCENARIO_BACKGROUND,
     // Weapons
     BAZOOKA_IDLE, // El gusano empieza con una bazooka, empieza con esta textura
     BAZOOKA_AIMING,

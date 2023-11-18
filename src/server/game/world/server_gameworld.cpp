@@ -35,13 +35,13 @@ GameWorld::GameWorld(const std::string& scenario_name):
     set_dimensions();
     entities_map.emplace(entity_id++, std::make_shared<Ground>(&b2_world));
 
-    entities_map.emplace(entity_id++, std::make_shared<Beam>(&b2_world, 15, 10, 6, .8, 0));
-    entities_map.emplace(entity_id++, std::make_shared<Beam>(&b2_world, 2, 5, 6, .8, 0));
+    entities_map.emplace(entity_id++, std::make_shared<Beam>(&b2_world, 15, -10, 6, .8, 0));
+    entities_map.emplace(entity_id++, std::make_shared<Beam>(&b2_world, 2, -5, 6, .8, 0));
 
 
     for (int i = 0; i < 2; ++i) {
         auto worm =
-                std::make_shared<Worm>(entity_id, &b2_world, 2.0 + (float)i * 13.f, 15, *bazooka);
+                std::make_shared<Worm>(entity_id, &b2_world, 2.0 + (float)i * 13.f, 0, *bazooka);
         entities_map.emplace(entity_id, worm);
         worm_map.emplace(entity_id++, worm);
 

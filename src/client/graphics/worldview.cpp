@@ -37,7 +37,7 @@ void WorldView::update(std::map<uint16_t, std::unique_ptr<EntityInfo>>& updated_
 void WorldView::render(SDL2pp::Renderer& renderer) {
     renderer.SetDrawColor(SDL2pp::Color(0, 0, 0, 255));
     renderer.Clear();
-
+    render_background(renderer);
     for (auto& entity: entities) {
         entity.second->render(renderer, camera);
     }
@@ -46,8 +46,8 @@ void WorldView::render(SDL2pp::Renderer& renderer) {
 }
 
 void WorldView::render_background(SDL2pp::Renderer& renderer) {
-    SDL2pp::Texture background(renderer, SDL2pp::Surface("../assets/background.png"));
-    renderer.Copy(background, SDL2pp::NullOpt, SDL2pp::NullOpt);
+    auto background = texture_controller.get_texture(SCENARIO_BACKGROUND);
+    renderer.Copy(*background, SDL2pp::NullOpt, SDL2pp::Rect{0,0,640,480});
 }
 // offset segun la posicion del objeto a enfocar.
 void WorldView::update_camera(float& x, float& y, float& w, float& h) {

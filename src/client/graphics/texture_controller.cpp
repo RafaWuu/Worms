@@ -19,6 +19,7 @@ TextureController::TextureController(SDL2pp::Renderer& renderer_): renderer(rend
         {AnimationState::BAZOOKA_IDLE, "wbazbak.png"}, // Quiza usar el mismo sprite para idle/aiming?
         {AnimationState::BAZOOKA_AIMING, "wbaz.png"},
         {AnimationState::CROSSHAIR, "crshairr.png"},
+        {AnimationState::SCENARIO_BACKGROUND, "background.png"},
     };
 
     for (auto const& texture: textures_to_load) {

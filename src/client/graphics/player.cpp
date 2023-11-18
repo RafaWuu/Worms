@@ -25,8 +25,8 @@ void Player::update_info(EntityInfo* info) {
 
     health = worm->get_health();
 
-    x = (worm->get_pos_x() * 640 / 20);
-    y = (480 - worm->get_pos_y() * 480 / 20);
+    x = worm->get_pos_x()*SCREEN_WIDTH/20 ;
+    y = - worm->get_pos_y()*SCREEN_HEIGHT/20;
 
     uint8_t dir = worm->get_dir();
     uint16_t new_state = worm->get_state();
@@ -74,12 +74,16 @@ void Player::update(float dt) {
 }
 
 void Player::render(SDL2pp::Renderer& renderer, SDL2pp::Rect& camera) {
+    
     SDL_RendererFlip flip = facingLeft ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL;
-    an.render(renderer, SDL2pp::Rect(x, y, 100, 100), flip);
-    //render barra de vida
+    an.render(renderer, SDL2pp::Rect(x-50,
+                                     y-50,
+                                    100,
+                                    100), flip);
+    //render barra de vida 50x10
     int bar_width = (health*50)/ 100.0;  
-    SDL2pp::Rect health_bar = { x -25 , y-3 -5 , bar_width, 10 };
-    renderer.SetDrawColor(color);
+    SDL2pp::Rect health_bar = { x-25, y-55  , bar_width, 10 };
+    renderer.SetDrawColor(color.r,color.g,color.b,color.a);
     renderer.FillRect(health_bar);
     if (aiming) {
         crosshair.render_crosshair(renderer, x, y, aim_angle);
@@ -87,6 +91,6 @@ void Player::render(SDL2pp::Renderer& renderer, SDL2pp::Rect& camera) {
 }
 
 uint16_t Player::get_id() const { return id; }
-void Player::set_color(SDL2pp::Color& color){
+void Player::set_color(SDL2pp::Color color){
     color = color;
 }
