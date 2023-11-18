@@ -4,7 +4,9 @@
 
 #include "proyectil.h"
 
-#include "graphics/debug_entity.h"
+#include <memory>
+
+#include "graphics/ground_entity.h"
 #include "graphics/proyectil_entity.h"
 
 float Proyectil::get_pos_x() const { return x; }
@@ -14,6 +16,4 @@ std::unique_ptr<Entity> Proyectil::create(TextureController& controller) {
     return std::make_unique<ProyectilEntity>(controller);
 }
 
-Proyectil::Proyectil(uint8_t type, float x, float y):
-        type(type), x(x), y(y){
-}
+Proyectil::Proyectil(uint8_t type, float x, float y): type(type), x(x), y(y) {}

@@ -31,11 +31,15 @@ private:
     uint16_t entity_id;
     Weapon* bazooka;
     OnFloorContactListener listener;
+    double height;
+    double width;
 
 public:
     b2World b2_world;
     explicit GameWorld(const std::string& scenario_name);
     ~GameWorld();
+    GameWorld(const GameWorld&) = delete;
+    GameWorld& operator=(const GameWorld&) = delete;
 
     void step(int steps);
 
@@ -49,9 +53,11 @@ public:
 
     void set_dimensions();
     void get_dimensions(float* h, float* w);
-
-    double height;
-    double width;
     void add_proyectil(std::shared_ptr<BazookaProyectil> proyectil);
+
+    void apply_blast_impulse(b2Body* body, Worm* worm, b2Vec2 blastCenter, b2Vec2 applyPoint,
+                             float blastPower);
+
+    void add_explosion(b2Body& proyectil, float radius);
 };
 #endif  // WORMS_SERVER_GAMEWORLD_H

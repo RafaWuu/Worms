@@ -12,6 +12,7 @@
 #include "game/entities/server_beam_info.h"
 #include "game/entities/server_worm_info.h"
 #include "game/entities/server_worm_sensor.h"
+#include "game/listeners/server_raycast_explosion_callback.h"
 
 #include "b2_body.h"
 #include "b2_edge_shape.h"
@@ -22,7 +23,7 @@ GameWorld::GameWorld(const std::string& scenario_name):
         worm_map(),
         entities_map(),
         file_handler(scenario_name),
-        listener() {
+        listener(*this) {
 
     bazooka = new Weapon(*this);
 
@@ -62,6 +63,13 @@ void GameWorld::update_entities() {
     for (auto& e: entities_map) {
         e.second->update(b2_world);
     }
+
+    for (auto it = entities_map.cbegin(); it != entities_map.cend();) {
+        if (it->second->is_dead)
+            it = entities_map.erase(it);
+        else
+            ++it;
+    }
 }
 
 void GameWorld::set_clients_to_worms(std::vector<uint16_t> client_vec) {
@@ -89,7 +97,6 @@ std::map<uint16_t, std::shared_ptr<GameObjectInfo>> GameWorld::get_entities_info
     std::map<uint16_t, std::shared_ptr<GameObjectInfo>> map;
 
     for (auto& e: entities_map) {
-        //  cppcheck-suppress useStlAlgorithm
         map.emplace(e.first, e.second->get_status());
     }
 
@@ -101,7 +108,6 @@ std::map<uint16_t, std::shared_ptr<WormInfo>> GameWorld::get_worms_info() {
     std::map<uint16_t, std::shared_ptr<WormInfo>> map;
 
     for (auto& e: worm_map) {
-        //  cppcheck-suppress useStlAlgorithm
         map.emplace(e.first, e.second->get_worminfo());
     }
 
@@ -122,7 +128,7 @@ void GameWorld::set_dimensions() {
     b2Vec2 bottom_left(0, -height);
     b2Vec2 bottom_right(width, -height);
 
-
+    /*
     b2BodyDef body_def;
     b2FixtureDef fixture_def;
     body_def.type = b2_staticBody;
@@ -149,4 +155,40 @@ void GameWorld::set_dimensions() {
     edge_shape.SetTwoSided(bottom_left, bottom_right);
     fixture_def.shape = &edge_shape;
     edge_4->CreateFixture(&fixture_def);
+     */
+}
+
+void GameWorld::add_explosion(b2Body& proyectil, float radius) {
+    b2Vec2 center = proyectil.GetPosition();
+    int num_rays = 15;
+    float m_blastPower = 30;
+    for (int i = 0; i < num_rays; i++) {
+        float angle = (i / (float)num_rays) * 2 * M_PI;
+
+        b2Vec2 rayDir(sinf(angle), cosf(angle));
+        b2Vec2 rayEnd = center + radius * rayDir;
+
+        // check what this ray hits
+        RayCastExplosionCallback callback;
+        b2_world.RayCast(&callback, center, rayEnd);
+        if (callback.m_body && callback.p_worm) {
+            apply_blast_impulse(callback.m_body, callback.p_worm, center, callback.m_point,
+                                (m_blastPower / (float)num_rays));
+        }
+    }
+}
+
+void GameWorld::apply_blast_impulse(b2Body* body, Worm* worm, b2Vec2 blastCenter, b2Vec2 applyPoint,
+                                    float blastPower) {
+    b2Vec2 blastDir = applyPoint - blastCenter;
+    float distance = blastDir.Normalize();
+    // ignore bodies exactly at the blast point - blast direction is undefined
+    if (distance == 0)
+        return;
+    float invDistance = 1 / distance;
+    float impulseMag = blastPower * invDistance * invDistance;
+    impulseMag = b2Min(impulseMag, 500.0f);
+
+    body->ApplyLinearImpulse(impulseMag * blastDir, applyPoint, true);
+    worm->get_hit(50 * invDistance);
 }

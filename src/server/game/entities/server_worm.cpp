@@ -31,7 +31,7 @@ Worm::Worm(uint8_t id, b2World* b2world, float pos_x, float pos_y, Weapon& weapo
     body->SetFixedRotation(true);
 
     b2PolygonShape dynamicBox;
-    dynamicBox.SetAsBox(.5f, .3f);
+    dynamicBox.SetAsBox(.5f, .5f);
 
     b2FixtureDef fixtureDef;
     fixtureDef.shape = &dynamicBox;
@@ -46,6 +46,12 @@ Worm::Worm(uint8_t id, b2World* b2world, float pos_x, float pos_y, Weapon& weapo
     getLog().write("Creando gusano %hhu, x: %f, y %f: \n", id, pos_x, pos_y);
 
     numFootContacts = 0;
+    jumpTimeout = 0;
+    aim_x = 0;
+    aim_y = 0;
+    aim_power = 0;
+    increasing_power = false;
+    desiredAngle = 0;
     ammo = 0;
 }
 
@@ -135,3 +141,5 @@ std::unique_ptr<GameObjectInfo> Worm::get_status() const {
 }
 
 std::unique_ptr<WormInfo> Worm::get_worminfo() const { return std::make_unique<WormInfo>(*this); }
+
+void Worm::get_hit(float d) {}

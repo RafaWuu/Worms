@@ -84,7 +84,7 @@ set(CLIENT_SOURCE
 	src/client/game/entity_info.cpp
 	src/client/game/ground.cpp
 	src/client/graphics/entities_factory.cpp
-	src/client/graphics/debug_entity.cpp
+		src/client/graphics/ground_entity.cpp
 	src/client/client_event_handler.cpp
 	src/client/commands/client_aim.cpp
 	src/client/commands/client_stop_aim.cpp
@@ -159,7 +159,8 @@ add_executable(server
 	src/server/game/weapons/server_weapon.cpp
 	src/server/game/weapons/server_bazooka_proyectil.cpp
 	src/server/game/weapons/bazooka_proyectil_info.cpp
-	src/server/server_game_reaper.cpp src/server/server_game_reaper.h
+		src/server/server_game_reaper.cpp
+		src/server/game/listeners/server_raycast_explosion_callback.cpp
 )
 
 target_include_directories(client PUBLIC
@@ -232,7 +233,8 @@ add_executable(hello_test
 		src/server/game/weapons/server_weapon.cpp
 		src/server/game/weapons/server_bazooka_proyectil.cpp
 		src/server/game/weapons/bazooka_proyectil_info.cpp
-		src/server/server_game_reaper.cpp src/server/server_game_reaper.h
+		src/server/server_game_reaper.cpp
+		src/server/game/listeners/server_raycast_explosion_callback.cpp
 )
 
 target_link_libraries(hello_test GTest::gtest_main GTest::gmock ${BOX2D_LIBRARY_PATH})

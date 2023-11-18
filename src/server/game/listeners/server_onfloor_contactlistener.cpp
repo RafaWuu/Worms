@@ -6,16 +6,15 @@
 
 #include "game/entities/server_gameobject.h"
 #include "game/entities/server_worm_sensor.h"
+#include "game/world/server_gameworld.h"
 
 void OnFloorContactListener::BeginContact(b2Contact* contact) {
 
     auto fixtureUserDataA = contact->GetFixtureA()->GetUserData().pointer;
     auto fixtureUserDataB = contact->GetFixtureB()->GetUserData().pointer;
 
-    // cppcheck-suppress cstyleCast
     auto game_objectA = (GameObject*)fixtureUserDataA;
 
-    // cppcheck-suppress cstyleCast
     auto game_objectB = (GameObject*)fixtureUserDataB;
 
     if (game_objectA->get_id() == WORM_SENSOR) {
@@ -27,6 +26,16 @@ void OnFloorContactListener::BeginContact(b2Contact* contact) {
         auto* worm_sensor = dynamic_cast<WormSensor*>(game_objectB);
         worm_sensor->handle_begin_floor_contact(game_objectA);
     }
+
+    if (game_objectA->get_id() == PROYECTIL) {
+        auto proyectil = dynamic_cast<BazookaProyectil*>(game_objectA);
+        proyectil->on_proyectil_impact(world);
+    }
+
+    if (game_objectB->get_id() == PROYECTIL) {
+        auto* proyectil = dynamic_cast<BazookaProyectil*>(game_objectB);
+        proyectil->on_proyectil_impact(world);
+    }
 }
 
 
@@ -35,10 +44,8 @@ void OnFloorContactListener::EndContact(b2Contact* contact) {
     auto fixtureUserDataA = contact->GetFixtureA()->GetUserData().pointer;
     auto fixtureUserDataB = contact->GetFixtureB()->GetUserData().pointer;
 
-    // cppcheck-suppress cstyleCast
     auto game_objectA = (GameObject*)fixtureUserDataA;
 
-    // cppcheck-suppress cstyleCast
     auto game_objectB = (GameObject*)fixtureUserDataB;
 
     if (game_objectA->get_id() == WORM_SENSOR) {
@@ -51,3 +58,5 @@ void OnFloorContactListener::EndContact(b2Contact* contact) {
         worm_sensor->handle_end_floor_contact(game_objectA);
     }
 }
+
+OnFloorContactListener::OnFloorContactListener(GameWorld& world): world(world) {}

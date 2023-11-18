@@ -4,13 +4,14 @@
 
 #include "server_bazooka_proyectil.h"
 
+#include "game/world/server_gameworld.h"
+
 #include "b2_fixture.h"
 #include "b2_polygon_shape.h"
 #include "bazooka_proyectil_info.h"
 
-BazookaProyectil::BazookaProyectil(b2World* world, b2Vec2& pos, float angle) :
-        dragConstant(.3),
-        GameObject() {
+BazookaProyectil::BazookaProyectil(b2World* world, b2Vec2& pos, float angle):
+        dragConstant(.3), GameObject() {
 
     b2BodyDef bodyDef;
     bodyDef.type = b2_dynamicBody;
@@ -33,35 +34,40 @@ BazookaProyectil::BazookaProyectil(b2World* world, b2Vec2& pos, float angle) :
 
     body = world->CreateBody(&bodyDef);
 
-    body->CreateFixture( &fixtureDef );
-    body->SetAngularDamping( 1);
+    body->CreateFixture(&fixtureDef);
+    body->SetAngularDamping(1);
     body->SetBullet(true);
 
     body->SetAwake(true);
     body->SetAngularVelocity(0);
-    body->SetTransform( pos, angle);
-    body->SetLinearVelocity( body->GetWorldVector( b2Vec2(1 * 12,0)));
+    body->SetTransform(pos, angle);
+    body->SetLinearVelocity(body->GetWorldVector(b2Vec2(1 * 12, 0)));
 }
 
 void BazookaProyectil::update(b2World& world) {
 
     b2Vec2 flightDirection = body->GetLinearVelocity();
-    float flightSpeed = flightDirection.Normalize();//normalizes and returns length
-    b2Vec2 pointingDirection = body->GetWorldVector( b2Vec2( 1, 0 ) );
-    float dot = b2Dot( flightDirection, pointingDirection );
+    float flightSpeed = flightDirection.Normalize();  // normalizes and returns length
+    b2Vec2 pointingDirection = body->GetWorldVector(b2Vec2(1, 0));
+    float dot = b2Dot(flightDirection, pointingDirection);
 
-    float dragForceMagnitude = (1 - fabs(dot)) * flightSpeed * flightSpeed * dragConstant * body->GetMass();
+    float dragForceMagnitude =
+            (1 - fabs(dot)) * flightSpeed * flightSpeed * dragConstant * body->GetMass();
 
-    b2Vec2 arrowTailPosition = body->GetWorldPoint( b2Vec2( -0.5, 0 ) );
+    b2Vec2 arrowTailPosition = body->GetWorldPoint(b2Vec2(-0.5, 0));
 
-    body->ApplyForce( dragForceMagnitude * -flightDirection, arrowTailPosition, true);
+    body->ApplyForce(dragForceMagnitude * -flightDirection, arrowTailPosition, true);
 }
-
 
 
 std::unique_ptr<GameObjectInfo> BazookaProyectil::get_status() const {
     return std::make_unique<BazookaProyectilInfo>(*this);
 }
-ObjectType BazookaProyectil::get_id() const {
-    return PROYECTIL;
+ObjectType BazookaProyectil::get_id() const { return PROYECTIL; }
+
+void BazookaProyectil::on_proyectil_impact(GameWorld& world) {
+    world.add_explosion(*this->body, 25);
+    this->is_dead = true;
 }
+
+BazookaProyectil::~BazookaProyectil() { body->GetWorld()->DestroyBody(body); }

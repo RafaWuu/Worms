@@ -41,6 +41,8 @@ public:
     float aim_power;
 
     Worm(uint8_t id, b2World* b2world, float pos_x, float pos_y, Weapon& weapon);
+    Worm(const Worm&) = delete;
+    Worm& operator=(const Worm&) = delete;
 
     void set_client_id(uint16_t id_);
 
@@ -85,5 +87,7 @@ public:
     uint8_t ammo;
     Weapon& current_gun;
     float desiredAngle;
+
+    void get_hit(float d);
 };
 #endif  // WORMS_SERVER_WORM_H

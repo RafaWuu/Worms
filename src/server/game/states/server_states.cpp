@@ -160,6 +160,7 @@ bool FallingState::update(Worm& worm) {
 
 uint16_t FallingState::on_deactivated(Worm& worm) {
     // worm.process_fall(max_y - worm.body->GetPosition().y);
+    worm.jumpTimeout = 3;
     return Standing;
 }
 
