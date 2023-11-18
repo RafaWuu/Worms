@@ -30,6 +30,8 @@ uint8_t Worm::get_current_weapon() { return current_weapon; }
 
 float Worm::get_aim_angle() { return aim_angle; }
 
+uint8_t Worm::get_attack_power() { return attack_power; }
+
 std::unique_ptr<Entity> Worm::create(TextureController& controller) {
     return std::make_unique<Player>(controller, get_id());
 }

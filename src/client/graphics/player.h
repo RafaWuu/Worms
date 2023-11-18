@@ -11,6 +11,7 @@
 #include "texture_controller.h"
 #include "weapons/weapon.h"
 #include "weapons/weapon_factory.h"
+#include "crosshair.h"
 
 class Player: public Entity {
 public:
@@ -18,12 +19,16 @@ public:
     ~Player();
 
     void update_info(EntityInfo* info) override;
+    
     void update(float dt) override;
+    
     void render(SDL2pp::Renderer& renderer, SDL2pp::Rect& camera) override;
 
     uint16_t get_id() const override;
 
     AnimationState get_idle_texture();
+
+    void render_crosshair(SDL2pp::Renderer& renderer);
 
 private:
     TextureController& texture_controller;
@@ -33,6 +38,7 @@ private:
     bool jumping;
     bool rolling;
     bool aiming;
+    float aim_angle;
 
     int x;
     int y;
@@ -41,6 +47,8 @@ private:
     std::unique_ptr<Weapon> current_weapon;
 
     WeaponFactory weapon_factory;
+
+    Crosshair crosshair;
 };
 
 #endif  // __PLAYER_H__

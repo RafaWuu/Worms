@@ -102,6 +102,7 @@ set(CLIENT_SOURCE
 	src/client/graphics/weapons/weapon.cpp
 	src/client/graphics/weapons/bazooka.cpp
 	src/client/graphics/weapons/weapon_factory.cpp
+	src/client/graphics/crosshair.cpp
 	)
 
 message("Headers generados: ${UIS_HEADERS}")

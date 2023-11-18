@@ -93,7 +93,7 @@ TEST(ClientGameProtocol, ReceiveWorm) {
     EXPECT_CALL(protocol, recv_4byte_float)
         .WillOnce(SetArgReferee<0, float>(2.0f))
         .WillOnce(SetArgReferee<0, float>(4.0f))
-            .WillOnce(SetArgReferee<0, float>(M_PI));
+        .WillOnce(SetArgReferee<0, float>(M_PI));
 
     EXPECT_CALL(protocol, recv_1byte_number)
         .WillOnce(SetArgReferee<0, uint8_t>(0))
@@ -109,5 +109,7 @@ TEST(ClientGameProtocol, ReceiveWorm) {
     EXPECT_EQ(worm.get_pos_y(), y);
     EXPECT_EQ(worm.get_dir(), dir);
     EXPECT_EQ(worm.get_state(), state);
-    EXPECT_EQ(worm.get_health(), health);
+    EXPECT_EQ(worm.get_current_weapon(), current_weapon);
+    EXPECT_EQ(worm.get_aim_angle(), angle);
+    EXPECT_EQ(worm.get_attack_power(), power);
 }

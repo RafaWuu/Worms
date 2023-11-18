@@ -5,6 +5,7 @@
 Player::Player(TextureController& controller, int id):
         texture_controller(controller),
         an(texture_controller.get_texture(AnimationState::BAZOOKA_IDLE), texture_controller),
+        crosshair(texture_controller.get_texture(AnimationState::CROSSHAIR), texture_controller),
         facingLeft(false),
         moving(false),
         jumping(false),
@@ -29,6 +30,7 @@ void Player::update_info(EntityInfo* info) {
 
     uint8_t dir = worm->get_dir();
     uint16_t new_state = worm->get_state();
+    aim_angle = worm->get_aim_angle();
 
     current_weapon = weapon_factory.create_weapon(worm->get_current_weapon());
     
@@ -36,6 +38,7 @@ void Player::update_info(EntityInfo* info) {
     bool is_moving_now = (new_state & 0x0004) ? true : false;
     bool is_jumping_now = (new_state & 0x0008) != 0;
     bool is_rolling_now = (new_state & 0x0010) != 0;
+    bool is_aiming_now = (new_state & 0x0080) != 0;
 
     // TODO: cambiar textura cuando apunta y elegir frame segun el angulo 
 
@@ -53,6 +56,7 @@ void Player::update_info(EntityInfo* info) {
     moving = is_moving_now;
     jumping = is_jumping_now;
     rolling = is_rolling_now;
+    aiming = is_aiming_now;
 
     if (dir == 1)
         facingLeft = false;
@@ -72,6 +76,10 @@ void Player::update(float dt) {
 void Player::render(SDL2pp::Renderer& renderer, SDL2pp::Rect& camera) {
     SDL_RendererFlip flip = facingLeft ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL;
     an.render(renderer, SDL2pp::Rect(x, y, 100, 100), flip);
+
+    if (aiming) {
+        crosshair.render_crosshair(renderer, x, y, aim_angle);
+    }
 }
 
 uint16_t Player::get_id() const { return id; }

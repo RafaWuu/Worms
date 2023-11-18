@@ -8,8 +8,8 @@
 
 #include "client_constants.h"
 enum AnimationState {
+    CROSSHAIR,
     WALKING,
-    // Standing still
     IDLE,
     JUMPING,
     ROLLING,
@@ -20,6 +20,7 @@ enum AnimationState {
     // Weapons
     BAZOOKA_IDLE, // El gusano empieza con una bazooka, empieza con esta textura
     BAZOOKA_AIMING,
+    BAZOOKA_PROJECTILE,
 };
 
 class TextureController {

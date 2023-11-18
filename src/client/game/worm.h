@@ -41,6 +41,8 @@ public:
 
     float get_aim_angle();
 
+    uint8_t get_attack_power();
+
     std::unique_ptr<Entity> create(TextureController& controller) override;
 };
 
