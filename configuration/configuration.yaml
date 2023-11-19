@@ -1,0 +1,152 @@
+weapons:
+  bazooka:
+    scope: true
+    hand_to_hand: false
+    variable_power: true
+    countdown: false
+    point_and_click: false # teledirigido
+    affected_by_wind: true
+    ammo: -1 # -1 = inifinito
+    damage: 50
+    radius: 2
+
+  mortar:
+    scope: true
+    hand_to_hand: false
+    variable_power: true
+    countdown: false
+    point_and_click: false # teledirigido
+    affected_by_wind: true
+    ammo: 10
+    main_explosion:
+      damage: 50
+      radius: 2
+    fragment:
+      damage: 10
+      radius: 2
+    fragment_number: 6
+  
+  green_grenade:
+    scope: true
+    hand_to_hand: false
+    variable_power: true
+    countdown: true
+    point_and_click: false # teledirigido
+    affected_by_wind: false
+    ammo: -1 # -1 = inifinito
+    damage: 30
+    radius: 2  
+
+  red_grenade:
+    scope: true
+    hand_to_hand: false
+    variable_power: true
+    countdown: true
+    point_and_click: false # teledirigido
+    affected_by_wind: false
+    ammo: 10
+    main_explosion:
+      damage: 30
+      radius: 2
+    fragment:
+      damage: 10
+      radius: 2
+    fragment_number: 6
+
+  banana:
+    scope: true
+    hand_to_hand: false
+    variable_power: true
+    countdown: true
+    point_and_click: false
+    affected_by_wind: false
+    ammo: 5
+    damage: 70
+    radius: 4
+
+  holy_grenade:
+    scope: true
+    hand_to_hand: false
+    variable_power: true
+    countdown: true
+    point_and_click: false
+    affected_by_wind: false
+    ammo: 2 
+    damage: 110
+    radius: 8
+
+  dynamite:
+    scope: false
+    hand_to_hand: true
+    variable_power: false
+    countdown: true
+    point_and_click: false
+    affected_by_wind: false
+    ammo: 5
+    damage: 50
+    radius: 4
+
+  baseball_bat:
+    scope: true
+    hand_to_hand: true
+    variable_power: false
+    countdown: false
+    point_and_click: false
+    affected_by_wind: false
+    ammo: -1 # -1 = inifinito
+    damage: 10
+
+  air_attack:
+    scope: false
+    hand_to_hand: false
+    countdown: false
+    point_and_click: true
+    affected_by_wind: true
+    ammo: 2
+    damage: 40
+    radius: 2
+
+  teleportation:
+    scope: false
+    hand_to_hand: false
+    variable_power: false
+    countdown: false
+    point_and_click: true
+    affected_by_wind: false
+    ammo: -1 # -1 = inifinito
+    damage: 0
+    radius: 0
+
+server:
+  states:
+    walking:
+      velocity: 0.4
+
+    standing:
+      velocity: 0.990
+
+    jumping:
+      remaining_frames: 8
+      jump_timeout: 10
+      force_x: 15
+      force_y: 20
+
+    rolling:
+      remaining_frames: 8
+      jump_timeout: 10
+      force_x: -6
+      force_y: 25
+
+    falling: 
+      jump_timeout: 3
+
+    firing:
+      source_x: 1.5
+      source_y: 0.2
+
+    powering:
+      modifier: 0.01
+
+
+  
+

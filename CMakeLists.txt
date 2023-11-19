@@ -16,6 +16,11 @@ find_package(SDL2pp REQUIRED)
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
+# YAML
+add_subdirectory(third-party/yaml-cpp)
+set(YAML_CPP_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/yaml-cpp/include")
+include_directories(${YAML_CPP_INCLUDE_DIR})
+
 set(BOX2D_LIBRARY_PATH "${CMAKE_SOURCE_DIR}/libbox2d.a")  
 set(BOX2D_INCLUDE_PATH "${CMAKE_SOURCE_DIR}/Box2D") 
 
@@ -103,6 +108,8 @@ set(CLIENT_SOURCE
 	src/client/graphics/weapons/bazooka.cpp
 	src/client/graphics/weapons/weapon_factory.cpp
 	src/client/graphics/crosshair.cpp
+	configuration/configuration.cpp
+	configuration/weapon_info.cpp
 	)
 
 message("Headers generados: ${UIS_HEADERS}")
@@ -182,8 +189,9 @@ target_include_directories(server PUBLIC
 target_link_libraries(client PUBLIC ${BOX2D_LIBRARY_PATH}
 					SDL2pp::SDL2pp
 					Qt5::Widgets
-					Qt5::Core)
-target_link_libraries(server PUBLIC ${BOX2D_LIBRARY_PATH})
+					Qt5::Core
+					yaml-cpp)
+target_link_libraries(server PUBLIC ${BOX2D_LIBRARY_PATH} yaml-cpp)
 
 add_executable(hello_test
 		test/hello_test.cc
@@ -237,7 +245,7 @@ add_executable(hello_test
 		src/server/game/listeners/server_raycast_explosion_callback.cpp
 )
 
-target_link_libraries(hello_test GTest::gtest_main GTest::gmock ${BOX2D_LIBRARY_PATH})
+target_link_libraries(hello_test GTest::gtest_main GTest::gmock ${BOX2D_LIBRARY_PATH} yaml-cpp)
 
 target_include_directories(hello_test PUBLIC
 		${CMAKE_CURRENT_SOURCE_DIR}/src/common
@@ -259,6 +267,6 @@ target_include_directories(client_test PUBLIC
 		${CMAKE_CURRENT_SOURCE_DIR}/test
 )
 
-target_link_libraries(client_test PUBLIC GTest::gtest_main GTest::gmock SDL2pp::SDL2pp Qt5::Widgets Qt5::Core)
+target_link_libraries(client_test PUBLIC GTest::gtest_main GTest::gmock SDL2pp::SDL2pp Qt5::Widgets Qt5::Core yaml-cpp)
 
 add_test(NAME ClientTest COMMAND client_test)
