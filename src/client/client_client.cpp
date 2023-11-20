@@ -1,5 +1,6 @@
 #include "client_client.h"
 
+#include <chrono>
 #include <iostream>
 #include <map>
 #include <string>
@@ -7,6 +8,7 @@
 #include <vector>
 
 #include <SDL2pp/SDL2pp.hh>
+#include <unistd.h>
 
 #include "../common/common_liberror.h"
 #include "../common/common_socket.h"
@@ -14,10 +16,12 @@
 #include "commands/client_move.h"
 #include "commands/client_rollback.h"
 #include "commands/client_stop_moving.h"
+#include "configuration/configuration.h"
 #include "graphics/worldview.h"
 
 #include "client_protocol.h"
 
+using namespace std::chrono;
 
 #define SUCCESS 0
 #define FAILURE 1
@@ -55,6 +59,7 @@ void Client::kill() {
     delete sender;
     delete receiver;
 }
+
 // lobby
 LobbyState Client::crear_partida(std::string& escenario) {
     protocol.send_create_game(escenario);
@@ -81,13 +86,10 @@ uint16_t Client::get_id_assigned_worm(const std::map<uint16_t, uint16_t>& distri
 
     return it->first;
 }
-void Client::assign_worms_color(std::map<uint16_t, uint16_t>& distribution){
-        for (auto& map : distribution){
-        color_map[map.first]= SDL2pp::Color(
-        map.second *100 %255,
-        map.second *100 %255 +255,
-        map.second *100 %255,
-        255);
+void Client::assign_worms_color(std::map<uint16_t, uint16_t>& distribution) {
+    for (auto& map: distribution) {
+        color_map[map.first] = SDL2pp::Color(map.second * 100 % 255, map.second * 100 % 255 + 255,
+                                             map.second * 100 % 255, 255);
     }
 }
 void Client::start_joined_game() {
@@ -100,10 +102,10 @@ void Client::start_joined_game() {
 
 void Client::start_game() {
     protocol.send_start_game();
-    
+
     // Que worm le corresponde a cada cliente (id_worm, id_client)
     std::map<uint16_t, uint16_t> distribution = protocol.receive_worms_distribution();
-    assign_worms_color(distribution); // puede ir en world_view
+    assign_worms_color(distribution);  // puede ir en world_view
     uint16_t assigned_worm = get_id_assigned_worm(distribution);
     id_assigned_worm = assigned_worm;
 }
@@ -113,7 +115,6 @@ int Client::start() {
 
     sender->start();
     receiver->start();
-    int frame_delay = 1000 / 60;
 
     SDL2pp::SDL sdl(SDL_INIT_VIDEO);  //--->crear clase que maneje la vista
 
@@ -123,20 +124,29 @@ int Client::start() {
     SDL2pp::Renderer renderer(window, -1, SDL_RENDERER_ACCELERATED);
 
     TextureController texture_controller(renderer);
-    WorldView worldview(texture_controller, std::move(this->scenario),color_map);
+    WorldView worldview(texture_controller, std::move(this->scenario), color_map);
 
     bool running = true;
+    auto start = high_resolution_clock::now();
     while (running) {
-        uint32_t frame_start = SDL_GetTicks();
 
         running = handle_events();
         update(worldview);
         worldview.render(renderer);
 
-        int frame_time = SDL_GetTicks() - frame_start;
-        if (frame_delay > frame_time) {
-            SDL_Delay(frame_delay - frame_time);
+        auto end = high_resolution_clock::now();
+        auto elapsed = duration_cast<duration<double>>(end - start).count();
+
+        auto rest = FRAME_RATE - elapsed;
+        if (rest < 0) {
+            auto behind = -rest;
+            auto lost = behind - fmod(behind, FRAME_RATE);
+            start += duration_cast<high_resolution_clock::duration>(duration<double>(lost));
+        } else {
+            std::this_thread::sleep_for(std::chrono::duration<double>(rest));
         }
+
+        start += duration_cast<high_resolution_clock::duration>(duration<double>(FRAME_RATE));
     }
 
     return SUCCESS;

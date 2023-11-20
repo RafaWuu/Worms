@@ -8,8 +8,9 @@
 
 #include <SDL2pp/SDL2pp.hh>
 #include "texture_controller.h"
+#include "configuration/configuration.h"
 
-#define FRAME_RATE 1000000.0f/25.0f
+#define FRAME_RATE (1.0 / Configuration::get_instance().get_fps())
 
 class SdlTexture;
 class Area;

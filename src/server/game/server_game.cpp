@@ -14,6 +14,7 @@
 
 #include "server_error.h"
 #include "server_statusbroadcast_monitor.h"
+#include "configuration/configuration.h"
 
 Game::Game(uint16_t game_id, std::string& scenario, uint16_t owner_id_,
            Queue<uint16_t>& reap_queue):
@@ -33,11 +34,12 @@ Game::Game(uint16_t game_id, std::string& scenario, uint16_t owner_id_,
 }
 
 void Game::run() {
-    auto frame_delay = std::chrono::milliseconds(1000 / 60);
+    
+    auto rate = 1.0 / Configuration::get_instance().get_fps();
 
     while (is_alive) {
         try {
-            auto frame_start = std::chrono::system_clock::now();
+            auto start = std::chrono::high_resolution_clock::now();
 
 
             std::shared_ptr<GameEvent> event;
@@ -59,10 +61,19 @@ void Game::run() {
                         std::make_shared<GameStatusRunning>(0, game_world));
             }
 
-            auto frame_time = std::chrono::system_clock::now() - frame_start;
-            if (frame_delay > frame_time) {
-                std::this_thread::sleep_for(frame_delay - frame_time);
+            auto end = std::chrono::high_resolution_clock::now();
+            auto elapsed = std::chrono::duration_cast<std::chrono::duration<double>>(end - start).count();
+
+            auto rest = rate - elapsed;
+            if (rest < 0) {
+                auto behind = -rest;
+                auto lost = behind - fmod(behind, rate);
+                start += std::chrono::duration_cast<std::chrono::high_resolution_clock::duration>(std::chrono::duration<double>(lost));
+            } else {
+                std::this_thread::sleep_for(std::chrono::duration<double>(rest));
             }
+
+            start += std::chrono::duration_cast<std::chrono::high_resolution_clock::duration>(std::chrono::duration<double>(rate));
 
         } catch (GameError& e) {
             std::cerr << e.what() << std::endl;

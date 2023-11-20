@@ -10,6 +10,7 @@ void ClientSender::run() {
     bool was_closed = false;
     while (keep_talking) {
         try {
+            
             std::shared_ptr<Command> command = messages_to_send.pop();
             command->serialize(protocol);
 

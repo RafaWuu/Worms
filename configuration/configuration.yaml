@@ -1,3 +1,5 @@
+fps: 60
+
 weapons:
   bazooka:
     scope: true

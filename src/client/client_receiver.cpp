@@ -8,8 +8,16 @@ void ClientReceiver::run() {
     is_alive = keep_talking = true;
 
     while (keep_talking) {
-        std::shared_ptr<EstadoJuego> game_status = protocol.recv_msg();
-        messages_received.push(game_status);
+        try {
+
+            std::shared_ptr<EstadoJuego> game_status = protocol.recv_msg();
+            messages_received.push(game_status);
+            
+        } catch (ClosedSocket& e) {
+            is_alive = keep_talking = false;
+        } catch (ClosedQueue& e) {
+            is_alive = keep_talking = false;
+        }
     }
 
     is_alive = false;

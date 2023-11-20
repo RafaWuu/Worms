@@ -20,6 +20,8 @@ class Configuration {
 private:
     std::map<std::string, WeaponInfo> weapons_info;
 
+    double fps;
+
     float walking_velocity;
     float standing_velocity;
 
@@ -53,6 +55,8 @@ private:
 
 public:
     static Configuration& get_instance();
+
+    double get_fps();
 
     /* WEAPONS INFO */
 
@@ -106,6 +110,8 @@ public:
     
     // Aim power modifier
     float get_powering_modifier() const ;
+
+    int getFps() const { return fps; }
 };
 
 #endif

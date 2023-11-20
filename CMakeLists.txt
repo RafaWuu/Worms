@@ -166,8 +166,10 @@ add_executable(server
 	src/server/game/weapons/server_weapon.cpp
 	src/server/game/weapons/server_bazooka_proyectil.cpp
 	src/server/game/weapons/bazooka_proyectil_info.cpp
-		src/server/server_game_reaper.cpp
-		src/server/game/listeners/server_raycast_explosion_callback.cpp
+	src/server/server_game_reaper.cpp
+	src/server/game/listeners/server_raycast_explosion_callback.cpp
+	configuration/configuration.cpp
+	configuration/weapon_info.cpp
 )
 
 target_include_directories(client PUBLIC
@@ -243,6 +245,8 @@ add_executable(hello_test
 		src/server/game/weapons/bazooka_proyectil_info.cpp
 		src/server/server_game_reaper.cpp
 		src/server/game/listeners/server_raycast_explosion_callback.cpp
+		configuration/configuration.cpp
+		configuration/weapon_info.cpp
 )
 
 target_link_libraries(hello_test GTest::gtest_main GTest::gmock ${BOX2D_LIBRARY_PATH} yaml-cpp)
