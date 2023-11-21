@@ -12,7 +12,6 @@ MainWindow::MainWindow(std::shared_ptr<Client> client, QWidget* parent):
         client(client) {
     ui->setupUi(this);
     ui->start_game->setEnabled(false);
-
 }
 
 MainWindow::~MainWindow() {
@@ -28,6 +27,7 @@ void MainWindow::on_new_game_button_clicked() {
     if (new_game->exec() == NEW_GAME_SUCCESS) {
         ui->start_game->setEnabled(true);
         ui->join_game_button->setEnabled(false);
+        ui->new_game_button->setEnabled(false);
     }
 }
 

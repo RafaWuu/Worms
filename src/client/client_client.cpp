@@ -21,7 +21,7 @@
 
 #include "client_protocol.h"
 
-using std::chrono;
+using namespace std::chrono;
 
 #define SUCCESS 0
 #define FAILURE 1

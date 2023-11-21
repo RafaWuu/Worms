@@ -125,29 +125,29 @@ server:
       velocity: 0.4
 
     standing:
-      velocity: 0.990
+      rate: 0.990
 
     jumping:
       remaining_frames: 8
-      jump_timeout: 10
-      force_x: 15
-      force_y: 20
+      jump_timeout: 15
+      delta_x: 1
+      delta_y: 0.5
 
     rolling:
-      remaining_frames: 8
-      jump_timeout: 10
-      force_x: -6
-      force_y: 25
+      remaining_frames: 15
+      jump_timeout: 15
+      delta_x: -0.2
+      delta_y: 1.2
 
     falling: 
-      jump_timeout: 3
+      jump_timeout: 15
 
     firing:
-      source_x: 1.5
-      source_y: 0.2
-
+      offset_x: 1.5
+      offset_y: 0.2
+      max_vel: 12 # maxima velocidad lineal a la que salen los disparos (distinto para cada arma?)
     powering:
-      modifier: 0.01
+      seconds: 2 # cuanto tiempo se necesita para llegar a la velocidad maxima
 
 
   

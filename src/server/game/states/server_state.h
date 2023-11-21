@@ -7,6 +7,7 @@
 
 #include <cstdint>
 
+#include "../../../../configuration/configuration.h"
 #include "game/entities/server_worm.h"
 #include "game/server_inputs.h"
 
@@ -22,9 +23,10 @@ protected:
     uint16_t blocking_me;
     uint16_t terminate;
     uint16_t requiring;
+    Configuration& config;
 
 public:
-    WormState() = default;
+    WormState();
     virtual bool can_be_activated(Worm& worm);
     virtual bool update(Worm& worm) = 0;
 
@@ -40,7 +42,6 @@ public:
     uint16_t get_code() const;
 
     virtual void on_activated(Worm& worm);
-    virtual uint16_t on_deactivated(Worm& worm); // Devuelve estados que deben activarse
-
+    virtual uint16_t on_deactivated(Worm& worm);  // Devuelve estados que deben activarse
 };
 #endif  // WORMS_SERVER_STATE_H

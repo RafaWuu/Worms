@@ -1,19 +1,22 @@
 #ifndef _CONFIGURATION_H_
 #define _CONFIGURATION_H_
 
-#include "yaml-cpp/yaml.h"
 #include <map>
+#include <string>
+
+#include "yaml-cpp/yaml.h"
+
 #include "weapon_info.h"
 
 class WeaponInfo;
 
 /**
  * Ejemplo:
- *   
+ *
  * Configuration& config = Configuration::get_instance();
  * bool has_scope = config.weapon_has_scope("bazooka");
- * 
-*/
+ *
+ */
 
 // Singleton
 class Configuration {
@@ -23,17 +26,17 @@ private:
     double fps;
 
     float walking_velocity;
-    float standing_velocity;
+    float standing_stop_rate;
 
     int jumping_remaining_frames;
     int jumping_jump_timeout;
-    int jumping_force_x;
-    int jumping_force_y;
+    float jumping_delta_x;
+    float jumping_delta_y;
 
     int rolling_remaining_frames;
     int rolling_jump_timeout;
-    int rolling_force_x;
-    int rolling_force_y;
+    float rolling_delta_x;
+    float rolling_delta_y;
 
     int falling_jump_timeout;
 
@@ -72,9 +75,11 @@ public:
 
     // returns -1 if ammo is infinite
     int weapon_ammo(const std::string& weapon_name);
-    // returns 0 if weapon has main a explosion & fragments, you need to check their respective damages
+    // returns 0 if weapon has main a explosion & fragments, you need to check their respective
+    // damages
     int weapon_damage(const std::string& weapon_name);
-    // returns 0 if weapon has main a explosion & fragments, you need to check their respective radiuses
+    // returns 0 if weapon has main a explosion & fragments, you need to check their respective
+    // radiuses
     int weapon_radius(const std::string& weapon_name);
     // returns 0 if there's no explosion
     int weapon_main_explosion_damage(const std::string& weapon_name);
@@ -89,27 +94,27 @@ public:
 
     /* SERVER STATES */
 
-    float get_walking_velocity() const ;
+    float get_walking_velocity() const;
     // Velocity modifier when worm stops moving
-    float get_standing_velocity() const ;
-    
-    int get_jumping_remaining_frames() const ;
-    int get_jumping_jump_timeout() const ;
-    int get_jumping_force_x() const ;
-    int get_jumping_force_y() const ;
-    
-    int get_rolling_remaining_frames() const ;
-    int get_rolling_jump_timeout() const ;
-    int get_rolling_force_x() const ;
-    int get_rolling_force_y() const ;
-    
-    int get_falling_jump_timeout() const ;
-    
-    float get_firing_source_x() const ;
-    float get_firing_source_y() const ;
-    
+    float get_standing_stopping_rate() const;
+
+    int get_jumping_remaining_frames() const;
+    int get_jumping_jump_timeout() const;
+    float get_jumping_delta_x() const;
+    float get_jumping_delta_y() const;
+
+    int get_rolling_remaining_frames() const;
+    int get_rolling_jump_timeout() const;
+    float get_rolling_delta_x() const;
+    float get_rolling_delta_y() const;
+
+    int get_falling_jump_timeout() const;
+
+    float get_firing_source_x() const;
+    float get_firing_source_y() const;
+
     // Aim power modifier
-    float get_powering_modifier() const ;
+    float get_powering_time() const;
 
     int getFps() const { return fps; }
 };

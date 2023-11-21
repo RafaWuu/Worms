@@ -4,6 +4,10 @@
 
 #include "server_states.h"
 
+#define ZERO_IMPULSE 0
+
+#define MAX_POWER 1
+
 AliveState::AliveState() {
     code = Alive;
     required = 0;
@@ -27,7 +31,7 @@ WalkingState::WalkingState() {
 }
 
 bool WalkingState::update(Worm& worm) {
-    float desired_vel = .4;
+    float desired_vel = config.get_walking_velocity();
 
     if (!worm.facing_right)
         desired_vel = -desired_vel;
@@ -39,7 +43,8 @@ bool WalkingState::update(Worm& worm) {
 
     float impulse_x = worm.body->GetMass() * vel_change_x;
 
-    worm.body->ApplyLinearImpulse(b2Vec2(impulse_x, 0), worm.body->GetWorldCenter(), true);
+    worm.body->ApplyLinearImpulse(b2Vec2(impulse_x, ZERO_IMPULSE), worm.body->GetWorldCenter(),
+                                  true);
     return true;
 }
 
@@ -53,13 +58,14 @@ StandingState::StandingState() {
 
 bool StandingState::update(Worm& worm) {
     b2Vec2 vel = worm.body->GetLinearVelocity();
-    float desired_vel = vel.x * 0.990f;
+    float desired_vel = vel.x * config.get_standing_stopping_rate();
 
     float vel_change_x = desired_vel - vel.x;
 
     float impulse_x = worm.body->GetMass() * vel_change_x;
 
-    worm.body->ApplyLinearImpulse(b2Vec2(impulse_x, 0), worm.body->GetWorldCenter(), true);
+    worm.body->ApplyLinearImpulse(b2Vec2(impulse_x, ZERO_IMPULSE), worm.body->GetWorldCenter(),
+                                  true);
     return true;
 }
 
@@ -71,29 +77,28 @@ JumpingState::JumpingState() {
     requiring = NoState;
 
     remaining_frames = 0;
-    last_moving_state = NoState;
 }
 
 void JumpingState::on_activated(Worm& worm) {
-    remaining_frames = 8;
-    worm.jumpTimeout = 10;
+    remaining_frames = config.get_jumping_remaining_frames();
+    worm.jumpTimeout = config.get_jumping_jump_timeout();
 
+    float v_y =
+            sqrt(2 * config.get_jumping_delta_y() * (-1) * worm.body->GetWorld()->GetGravity().y);
+    float v_x = config.get_jumping_delta_x() * (-1) * worm.body->GetWorld()->GetGravity().y / v_y;
 
-    last_moving_state = worm.get_state() & (Walking | Standing);
+    float impulse_y = worm.body->GetMass() * v_y;
+    float impulse_x = worm.body->GetMass() * (v_x - worm.body->GetLinearVelocity().x);
+
+    if (!worm.facing_right)
+        impulse_x = -impulse_x;
+
+    worm.body->ApplyLinearImpulse(b2Vec2(impulse_x, impulse_y), worm.body->GetWorldCenter(), true);
 }
 
 bool JumpingState::update(Worm& worm) {
     if (remaining_frames == 0)
         return false;
-
-    float force_x = 15;
-    float force_y = 20;
-
-
-    if (!worm.facing_right)
-        force_x = -force_x;
-
-    worm.body->ApplyForce(b2Vec2(force_x, force_y), worm.body->GetWorldCenter(), true);
 
     remaining_frames--;
     return true;
@@ -113,25 +118,28 @@ RollingState::RollingState() {
     requiring = NoState;
 
     remaining_frames = 0;
-    last_moving_state = NoState;
 }
 
 void RollingState::on_activated(Worm& worm) {
-    remaining_frames = 8;
-    worm.jumpTimeout = 10;
-    last_moving_state = worm.get_state() & (Walking | Standing);
+    remaining_frames = config.get_rolling_remaining_frames();
+    worm.jumpTimeout = config.get_rolling_jump_timeout();
+
+    float v_y =
+            sqrt(2 * config.get_rolling_delta_y() * (-1) * worm.body->GetWorld()->GetGravity().y);
+    float v_x = config.get_rolling_delta_x() * (-1) * worm.body->GetWorld()->GetGravity().y / v_y;
+
+    float impulse_y = worm.body->GetMass() * v_y;
+    float impulse_x = worm.body->GetMass() * (v_x - worm.body->GetLinearVelocity().x);
+
+    if (!worm.facing_right)
+        impulse_x = -impulse_x;
+
+    worm.body->ApplyLinearImpulse(b2Vec2(impulse_x, impulse_y), worm.body->GetWorldCenter(), true);
 }
 
 bool RollingState::update(Worm& worm) {
     if (remaining_frames == 0)
         return false;
-
-    float force_x = -6;
-    float force_y = 25;
-    if (!worm.facing_right)
-        force_x = -force_x;
-
-    worm.body->ApplyForce(b2Vec2(force_x, force_y), worm.body->GetWorldCenter(), true);
 
     remaining_frames--;
     return true;
@@ -164,7 +172,7 @@ bool FallingState::update(Worm& worm) {
 
 uint16_t FallingState::on_deactivated(Worm& worm) {
     worm.process_fall(max_y - worm.body->GetPosition().y);
-    worm.jumpTimeout = 3;
+    worm.jumpTimeout = config.get_falling_jump_timeout();
     return Standing;
 }
 
@@ -178,7 +186,7 @@ FiringState::FiringState() {
 
 
 bool FiringState::update(Worm& worm) {
-    b2Vec2 source = b2Vec2(1.5, .2);
+    b2Vec2 source = b2Vec2(config.get_firing_source_x(), config.get_firing_source_y());
 
     if (!worm.facing_right) {
         source.x = -source.x;
@@ -200,12 +208,14 @@ AimingState::AimingState() {
 bool AimingState::update(Worm& worm) {
     b2Vec2 toTarget = worm.body->GetLocalPoint(b2Vec2(worm.aim_x, worm.aim_y));
 
-    if (worm.facing_right && toTarget.x < 0) {
+    if (worm.facing_right &&
+        toTarget.x < 0) {  // Limito el campo de vision al apuntar hacia la derecha
         worm.desiredAngle = (toTarget.y > 0) ? M_PI_2f32 : -M_PI_2f32;
         return true;
     }
 
-    if (!worm.facing_right && toTarget.x > 0) {
+    if (!worm.facing_right &&
+        toTarget.x > 0) {  // Limito el campo de vision al apuntar hacia la izquierda
         worm.desiredAngle = (toTarget.y > 0) ? M_PI_2f32 : -M_PI_2f32;
         return true;
     }
@@ -224,10 +234,10 @@ PoweringState::PoweringState() {
 }
 
 bool PoweringState::update(Worm& worm) {
-    worm.aim_power += 0.01;
+    worm.aim_power += config.get_powering_time() / config.getFps();
 
-    if (worm.aim_power > 1) {
-        worm.aim_power = 1;
+    if (worm.aim_power > MAX_POWER) {
+        worm.aim_power = MAX_POWER;
         return false;
     }
     return true;

@@ -31,7 +31,6 @@ public:
 class JumpingState: public WormState {
 private:
     uint8_t remaining_frames;
-    uint16_t last_moving_state;
 
 public:
     JumpingState();
@@ -44,7 +43,6 @@ public:
 class RollingState: public WormState {
 private:
     uint8_t remaining_frames;
-    uint16_t last_moving_state;
 
 public:
     RollingState();

@@ -70,24 +70,24 @@ void Configuration::load_server_states_info(YAML::Node config) {
     YAML::Node states = config["server"]["states"];
 
     walking_velocity = states["walking"]["velocity"].as<float>();
-    standing_velocity = states["standing"]["velocity"].as<float>();
+    standing_stop_rate = states["standing"]["rate"].as<float>();
 
     jumping_remaining_frames = states["jumping"]["remaining_frames"].as<int>();
     jumping_jump_timeout = states["jumping"]["jump_timeout"].as<int>();
-    jumping_force_x = states["jumping"]["force_x"].as<int>();
-    jumping_force_y = states["jumping"]["force_y"].as<int>();
+    jumping_delta_x = states["jumping"]["delta_x"].as<float>();
+    jumping_delta_y = states["jumping"]["delta_y"].as<float>();
 
     rolling_remaining_frames = states["rolling"]["remaining_frames"].as<int>();
     rolling_jump_timeout = states["rolling"]["jump_timeout"].as<int>();
-    rolling_force_x = states["rolling"]["force_y"].as<int>();
-    rolling_force_y = states["rolling"]["force_y"].as<int>();
+    rolling_delta_x = states["rolling"]["delta_x"].as<float>();
+    rolling_delta_y = states["rolling"]["delta_y"].as<float>();
 
     falling_jump_timeout = states["falling"]["jump_timeout"].as<int>();
 
-    firing_source_x = states["firing"]["source_x"].as<float>();
-    firing_source_y = states["firing"]["source_y"].as<float>();
+    firing_source_x = states["firing"]["offset_x"].as<float>();
+    firing_source_y = states["firing"]["offset_y"].as<float>();
 
-    powering_modifier = states["powering"]["modifier"].as<float>();
+    powering_modifier = states["powering"]["seconds"].as<float>();
 }
 
 bool Configuration::weapon_has_scope(const std::string& weapon_name) {
@@ -152,19 +152,19 @@ int Configuration::weapon_fragment_number(const std::string& weapon_name) {
 float Configuration::get_walking_velocity() const { return walking_velocity; }
 
 // Standing
-float Configuration::get_standing_velocity() const { return standing_velocity; }
+float Configuration::get_standing_stopping_rate() const { return standing_stop_rate; }
 
 // Jumping
 int Configuration::get_jumping_remaining_frames() const { return jumping_remaining_frames; }
 int Configuration::get_jumping_jump_timeout() const { return jumping_jump_timeout; }
-int Configuration::get_jumping_force_x() const { return jumping_force_x; }
-int Configuration::get_jumping_force_y() const { return jumping_force_y; }
+float Configuration::get_jumping_delta_x() const { return jumping_delta_x; }
+float Configuration::get_jumping_delta_y() const { return jumping_delta_y; }
 
 // Rolling
 int Configuration::get_rolling_remaining_frames() const { return rolling_remaining_frames; }
 int Configuration::get_rolling_jump_timeout() const { return rolling_jump_timeout; }
-int Configuration::get_rolling_force_x() const { return rolling_force_x; }
-int Configuration::get_rolling_force_y() const { return rolling_force_y; }
+float Configuration::get_rolling_delta_x() const { return rolling_delta_x; }
+float Configuration::get_rolling_delta_y() const { return rolling_delta_y; }
 
 // Falling
 int Configuration::get_falling_jump_timeout() const { return falling_jump_timeout; }
@@ -174,4 +174,4 @@ float Configuration::get_firing_source_x() const { return firing_source_x; }
 float Configuration::get_firing_source_y() const { return firing_source_y; }
 
 // Powering
-float Configuration::get_powering_modifier() const { return powering_modifier; }
+float Configuration::get_powering_time() const { return powering_modifier; }
