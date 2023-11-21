@@ -37,13 +37,14 @@ private:
 
     uint8_t id_assigned_worm;
     uint16_t my_id;
-    std::map<uint16_t, SDL2pp::Color> color_map; //sdl color o 3 ints(r,g,b)
+    std::map<uint16_t, SDL2pp::Color> color_map;  // sdl color o 3 ints(r,g,b)
     // Por ahora que sea un array de chars, despues cambiarlo a una clase propia
     Queue<std::shared_ptr<Command>> messages_to_send;
     Queue<std::shared_ptr<EstadoJuego>> messages_received;
 
     uint16_t get_id_assigned_worm(const std::map<uint16_t, uint16_t>& distribution);
-    void assign_worms_color(std::map<uint16_t, uint16_t>& distribution);
+    void assign_worms_color(const std::map<uint16_t, uint16_t>& distribution);
+
 public:
     Client(const std::string& hostname, const std::string& servicename);
     ~Client();

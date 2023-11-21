@@ -6,9 +6,13 @@
 #ifndef __ANIMATION_H__
 #define __ANIMATION_H__
 
+#include <memory>
+
 #include <SDL2pp/SDL2pp.hh>
+
+#include "../configuration/configuration.h"
+
 #include "texture_controller.h"
-#include "configuration/configuration.h"
 
 #define FRAME_RATE (1.0 / Configuration::get_instance().get_fps())
 
@@ -16,14 +20,14 @@ class SdlTexture;
 class Area;
 
 class Animation {
-   public:
+public:
     Animation(std::shared_ptr<SDL2pp::Texture> texture, TextureController& controller);
     ~Animation();
     void update(float dt);
-    void render(SDL2pp::Renderer &renderer, const SDL2pp::Rect dest, SDL_RendererFlip &flipType);
+    void render(SDL2pp::Renderer& renderer, const SDL2pp::Rect dest, SDL_RendererFlip& flipType);
     void change_texture(AnimationState new_state);
 
-   private:
+private:
     void advanceFrame();
     /** SDL texture of the raw image. */
     std::shared_ptr<SDL2pp::Texture> texture;

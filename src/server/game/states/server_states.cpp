@@ -170,7 +170,7 @@ uint16_t FallingState::on_deactivated(Worm& worm) {
 
 FiringState::FiringState() {
     code = Firing;
-    required = Powering;
+    required = Powering | Alive;
     blocking_me = NoState;
     terminate = Aiming | Powering;
     requiring = NoState;
@@ -217,7 +217,7 @@ bool AimingState::update(Worm& worm) {
 
 PoweringState::PoweringState() {
     code = Powering;
-    required = Aiming;
+    required = Aiming | Alive;
     blocking_me = NoState;
     terminate = NoState;
     requiring = Firing;

@@ -4,13 +4,20 @@
 
 #include "server_ground_info.h"
 
-GroundInfo::GroundInfo(const Ground& ground): ground(ground) {}
+GroundInfo::GroundInfo(const Ground& ground) {
+    id = ground.get_id();
+    x = ground.body->GetPosition().x;
+    y = ground.body->GetPosition().y;
+    height = ground.height;
+    width = ground.width;
+}
 
 void GroundInfo::serialize_scenario(BaseProtocol& bp) {
-    bp.send_1byte_number(ground.get_id());
-    bp.send_4byte_float(ground.body->GetPosition().x);
-    bp.send_4byte_float(ground.body->GetPosition().y);
-    bp.send_4byte_float(ground.height);
-    bp.send_4byte_float(ground.width);
+    bp.send_1byte_number(id);
+    bp.send_4byte_float(x);
+    bp.send_4byte_float(y);
+
+    bp.send_4byte_float(height);
+    bp.send_4byte_float(width);
 }
-void GroundInfo::serialize_status(BaseProtocol& bp) { bp.send_1byte_number(ground.get_id()); }
+void GroundInfo::serialize_status(BaseProtocol& bp) { bp.send_1byte_number(id); }

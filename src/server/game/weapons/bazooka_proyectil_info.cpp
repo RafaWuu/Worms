@@ -3,14 +3,17 @@
 //
 
 #include "bazooka_proyectil_info.h"
+
 BazookaProyectilInfo::BazookaProyectilInfo(const BazookaProyectil& proyectil):
-        proyectil(proyectil) {}
+        id(proyectil.get_id()) {
+    type = 1;
+    x = proyectil.body->GetPosition().x;
+    y = proyectil.body->GetPosition().y;
+}
 void BazookaProyectilInfo::serialize_status(BaseProtocol& gp) {
-    gp.send_1byte_number(proyectil.get_id());
-    gp.send_1byte_number(1);
-    gp.send_4byte_float(proyectil.body->GetPosition().x);
-    gp.send_4byte_float(proyectil.body->GetPosition().y);
+    gp.send_1byte_number(id);
+    gp.send_1byte_number(type);
+    gp.send_4byte_float(x);
+    gp.send_4byte_float(y);
 }
-void BazookaProyectilInfo::serialize_scenario(BaseProtocol& gp) {
-    gp.send_1byte_number(proyectil.get_id());
-}
+void BazookaProyectilInfo::serialize_scenario(BaseProtocol& gp) { gp.send_1byte_number(id); }

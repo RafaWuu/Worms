@@ -8,9 +8,15 @@
 #include "server_gameobject_info.h"
 #include "server_ground.h"
 class GroundInfo: public GameObjectInfo {
+private:
+    ObjectType id;
+    float x;
+    float y;
+    float height;
+    float width;
+
 public:
     explicit GroundInfo(const Ground& ground);
-    const Ground& ground;
 
     void serialize_scenario(BaseProtocol& bp) override;
     void serialize_status(BaseProtocol& bp) override;

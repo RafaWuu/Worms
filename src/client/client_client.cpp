@@ -12,16 +12,16 @@
 
 #include "../common/common_liberror.h"
 #include "../common/common_socket.h"
+#include "../configuration/configuration.h"
 #include "commands/client_jump.h"
 #include "commands/client_move.h"
 #include "commands/client_rollback.h"
 #include "commands/client_stop_moving.h"
-#include "configuration/configuration.h"
 #include "graphics/worldview.h"
 
 #include "client_protocol.h"
 
-using namespace std::chrono;
+using std::chrono;
 
 #define SUCCESS 0
 #define FAILURE 1
@@ -86,7 +86,7 @@ uint16_t Client::get_id_assigned_worm(const std::map<uint16_t, uint16_t>& distri
 
     return it->first;
 }
-void Client::assign_worms_color(std::map<uint16_t, uint16_t>& distribution) {
+void Client::assign_worms_color(const std::map<uint16_t, uint16_t>& distribution) {
     for (auto& map: distribution) {
         color_map[map.first] = SDL2pp::Color(map.second * 100 % 255, map.second * 100 % 255 + 255,
                                              map.second * 100 % 255, 255);

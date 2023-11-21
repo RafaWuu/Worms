@@ -10,7 +10,10 @@
 #include "server_bazooka_proyectil.h"
 class BazookaProyectilInfo: public GameObjectInfo {
 private:
-    const BazookaProyectil& proyectil;
+    ObjectType id;
+    int type;
+    float x;
+    float y;
 
 public:
     explicit BazookaProyectilInfo(const BazookaProyectil& proyectil);
