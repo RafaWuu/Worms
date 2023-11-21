@@ -38,7 +38,6 @@ std::unique_ptr<ClientState> LobbyClientState::run() {
             is_alive = false;
         } catch (YAML::Exception& e) {
             std::cerr << e.what() << std::endl;
-            is_alive = false;
             LobbyError lb(0, "Error loading scenario", 0);
             lb.send(gp);
         }

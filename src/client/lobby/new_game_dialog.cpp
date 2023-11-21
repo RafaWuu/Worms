@@ -9,14 +9,14 @@
 #include "ui_new_game_dialog.h"
 
 NewGameDialog::NewGameDialog(std::shared_ptr<Client> client, QWidget* parent):
-        QDialog(parent), ui(new Ui::NewGameDialog), client(client) {
+        QDialog(parent), ui(new Ui::NewGameDialog), client(client){
     ui->setupUi(this);
+    this->ui->nom_escenario->setText("basic");
 }
 
 NewGameDialog::~NewGameDialog() { delete ui; }
 
 void NewGameDialog::on_play_clicked() {
-
     std::string escenario = this->ui->nom_escenario->toPlainText().toStdString();
 
     // label validacion

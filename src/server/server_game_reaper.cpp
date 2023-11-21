@@ -7,7 +7,7 @@
 #include "server_error.h"
 
 GameReaper::GameReaper(LobbyMonitor& lobby, Queue<uint16_t>& reap_queue):
-        lobby(lobby), reap_queue(reap_queue), is_alive(false) {}
+        lobby(lobby), reap_queue(reap_queue), is_alive(true) {}
 
 GameReaper::~GameReaper() { kill_all(); }
 
@@ -28,4 +28,4 @@ void GameReaper::run() {
 
 void GameReaper::kill_all() { lobby.close_all(); }
 
-void GameReaper::kill() { is_alive = false; }
+void GameReaper::kill() { is_alive = false; reap_queue.close(); }

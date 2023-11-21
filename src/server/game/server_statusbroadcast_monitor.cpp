@@ -24,6 +24,7 @@ void StatusBroadcastMonitor::remove_queue(uint16_t key) {
 
     auto it = queues_map.find(key);
     if (it != queues_map.end()) {
+        it->second.close();
         queues_map.erase(it);
     }
 }
