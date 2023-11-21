@@ -10,9 +10,9 @@
 #include "b2_polygon_shape.h"
 #include "server_ground_info.h"
 
-Ground::Ground(b2World* world): width(24.0), height(4.0), GameObject() {
+Ground::Ground(b2World* world, float width): width(width), height(10.0), GameObject() {
     b2BodyDef groundBodyDef;
-    groundBodyDef.position.Set(10.0f, -20.0f);
+    groundBodyDef.position.Set(10.0f, -25.0f);
 
     body = world->CreateBody(&groundBodyDef);
 

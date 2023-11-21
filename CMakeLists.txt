@@ -148,7 +148,6 @@ add_executable(server
 	src/server/game/server_gamestatus.cpp
 	src/server/game/entities/server_worm.cpp
 	src/server/game/world/server_gameworld.cpp
-	src/server/game/server_scenario_file_handler.cpp
 	src/server/game/entities/server_beam.cpp
 	src/server/game/entities/server_worm_info.cpp
 	src/server/game/entities/server_beam_info.cpp
@@ -170,6 +169,8 @@ add_executable(server
 	src/server/game/listeners/server_raycast_explosion_callback.cpp
 	configuration/configuration.cpp
 	configuration/weapon_info.cpp
+		src/server/scenario_filehandler.cpp
+		src/server/scenario_filehandler.h
 )
 
 target_include_directories(client PUBLIC
@@ -225,7 +226,6 @@ add_executable(hello_test
 		src/server/game/server_gamestatus.cpp
 		src/server/game/entities/server_worm.cpp
 		src/server/game/world/server_gameworld.cpp
-		src/server/game/server_scenario_file_handler.cpp
 		src/server/game/entities/server_beam.cpp
 		src/server/game/entities/server_worm_info.cpp
 		src/server/game/entities/server_beam_info.cpp

@@ -5,6 +5,8 @@
 #ifndef WORMS_SERVER_GROUND_H
 #define WORMS_SERVER_GROUND_H
 
+#include <memory>
+
 #include "b2_body.h"
 #include "b2_world.h"
 #include "server_gameobject.h"
@@ -12,10 +14,11 @@
 class Ground: public GameObject {
 private:
     b2Body* body;
+
 public:
     friend class GroundInfo;
 
-    explicit Ground(b2World* world);
+    explicit Ground(b2World* world, float width);
     ObjectType get_id() const override;
     std::unique_ptr<GameObjectInfo> get_status() const override;
     float width;

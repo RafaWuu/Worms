@@ -1,0 +1,27 @@
+beam_config:
+  large_width: 6
+  short_width: 3
+  height: 0.8
+
+scenarios:
+    basic:
+        width: 20.0
+        height: 20.0 # Altura desde el suelo
+        beams:
+            -
+              type: large
+              pos_x:   15.0
+              pos_y:  10.0
+              angle: 0.0
+            -
+              type: large
+              pos_x: 2.0
+              pos_y: 5.0
+              angle: 0.0
+        worms:
+            -
+              pos_x: 2.0
+              pos_y: 0.0
+            -
+              pos_x: 15.0
+              pos_y: 0.0

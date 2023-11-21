@@ -16,39 +16,36 @@
 
 #include "b2_body.h"
 #include "b2_edge_shape.h"
+#include "scenario_filehandler.h"
 #include "server_error.h"
 
 GameWorld::GameWorld(const std::string& scenario_name):
-        b2_world(b2Vec2(.0, -9.8)),
-        worm_map(),
-        entities_map(),
-        file_handler(scenario_name),
-        listener(*this) {
+        b2_world(b2Vec2(.0, -9.8)), worm_map(), entities_map(), file_handler(), listener(*this) {
 
     bazooka = new Weapon(*this);
 
     entity_id = 0;
+    file_handler.get_scenario(*this, scenario_name);
 
-    height = 20.0;
-    width = 20.0;
-
-    set_dimensions();
-    entities_map.emplace(entity_id++, std::make_shared<Ground>(&b2_world));
-
-    entities_map.emplace(entity_id++, std::make_shared<Beam>(&b2_world, 15, -10, 6, .8, 0));
-    entities_map.emplace(entity_id++, std::make_shared<Beam>(&b2_world, 2, -5, 6, .8, 0));
-
-
-    for (int i = 0; i < 2; ++i) {
-        auto worm =
-                std::make_shared<Worm>(entity_id, &b2_world, 2.0 + (float)i * 13.f, 0, *bazooka);
-        entities_map.emplace(entity_id, worm);
-        worm_map.emplace(entity_id++, worm);
-
-        entities_map.emplace(entity_id++, std::make_shared<WormSensor>(worm.get()));
-    }
+    entities_map.emplace(entity_id++, std::make_shared<Ground>(&b2_world, width));
 
     b2_world.SetContactListener(&listener);
+}
+
+void GameWorld::create_worm(float x, float y) {
+    auto worm = std::make_shared<Worm>(entity_id, &b2_world, x, -y, *bazooka);
+    entities_map.emplace(entity_id, worm);
+    worm_map.emplace(entity_id++, worm);
+
+    entities_map.emplace(entity_id++, std::make_shared<WormSensor>(worm.get()));
+}
+
+void GameWorld::create_large_beam(float x, float y, float angle) {
+    entities_map.emplace(entity_id++, std::make_shared<Beam>(&b2_world, x, -y, 6, .8, angle));
+}
+
+void GameWorld::create_short_beam(float x, float y, float angle) {
+    entities_map.emplace(entity_id++, std::make_shared<Beam>(&b2_world, x, -y, 3, .8, angle));
 }
 
 void GameWorld::step(int steps) {
@@ -103,7 +100,6 @@ std::map<uint16_t, std::shared_ptr<GameObjectInfo>> GameWorld::get_entities_info
     return std::move(map);
 }
 
-GameWorld::~GameWorld() { delete bazooka; }
 std::map<uint16_t, std::shared_ptr<WormInfo>> GameWorld::get_worms_info() {
     std::map<uint16_t, std::shared_ptr<WormInfo>> map;
 
@@ -122,13 +118,17 @@ void GameWorld::add_proyectil(std::shared_ptr<BazookaProyectil> proyectil) {
 }
 
 //  limit 4to cuadrante x>=0 , y<=0
-void GameWorld::set_dimensions() {
+void GameWorld::set_dimensions(float h, float w) {
+    width = w;
+    height = h;
+
+    /*
     b2Vec2 top_left(0, 0);
     b2Vec2 top_right(width, 0);
     b2Vec2 bottom_left(0, -height);
     b2Vec2 bottom_right(width, -height);
 
-    /*
+
     b2BodyDef body_def;
     b2FixtureDef fixture_def;
     body_def.type = b2_staticBody;
@@ -149,13 +149,7 @@ void GameWorld::set_dimensions() {
     b2Body* edge_3 = b2_world.CreateBody(&body_def);
     edge_shape.SetTwoSided(top_right, bottom_right);
     fixture_def.shape = &edge_shape;
-    edge_3->CreateFixture(&fixture_def);
-
-    b2Body* edge_4 = b2_world.CreateBody(&body_def);
-    edge_shape.SetTwoSided(bottom_left, bottom_right);
-    fixture_def.shape = &edge_shape;
-    edge_4->CreateFixture(&fixture_def);
-     */
+    edge_3->CreateFixture(&fixture_def);*/
 }
 
 void GameWorld::add_explosion(b2Body& proyectil, float radius) {
@@ -192,3 +186,5 @@ void GameWorld::apply_blast_impulse(b2Body* body, Worm* worm, b2Vec2 blastCenter
     body->ApplyLinearImpulse(impulseMag * blastDir, applyPoint, true);
     worm->get_hit(50 * invDistance);
 }
+
+GameWorld::~GameWorld() { delete bazooka; }
