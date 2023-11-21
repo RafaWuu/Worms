@@ -133,7 +133,7 @@ int Client::start() {
     while (running) {
 
         // TODO: pasarle weapon_selector al handle_events()??? y manejar desde ahi que arma se selecciono
-        running = handle_events();
+        running = handle_events(weapon_selector);
         update(worldview);
         worldview.render(renderer);
 
@@ -168,11 +168,11 @@ void Client::update(WorldView& worldview) {
     }
 }
 
-bool Client::handle_events() {
+bool Client::handle_events(WeaponSelector& weapon_selector) {
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
         try {
-            auto c = event_handler.handle(event);
+            auto c = event_handler.handle(event, weapon_selector); // Queda feo pasarle e weapon_selector x parametro?
             if (c != nullptr)
                 messages_to_send.push(c);
         } catch (QuitGameClientInput& e) {

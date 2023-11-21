@@ -15,13 +15,15 @@
 #include "commands/client_stop_aim.h"
 #include "commands/client_stop_moving.h"
 
+#include "graphics/weapons/weapon_selector.h"
+
 EventHandler::EventHandler() {
     moving_left = false;
     moving_right = false;
     aiming = false;
 }
 
-std::shared_ptr<Command> EventHandler::handle(const SDL_Event& event) {
+std::shared_ptr<Command> EventHandler::handle(const SDL_Event& event, WeaponSelector& weapon_selector) {
     if (event.type == SDL_QUIT) {
         throw(QuitGameClientInput());
     }
@@ -53,6 +55,10 @@ std::shared_ptr<Command> EventHandler::handle(const SDL_Event& event) {
 
     if (event.type == SDL_MOUSEBUTTONDOWN) {
         if (event.button.button == SDL_BUTTON_LEFT) {
+            if (weapon_selector.mouse_inside(event.button.x, event.button.y)) {
+                int weapon_index = weapon_selector.get_weapon_index(event.button.x, event.button.y);
+                std::cout << "Weapon Index: " << weapon_index << std::endl;
+            }
             if (!aiming)
                 return aim(event.button.x, event.button.y);
         }
