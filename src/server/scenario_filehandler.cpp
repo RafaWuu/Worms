@@ -16,9 +16,15 @@ ScenarioFileHandler::ScenarioFileHandler() {
     try {
         config = YAML::LoadFile("../scenarios/scenarios.yaml");
 
-    } catch (const YAML::Exception& e) {
-        std::cerr << "Error yaml: " << e.what() << std::endl;
-        throw(e);
+    } catch (const YAML::Exception& e1) {
+        try {
+            config = YAML::LoadFile("scenarios/scenarios.yaml");
+
+        } catch (const YAML::Exception& e2) {
+            std::cerr << "Error yaml: " << e1.what() << std::endl;
+            std::cerr << "Error yaml: " << e2.what() << std::endl;
+            throw e2;
+        }
     }
 }
 

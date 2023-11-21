@@ -2,10 +2,12 @@
 
 WorldView::WorldView(TextureController& texture_controller,
                     std::unique_ptr<Scenario> scenario,
-                    std::map<uint16_t, SDL2pp::Color>& color_map):
+                    std::map<uint16_t, SDL2pp::Color>& color_map, WeaponSelector& weapon_selector):
         texture_controller(texture_controller),
         entity_factory(texture_controller), 
-        entities(){
+        entities(),
+        weapon_selector(weapon_selector) {
+
     camera = SDL2pp::Rect{0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
 
     for (auto& entity_info: scenario->get_entities_info()) {
@@ -41,6 +43,7 @@ void WorldView::render(SDL2pp::Renderer& renderer) {
     for (auto& entity: entities) {
         entity.second->render(renderer, camera);
     }
+    weapon_selector.render(renderer);
 
     renderer.Present();
 }

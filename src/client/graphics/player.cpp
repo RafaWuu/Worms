@@ -85,6 +85,7 @@ void Player::render(SDL2pp::Renderer& renderer, SDL2pp::Rect& camera) {
     SDL2pp::Rect health_bar = { x-25, y-55  , bar_width, 10 };
     renderer.SetDrawColor(color.r,color.g,color.b,color.a);
     renderer.FillRect(health_bar);
+    
     if (aiming) {
         crosshair.render_crosshair(renderer, x, y, aim_angle);
     }

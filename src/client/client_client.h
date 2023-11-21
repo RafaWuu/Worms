@@ -7,6 +7,7 @@
 
 #include <SDL2pp/SDL2pp.hh>
 #include <string.h>
+#include <chrono>
 
 #include "../common/common_queue.h"
 #include "../common/common_socket.h"
@@ -44,6 +45,8 @@ private:
 
     uint16_t get_id_assigned_worm(const std::map<uint16_t, uint16_t>& distribution);
     void assign_worms_color(const std::map<uint16_t, uint16_t>& distribution);
+
+    void manage_frame_rate(std::chrono::time_point<std::chrono::high_resolution_clock>& start);
 
 public:
     Client(const std::string& hostname, const std::string& servicename);

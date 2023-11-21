@@ -18,6 +18,7 @@
 #include "commands/client_rollback.h"
 #include "commands/client_stop_moving.h"
 #include "graphics/worldview.h"
+#include "graphics/weapons/weapon_selector.h"
 
 #include "client_protocol.h"
 
@@ -119,37 +120,43 @@ int Client::start() {
     SDL2pp::SDL sdl(SDL_INIT_VIDEO);  //--->crear clase que maneje la vista
 
     // Create main window: 640x480 dimensions, resizable, "SDL2pp demo" title
-    SDL2pp::Window window("Worms", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480,
+    SDL2pp::Window window("Worms", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT,
                           SDL_WINDOW_RESIZABLE);
     SDL2pp::Renderer renderer(window, -1, SDL_RENDERER_ACCELERATED);
 
     TextureController texture_controller(renderer);
-    WorldView worldview(texture_controller, std::move(this->scenario), color_map);
+    WeaponSelector weapon_selector(renderer);
+    WorldView worldview(texture_controller, std::move(this->scenario), color_map, weapon_selector);
 
     bool running = true;
     auto start = high_resolution_clock::now();
     while (running) {
 
+        // TODO: pasarle weapon_selector al handle_events()??? y manejar desde ahi que arma se selecciono
         running = handle_events();
         update(worldview);
         worldview.render(renderer);
 
-        auto end = high_resolution_clock::now();
-        auto elapsed = duration_cast<duration<double>>(end - start).count();
-
-        auto rest = FRAME_RATE - elapsed;
-        if (rest < 0) {
-            auto behind = -rest;
-            auto lost = behind - fmod(behind, FRAME_RATE);
-            start += duration_cast<high_resolution_clock::duration>(duration<double>(lost));
-        } else {
-            std::this_thread::sleep_for(std::chrono::duration<double>(rest));
-        }
-
-        start += duration_cast<high_resolution_clock::duration>(duration<double>(FRAME_RATE));
+        manage_frame_rate(start);
     }
 
     return SUCCESS;
+}
+
+void Client::manage_frame_rate(time_point<high_resolution_clock>& start) {
+    auto end = high_resolution_clock::now();
+    auto elapsed = duration_cast<duration<double>>(end - start).count();
+
+    auto rest = FRAME_RATE - elapsed;
+    if (rest < 0) {
+        auto behind = -rest;
+        auto lost = behind - fmod(behind, FRAME_RATE);
+        start += duration_cast<high_resolution_clock::duration>(duration<double>(lost));
+    } else {
+        std::this_thread::sleep_for(std::chrono::duration<double>(rest));
+    }
+
+    start += duration_cast<high_resolution_clock::duration>(duration<double>(FRAME_RATE));
 }
 
 void Client::update(WorldView& worldview) {

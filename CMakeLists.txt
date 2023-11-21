@@ -110,6 +110,7 @@ set(CLIENT_SOURCE
 	src/client/graphics/crosshair.cpp
 	configuration/configuration.cpp
 	configuration/weapon_info.cpp
+	src/client/graphics/weapons/weapon_selector.cpp
 	)
 
 message("Headers generados: ${UIS_HEADERS}")
@@ -247,6 +248,7 @@ add_executable(hello_test
 		src/server/game/listeners/server_raycast_explosion_callback.cpp
 		configuration/configuration.cpp
 		configuration/weapon_info.cpp
+		src/server/scenario_filehandler.cpp
 )
 
 target_link_libraries(hello_test GTest::gtest_main GTest::gmock ${BOX2D_LIBRARY_PATH} yaml-cpp)

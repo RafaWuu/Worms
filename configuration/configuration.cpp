@@ -15,8 +15,20 @@ Configuration::Configuration() {
         fps = config["fps"].as<float>();
         load_weapon_info(config);
         load_server_states_info(config);
-    } catch (const YAML::Exception& e) {
-        std::cerr << "Error yaml: " << e.what() << std::endl;
+
+    } catch (const YAML::Exception& e1) {
+        try {
+            YAML::Node config = YAML::LoadFile("configuration/configuration.yaml");
+
+            fps = config["fps"].as<float>();
+            load_weapon_info(config);
+            load_server_states_info(config);
+
+        } catch (const YAML::Exception& e2) {
+            // If both attempts fail, print the error messages
+            std::cerr << "Error yaml: " << e1.what() << std::endl;
+            std::cerr << "Error yaml: " << e2.what() << std::endl;
+        }
     }
 }
 

@@ -11,6 +11,8 @@
 #include "entity.h"
 #include "player.h"
 #include "scenario_beam.h"
+#include "weapons/weapon_selector.h"
+
 // Contiene a los objetos renderizables (x ahora solo los gusanos/Players)
 class WorldView {
 private:
@@ -20,9 +22,11 @@ private:
     SDL2pp::Rect camera;
     void render_background(SDL2pp::Renderer& renderer);
 
+    WeaponSelector& weapon_selector;
+
 public:
     WorldView(TextureController& texture_controller, std::unique_ptr<Scenario> scenario,
-            std::map<uint16_t, SDL2pp::Color>& color_map);
+            std::map<uint16_t, SDL2pp::Color>& color_map, WeaponSelector& weapon_selector);
 
     void update(std::map<uint16_t, std::unique_ptr<EntityInfo>>& updated_info);
 
