@@ -9,17 +9,19 @@ TextureController::TextureController(SDL2pp::Renderer& renderer_): renderer(rend
     Uint32 blue_color_key = get_color_key(0x80, 0x80, 0xC0);
 
     std::map<AnimationState, std::string> textures_to_load = {
-        {AnimationState::WALKING, "wwalk2.png"},
-        {AnimationState::IDLE, "wblink1.png"},
-        {AnimationState::JUMPING, "wjumpd.png"},
-        {AnimationState::ROLLING, "wbackflp.png"},
-        {AnimationState::SCENARIO_BEAM_3M, "beam_3m.png"},
-        {AnimationState::SCENARIO_BEAM_6M, "beam_6m.png"},
+        {WALKING, "wwalk2.png"},
+        {IDLE, "wblink1.png"},
+        {JUMPING, "wjumpd.png"},
+        {ROLLING, "wbackflp.png"},
+        {FALLING, "wfall.png"},
+        {DEAD, "grave2.png"},
+        {SCENARIO_BEAM_3M, "beam_3m.png"},
+        {SCENARIO_BEAM_6M, "beam_6m.png"},
         //{AnimationState::SCENARIO_GROUND, "blue00.bmp"},
-        {AnimationState::BAZOOKA_IDLE, "wbazbak.png"}, // Quiza usar el mismo sprite para idle/aiming?
-        {AnimationState::BAZOOKA_AIMING, "wbaz.png"},
-        {AnimationState::CROSSHAIR, "crshairr.png"},
-        {AnimationState::SCENARIO_BACKGROUND, "background.png"},
+        {BAZOOKA_IDLE, "wbazbak.png"}, // Quiza usar el mismo sprite para idle/aiming?
+        {BAZOOKA_AIMING, "wbaz.png"},
+        {CROSSHAIR, "crshairr.png"},
+        {SCENARIO_BACKGROUND, "background.png"},
     };
 
     for (auto const& texture: textures_to_load) {

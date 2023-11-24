@@ -10,16 +10,24 @@
 
 class Scenario {
 private:
-
-    std::map<uint16_t, std::unique_ptr<EntityInfo>> entities_info;
+    // Worms, missiles, explosions, ...
+    std::map<uint16_t, std::unique_ptr<EntityInfo>> dynamic_entities_info;
+    // Beams & Ground (entities that should always be rendered, but aren't sent by the server every frame)
+    std::map<uint16_t, std::unique_ptr<EntityInfo>> static_entities_info;
 
 public:
-    Scenario(std::map<uint16_t, std::unique_ptr<EntityInfo>>&& entities_info,
-             float height, float width);
+    Scenario(std::map<uint16_t, std::unique_ptr<EntityInfo>>&& dynamic_entities_info,
+             std::map<uint16_t, std::unique_ptr<EntityInfo>>&& static_entities_info, float height,
+             float width);
 
     float width;
     float height;
-    std::map<uint16_t, std::unique_ptr<EntityInfo>>& get_entities_info();
+
+    // Return Worms, missiles, ...
+    std::map<uint16_t, std::unique_ptr<EntityInfo>>& get_dynamic_entities_info();
+
+    // Return Ground and Beams
+    std::map<uint16_t, std::unique_ptr<EntityInfo>>& get_static_entities_info();
 };
 
 #endif

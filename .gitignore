@@ -15,14 +15,14 @@ BtoA.dump
 build
 _deps/
 
-client
+/client
 client_autogen/
 client_test
 client_test_autogen/
 hello_test
 hello_test_autogen/
 lib/
-server
+/server
 server_autogen/
 ui_connectdialog.h
 ui_join_game_dialog.h

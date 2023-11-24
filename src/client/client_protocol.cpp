@@ -247,7 +247,10 @@ std::unique_ptr<Scenario> ClientProtocol::receive_scenario() {
     uint16_t entities_number;
     baseProtocol.recv_2byte_number(entities_number);
 
-    std::map<uint16_t, std::unique_ptr<EntityInfo>> entities;
+    // Ground & Beams
+    std::map<uint16_t, std::unique_ptr<EntityInfo>> static_entities;
+    // Worms
+    std::map<uint16_t, std::unique_ptr<EntityInfo>> dynamic_entities;
 
     uint16_t entity_id;
     uint8_t entity_type;
@@ -257,20 +260,20 @@ std::unique_ptr<Scenario> ClientProtocol::receive_scenario() {
         baseProtocol.recv_1byte_number(entity_type);
         switch (entity_type) {
             case ObjectType::BEAM:
-                entities.emplace(entity_id, receive_beam());
+                static_entities.emplace(entity_id, receive_beam());
                 break;
             case ObjectType::WORM:
-                entities.emplace(entity_id, receive_worm());
+                dynamic_entities.emplace(entity_id, receive_worm());
                 break;
             case ObjectType::GROUND:
-                entities.emplace(entity_id, receive_ground());
+                static_entities.emplace(entity_id, receive_ground());
                 break;
             default:
                 break;
         }
     }
 
-    return std::make_unique<Scenario>(std::move(entities), h, w);
+    return std::make_unique<Scenario>(std::move(dynamic_entities), std::move(static_entities), h, w);
 }
 
 std::shared_ptr<EstadoJuego> ClientProtocol::recv_msg() {

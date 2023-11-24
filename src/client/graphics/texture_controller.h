@@ -13,6 +13,8 @@ enum AnimationState {
     IDLE,
     JUMPING,
     ROLLING,
+    FALLING,
+    DEAD,
     // Scenario
     SCENARIO_BEAM_3M,
     SCENARIO_BEAM_6M,

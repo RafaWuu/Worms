@@ -33,11 +33,15 @@ public:
 private:
     TextureController& texture_controller;
     Animation an;
+
     bool facingLeft;
     bool moving;
     bool jumping;
     bool rolling;
     bool aiming;
+    bool falling;
+    bool idle;
+    bool dead;
     float aim_angle;
 
     int x;
