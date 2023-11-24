@@ -46,6 +46,8 @@ void Configuration::load_weapon_info(YAML::Node config) {
         bool countdown = weapon_node["countdown"].as<bool>(false);
         bool point_and_click = weapon_node["point_and_click"].as<bool>(false);
         bool affected_by_wind = weapon_node["affected_by_wind"].as<bool>(false);
+
+        int id = weapon_node["id"].as<int>();
         int ammo = weapon_node["ammo"].as<int>();
         int damage = weapon_node["damage"].as<int>(0);
         int radius = weapon_node["radius"].as<int>(0);
@@ -70,7 +72,7 @@ void Configuration::load_weapon_info(YAML::Node config) {
         }
 
         WeaponInfo weapon_info(scope, hand_to_hand, variable_power, countdown, point_and_click,
-                               affected_by_wind, ammo, damage, radius, main_explosion_damage,
+                               affected_by_wind, id, ammo, damage, radius, main_explosion_damage,
                                main_explosion_radius, fragment_damage, fragment_radius,
                                fragment_number);
 
@@ -126,35 +128,39 @@ bool Configuration::weapon_is_affected_by_wind(const std::string& weapon_name) {
     return weapons_info[weapon_name].affected_by_wind;
 }
 
-int Configuration::weapon_ammo(const std::string& weapon_name) {
+int Configuration::get_weapon_id(const std::string& weapon_name) {
+    return weapons_info[weapon_name].id;
+}
+
+int Configuration::get_weapon_ammo(const std::string& weapon_name) {
     return weapons_info[weapon_name].ammo;
 }
 
-int Configuration::weapon_damage(const std::string& weapon_name) {
+int Configuration::get_weapon_damage(const std::string& weapon_name) {
     return weapons_info[weapon_name].damage;
 }
 
-int Configuration::weapon_radius(const std::string& weapon_name) {
+int Configuration::get_weapon_radius(const std::string& weapon_name) {
     return weapons_info[weapon_name].radius;
 }
 
-int Configuration::weapon_main_explosion_damage(const std::string& weapon_name) {
+int Configuration::get_weapon_main_explosion_damage(const std::string& weapon_name) {
     return weapons_info[weapon_name].main_explosion_damage;
 }
 
-int Configuration::weapon_main_explosion_radius(const std::string& weapon_name) {
+int Configuration::get_weapon_main_explosion_radius(const std::string& weapon_name) {
     return weapons_info[weapon_name].main_explosion_radius;
 }
 
-int Configuration::weapon_fragment_damage(const std::string& weapon_name) {
+int Configuration::get_weapon_fragment_damage(const std::string& weapon_name) {
     return weapons_info[weapon_name].fragment_damage;
 }
 
-int Configuration::weapon_fragment_radius(const std::string& weapon_name) {
+int Configuration::get_weapon_fragment_radius(const std::string& weapon_name) {
     return weapons_info[weapon_name].fragment_radius;
 }
 
-int Configuration::weapon_fragment_number(const std::string& weapon_name) {
+int Configuration::get_weapon_fragment_number(const std::string& weapon_name) {
     return weapons_info[weapon_name].fragment_number;
 }
 

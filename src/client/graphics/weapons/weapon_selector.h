@@ -21,6 +21,9 @@ private:
 
     int height;
     int width;
+
+    int x;
+    int y;
 };
 
 #endif

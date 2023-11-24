@@ -39,6 +39,7 @@ public:
     void serialize_aim(float x, float y);
     void serialize_stop_aim();
     void serialize_fire();
+    void serialize_change_weapon(int weapon_id);
 
 
     std::shared_ptr<EstadoJuego> recv_msg();

@@ -2,6 +2,7 @@ fps: 45
 
 weapons:
   bazooka:
+    id: 0
     scope: true
     hand_to_hand: false
     variable_power: true
@@ -13,6 +14,7 @@ weapons:
     radius: 2
 
   mortar:
+    id: 1
     scope: true
     hand_to_hand: false
     variable_power: true
@@ -29,6 +31,7 @@ weapons:
     fragment_number: 6
   
   green_grenade:
+    id: 2
     scope: true
     hand_to_hand: false
     variable_power: true
@@ -40,6 +43,7 @@ weapons:
     radius: 2  
 
   red_grenade:
+    id: 3
     scope: true
     hand_to_hand: false
     variable_power: true
@@ -56,6 +60,7 @@ weapons:
     fragment_number: 6
 
   banana:
+    id: 4
     scope: true
     hand_to_hand: false
     variable_power: true
@@ -67,6 +72,7 @@ weapons:
     radius: 4
 
   holy_grenade:
+    id: 5
     scope: true
     hand_to_hand: false
     variable_power: true
@@ -78,6 +84,7 @@ weapons:
     radius: 8
 
   dynamite:
+    id: 6
     scope: false
     hand_to_hand: true
     variable_power: false
@@ -89,6 +96,7 @@ weapons:
     radius: 4
 
   baseball_bat:
+    id: 7
     scope: true
     hand_to_hand: true
     variable_power: false
@@ -99,6 +107,7 @@ weapons:
     damage: 10
 
   air_attack:
+    id: 8
     scope: false
     hand_to_hand: false
     countdown: false
@@ -109,6 +118,7 @@ weapons:
     radius: 2
 
   teleportation:
+    id: 9
     scope: false
     hand_to_hand: false
     variable_power: false

@@ -384,6 +384,16 @@ void ClientProtocol::serialize_power_attack() {
     baseProtocol.send_uint_vector(serialized_command);
 }
 
+void ClientProtocol::serialize_change_weapon(int weapon_id) {
+    uint8_t weapon = weapon_id;
+
+    std::vector<uint8_t> serialized_command = {GAME_SENDING, CHANGE_WEAPON_CODE, worm_id, weapon};
+
+    getLog().write("Cliente elige arma %hhu\n", weapon);
+
+    baseProtocol.send_uint_vector(serialized_command);    
+}
+
 Log& ClientProtocol::getLog() {
     static Log log_("../log/clientprotocol_log.txt");
     return log_;

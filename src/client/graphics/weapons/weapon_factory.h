@@ -1,11 +1,9 @@
 #include "weapon.h"
 #include "bazooka.h"
+#include "configuration/configuration.h"
+#include "../../../common/common_weapon_constants.h"
 
 #include <memory>
-
-enum Weapons {
-    BAZOOKA = 1,
-};
 
 class WeaponFactory {
 public:

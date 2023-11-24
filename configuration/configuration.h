@@ -74,22 +74,23 @@ public:
     bool weapon_is_affected_by_wind(const std::string& weapon_name);
 
     // returns -1 if ammo is infinite
-    int weapon_ammo(const std::string& weapon_name);
+    int get_weapon_ammo(const std::string& weapon_name);
+    int get_weapon_id(const std::string& weapon_name);
     // returns 0 if weapon has main a explosion & fragments, you need to check their respective
     // damages
-    int weapon_damage(const std::string& weapon_name);
+    int get_weapon_damage(const std::string& weapon_name);
     // returns 0 if weapon has main a explosion & fragments, you need to check their respective
     // radiuses
-    int weapon_radius(const std::string& weapon_name);
+    int get_weapon_radius(const std::string& weapon_name);
     // returns 0 if there's no explosion
-    int weapon_main_explosion_damage(const std::string& weapon_name);
+    int get_weapon_main_explosion_damage(const std::string& weapon_name);
     // returns 0 if there's no explosion
-    int weapon_main_explosion_radius(const std::string& weapon_name);
+    int get_weapon_main_explosion_radius(const std::string& weapon_name);
     // returns 0 if there's no explosion/fragments
-    int weapon_fragment_damage(const std::string& weapon_name);
+    int get_weapon_fragment_damage(const std::string& weapon_name);
     // returns 0 if there's no explosion/fragments
-    int weapon_fragment_radius(const std::string& weapon_name);
-    int weapon_fragment_number(const std::string& weapon_name);
+    int get_weapon_fragment_radius(const std::string& weapon_name);
+    int get_weapon_fragment_number(const std::string& weapon_name);
 
 
     /* SERVER STATES */

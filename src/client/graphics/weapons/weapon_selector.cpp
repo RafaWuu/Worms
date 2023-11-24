@@ -12,14 +12,13 @@ WeaponSelector::WeaponSelector(SDL2pp::Renderer& renderer) {
 
     height = texture->GetHeight();
     width = texture->GetWidth();
+
+    // Posicion del listado de armas
+    x = (SCREEN_WIDTH - texture->GetWidth()) / 2; 
+    y = 0; 
 }
 
 void WeaponSelector::render(SDL2pp::Renderer& renderer) {
-    
-    // Posicion del listado de armas
-    int x = (SCREEN_WIDTH - texture->GetWidth()) / 2; 
-    int y = SCREEN_HEIGHT - texture->GetHeight(); 
-
     // Agrego un rectangulo blanco detras para que quede como un borde alrededor del listado
     int border_width = 4;
     SDL_Color border_color = {255, 255, 255, 255}; 
@@ -42,14 +41,14 @@ bool WeaponSelector::mouse_inside(int x, int y) {
     return inside_x && inside_y;
 }
 
-int WeaponSelector::get_weapon_index(int x, int y) {
-    int sprite_x = (SCREEN_WIDTH - width) / 2;
-    int sprite_y = SCREEN_HEIGHT - height;
+int WeaponSelector::get_weapon_index(int mouse_x, int mouse_y) {
+    int sprite_x = x;
+    int sprite_y = y;
     
     int num_weapons = texture->GetWidth() / texture->GetHeight();
     double width_per_weapon = texture->GetWidth() / num_weapons;
 
-    int mouse_position = x - sprite_x;
+    int mouse_position = mouse_x - sprite_x;
 
     int weapon_index = mouse_position / width_per_weapon;
 

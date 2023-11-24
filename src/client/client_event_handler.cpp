@@ -14,6 +14,7 @@
 #include "commands/client_rollback.h"
 #include "commands/client_stop_aim.h"
 #include "commands/client_stop_moving.h"
+#include "commands/change_weapon.h"
 
 #include "graphics/weapons/weapon_selector.h"
 
@@ -56,8 +57,9 @@ std::shared_ptr<Command> EventHandler::handle(const SDL_Event& event, WeaponSele
     if (event.type == SDL_MOUSEBUTTONDOWN) {
         if (event.button.button == SDL_BUTTON_LEFT) {
             if (weapon_selector.mouse_inside(event.button.x, event.button.y)) {
-                int weapon_index = weapon_selector.get_weapon_index(event.button.x, event.button.y);
-                std::cout << "Weapon Index: " << weapon_index << std::endl;
+                int weapon_id = weapon_selector.get_weapon_index(event.button.x, event.button.y);
+                printf("Cliente elige arma %hhu\n", weapon_id);
+                //return change_weapon(weapon_id); 
             }
             if (!aiming)
                 return aim(event.button.x, event.button.y);
@@ -82,6 +84,10 @@ std::shared_ptr<Command> EventHandler::handle(const SDL_Event& event, WeaponSele
 
 
     return nullptr;
+}
+
+std::shared_ptr<Command> EventHandler::change_weapon(int weapon_id) {
+    return std::make_shared<ChangeWeapon>(weapon_id);
 }
 
 std::shared_ptr<Command> EventHandler::move_left() {

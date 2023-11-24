@@ -1,7 +1,7 @@
 #include "weapon_info.h"
 
 WeaponInfo::WeaponInfo(bool scope, bool hand_to_hand, bool variable_power, bool countdown,
-                       bool point_and_click, bool affected_by_wind, int ammo, int damage,
+                       bool point_and_click, bool affected_by_wind, int index, int ammo, int damage,
                        int radius, int main_explosion_damage, int main_explosion_radius, int fragment_damage,
                        int fragment_radius, int fragment_number):
         scope(scope),
@@ -10,6 +10,7 @@ WeaponInfo::WeaponInfo(bool scope, bool hand_to_hand, bool variable_power, bool 
         countdown(countdown),
         point_and_click(point_and_click),
         affected_by_wind(affected_by_wind),
+        id(id),
         ammo(ammo),
         damage(damage),
         radius(radius),

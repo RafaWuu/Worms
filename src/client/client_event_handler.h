@@ -23,6 +23,7 @@ private:
     std::shared_ptr<Command> stop_moving();
     std::shared_ptr<Command> jump();
     std::shared_ptr<Command> rollback();
+    std::shared_ptr<Command> change_weapon(int weapon_id);
     bool moving_right;
     bool moving_left;
     bool aiming;

@@ -4,9 +4,12 @@
 
 #include "bazooka_proyectil_info.h"
 
+#include "configuration/configuration.h"
+#include "common_weapon_constants.h"
+
 BazookaProyectilInfo::BazookaProyectilInfo(const BazookaProyectil& proyectil):
         id(proyectil.get_id()) {
-    type = 1;
+    type = BAZOOKA_ID;
     x = proyectil.body->GetPosition().x;
     y = proyectil.body->GetPosition().y;
 }
