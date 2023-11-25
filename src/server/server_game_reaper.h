@@ -14,6 +14,7 @@ private:
     LobbyMonitor& lobby;
     Queue<uint16_t>& reap_queue;
 
+    // utilizar el atomic_bool que viene de la clase padre (aca y en todos lados en donde se necesite)
     std::atomic<bool> is_alive;
     void kill_all();
 

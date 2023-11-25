@@ -10,6 +10,17 @@
 #include "server_state.h"
 
 
+/*
+    Creo que estaban en buen camino a tener un patron state.
+    Cada estado deberia tener un metodo que posiblmente lo lleve a cualquier otro estado
+    no deberia en ese caso manejar un estado a traves de un state manager que lea flags
+    mas bien, le pido a un estado transicionar a otro 
+    (en codigo, me devuelve un puntero a ese estado o nullptr si la transicion no se puede dar).
+
+
+    Esto esta bien pero se los marco como posibilidad de mejora.
+*/
+
 class AliveState: public WormState {
 public:
     AliveState();

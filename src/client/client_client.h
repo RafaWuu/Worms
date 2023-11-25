@@ -24,6 +24,7 @@
 
 class Client {
 private:
+    // remover estos atributos si solo se usan para construir el socket
     std::string hostname;
     std::string servicename;
 

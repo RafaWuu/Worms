@@ -8,6 +8,11 @@
 #include <fstream>
 #include <mutex>
 #include <string>
+
+
+// Okay, capaz era preferible utilizar `syslog` (man syslog)
+// tiene algunos beneficios, como automaticamente poner fecha y hora
+// niveles de log (WARNING, DEBUG, ERROR, etc)
 class Log {
 private:
     std::mutex mtx;

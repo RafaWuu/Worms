@@ -13,10 +13,14 @@ LobbyRequestNewGame::LobbyRequestNewGame(const std::string& s): scenario(s) {}
 
 std::shared_ptr<Game> LobbyRequestNewGame::execute(LobbyMonitor& lobby, ServerProtocol& gp,
                                                    uint16_t client_id) {
-
+    // weird que necesite crear y ademas unirme a la partida
+    // no se si hay una explicacion pero entenderia que quien crea la partida 
+    // automaticamente se une
+    // de todas maneras es un minor
     uint16_t id = lobby.create_game(this->scenario, client_id);
     auto game = lobby.join_game(client_id, id);
 
+    // minor: un nombre mas apropiado seria LobbyResponse (Request/Response)
     auto answer = LobbyAnswerGame(id);
     answer.send(gp);
 

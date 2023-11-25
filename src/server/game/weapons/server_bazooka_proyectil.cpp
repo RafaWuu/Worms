@@ -70,4 +70,7 @@ void BazookaProyectil::on_proyectil_impact(GameWorld& world) {
     this->is_dead = true;
 }
 
+// esto rompe (por algun motivo) si el proyectil NO es destruido antes de que termine el juego
+// para replicarlo, disparen afuera del mapa (el proyectil no se destruye porque no hace contacto)
+// y cierren el cliente.
 BazookaProyectil::~BazookaProyectil() { body->GetWorld()->DestroyBody(body); }

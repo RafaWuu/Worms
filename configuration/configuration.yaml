@@ -145,7 +145,7 @@ server:
     firing:
       offset_x: 1.5
       offset_y: 0.2
-      max_vel: 12 # maxima velocidad lineal a la que salen los disparos (distinto para cada arma?)
+      max_vel: 12 # maxima velocidad lineal a la que salen los disparos (distinto para cada arma?) -> mientras mas configurable, mejor
     powering:
       seconds: 2 # cuanto tiempo se necesita para llegar a la velocidad maxima
 

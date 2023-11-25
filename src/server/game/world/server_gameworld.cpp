@@ -22,6 +22,7 @@
 GameWorld::GameWorld(const std::string& scenario_name):
         b2_world(b2Vec2(.0, -9.8)), worm_map(), entities_map(), file_handler(), listener(*this) {
 
+    // usar smart pointers
     bazooka = new Weapon(*this);
 
     entity_id = 0;
@@ -49,6 +50,7 @@ void GameWorld::create_short_beam(float x, float y, float angle) {
 }
 
 void GameWorld::step(int steps) {
+    // relacionar la velocidad de step al tickrate que definen por configuracion
     for (int32 i = 0; i < steps; ++i) {
         // Instruct the world to perform a single step of simulation.
         // It is generally best to keep the time step and iterations fixed.
@@ -69,11 +71,12 @@ void GameWorld::update_entities() {
     }
 }
 
-void GameWorld::set_clients_to_worms(std::vector<uint16_t> client_vec) {
+void GameWorld::set_clients_to_worms(const std::vector<uint16_t>& client_vec) {
     int i = 0;
 
     for (auto& worm: worm_map) {
         worm.second->set_client_id(client_vec[i % client_vec.size()]);
+        // y el logger?
         std::cout << "Worm :" << worm.first << ", Client: " << client_vec[i % client_vec.size()]
                   << "\n";
         i++;
@@ -82,9 +85,7 @@ void GameWorld::set_clients_to_worms(std::vector<uint16_t> client_vec) {
 
 Worm& GameWorld::get_worm(uint8_t worm_id, uint16_t client_id) {
     auto it = worm_map.find(worm_id);
-    if (it == worm_map.end())
-        throw InvalidWormIdGameError(client_id);
-    if (!it->second->validate_client(client_id))
+    if (it == worm_map.end() || !it->second->validate_client(client_id))
         throw InvalidWormIdGameError(client_id);
 
     return *it->second;
@@ -97,6 +98,7 @@ std::map<uint16_t, std::shared_ptr<GameObjectInfo>> GameWorld::get_entities_info
         map.emplace(e.first, e.second->get_status());
     }
 
+    // no hace falta castear el retorno con std::move (revisar copy elision)
     return std::move(map);
 }
 
@@ -113,10 +115,13 @@ void GameWorld::get_dimensions(float* h, float* w) {
     *h = this->height;
     *w = this->width;
 }
+
+// evitar spanglish
 void GameWorld::add_proyectil(std::shared_ptr<BazookaProyectil> proyectil) {
     entities_map.emplace(entity_id++, proyectil);
 }
 
+// remover codigo comentado
 //  limit 4to cuadrante x>=0 , y<=0
 void GameWorld::set_dimensions(float h, float w) {
     width = w;
@@ -154,6 +159,7 @@ void GameWorld::set_dimensions(float h, float w) {
 
 void GameWorld::add_explosion(b2Body& proyectil, float radius) {
     b2Vec2 center = proyectil.GetPosition();
+    // los numeros magicos a macros o constantes
     int num_rays = 15;
     float m_blastPower = 30;
     for (int i = 0; i < num_rays; i++) {
@@ -172,7 +178,7 @@ void GameWorld::add_explosion(b2Body& proyectil, float radius) {
     }
 }
 
-void GameWorld::apply_blast_impulse(b2Body* body, Worm* worm, b2Vec2 blastCenter, b2Vec2 applyPoint,
+void GameWorld::apply_blast_impulse(b2Body* body, Worm* worm, const b2Vec2& blastCenter, const b2Vec2& applyPoint,
                                     float blastPower) {
     b2Vec2 blastDir = applyPoint - blastCenter;
     float distance = blastDir.Normalize();
@@ -184,7 +190,10 @@ void GameWorld::apply_blast_impulse(b2Body* body, Worm* worm, b2Vec2 blastCenter
     impulseMag = b2Min(impulseMag, 500.0f);
 
     body->ApplyLinearImpulse(impulseMag * blastDir, applyPoint, true);
+    // 50 -> numero magico -> configurable
     worm->get_hit(50 * invDistance);
 }
 
-GameWorld::~GameWorld() { delete bazooka; }
+GameWorld::~GameWorld() {
+    delete bazooka;
+}

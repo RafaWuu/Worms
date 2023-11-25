@@ -26,7 +26,7 @@ void Acceptor::run() {
             reap_dead();
         } catch (ClosedSocket& e) {
             if (is_alive) {
-                throw(e);  // Inesperado, dejo que run_expecting loggee
+                throw;  // Inesperado, dejo que run_expecting loggee
             }
         }
     }

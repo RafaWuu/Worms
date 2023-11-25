@@ -12,7 +12,7 @@
 //
 LobbyMonitor::LobbyMonitor(Queue<uint16_t>& reap_queue): reap_queue(reap_queue), id(1) {}
 
-uint16_t LobbyMonitor::create_game(std::string scenario, uint16_t client_id) {
+uint16_t LobbyMonitor::create_game(const std::string& scenario, uint16_t client_id) {
     std::lock_guard<std::mutex> lock(mutex);
     games_map.emplace(id, std::make_shared<Game>(id, scenario, client_id, reap_queue));
     this->id++;
@@ -31,7 +31,9 @@ std::shared_ptr<Game> LobbyMonitor::join_game(uint16_t client_id, uint16_t game_
     return it->second;
 }
 
-std::vector<GameInfo> LobbyMonitor::list_games() {
+std::vector<GameInfo> LobbyMonitor::list_games() const {
+    // ya saben que cantidad de juegos hay
+    // pueden preallocar el vector para evitar posibles resizings
     std::vector<GameInfo> v{};
 
     for (auto& game: games_map) {

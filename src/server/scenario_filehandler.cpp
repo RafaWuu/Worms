@@ -1,3 +1,5 @@
+// saquen estos comentarios automaticos del ide (o pongan uno que represente al grupo)
+
 //
 // Created by xguss on 21/11/23.
 //
@@ -29,6 +31,7 @@ ScenarioFileHandler::ScenarioFileHandler() {
 }
 
 bool ScenarioFileHandler::scenario_exists(const std::string& name) {
+    // strings hardcodeados a constantes o macros en donde sea sencillo de cambiar/encontrar
     for (const auto& scenario: config["scenarios"]) {
         std::string scenario_name = scenario.first.as<std::string>();
         if (scenario_name == name)

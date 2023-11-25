@@ -29,5 +29,7 @@ public:
     virtual ObjectType get_id() const = 0;
     virtual std::unique_ptr<GameObjectInfo> get_status() const = 0;
     virtual void update(b2World& world);
+    // recuerden tener destructores virtuales cuando usen herencia!
+    virtual ~GameObject() = default;
 };
 #endif  // WORMS_SERVER_GAMEOBJECT_H

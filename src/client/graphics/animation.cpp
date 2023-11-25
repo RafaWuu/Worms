@@ -25,6 +25,7 @@ Animation::Animation(std::shared_ptr<SDL2pp::Texture> texture, TextureController
 Animation::~Animation() {}
 
 void Animation::update(float dt) {
+    // manejar todo en base al frame actual y no al framerate (de eso se encargará el game loop)
     this->elapsed += dt;
     /* checks if the frame should be updated based on the time elapsed since the last update */
     while (this->elapsed > FRAME_RATE) {

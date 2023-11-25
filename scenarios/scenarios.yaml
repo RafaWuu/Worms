@@ -3,6 +3,10 @@ beam_config:
   short_width: 3
   height: 0.8
 
+
+# Tengan un archivo por escenario, asi les es mas sencillo el parseo
+# van a tener que recorrer este directorio para buscar todos los archivos .yml/.yaml 
+# hint: std::filesystem
 scenarios:
     basic:
         width: 20.0
@@ -14,14 +18,22 @@ scenarios:
               pos_y:  10.0
               angle: 0.0
             -
+              angle: 0.0
               type: large
               pos_x: 2.0
               pos_y: 5.0
-              angle: 0.0
+            -
+              angle: 25.0
+              type: short
+              pos_x: 6.0
+              pos_y: 7.0
         worms:
             -
               pos_x: 2.0
               pos_y: 0.0
             -
               pos_x: 15.0
+              pos_y: 0.0
+            -
+              pos_x: 3.0
               pos_y: 0.0

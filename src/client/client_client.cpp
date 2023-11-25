@@ -36,7 +36,8 @@ Client::Client(const std::string& hostname, const std::string& servicename):
         messages_to_send(1000),
         messages_received(1000),
         event_handler() {
-
+    
+    // smart pointers
     sender = new ClientSender(protocol, messages_to_send);
     receiver = new ClientReceiver(protocol, messages_received);
 
@@ -161,7 +162,10 @@ void Client::manage_frame_rate(time_point<high_resolution_clock>& start) {
 
 void Client::update(WorldView& worldview) {
     std::shared_ptr<EstadoJuego> estado;
-    if (messages_received.try_pop(estado)) {
+    // ojo que si el server envia eventos mas rapido de lo que el cliente los procesa
+    // vamos a tener input lag
+    // procesar hasta que la cola se vacie
+    while (messages_received.try_pop(estado)) {
         std::map<uint16_t, std::unique_ptr<EntityInfo>>& updated_states =
                 estado->get_updated_info();
         worldview.update(updated_states);

@@ -270,7 +270,7 @@ std::unique_ptr<Scenario> ClientProtocol::receive_scenario() {
         }
     }
 
-    return std::make_unique<Scenario>(std::move(entities), h, w);
+    return std::make_unique<Scenario>(entities, h, w);
 }
 
 std::shared_ptr<EstadoJuego> ClientProtocol::recv_msg() {

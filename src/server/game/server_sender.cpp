@@ -13,6 +13,8 @@ void Sender::run() {
     while (is_alive) {
         try {
             auto status = outgoing_q.pop();
+            // un nombre mas apropiado seria send
+            // o separar serializacion y send
             status->serialize(game_protocol);
 
         } catch (ClosedSocket& e) {

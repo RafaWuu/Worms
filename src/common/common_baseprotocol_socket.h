@@ -17,12 +17,12 @@ class SocketBaseProtocol: public BaseProtocol {
 private:
     Socket skt;
     void recv_throw(void* v, size_t n);
-    void send_throw(void* v, size_t n);
+    void send_throw(const void* v, size_t n);
 
 public:
     explicit SocketBaseProtocol(Socket socket);
     ~SocketBaseProtocol() override = default;
-    // devuelven si el socket fue cerrado
+    // devuelven si el socket fue cerrado -> mentira
     void send_4byte_number(uint32_t number) override;
     void send_2byte_number(uint16_t number) override;
     void send_1byte_number(uint8_t number) override;

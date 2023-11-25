@@ -22,6 +22,8 @@ void Server::run() {
     acc.start();
     game_reaper.start();
     while (std::cin.get() != CLOSE_CHAR) {}
+    // minor: para mantener la simetría y ser purista de RAII, metan el .kill()/.join() del acceptor y del game_reaper aqui
+    // o, si prefieren, starteen tanto acceptor como reaper en el constructor y destruyanlos en el destructor.
 }
 
 Server::~Server() {

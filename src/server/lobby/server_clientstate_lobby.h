@@ -15,6 +15,7 @@
 class LobbyClientState: public ClientState {
 private:
     LobbyMonitor& lobby;
+    // tiene sentido que el lobby tenga un puntero (posiblemente nulo) al game?
     std::shared_ptr<Game> game;
 
 public:

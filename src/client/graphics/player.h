@@ -48,6 +48,8 @@ private:
 
     WeaponFactory weapon_factory;
     SDL2pp::Color color;
+    // asegurarse que solo el player (nosotros) tenga crosshair
+    // no quiero ver el crosshair de un worm que no controlo
     Crosshair crosshair;
 };
 

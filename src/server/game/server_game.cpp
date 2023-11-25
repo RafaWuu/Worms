@@ -16,7 +16,7 @@
 #include "server_error.h"
 #include "server_statusbroadcast_monitor.h"
 
-Game::Game(uint16_t game_id, std::string& scenario, uint16_t owner_id_,
+Game::Game(uint16_t game_id, const std::string& scenario, uint16_t owner_id_,
            Queue<uint16_t>& reap_queue):
         game_world(scenario),
         game_id(game_id),
@@ -34,7 +34,9 @@ Game::Game(uint16_t game_id, std::string& scenario, uint16_t owner_id_,
 }
 
 void Game::run() {
-
+    // el servidor no deberia estar necesariamente sincronizado con el cliente
+    // ademas hay un tema de semantica que no esta bueno
+    // frames refiere a imagenes, en el server nos referimos a "tick" (tickrate, genericamente)
     auto rate = 1.0 / Configuration::get_instance().get_fps();
 
     while (is_alive) {
@@ -133,4 +135,4 @@ void Game::exit_game(uint16_t client_id) {
         owner_id = id_lists[0];
 }
 
-GameInfo Game::get_info() const { return std::move(GameInfo(*this)); }
+GameInfo Game::get_info() const { return GameInfo(*this); }

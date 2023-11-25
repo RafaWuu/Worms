@@ -33,6 +33,12 @@ std::shared_ptr<SDL2pp::Texture> TextureController::get_texture(AnimationState s
 
 // Color del pixel que hay que hacer transparente
 static Uint32 get_color_key(uint8_t r, uint8_t g, uint8_t b) {
+    // https://cmake.org/cmake/help/latest/command/add_compile_definitions.html#command:add_compile_definitions
+    // agregan una compile_time_definition (una MACRO) que apunte al directorio base de assets
+    // esto es CRUCIAL para atacar el problema de la instalacion
+    // esa macro se define en tiempo de build y apuntará a distintos lugares, segun esté instalando la version de release
+    // o solamente esté buildeando la version de development
+
     // Medio feo lo del alternative_path, seguro hay una manera mejor de hacerlo
     std::string path = "../assets/wwalk2.png";
     std::string alternative_path = "assets/wwalk2.png";

@@ -25,6 +25,7 @@ void Player::update_info(EntityInfo* info) {
 
     health = worm->get_health();
 
+    // esta conversion deberia hacerse a nivel protocolo!
     x = worm->get_pos_x()*SCREEN_WIDTH/20 ;
     y = - worm->get_pos_y()*SCREEN_HEIGHT/20;
 
@@ -33,7 +34,8 @@ void Player::update_info(EntityInfo* info) {
     aim_angle = worm->get_aim_angle();
 
     current_weapon = weapon_factory.create_weapon(worm->get_current_weapon());
-    
+
+    // el state podria ser un poquito mas high level que una mascara de bits (eso es mas del protocolo que otra cosa) 
     // Hay que cambiar la textura si empieza a moverse o para de moverse
     bool is_moving_now = (new_state & 0x0004) ? true : false;
     bool is_jumping_now = (new_state & 0x0008) != 0;

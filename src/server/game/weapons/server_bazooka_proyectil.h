@@ -24,7 +24,7 @@ public:
     friend class BazookaProyectilInfo;
 
     explicit BazookaProyectil(b2World* world, b2Vec2& pos, float angle);
-    ~BazookaProyectil();
+    ~BazookaProyectil() override;
     BazookaProyectil(const BazookaProyectil&) = delete;
     BazookaProyectil& operator=(const BazookaProyectil&) = delete;
 

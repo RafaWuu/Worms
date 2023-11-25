@@ -27,6 +27,7 @@ void WorldView::update(std::map<uint16_t, std::unique_ptr<EntityInfo>>& updated_
     for (auto& info: updated_info) {
         auto it = entities.find(info.first);
         if (it != entities.end()) {
+            // deberian recibir el frame actual (un entero) y no el framerate
             it->second->update(FRAME_RATE);
             it->second->update_info(info.second.get());
 
@@ -40,6 +41,8 @@ void WorldView::render(SDL2pp::Renderer& renderer) {
     renderer.SetDrawColor(SDL2pp::Color(0, 0, 0, 255));
     renderer.Clear();
     render_background(renderer);
+    // Optimizar: seguramente haya entidades en el mapa que no esten en rango de camara
+    // renderizar solo las que el cliente puede ver, sino, evitar
     for (auto& entity: entities) {
         entity.second->render(renderer, camera);
     }

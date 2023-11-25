@@ -20,6 +20,9 @@ Client::Client(uint16_t id, Socket socket, LobbyMonitor& lobby):
 
 void Client::run() {
     while (is_alive) {
+        // Excelente, a esto me referia cuando les comente lo de los estados del cliente!
+        // bonus points (si llegan solamente!!!) -> pueden tener un estado ContinuePlaying que pueda volver a mandarlos al Lobby o desconectarlos
+        // segun lo que el cliente elija
         this->state = this->state->run();
         if (!this->state)
             is_alive = false;

@@ -12,6 +12,7 @@
 
 #include "graphics/weapons/weapon_selector.h"
 
+// LibError es para errores del kernel (los que settean errno)
 struct QuitGameClientInput: public LibError {
     QuitGameClientInput(): LibError(EBADRQC, "Exiting game") {}
 };

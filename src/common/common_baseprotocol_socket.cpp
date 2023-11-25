@@ -35,6 +35,15 @@ void SocketBaseProtocol::recv_4byte_number(uint32_t& number) {
 void SocketBaseProtocol::send_4byte_float(float number) {
     float a = number;
 
+    // MMM, undefined behavior
+    // para mandar flotantes, usen aritmetica de punto fijo 
+
+    // ejemplo, si quiero enviar 1.234 -> multiplico por un numero fijo (ej: 1000)
+    // 1.234 * 1000 = 1234.0 
+    // casteo a un integer type (ej: uint32_t)
+    // y envio
+    // al recibir del otro lado, voy a tener que dividir por el numero fijo 
+    // acarrean un pequeño error, pero es insignificante
     uint32_t num = htonl(*((uint32_t*)((char*)(&a))));
     send_throw(&num, sizeof(uint32_t));
 }
@@ -84,7 +93,7 @@ void SocketBaseProtocol::recv_throw(void* v, size_t n) {
         throw ClosedSocket();
 }
 
-void SocketBaseProtocol::send_throw(void* v, size_t n) {
+void SocketBaseProtocol::send_throw(const void* v, size_t n) {
     bool was_closed = false;
 
     skt.sendall(v, n, &was_closed);

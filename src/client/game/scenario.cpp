@@ -3,7 +3,7 @@
 #include <utility>
 
 
-Scenario::Scenario(std::map<uint16_t, std::unique_ptr<EntityInfo>>&& entities_info,
+Scenario::Scenario(std::map<uint16_t, std::unique_ptr<EntityInfo>>& entities_info,
                    float height, float width) :
         entities_info(std::move(entities_info)) {
     this->height = height;

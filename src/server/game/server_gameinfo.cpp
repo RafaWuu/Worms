@@ -10,6 +10,7 @@
 GameInfo::GameInfo(const Game& game): scenario(game.name) {
     id = game.game_id;
     players = game.id_lists.size();
+    // TODO: dehardcodear (y permitir mas de dos jugadores)
     max_players = 2;
     status = game.had_started;
 }

@@ -38,7 +38,7 @@ private:
 
 public:
     friend class GameInfo;
-    explicit Game(uint16_t game_id, std::string& scenario, uint16_t owner_id_,
+    explicit Game(uint16_t game_id, const std::string& scenario, uint16_t owner_id_,
                   Queue<uint16_t>& reap_queue);
     Game(const Game&) = delete;
     Game& operator=(const Game&) = delete;
