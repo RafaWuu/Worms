@@ -18,6 +18,10 @@ scenarios:
               pos_x: 2.0
               pos_y: 5.0
               angle: 0.0
+            - type: large
+              pos_x: 9.0
+              pos_y: 10.0
+              angle: 0.0
         worms:
             -
               pos_x: 2.0

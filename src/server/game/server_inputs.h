@@ -17,7 +17,7 @@ enum Input {
     Power = GAME_POWER,
     DirAttack = GAME_DATTACK,
     CountDown = GAME_COUNTDOWN,
-    SelectGun = GAME_GUNSELECT
+    ChangeWeapon = GAME_GUNSELECT
 };
 
 enum MoveEnum { MoveLeft = 1, MoveRight = 2, StopMove = 3 };

@@ -94,8 +94,8 @@ set(CLIENT_SOURCE
 	src/client/commands/client_aim.cpp
 	src/client/commands/client_stop_aim.cpp
 	src/client/commands/client_fire.cpp
-	src/client/game/proyectil.cpp
-	src/client/graphics/proyectil_entity.cpp
+	src/client/game/projectile.cpp
+	src/client/graphics/projectile_entity.cpp
 	src/common/common_baseprotocol.cpp
 	src/common/common_baseprotocol.h
 	src/client/lobby/gameinfo.cpp
@@ -165,14 +165,28 @@ add_executable(server
 	src/server/game/entities/server_ground_info.cpp
 	src/server/game/entities/server_worm_sensor_info.cpp
 	src/server/game/weapons/server_weapon.cpp
-	src/server/game/weapons/server_bazooka_proyectil.cpp
-	src/server/game/weapons/bazooka_proyectil_info.cpp
+		src/server/game/projectiles/server_projectile.cpp
+		src/server/game/projectiles/server_projectile_info.cpp
 	src/server/server_game_reaper.cpp
 	src/server/game/listeners/server_raycast_explosion_callback.cpp
 	configuration/configuration.cpp
 	configuration/weapon_info.cpp
 		src/server/scenario_filehandler.cpp
-		src/server/scenario_filehandler.h
+        src/server/game/weapons/server_weapon_bazooka.cpp
+		src/server/game/weapons/server_weapon_grenade.cpp
+		src/server/game/projectiles/server_projectile.cpp
+		src/server/game/projectiles/server_projectile_effect.cpp
+		src/server/game/projectiles/server_projectile_effect_defaultexplosion.cpp
+		src/server/game/projectiles/server_projectile_effect_noeffect.cpp
+		src/server/game/weapons/server_weapon_factory.cpp
+		src/server/game/weapons/server_weapon_mortar.cpp
+		src/server/game/projectiles/server_projectile_effect_fragmentedexplosion.cpp
+		src/server/game/weapons/server_weapon_info.cpp
+		src/server/game/weapons/server_weapon_info_bazooka.cpp
+		src/server/game/weapons/server_weapon_mortar_info.cpp
+		src/server/game/weapons/server_weapon_info_grenade.cpp
+		src/server/game/weapons/server_weapon_redgrenade.cpp
+		src/server/game/weapons/server_weapon_info_redgrenade.cpp
 )
 
 target_include_directories(client PUBLIC
@@ -243,13 +257,15 @@ add_executable(hello_test
 		src/server/game/entities/server_ground_info.cpp
 		src/server/game/entities/server_worm_sensor_info.cpp
 		src/server/game/weapons/server_weapon.cpp
-		src/server/game/weapons/server_bazooka_proyectil.cpp
-		src/server/game/weapons/bazooka_proyectil_info.cpp
+		src/server/game/projectiles/server_projectile.cpp
+		src/server/game/projectiles/server_projectile_info.cpp
 		src/server/server_game_reaper.cpp
 		src/server/game/listeners/server_raycast_explosion_callback.cpp
 		configuration/configuration.cpp
 		configuration/weapon_info.cpp
 		src/server/scenario_filehandler.cpp
+        src/server/game/weapons/server_weapon_bazooka.cpp
+        src/server/game/weapons/server_weapon_bazooka.h
 )
 
 target_link_libraries(hello_test GTest::gtest_main GTest::gmock ${BOX2D_LIBRARY_PATH} yaml-cpp)

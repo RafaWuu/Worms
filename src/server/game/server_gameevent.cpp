@@ -83,3 +83,13 @@ void GameEventPowerStop::execute(EventHandler& e) {
     Worm& worm = e.get_worm(this->worm_id, this->client_id);
     worm.stop_power();
 }
+
+
+GameEventChangeWeapon::GameEventChangeWeapon(uint16_t client_id, uint8_t worm_id,
+                                             uint8_t weapon_id):
+        worm_id(worm_id), weapon_id(weapon_id), GameEvent(client_id) {}
+
+void GameEventChangeWeapon::execute(EventHandler& e) {
+    Worm& worm = e.get_worm(this->worm_id, this->client_id);
+    worm.change_weapon(weapon_id);
+}

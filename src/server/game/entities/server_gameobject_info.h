@@ -12,6 +12,7 @@ class ServerProtocol;
 class GameObjectInfo {
 
 public:
+    virtual ~GameObjectInfo() = default;
     virtual void serialize_status(BaseProtocol& gp);
 
     virtual void serialize_scenario(BaseProtocol& gp);

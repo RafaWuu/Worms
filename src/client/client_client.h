@@ -1,26 +1,26 @@
 #ifndef CLIENT_CLIENT_H
 #define CLIENT_CLIENT_H
 
+#include <chrono>
 #include <map>
 #include <memory>
 #include <string>
 
 #include <SDL2pp/SDL2pp.hh>
 #include <string.h>
-#include <chrono>
 
 #include "../common/common_queue.h"
 #include "../common/common_socket.h"
 #include "commands/client_command.h"
 #include "commands/client_jump.h"
 #include "game/scenario.h"
-#include "graphics/worldview.h"
 
 #include "client_event_handler.h"
 #include "client_protocol.h"
 #include "client_receiver.h"
 #include "client_sender.h"
 
+class WorldView;
 
 class Client {
 private:

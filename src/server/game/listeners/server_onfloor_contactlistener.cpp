@@ -27,14 +27,14 @@ void OnFloorContactListener::BeginContact(b2Contact* contact) {
         worm_sensor->handle_begin_floor_contact(game_objectA);
     }
 
-    if (game_objectA->get_id() == PROYECTIL) {
-        auto proyectil = dynamic_cast<BazookaProyectil*>(game_objectA);
-        proyectil->on_proyectil_impact(world);
+    if (game_objectA->get_id() == projectile) {
+        auto projectile = dynamic_cast<Projectile*>(game_objectA);
+        projectile->on_projectile_impact(world);
     }
 
-    if (game_objectB->get_id() == PROYECTIL) {
-        auto* proyectil = dynamic_cast<BazookaProyectil*>(game_objectB);
-        proyectil->on_proyectil_impact(world);
+    if (game_objectB->get_id() == projectile) {
+        auto* projectile = dynamic_cast<Projectile*>(game_objectB);
+        projectile->on_projectile_impact(world);
     }
 }
 

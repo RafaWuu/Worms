@@ -3,7 +3,7 @@
 
 #include "configuration.h"
 
-class WeaponInfo {
+class WeaponConfig {
     bool scope;
     bool hand_to_hand;
     bool variable_power;
@@ -21,15 +21,20 @@ class WeaponInfo {
     int fragment_radius;
     int fragment_number;
 
+    float width;
+    float height;
+    float blast_power;
+    float drag_constant;
+    float density;
+    float angular_damping;
+    float max_vel;
+
 public:
     friend class Configuration;
 
-    WeaponInfo() = default;
+    WeaponConfig() = default;
 
-    WeaponInfo(bool scope, bool hand_to_hand, bool variable_power, bool countdown,
-               bool point_and_click, bool affected_by_wind, int id, int ammo, int damage, int radius,
-               int main_explosion_damage, int main_explosion_radius, int fragment_damage, int fragment_radius,
-               int fragment_number);
+    explicit WeaponConfig(const YAML::Node& weapon_node);
 };
 
 #endif

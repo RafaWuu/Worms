@@ -2,16 +2,16 @@
 // Created by xguss on 15/11/23.
 //
 
-#ifndef WORMS_PROYECTIL_ENTITY_H
-#define WORMS_PROYECTIL_ENTITY_H
+#ifndef WORMS_projectile_ENTITY_H
+#define WORMS_projectile_ENTITY_H
 
 #include "animation.h"
 #include "entity.h"
 
-class ProyectilEntity: public Entity {
+class projectileEntity: public Entity {
 public:
-    explicit ProyectilEntity(TextureController& texture_controller);
-    ~ProyectilEntity();
+    explicit projectileEntity(TextureController& texture_controller);
+    ~projectileEntity();
 
     void update_info(EntityInfo* info) override;
     void update(float dt) override;
@@ -26,4 +26,4 @@ private:
     int y;
     int id;
 };
-#endif  // WORMS_PROYECTIL_ENTITY_H
+#endif  // WORMS_projectile_ENTITY_H

@@ -9,11 +9,12 @@
 
 #include <string.h>
 
+#include "../../configuration/configuration.h"
 #include "../common/common_baseprotocol_socket.h"
 #include "../common/common_socket.h"
 #include "game/estado_juego.h"
 #include "game/ground.h"
-#include "game/proyectil.h"
+#include "game/projectile.h"
 #include "game/scenario.h"
 #include "lobby/lobby_state.h"
 
@@ -26,6 +27,7 @@ struct ErrorLobby: public std::runtime_error {
 class ClientProtocol {
 private:
     BaseProtocol& baseProtocol;
+    Configuration& config;
 
 protected:
     Log& getLog();
@@ -46,10 +48,11 @@ public:
     std::map<uint16_t, uint16_t> receive_worms_distribution();
     std::unique_ptr<Scenario> receive_scenario();
 
+    std::unique_ptr<Worm> receive_worm_initial_status();
     std::unique_ptr<Worm> receive_worm();
     std::unique_ptr<Beam> receive_beam();
     std::unique_ptr<Ground> receive_ground();
-    std::unique_ptr<Proyectil> receive_proyectil();
+    std::unique_ptr<Projectile> receive_projectile();
 
     void get_my_id(uint16_t& id);
     void set_worm_id(uint16_t i);

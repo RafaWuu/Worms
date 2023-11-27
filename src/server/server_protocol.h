@@ -79,6 +79,8 @@ public:
     std::unique_ptr<GameEvent> recv_aim(uint16_t id_client);
 
     std::unique_ptr<GameEvent> recv_power(uint16_t id_client);
+
+    std::unique_ptr<GameEvent> recv_change_weapon(uint16_t id_client);
 };
 
 

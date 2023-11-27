@@ -20,9 +20,7 @@
 #include "server_error.h"
 
 GameWorld::GameWorld(const std::string& scenario_name):
-        b2_world(b2Vec2(.0, -9.8)), worm_map(), entities_map(), file_handler(), listener(*this) {
-
-    bazooka = new Weapon(*this);
+        b2_world(b2Vec2(.0, -9.8)), worm_map(), file_handler(), listener(*this) {
 
     entity_id = 0;
     file_handler.get_scenario(*this, scenario_name);
@@ -33,9 +31,9 @@ GameWorld::GameWorld(const std::string& scenario_name):
 }
 
 void GameWorld::create_worm(float x, float y) {
-    auto worm = std::make_shared<Worm>(entity_id, &b2_world, x, -y, *bazooka);
+    auto worm = std::make_shared<Worm>(entity_id, *this, x, -y);
     entities_map.emplace(entity_id, worm);
-    worm_map.emplace(entity_id++, worm);
+    worm_map.emplace(entity_id++, worm.get());
 
     entities_map.emplace(entity_id++, std::make_shared<WormSensor>(worm.get()));
 }
@@ -58,14 +56,16 @@ void GameWorld::step(int steps) {
 
 void GameWorld::update_entities() {
     for (auto& e: entities_map) {
-        e.second->update(b2_world);
+        e.second->update(*this);
     }
 
     for (auto it = entities_map.cbegin(); it != entities_map.cend();) {
-        if (it->second->is_dead)
+        if (it->second->is_dead) {
+            it->second->delete_body();
             it = entities_map.erase(it);
-        else
+        } else {
             ++it;
+        }
     }
 }
 
@@ -73,6 +73,9 @@ void GameWorld::set_clients_to_worms(std::vector<uint16_t> client_vec) {
     int i = 0;
 
     for (auto& worm: worm_map) {
+        if (worm.second == nullptr)
+            continue;
+
         worm.second->set_client_id(client_vec[i % client_vec.size()]);
         std::cout << "Worm :" << worm.first << ", Client: " << client_vec[i % client_vec.size()]
                   << "\n";
@@ -84,6 +87,10 @@ Worm& GameWorld::get_worm(uint8_t worm_id, uint16_t client_id) {
     auto it = worm_map.find(worm_id);
     if (it == worm_map.end())
         throw InvalidWormIdGameError(client_id);
+
+    if (it->second == nullptr)
+        throw InvalidWormIdGameError(client_id);
+
     if (!it->second->validate_client(client_id))
         throw InvalidWormIdGameError(client_id);
 
@@ -113,8 +120,8 @@ void GameWorld::get_dimensions(float* h, float* w) {
     *h = this->height;
     *w = this->width;
 }
-void GameWorld::add_proyectil(std::shared_ptr<BazookaProyectil> proyectil) {
-    entities_map.emplace(entity_id++, proyectil);
+void GameWorld::add_projectile(std::shared_ptr<Projectile> projectile) {
+    entities_map.emplace(entity_id++, projectile);
 }
 
 //  limit 4to cuadrante x>=0 , y<=0
@@ -152,39 +159,9 @@ void GameWorld::set_dimensions(float h, float w) {
     edge_3->CreateFixture(&fixture_def);*/
 }
 
-void GameWorld::add_explosion(b2Body& proyectil, float radius) {
-    b2Vec2 center = proyectil.GetPosition();
-    int num_rays = 15;
-    float m_blastPower = 30;
-    for (int i = 0; i < num_rays; i++) {
-        float angle = (i / (float)num_rays) * 2 * M_PI;
-
-        b2Vec2 rayDir(sinf(angle), cosf(angle));
-        b2Vec2 rayEnd = center + radius * rayDir;
-
-        // check what this ray hits
-        RayCastExplosionCallback callback;
-        b2_world.RayCast(&callback, center, rayEnd);
-        if (callback.m_body && callback.p_worm) {
-            apply_blast_impulse(callback.m_body, callback.p_worm, center, callback.m_point,
-                                (m_blastPower / (float)num_rays));
-        }
-    }
-}
+void GameWorld::add_explosion(b2Body& projectile, float radius) {}
 
 void GameWorld::apply_blast_impulse(b2Body* body, Worm* worm, b2Vec2 blastCenter, b2Vec2 applyPoint,
-                                    float blastPower) {
-    b2Vec2 blastDir = applyPoint - blastCenter;
-    float distance = blastDir.Normalize();
-    // ignore bodies exactly at the blast point - blast direction is undefined
-    if (distance == 0)
-        return;
-    float invDistance = 1 / distance;
-    float impulseMag = blastPower * invDistance * invDistance;
-    impulseMag = b2Min(impulseMag, 500.0f);
+                                    float blastPower) {}
 
-    body->ApplyLinearImpulse(impulseMag * blastDir, applyPoint, true);
-    worm->get_hit(50 * invDistance);
-}
-
-GameWorld::~GameWorld() { delete bazooka; }
+GameWorld::~GameWorld() {}

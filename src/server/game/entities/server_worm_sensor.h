@@ -5,6 +5,8 @@
 #ifndef WORMS_SERVER_WORM_SENSOR_H
 #define WORMS_SERVER_WORM_SENSOR_H
 
+#include <memory>
+
 #include "server_gameobject.h"
 #include "server_worm.h"
 
@@ -23,5 +25,6 @@ public:
 
     void handle_end_floor_contact(GameObject* pObject);
 
+    void update(GameWorld& world) override;
 };
 #endif  // WORMS_SERVER_WORM_SENSOR_H

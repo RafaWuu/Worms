@@ -9,7 +9,7 @@
 #include "game/entity_info.h"
 #include "game/estado_juego.h"
 #include "game/ground.h"
-#include "game/proyectil.h"
+#include "game/projectile.h"
 #include "lobby/gameinfo.h"
 #include "lobby/lobby_state.h"
 
@@ -25,11 +25,12 @@ enum ObjectType {
     BEAM = 0x002,
     WORM = 0x004,
     WORM_SENSOR = 0x008,
-    PROYECTIL = 0x0010,
+    projectile = 0x0010,
     BOX = 0x0020
 };
 
-ClientProtocol::ClientProtocol(BaseProtocol& bp): baseProtocol(bp) {}
+ClientProtocol::ClientProtocol(BaseProtocol& bp):
+        baseProtocol(bp), config(Configuration::get_instance()) {}
 
 // lobby
 void ClientProtocol::send_create_game(std::string& escenario) {
@@ -135,6 +136,30 @@ void ClientProtocol::send_start_game() {
     getLog().write("Cliente inicia la partidas\n");
 }
 // game
+std::unique_ptr<Worm> ClientProtocol::receive_worm_initial_status() {
+    uint16_t id;
+    float x;
+    float y;
+    uint8_t dir;
+    uint16_t state;
+    uint8_t health;
+    uint8_t current_weapon;
+
+    baseProtocol.recv_2byte_number(id);
+    baseProtocol.recv_4byte_float(x);
+    baseProtocol.recv_4byte_float(y);
+    baseProtocol.recv_1byte_number(dir);
+
+    baseProtocol.recv_2byte_number(state);
+    baseProtocol.recv_1byte_number(health);
+    baseProtocol.recv_1byte_number(current_weapon);
+
+    getLog().write("Cliente recibe gusano: id %hhu, x: %f, y: %f. Estado %hu \n", id, x, y, state);
+
+    // quedaria mejor si el constructor recibe el protocolo y se construye a sí mismo?
+    return std::make_unique<Worm>(id, x, y, dir, state, health, current_weapon);
+}
+
 std::unique_ptr<Worm> ClientProtocol::receive_worm() {
     uint16_t id;
     float x;
@@ -143,7 +168,10 @@ std::unique_ptr<Worm> ClientProtocol::receive_worm() {
     uint16_t state;
     uint8_t health;
     uint8_t current_weapon;
+    uint16_t ammo;
     float aim_angle;
+    float x_aim;
+    float y_aim;
     uint8_t attack_power;
 
     baseProtocol.recv_2byte_number(id);
@@ -154,13 +182,30 @@ std::unique_ptr<Worm> ClientProtocol::receive_worm() {
     baseProtocol.recv_2byte_number(state);
     baseProtocol.recv_1byte_number(health);
     baseProtocol.recv_1byte_number(current_weapon);
-    baseProtocol.recv_4byte_float(aim_angle);
-    baseProtocol.recv_1byte_number(attack_power);
+
+    // TODO por ahi seria mas directo si el map directamente tiene los ids como indice
+    auto s = config.get_weapon_name(current_weapon);
+    baseProtocol.recv_2byte_number(ammo);
+
+    if (config.weapon_has_scope(s)) {
+        baseProtocol.recv_4byte_float(aim_angle);
+    } else if (config.weapon_is_point_and_click(s)) {
+        baseProtocol.recv_4byte_float(x_aim);
+        baseProtocol.recv_4byte_float(y_aim);
+    }
+
+    if (config.weapon_has_variable_power(s))
+        baseProtocol.recv_1byte_number(attack_power);
+
+    if (config.weapon_has_countdown(s)) {
+        float countdown;
+        baseProtocol.recv_4byte_float(countdown);
+    }
 
     getLog().write("Cliente recibe gusano: id %hhu, x: %f, y: %f. Estado %hu \n", id, x, y, state);
 
-    // quedaria mejor si el constructor recibe el protocolo y se construye a sí mismo?
-    return std::make_unique<Worm>(id, x, y, dir, state, health, current_weapon, aim_angle,
+    // TODO ahora solo maneja las armas basicas
+    return std::make_unique<Worm>(id, x, y, dir, state, health, current_weapon, ammo, aim_angle,
                                   attack_power);
 }
 
@@ -195,16 +240,18 @@ std::unique_ptr<Beam> ClientProtocol::receive_beam() {
     return std::make_unique<Beam>(x, y, height, width, angle);
 }
 
-std::unique_ptr<Proyectil> ClientProtocol::receive_proyectil() {
+std::unique_ptr<Projectile> ClientProtocol::receive_projectile() {
     uint8_t type;
     float x;
     float y;
+    float angle;
 
     baseProtocol.recv_1byte_number(type);
     baseProtocol.recv_4byte_float(x);
     baseProtocol.recv_4byte_float(y);
+    baseProtocol.recv_4byte_float(angle);
 
-    return std::make_unique<Proyectil>(type, x, y);
+    return std::make_unique<Projectile>(type, x, y, angle);
 }
 
 std::map<uint16_t, uint16_t> ClientProtocol::receive_worms_distribution() {
@@ -263,7 +310,7 @@ std::unique_ptr<Scenario> ClientProtocol::receive_scenario() {
                 static_entities.emplace(entity_id, receive_beam());
                 break;
             case ObjectType::WORM:
-                dynamic_entities.emplace(entity_id, receive_worm());
+                dynamic_entities.emplace(entity_id, receive_worm_initial_status());
                 break;
             case ObjectType::GROUND:
                 static_entities.emplace(entity_id, receive_ground());
@@ -273,7 +320,8 @@ std::unique_ptr<Scenario> ClientProtocol::receive_scenario() {
         }
     }
 
-    return std::make_unique<Scenario>(std::move(dynamic_entities), std::move(static_entities), h, w);
+    return std::make_unique<Scenario>(std::move(dynamic_entities), std::move(static_entities), h,
+                                      w);
 }
 
 std::shared_ptr<EstadoJuego> ClientProtocol::recv_msg() {
@@ -299,8 +347,8 @@ std::shared_ptr<EstadoJuego> ClientProtocol::recv_msg() {
             case ObjectType::WORM:
                 entities.emplace(entity_id, receive_worm());
                 break;
-            case ObjectType::PROYECTIL:
-                entities.emplace(entity_id, receive_proyectil());
+            case ObjectType::projectile:
+                entities.emplace(entity_id, receive_projectile());
             default:
                 break;
         }
@@ -391,7 +439,7 @@ void ClientProtocol::serialize_change_weapon(int weapon_id) {
 
     getLog().write("Cliente elige arma %hhu\n", weapon);
 
-    baseProtocol.send_uint_vector(serialized_command);    
+    baseProtocol.send_uint_vector(serialized_command);
 }
 
 Log& ClientProtocol::getLog() {

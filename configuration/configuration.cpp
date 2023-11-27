@@ -35,46 +35,13 @@ Configuration::Configuration() {
 double Configuration::get_fps() { return fps; }
 
 void Configuration::load_weapon_info(YAML::Node config) {
+    maximum_countdown = config["maximum_countdown"].as<float>();
 
     for (const auto& weapon: config["weapons"]) {
-        std::string weapon_name = weapon.first.as<std::string>();
+        auto weapon_name = weapon.first.as<std::string>();
         const YAML::Node& weapon_node = weapon.second;
 
-        bool scope = weapon_node["scope"].as<bool>(false);
-        bool hand_to_hand = weapon_node["hand_to_hand"].as<bool>(false);
-        bool variable_power = weapon_node["variable_power"].as<bool>(false);
-        bool countdown = weapon_node["countdown"].as<bool>(false);
-        bool point_and_click = weapon_node["point_and_click"].as<bool>(false);
-        bool affected_by_wind = weapon_node["affected_by_wind"].as<bool>(false);
-
-        int id = weapon_node["id"].as<int>();
-        int ammo = weapon_node["ammo"].as<int>();
-        int damage = weapon_node["damage"].as<int>(0);
-        int radius = weapon_node["radius"].as<int>(0);
-
-
-        int main_explosion_damage = 0;
-        int main_explosion_radius = 0;
-        if (weapon_node["explosion"]) {
-            const YAML::Node& explosion_node = weapon_node["explosion"];
-            main_explosion_damage = explosion_node["damage"].as<int>();
-            main_explosion_radius = explosion_node["radius"].as<int>();
-        }
-
-        int fragment_damage = 0;
-        int fragment_radius = 0;
-        int fragment_number = 0;
-        if (weapon_node["fragment"]) {
-            const YAML::Node& fragment_node = weapon_node["fragment"];
-            fragment_damage = fragment_node["damage"].as<int>();
-            fragment_radius = fragment_node["radius"].as<int>();
-            fragment_number = weapon_node["fragment_number"].as<int>();
-        }
-
-        WeaponInfo weapon_info(scope, hand_to_hand, variable_power, countdown, point_and_click,
-                               affected_by_wind, id, ammo, damage, radius, main_explosion_damage,
-                               main_explosion_radius, fragment_damage, fragment_radius,
-                               fragment_number);
+        WeaponConfig weapon_info(weapon.second);
 
         weapons_info[weapon_name] = weapon_info;
     }
@@ -128,6 +95,14 @@ bool Configuration::weapon_is_affected_by_wind(const std::string& weapon_name) {
     return weapons_info[weapon_name].affected_by_wind;
 }
 
+std::string Configuration::get_weapon_name(int id) {
+    for (auto& weapon: weapons_info) {
+        if (weapon.second.id == id)
+            return weapon.first;
+    }
+    throw YAML::Exception::exception();  // TODO mejorar ?)
+}
+
 int Configuration::get_weapon_id(const std::string& weapon_name) {
     return weapons_info[weapon_name].id;
 }
@@ -163,6 +138,37 @@ int Configuration::get_weapon_fragment_radius(const std::string& weapon_name) {
 int Configuration::get_weapon_fragment_number(const std::string& weapon_name) {
     return weapons_info[weapon_name].fragment_number;
 }
+
+float Configuration::get_weapon_width(const std::string& weapon_name) {
+    return weapons_info[weapon_name].width;
+}
+
+float Configuration::get_weapon_height(const std::string& weapon_name) {
+    return weapons_info[weapon_name].height;
+}
+
+float Configuration::get_weapon_blastpower(const std::string& weapon_name) {
+    return weapons_info[weapon_name].blast_power;
+}
+
+float Configuration::get_weapon_dragconstant(const std::string& weapon_name) {
+    return weapons_info[weapon_name].drag_constant;
+}
+
+float Configuration::get_weapon_density(const std::string& weapon_name) {
+    return weapons_info[weapon_name].density;
+}
+
+float Configuration::get_weapon_damping(const std::string& weapon_name) {
+    return weapons_info[weapon_name].angular_damping;
+}
+
+float Configuration::get_weapon_max_vel(const std::string& weapon_name) {
+    return weapons_info[weapon_name].max_vel;
+}
+
+float Configuration::get_maximum_countdown() const { return maximum_countdown; }
+
 
 /* SERVER STATES */
 

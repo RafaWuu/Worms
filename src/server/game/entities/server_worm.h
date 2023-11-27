@@ -5,19 +5,21 @@
 #ifndef WORMS_SERVER_WORM_H
 #define WORMS_SERVER_WORM_H
 
+#include <map>
 #include <memory>
 #include <utility>
 #include <vector>
 
 #include "game/server_inputs.h"
 #include "game/states/server_state_manager.h"
-#include "game/world/server_gameworld.h"
+#include "game/weapons/server_weapon_info.h"
 
 #include "b2_body.h"
 #include "server_gameobject.h"
 
 class StateManager;
 class Weapon;
+class GameWorld;
 
 class Worm: public GameObject {
 private:
@@ -27,10 +29,10 @@ private:
     float pos_x;
     float pos_y;
 
-
     StateManager state_manager;
 
 public:
+    std::map<uint8_t, std::unique_ptr<Weapon>> weapons_map;
     friend class WormInfo;
     friend class WormSensor;
 
@@ -38,14 +40,14 @@ public:
     int jumpTimeout;
     float aim_power;
 
-    Worm(uint8_t id, b2World* b2world, float pos_x, float pos_y, Weapon& weapon);
+    Worm(uint8_t id, GameWorld& world, float pos_x, float pos_y);
+    ~Worm();
     Worm(const Worm&) = delete;
     Worm& operator=(const Worm&) = delete;
 
     void set_client_id(uint16_t id_);
 
-    void update(b2World& world) override;
-
+    void update(GameWorld& world) override;
 
     b2Body* body;
 
@@ -83,7 +85,7 @@ public:
     std::unique_ptr<GameObjectInfo> get_status() const override;
     std::unique_ptr<WormInfo> get_worminfo() const;
     uint8_t ammo;
-    Weapon& current_gun;
+    uint8_t current_weapon;
     float desiredAngle;
 
     void get_hit(float d);
@@ -91,5 +93,11 @@ public:
     void process_fall(float distance);
 
     uint8_t health;
+
+    void change_weapon(uint8_t weapon_id);
+
+    float get_angle();
+
+    std::unique_ptr<WeaponInfo> get_current_weapon_info() const;
 };
 #endif  // WORMS_SERVER_WORM_H

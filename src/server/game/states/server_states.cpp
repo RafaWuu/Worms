@@ -4,9 +4,9 @@
 
 #include "server_states.h"
 
-#define ZERO_IMPULSE 0
+#include "../weapons/server_weapon.h"
 
-#define MAX_POWER 1
+#define ZERO_IMPULSE 0
 
 AliveState::AliveState() {
     code = Alive;
@@ -17,9 +17,18 @@ AliveState::AliveState() {
 }
 
 bool AliveState::update(Worm& worm) {
+    if (worm.jumpTimeout > 0)
+        worm.jumpTimeout--;
+
     if (worm.health > 0)
         return true;
     return false;
+}
+
+uint16_t AliveState::on_deactivated(Worm& worm) {
+    // TODO deshabilitar colisiones
+    worm.body->SetType(b2_staticBody);
+    return NoState;
 }
 
 WalkingState::WalkingState() {
@@ -186,14 +195,9 @@ FiringState::FiringState() {
 
 
 bool FiringState::update(Worm& worm) {
-    b2Vec2 source = b2Vec2(config.get_firing_source_x(), config.get_firing_source_y());
-
-    if (!worm.facing_right) {
-        source.x = -source.x;
-    }
-
-    worm.current_gun.fire_proyectil(worm.body->GetWorldPoint(source), worm.desiredAngle);
-
+    auto it = worm.weapons_map.find(worm.current_weapon);
+    if (it != worm.weapons_map.end())
+        return it->second->fire_projectile(*worm.body, worm.facing_right);
     return false;
 }
 
@@ -206,23 +210,10 @@ AimingState::AimingState() {
 }
 
 bool AimingState::update(Worm& worm) {
-    b2Vec2 toTarget = worm.body->GetLocalPoint(b2Vec2(worm.aim_x, worm.aim_y));
-
-    if (worm.facing_right &&
-        toTarget.x < 0) {  // Limito el campo de vision al apuntar hacia la derecha
-        worm.desiredAngle = (toTarget.y > 0) ? M_PI_2f32 : -M_PI_2f32;
-        return true;
-    }
-
-    if (!worm.facing_right &&
-        toTarget.x > 0) {  // Limito el campo de vision al apuntar hacia la izquierda
-        worm.desiredAngle = (toTarget.y > 0) ? M_PI_2f32 : -M_PI_2f32;
-        return true;
-    }
-
-    worm.desiredAngle = atan2f(toTarget.y, toTarget.x);
-
-    return true;
+    auto it = worm.weapons_map.find(worm.current_weapon);
+    if (it != worm.weapons_map.end())
+        return it->second->aim_projectile(*worm.body, worm.aim_x, worm.aim_y, worm.facing_right);
+    return false;
 }
 
 PoweringState::PoweringState() {
@@ -234,13 +225,10 @@ PoweringState::PoweringState() {
 }
 
 bool PoweringState::update(Worm& worm) {
-    worm.aim_power += config.get_powering_time() / config.getFps();
-
-    if (worm.aim_power > MAX_POWER) {
-        worm.aim_power = MAX_POWER;
-        return false;
-    }
-    return true;
+    auto it = worm.weapons_map.find(worm.current_weapon);
+    if (it != worm.weapons_map.end())
+        return it->second->power_projectile();
+    return false;
 }
 
 uint16_t PoweringState::on_deactivated(Worm& worm) {

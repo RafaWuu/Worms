@@ -14,7 +14,7 @@
 #include "game/entities/server_ground.h"
 #include "game/entities/server_worm_sensor.h"
 #include "game/listeners/server_onfloor_contactlistener.h"
-#include "game/weapons/server_bazooka_proyectil.h"
+#include "game/projectiles/server_projectile.h"
 #include "game/weapons/server_weapon.h"
 
 #include "b2_world.h"
@@ -26,11 +26,10 @@ class GameWorld {
 private:
     ScenarioFileHandler file_handler;
 
-    std::map<uint16_t, std::shared_ptr<Worm>> worm_map;
+    std::map<uint16_t, Worm*> worm_map;
     std::map<uint16_t, std::shared_ptr<GameObject>> entities_map;
 
     uint16_t entity_id;
-    Weapon* bazooka;
     OnFloorContactListener listener;
     double height;
     double width;
@@ -57,9 +56,9 @@ public:
     std::map<uint16_t, std::shared_ptr<WormInfo>> get_worms_info();
 
     Worm& get_worm(uint8_t worm_id, uint16_t client_id);
-    void add_proyectil(std::shared_ptr<BazookaProyectil> proyectil);
+    void add_projectile(std::shared_ptr<Projectile> projectile);
     void apply_blast_impulse(b2Body* body, Worm* worm, b2Vec2 blastCenter, b2Vec2 applyPoint,
                              float blastPower);
-    void add_explosion(b2Body& proyectil, float radius);
+    void add_explosion(b2Body& projectile, float radius);
 };
 #endif  // WORMS_SERVER_GAMEWORLD_H

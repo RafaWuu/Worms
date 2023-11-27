@@ -4,10 +4,10 @@
 
 #include "server_worm_info.h"
 
-#include "server_worm.h"
+#include "../../configuration/configuration.h"
 
-#include "configuration/configuration.h"
 #include "common_weapon_constants.h"
+#include "server_worm.h"
 
 WormInfo::WormInfo(const Worm& worm) {
     object_id = worm.get_id();
@@ -17,10 +17,9 @@ WormInfo::WormInfo(const Worm& worm) {
     facing_right = worm.facing_right;
     state = worm.get_state();
     health = worm.health;
-    weapon = BAZOOKA_ID;  // arma
-    angle = worm.desiredAngle;
-    power = worm.aim_power * 255;
+    weapon = worm.current_weapon;  // arma
     client_id = worm.client_id;
+    weapon_info = worm.get_current_weapon_info();
 }
 
 void WormInfo::serialize_scenario(BaseProtocol& bp) {
@@ -32,8 +31,6 @@ void WormInfo::serialize_scenario(BaseProtocol& bp) {
     bp.send_2byte_number(state);
     bp.send_1byte_number(health);
     bp.send_1byte_number(weapon);  // arma
-    bp.send_4byte_float(angle);
-    bp.send_1byte_number(power * 255);
 }
 void WormInfo::serialize_status(BaseProtocol& bp) {
     bp.send_1byte_number(object_id);
@@ -43,9 +40,7 @@ void WormInfo::serialize_status(BaseProtocol& bp) {
     bp.send_1byte_number(facing_right);
     bp.send_2byte_number(state);
     bp.send_1byte_number(health);
-    bp.send_1byte_number(weapon);  // arma
-    bp.send_4byte_float(angle);
-    bp.send_1byte_number(power * 255);
+    weapon_info->serialize_status(bp);
 }
 
 void WormInfo::serialize_start(BaseProtocol& bp) {

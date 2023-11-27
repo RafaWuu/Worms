@@ -8,7 +8,7 @@
 
 #include "weapon_info.h"
 
-class WeaponInfo;
+class WeaponConfig;
 
 /**
  * Ejemplo:
@@ -21,8 +21,6 @@ class WeaponInfo;
 // Singleton
 class Configuration {
 private:
-    std::map<std::string, WeaponInfo> weapons_info;
-
     double fps;
 
     float walking_velocity;
@@ -44,7 +42,7 @@ private:
     float firing_source_y;
 
     float powering_modifier;
-
+    float maximum_countdown;
     Configuration();
 
     ~Configuration() = default;
@@ -57,6 +55,8 @@ private:
     void load_server_states_info(YAML::Node config);
 
 public:
+    std::map<std::string, WeaponConfig> weapons_info;
+
     static Configuration& get_instance();
 
     double get_fps();
@@ -75,6 +75,8 @@ public:
 
     // returns -1 if ammo is infinite
     int get_weapon_ammo(const std::string& weapon_name);
+    std::string get_weapon_name(int id);
+
     int get_weapon_id(const std::string& weapon_name);
     // returns 0 if weapon has main a explosion & fragments, you need to check their respective
     // damages
@@ -91,6 +93,14 @@ public:
     // returns 0 if there's no explosion/fragments
     int get_weapon_fragment_radius(const std::string& weapon_name);
     int get_weapon_fragment_number(const std::string& weapon_name);
+
+    float get_weapon_width(const std::string& weapon_name);
+    float get_weapon_height(const std::string& weapon_name);
+    float get_weapon_blastpower(const std::string& weapon_name);
+    float get_weapon_dragconstant(const std::string& weapon_name);
+    float get_weapon_density(const std::string& weapon_name);
+    float get_weapon_damping(const std::string& weapon_name);
+    float get_weapon_max_vel(const std::string& weapon_name);
 
 
     /* SERVER STATES */
@@ -118,6 +128,8 @@ public:
     float get_powering_time() const;
 
     int getFps() const { return fps; }
+
+    float get_maximum_countdown() const;
 };
 
 #endif

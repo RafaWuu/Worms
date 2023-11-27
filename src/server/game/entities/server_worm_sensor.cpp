@@ -38,3 +38,8 @@ ObjectType WormSensor::get_id() const { return WORM_SENSOR; }
 std::unique_ptr<GameObjectInfo> WormSensor::get_status() const {
     return std::make_unique<WormSensorInfo>(*this);
 }
+
+void WormSensor::update(GameWorld& world) {
+    if (worm == nullptr || worm->is_dead)
+        is_dead = true;
+}

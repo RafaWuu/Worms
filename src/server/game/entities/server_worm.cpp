@@ -9,26 +9,32 @@
 #include <utility>
 
 #include "game/states/server_state_enum.h"
+#include "game/weapons/server_weapon_factory.h"
+#include "game/world/server_gameworld.h"
 
 #include "b2_fixture.h"
 #include "b2_polygon_shape.h"
+#include "common_weapon_constants.h"
 #include "server_error.h"
 #include "server_worm_info.h"
 
-Worm::Worm(uint8_t id, b2World* b2world, float pos_x, float pos_y, Weapon& weapon):
+
+Worm::Worm(uint8_t id, GameWorld& world, float pos_x, float pos_y):
+        weapons_map(WeaponFactory::get_weapons(world)),
         id(id),
         client_id(),
         pos_x(pos_x),
         pos_y(pos_y),
-        health(100),
         state_manager(Alive | Standing),
-        current_gun(weapon),
         GameObject() {
+
+    auto& config = Configuration::get_instance();
+
     b2BodyDef bodyDef;
     bodyDef.type = b2_dynamicBody;
     bodyDef.position.Set(pos_x, pos_y);
 
-    body = b2world->CreateBody(&bodyDef);
+    body = world.b2_world.CreateBody(&bodyDef);
     body->SetFixedRotation(true);
 
     b2PolygonShape dynamicBox;
@@ -46,6 +52,8 @@ Worm::Worm(uint8_t id, b2World* b2world, float pos_x, float pos_y, Weapon& weapo
 
     getLog().write("Creando gusano %hhu, x: %f, y %f: \n", id, pos_x, pos_y);
 
+    current_weapon = BAZOOKA_ID;
+    health = 100;
     numFootContacts = 0;
     jumpTimeout = 0;
     aim_x = 0;
@@ -56,6 +64,8 @@ Worm::Worm(uint8_t id, b2World* b2world, float pos_x, float pos_y, Weapon& weapo
     ammo = 0;
 }
 
+Worm::~Worm() = default;
+
 void Worm::process_fall(float distance) {
     double max = fmax(25, health);
 
@@ -65,16 +75,12 @@ void Worm::process_fall(float distance) {
 
 void Worm::set_client_id(uint16_t id_) { this->client_id = id_; }
 
-void Worm::update(b2World& world) {
-    if (jumpTimeout > 0)
-        jumpTimeout--;
-
+void Worm::update(GameWorld& world) {
     if (numFootContacts < 1)
         state_manager.try_activate(StateEnum::Falling, *this);
 
     // getLog().write("Gusano %hhu actualizandose, x: %f, y %f: \n", id, body->GetPosition().x,
     //              body->GetPosition().y);
-
 
     state_manager.update(*this);
 }
@@ -115,18 +121,17 @@ uint16_t Worm::get_state() const { return state_manager.current; }
 bool Worm::validate_client(uint16_t id_) const { return id_ == this->client_id; }
 
 void Worm::fire() {
-    bool r = state_manager.try_activate(StateEnum::Firing, *this);
-    if (r)
-        ammo--;
+    state_manager.try_activate(StateEnum::Firing, *this);
+    getLog().write("Gusano %hhu, jugador dispara\n", id);
 }
 
 void Worm::aim(float x, float y) {
-    this->aim_x = x;
-    this->aim_y = y;
+    state_manager.try_activate(StateEnum::Aiming, *this);
+
+    aim_x = x;
+    aim_y = y;
 
     getLog().write("Gusano %hhu, jugador apunta hacia %f, %f\n", id, x, y);
-
-    state_manager.try_activate(StateEnum::Aiming, *this);
 }
 
 void Worm::stop_aim() {
@@ -151,3 +156,17 @@ std::unique_ptr<GameObjectInfo> Worm::get_status() const {
 std::unique_ptr<WormInfo> Worm::get_worminfo() const { return std::make_unique<WormInfo>(*this); }
 
 void Worm::get_hit(float d) { health -= (uint8_t)fmin(d, health); }
+
+void Worm::change_weapon(uint8_t weapon_id) {
+    auto it = weapons_map.find(weapon_id);
+    if (it != weapons_map.end())
+        current_weapon = weapon_id;
+}
+
+float Worm::get_angle() { return 0; }
+
+std::unique_ptr<WeaponInfo> Worm::get_current_weapon_info() const {
+    auto it = weapons_map.find(current_weapon);
+    if (it != weapons_map.end())
+        return it->second->get_info();
+}

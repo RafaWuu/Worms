@@ -6,6 +6,9 @@
 #define WORMS_SERVER_WORM_INFO_H
 
 #include <cstdint>
+#include <memory>
+
+#include "game/weapons/server_weapon_info.h"
 
 #include "server_gameobject.h"
 #include "server_gameobject_info.h"
@@ -17,13 +20,11 @@ private:
     ObjectType object_id;
     float x;
     float y;
-    float angle;
     uint16_t worm_id;
     bool facing_right;
     uint16_t state;
     uint8_t health;
     int weapon;
-    float power;
     uint16_t client_id;
 
 public:
@@ -34,5 +35,7 @@ public:
 
 
     void serialize_start(BaseProtocol& bp);
+
+    std::unique_ptr<WeaponInfo> weapon_info;
 };
 #endif  // WORMS_SERVER_WORM_INFO_H

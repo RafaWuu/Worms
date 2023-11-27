@@ -17,8 +17,9 @@
 #include "commands/client_move.h"
 #include "commands/client_rollback.h"
 #include "commands/client_stop_moving.h"
-#include "graphics/worldview.h"
+#include "graphics/animation.h"
 #include "graphics/weapons/weapon_selector.h"
+#include "graphics/worldview.h"
 
 #include "client_protocol.h"
 
@@ -120,8 +121,8 @@ int Client::start() {
     SDL2pp::SDL sdl(SDL_INIT_VIDEO);  //--->crear clase que maneje la vista
 
     // Create main window: 640x480 dimensions, resizable, "SDL2pp demo" title
-    SDL2pp::Window window("Worms", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT,
-                          SDL_WINDOW_RESIZABLE);
+    SDL2pp::Window window("Worms", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH,
+                          SCREEN_HEIGHT, SDL_WINDOW_RESIZABLE);
     SDL2pp::Renderer renderer(window, -1, SDL_RENDERER_ACCELERATED);
 
     TextureController texture_controller(renderer);
@@ -132,7 +133,8 @@ int Client::start() {
     auto start = high_resolution_clock::now();
     while (running) {
 
-        // TODO: pasarle weapon_selector al handle_events()??? y manejar desde ahi que arma se selecciono
+        // TODO: pasarle weapon_selector al handle_events()??? y manejar desde ahi que arma se
+        // selecciono
         running = handle_events(weapon_selector);
         update(worldview);
         worldview.render(renderer);
@@ -172,7 +174,8 @@ bool Client::handle_events(WeaponSelector& weapon_selector) {
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
         try {
-            auto c = event_handler.handle(event, weapon_selector); // Queda feo pasarle e weapon_selector x parametro?
+            auto c = event_handler.handle(
+                    event, weapon_selector);  // Queda feo pasarle e weapon_selector x parametro?
             if (c != nullptr)
                 messages_to_send.push(c);
         } catch (QuitGameClientInput& e) {

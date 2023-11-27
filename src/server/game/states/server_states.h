@@ -14,6 +14,7 @@ class AliveState: public WormState {
 public:
     AliveState();
     bool update(Worm& worm) override;
+    uint16_t on_deactivated(Worm& worm) override;
 };
 
 class StandingState: public WormState {

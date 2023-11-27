@@ -119,4 +119,15 @@ private:
     uint8_t worm_id;
 };
 
+class GameEventChangeWeapon: public GameEvent {
+
+public:
+    GameEventChangeWeapon(uint16_t client_id, uint8_t worm_id, uint8_t weapon_id);
+    void execute(EventHandler& e) override;
+
+private:
+    uint8_t worm_id;
+    uint8_t weapon_id;
+};
+
 #endif  // WORMS_SERVER_GAMEEVENT_H

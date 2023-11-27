@@ -8,16 +8,34 @@
 
 #include <memory>
 
-#include "b2_math.h"
-class GameWorld;
-class BazookaProyectil;
+#include "../../../configuration/configuration.h"
 
-class Weapon{
+#include "b2_body.h"
+#include "b2_math.h"
+#include "server_weapon_info.h"
+
+#define MAX_POWER 1
+
+class GameWorld;
+class Projectile;
+
+class Weapon {
 private:
+protected:
     GameWorld& world;
+    Configuration& config;
+
 public:
     explicit Weapon(GameWorld& world);
-    void fire_proyectil(b2Vec2 pos, float angle);
+    virtual ~Weapon() = default;
+    virtual bool aim_projectile(b2Body& body, float x, float y, bool facing_right);
 
+    virtual bool power_projectile();
+
+    virtual bool fire_projectile(b2Body& body, bool facing_right) = 0;
+
+    virtual bool adjust_projectile_countdown(float seconds);
+
+    virtual std::unique_ptr<WeaponInfo> get_info() const = 0;
 };
-#endif //WORMS_SERVER_WEAPON_H
+#endif  // WORMS_SERVER_WEAPON_H

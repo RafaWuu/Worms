@@ -137,9 +137,9 @@ std::unique_ptr<GameEvent> ServerProtocol::recv_game_msg(uint16_t id_client) {
         case Input::DirAttack:
             return recv_aim(id_client);
         case Input::CountDown:
-            return recv_move(id_client);
-        case Input::SelectGun:
-            return recv_move(id_client);
+            return recv_aim(id_client);
+        case Input::ChangeWeapon:
+            return recv_change_weapon(id_client);
 
         default:
             throw InvalidMsg();
@@ -229,6 +229,17 @@ std::unique_ptr<GameEvent> ServerProtocol::recv_power(uint16_t id_client) {
     }
 }
 
+
+std::unique_ptr<GameEvent> ServerProtocol::recv_change_weapon(uint16_t id_client) {
+    uint8_t id_worm;
+    uint8_t id_weapon;
+
+    baseProtocol.recv_1byte_number(id_worm);
+    baseProtocol.recv_1byte_number(id_weapon);
+
+
+    return std::make_unique<GameEventChangeWeapon>(id_client, id_worm, id_weapon);
+}
 
 void ServerProtocol::send_game_errormessage(uint8_t error_code) {
     baseProtocol.send_1byte_number(GAME_SENDING);

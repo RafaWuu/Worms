@@ -13,6 +13,8 @@ enum WORM_STATE { DirLeft = 1, DirRight = 2, Stop = 3, JumpF = 4, JumpB = 5 };
 class Worm: public EntityInfo {
 private:
     uint16_t id;
+    uint16_t ammo;
+
     float pos_x;
     float pos_y;
     uint8_t dir;
@@ -24,7 +26,10 @@ private:
 
 public:
     Worm(uint16_t id, float pos_x, float pos_y, uint8_t dir, uint16_t state, uint8_t health,
-         uint8_t current_weapon, float aim_angle, uint8_t attack_power);
+         uint8_t current_weapon, uint16_t ammo, float aim_angle, uint8_t attack_power);
+
+    Worm(uint16_t id, float pos_x, float pos_y, uint8_t dir, uint16_t state, uint8_t health,
+         uint8_t current_weapon);
 
     void set_position(float x, float y);
     void set_health(int8_t health);

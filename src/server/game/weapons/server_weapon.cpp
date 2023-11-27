@@ -3,12 +3,13 @@
 //
 
 #include "server_weapon.h"
-#include "server_bazooka_proyectil.h"
-#include "game/world/server_gameworld.h"
 
+#include "../world/server_gameworld.h"
 
-void Weapon::fire_proyectil(b2Vec2 pos, float angle) {
-    world.add_proyectil(std::make_shared<BazookaProyectil>(&world.b2_world, pos, angle));
-}
-Weapon::Weapon(GameWorld& world): world(world) {
-}
+Weapon::Weapon(GameWorld& world): world(world), config(Configuration::get_instance()) {}
+
+bool Weapon::adjust_projectile_countdown(float seconds) { return false; }
+
+bool Weapon::power_projectile() { return false; }
+
+bool Weapon::aim_projectile(b2Body& body, float x, float y, bool facing_right) { return false; }
