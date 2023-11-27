@@ -11,7 +11,7 @@
 class ProjectileEffectNone: public ProjectileEffect {
 
 public:
-    ProjectileEffectNone() = default;
+    explicit ProjectileEffectNone(uint16_t projectile_id);
     bool execute(GameWorld& world, b2Body& body) override;
 };
 

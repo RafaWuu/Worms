@@ -1,5 +1,5 @@
-fps: 45
-tick_rate: 60
+fps: 60
+tick_rate: 100
 
 maximum_countdown: 5
 
@@ -8,6 +8,7 @@ weapons:
     id: 0
     scope: true
     hand_to_hand: false
+    hand_to_hand: false
     variable_power: true
     countdown: false
     point_and_click: false # teledirigido
@@ -15,12 +16,12 @@ weapons:
     ammo: -1 # -1 = inifinito
     damage: 50
     radius: 2
-    width: 0.5
-    height: 0.3
+    width: 0.3
+    height: 0.2
     blast_power: 15
-    drag_constant: .3
+    drag_constant: 0
     density: 1
-    angular_damping: 0.2
+    angular_damping: 0.0
     max_vel: 12
 
   mortar:
@@ -108,6 +109,7 @@ weapons:
     density: 1
     angular_damping: 0.2
     max_vel: 12
+    restitution: 1
 
   holy_grenade:
     id: 5
@@ -145,7 +147,7 @@ weapons:
     drag_constant: .3
     density: 1
     angular_damping: 0.2
-    max_vel: 12
+    max_vel: 3
 
   baseball_bat:
     id: 7

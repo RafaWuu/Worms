@@ -28,8 +28,6 @@ Worm::Worm(uint8_t id, GameWorld& world, float pos_x, float pos_y):
         state_manager(Alive | Standing),
         GameObject() {
 
-    auto& config = Configuration::get_instance();
-
     b2BodyDef bodyDef;
     bodyDef.type = b2_dynamicBody;
     bodyDef.position.Set(pos_x, pos_y);
@@ -58,9 +56,7 @@ Worm::Worm(uint8_t id, GameWorld& world, float pos_x, float pos_y):
     jumpTimeout = 0;
     aim_x = 0;
     aim_y = 0;
-    aim_power = 0;
     increasing_power = false;
-    desiredAngle = 0;
     ammo = 0;
 }
 
@@ -141,6 +137,7 @@ void Worm::stop_aim() {
 
 void Worm::power() {
     if (state_manager.try_activate(StateEnum::Powering, *this)) {
+        state_manager.try_activate(StateEnum::Aiming, *this);
         getLog().write("Gusano %hhu, jugador potenciando su ataque\n", id);
     }
 }
@@ -162,8 +159,6 @@ void Worm::change_weapon(uint8_t weapon_id) {
     if (it != weapons_map.end())
         current_weapon = weapon_id;
 }
-
-float Worm::get_angle() { return 0; }
 
 std::unique_ptr<WeaponInfo> Worm::get_current_weapon_info() const {
     auto it = weapons_map.find(current_weapon);

@@ -6,6 +6,7 @@
 
 #include "game/projectiles/server_projectile_effect_fragmentedexplosion.h"
 #include "game/projectiles/server_projectile_effect_noeffect.h"
+#include "game/projectiles/server_projectile_launch_parabolic.h"
 
 #include "common_weapon_constants.h"
 #include "server_weapon_info_redgrenade.h"
@@ -45,8 +46,11 @@ bool RedGrenadeWeapon::power_projectile() {
 }
 
 bool RedGrenadeWeapon::fire_projectile(b2Body& body, bool facing_right) {
-    if (ammo == 0)
+    if (ammo == 0) {
+        aim_power = 0;
+        aim_angle = 0;
         return false;
+    }
 
     b2Vec2 source = b2Vec2(config.get_firing_source_x(), config.get_firing_source_y());
 
@@ -57,17 +61,24 @@ bool RedGrenadeWeapon::fire_projectile(b2Body& body, bool facing_right) {
     float radius = config.get_weapon_main_explosion_radius(RED_GRENADE);
     float damage = config.get_weapon_main_explosion_damage(RED_GRENADE);
     float blast_power = config.get_weapon_blastpower(RED_GRENADE);
+    float max_vel = config.get_weapon_max_vel(RED_GRENADE);
     float fragment_number = config.get_weapon_fragment_number(RED_GRENADE);
     float fragment_radius = config.get_weapon_fragment_radius(RED_GRENADE);
     float fragment_damage = config.get_weapon_fragment_damage(RED_GRENADE);
 
     world.add_projectile(std::make_shared<Projectile>(
-            &world.b2_world, RED_GRENADE, std::make_unique<ProjectileEffectNone>(),
-            std::make_unique<ProjectileEffectFragmentedExplosion>(
-                    radius, damage, blast_power, fragment_number, fragment_radius, fragment_damage),
-            body.GetWorldPoint(source), aim_angle, aim_power, countdown));
+            &world.b2_world, RED_GRENADE,
+            std::make_unique<ProjectileLaunchParabolic>(body.GetWorldPoint(source), aim_angle,
+                                                        aim_power, max_vel),
+            std::make_unique<ProjectileEffectNone>(RED_GRENADE_ID),
+            std::make_unique<ProjectileEffectFragmentedExplosion>(RED_GRENADE_ID, radius, damage,
+                                                                  blast_power, fragment_number,
+                                                                  fragment_radius, fragment_damage),
+            countdown));
 
     ammo--;
+    aim_power = 0;
+    aim_angle = 0;
     return false;
 }
 

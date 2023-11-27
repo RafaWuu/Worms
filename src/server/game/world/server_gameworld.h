@@ -60,5 +60,7 @@ public:
     void add_projectile(std::shared_ptr<Projectile> projectile);
 
     size_t get_worms_number();
+
+    void notify_explosion(uint16_t projectile_type, float radius, b2Vec2 center);
 };
 #endif  // WORMS_SERVER_GAMEWORLD_H

@@ -22,8 +22,6 @@ private:
 
     Queue<std::shared_ptr<GameStatus>>& outgoing_q;
 
-    std::atomic<bool> is_alive;
-
 public:
     Sender(Queue<std::shared_ptr<GameStatus>>& queue, ServerProtocol& gp);
     Sender(const Sender&) = delete;

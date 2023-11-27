@@ -10,8 +10,10 @@
 
 #define NRAYS 15
 
-ProjectileEffectDefaultExplosion::ProjectileEffectDefaultExplosion(float radius, float damage,
-                                                                   float blast_power) {
+ProjectileEffectDefaultExplosion::ProjectileEffectDefaultExplosion(uint16_t projectile_type,
+                                                                   float radius, float damage,
+                                                                   float blast_power):
+        ProjectileEffect(projectile_type) {
     this->radius = radius;
     this->damage = damage;
     this->blast_power = blast_power;

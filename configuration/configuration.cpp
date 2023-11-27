@@ -174,6 +174,10 @@ float Configuration::get_weapon_max_vel(const std::string& weapon_name) {
     return weapons_info[weapon_name].max_vel;
 }
 
+float Configuration::get_restitution(const std::string& weapon_name) {
+    return weapons_info[weapon_name].restitution;
+}
+
 float Configuration::get_maximum_countdown() const { return maximum_countdown; }
 
 

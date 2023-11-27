@@ -16,9 +16,9 @@
 #include "server_projectile_info.h"
 
 Projectile::Projectile(b2World* world, std::string&& identifier,
+                       std::unique_ptr<ProjectileLaunch> launch_strategy,
                        std::unique_ptr<ProjectileEffect> impact_strategy,
-                       std::unique_ptr<ProjectileEffect> countdown_strategy, b2Vec2 pos,
-                       float angle, float power, float countdown):
+                       std::unique_ptr<ProjectileEffect> countdown_strategy, float countdown):
         type(config.get_weapon_id(identifier)),
         impact_strategy(std::move(impact_strategy)),
         countdown_strategy(std::move(countdown_strategy)),
@@ -30,8 +30,8 @@ Projectile::Projectile(b2World* world, std::string&& identifier,
     this->height = config.get_weapon_height(identifier);
     this->dragConstant = config.get_weapon_dragconstant(identifier);
     float density = config.get_weapon_density(identifier);
-    float angular_damping = config.get_weapon_damping(identifier);
-    float max_vel = config.get_weapon_max_vel(identifier);
+    float restitution = config.get_restitution(identifier);
+
 
     b2BodyDef bodyDef;
     bodyDef.type = b2_dynamicBody;
@@ -43,20 +43,19 @@ Projectile::Projectile(b2World* world, std::string&& identifier,
     b2FixtureDef fixtureDef;
     fixtureDef.shape = &polygonShape;
     fixtureDef.density = density;
+    fixtureDef.restitution = restitution;
 
     fixtureDef.userData.pointer = reinterpret_cast<uintptr_t>(this);
     fixtureDef.filter.groupIndex = -(int)projectile;
     body = world->CreateBody(&bodyDef);
 
     body->CreateFixture(&fixtureDef);
-    body->SetAngularDamping(angular_damping);
     body->SetBullet(true);
-
     body->SetAwake(true);
     body->SetAngularVelocity(0);
-    body->SetTransform(pos, angle);
-    body->SetLinearVelocity(body->GetWorldVector(b2Vec2(power * max_vel, 0)));
     had_impacted = false;
+
+    launch_strategy->execute(*body);
 }
 
 void Projectile::update(GameWorld& world) {
@@ -66,21 +65,7 @@ void Projectile::update(GameWorld& world) {
     if (is_dead)
         return;
 
-    b2Vec2 flightDirection = body->GetLinearVelocity();
-    float flightSpeed = flightDirection.Normalize();
-    b2Vec2 pointingDirection = body->GetWorldVector(b2Vec2(1, 0));
-    float dot = b2Dot(flightDirection, pointingDirection);
-
-    float dragForceMagnitude =
-            (1 - fabs(dot)) * flightSpeed * flightSpeed * dragConstant * body->GetMass();
-
-    b2Vec2 tailPosition = body->GetWorldPoint(b2Vec2(-width / 2, 0));
-
-    body->ApplyForce(dragForceMagnitude * -flightDirection, tailPosition, true);
-
     countdown -= 1.0 / config.get_tick_rate();
-
-    std::cout << "countdown: " << countdown << '\n';
 
     if (countdown < 0.0)
         on_countdown_finished(world);

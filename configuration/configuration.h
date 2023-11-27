@@ -132,6 +132,8 @@ public:
     int getFps() const { return fps; }
 
     float get_maximum_countdown() const;
+
+    float get_restitution(const std::string& weapon_name);
 };
 
 #endif

@@ -8,9 +8,11 @@
 #include "game/world/server_gameworld.h"
 
 class ProjectileEffect {
+protected:
+    uint16_t projectile_type;
 
 public:
-    ProjectileEffect() = default;
+    explicit ProjectileEffect(uint16_t projectile_type);
     virtual ~ProjectileEffect() = default;
 
     // Devuelve true si el preyectil deberia desaparecer

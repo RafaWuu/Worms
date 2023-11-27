@@ -160,3 +160,5 @@ void GameWorld::set_dimensions(float h, float w) {
 GameWorld::~GameWorld() {}
 
 size_t GameWorld::get_worms_number() { return worm_map.size(); }
+
+void GameWorld::notify_explosion(uint16_t projectile_type, float radius, b2Vec2 center) {}

@@ -218,7 +218,7 @@ bool AimingState::update(Worm& worm) {
 
 PoweringState::PoweringState() {
     code = Powering;
-    required = Aiming | Alive;
+    required = Alive;
     blocking_me = NoState;
     terminate = NoState;
     requiring = Firing;
@@ -231,7 +231,4 @@ bool PoweringState::update(Worm& worm) {
     return false;
 }
 
-uint16_t PoweringState::on_deactivated(Worm& worm) {
-    worm.aim_power = 0;
-    return Firing;
-}
+uint16_t PoweringState::on_deactivated(Worm& worm) { return Firing; }

@@ -192,7 +192,25 @@ add_executable(server
 		src/server/game/weapons/server_weapon_info_grenade.cpp
 		src/server/game/weapons/server_weapon_redgrenade.cpp
 		src/server/game/weapons/server_weapon_info_redgrenade.cpp
+		src/server/game/weapons/server_weapon_banana.cpp
+		src/server/game/weapons/server_weapon_banana.h
+		src/server/game/weapons/server_weapon_info_banana.cpp
+		src/server/game/weapons/server_weapon_info_banana.h
 		src/server/game/weapons/server_weapon_factory.cpp
+        src/server/game/projectiles/server_projectile_launch_parabolic.cpp
+        src/server/game/projectiles/server_projectile_launch_parabolic.h
+		src/server/game/projectiles/server_projectile_launch.cpp
+		src/server/game/projectiles/server_projectile_launch.h
+		src/server/game/weapons/server_weapon_holygrenade.cpp
+		src/server/game/weapons/server_weapon_holygrenade.h
+        src/server/game/weapons/server_weapon_info_holygrenade.cpp
+        src/server/game/weapons/server_weapon_info_holygrenade.h
+		src/server/game/weapons/server_weapon_dynamite.cpp
+		src/server/game/weapons/server_weapon_dynamite.h
+		src/server/game/projectiles/server_projectile_launch_inplace.cpp
+		src/server/game/projectiles/server_projectile_launch_inplace.h
+		src/server/game/weapons/server_weapon_info_dynamite.cpp
+		src/server/game/weapons/server_weapon_info_dynamite.h
 )
 
 target_include_directories(client PUBLIC
@@ -287,6 +305,14 @@ add_executable(hello_test
 		src/server/game/weapons/server_weapon_redgrenade.cpp
 		src/server/game/weapons/server_weapon_info_redgrenade.cpp
 		src/server/game/weapons/server_weapon_factory.cpp
+        src/server/game/projectiles/server_projectile_launch_parabolic.cpp
+        src/server/game/projectiles/server_projectile_launch_parabolic.h
+		src/server/game/projectiles/server_projectile_launch.cpp
+		src/server/game/projectiles/server_projectile_launch.h
+        src/server/game/weapons/server_weapon_info_holygrenade.cpp
+        src/server/game/weapons/server_weapon_info_holygrenade.h
+		src/server/game/projectiles/server_projectile_launch_inplace.cpp
+		src/server/game/projectiles/server_projectile_launch_inplace.h
 )
 
 target_link_libraries(hello_test GTest::gtest_main GTest::gmock ${BOX2D_LIBRARY_PATH} yaml-cpp)

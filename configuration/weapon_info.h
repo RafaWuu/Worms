@@ -35,6 +35,8 @@ public:
     WeaponConfig() = default;
 
     explicit WeaponConfig(const YAML::Node& weapon_node);
+
+    float restitution;
 };
 
 #endif

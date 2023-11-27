@@ -38,7 +38,6 @@ public:
 
     int numFootContacts;
     int jumpTimeout;
-    float aim_power;
 
     Worm(uint8_t id, GameWorld& world, float pos_x, float pos_y);
     ~Worm();
@@ -86,7 +85,6 @@ public:
     std::unique_ptr<WormInfo> get_worminfo() const;
     uint8_t ammo;
     uint8_t current_weapon;
-    float desiredAngle;
 
     void get_hit(float d);
 
@@ -95,8 +93,6 @@ public:
     uint8_t health;
 
     void change_weapon(uint8_t weapon_id);
-
-    float get_angle();
 
     std::unique_ptr<WeaponInfo> get_current_weapon_info() const;
 };

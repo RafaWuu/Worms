@@ -14,6 +14,7 @@
 
 #include "b2_body.h"
 #include "b2_world.h"
+#include "server_projectile_launch.h"
 
 class ProjectileEffect;
 class GameWorld;
@@ -35,11 +36,11 @@ public:
     friend class ProjectileInfo;
 
     Projectile(b2World* world, std::string&& identifier,
+               std::unique_ptr<ProjectileLaunch> launch_strategy,
                std::unique_ptr<ProjectileEffect> impact_strategy,
-               std::unique_ptr<ProjectileEffect> countdown_strategy, b2Vec2 pos, float angle,
-               float power, float countdown);
+               std::unique_ptr<ProjectileEffect> countdown_strategy, float countdown);
 
-    ~Projectile() = default;
+    ~Projectile() override = default;
     Projectile& operator=(const Projectile&) = delete;
 
     void update(GameWorld& world) override;

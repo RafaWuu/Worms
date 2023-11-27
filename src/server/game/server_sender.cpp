@@ -7,22 +7,22 @@
 // Created by xguss on 03/10/23.
 //
 Sender::Sender(Queue<std::shared_ptr<GameStatus>>& queue, ServerProtocol& gp):
-        game_protocol(gp), outgoing_q(queue), is_alive(true) {}
+        game_protocol(gp), outgoing_q(queue) {}
 
 void Sender::run() {
-    while (is_alive) {
+    while (_is_alive) {
         try {
             auto status = outgoing_q.pop();
             status->serialize(game_protocol);
 
         } catch (ClosedSocket& e) {
-            is_alive = false;
+            _is_alive = false;
         } catch (ClosedQueue& e) {
-            is_alive = false;
+            _is_alive = false;
         }
     }
 }
 
-void Sender::kill() { is_alive = false; }
+void Sender::kill() { _is_alive = false; }
 
-bool Sender::is_dead() { return not is_alive; }
+bool Sender::is_dead() { return not _is_alive; }
