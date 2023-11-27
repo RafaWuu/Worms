@@ -23,8 +23,12 @@ class Animation {
 public:
     Animation(std::shared_ptr<SDL2pp::Texture> texture, TextureController& controller);
     ~Animation();
+
     void update(float dt);
+    void update_by_angle(float aim_angle);
+
     void render(SDL2pp::Renderer& renderer, const SDL2pp::Rect dest, SDL_RendererFlip& flipType);
+
     void change_texture(AnimationState new_state);
 
 private:

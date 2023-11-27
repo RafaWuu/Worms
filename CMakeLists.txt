@@ -187,6 +187,7 @@ add_executable(server
 		src/server/game/weapons/server_weapon_info_grenade.cpp
 		src/server/game/weapons/server_weapon_redgrenade.cpp
 		src/server/game/weapons/server_weapon_info_redgrenade.cpp
+		src/server/game/weapons/server_weapon_factory.cpp
 )
 
 target_include_directories(client PUBLIC
@@ -266,6 +267,21 @@ add_executable(hello_test
 		src/server/scenario_filehandler.cpp
         src/server/game/weapons/server_weapon_bazooka.cpp
         src/server/game/weapons/server_weapon_bazooka.h
+		src/server/game/weapons/server_weapon_grenade.cpp
+		src/server/game/projectiles/server_projectile.cpp
+		src/server/game/projectiles/server_projectile_effect.cpp
+		src/server/game/projectiles/server_projectile_effect_defaultexplosion.cpp
+		src/server/game/projectiles/server_projectile_effect_noeffect.cpp
+		src/server/game/weapons/server_weapon_factory.cpp
+		src/server/game/weapons/server_weapon_mortar.cpp
+		src/server/game/projectiles/server_projectile_effect_fragmentedexplosion.cpp
+		src/server/game/weapons/server_weapon_info.cpp
+		src/server/game/weapons/server_weapon_info_bazooka.cpp
+		src/server/game/weapons/server_weapon_mortar_info.cpp
+		src/server/game/weapons/server_weapon_info_grenade.cpp
+		src/server/game/weapons/server_weapon_redgrenade.cpp
+		src/server/game/weapons/server_weapon_info_redgrenade.cpp
+		src/server/game/weapons/server_weapon_factory.cpp
 )
 
 target_link_libraries(hello_test GTest::gtest_main GTest::gmock ${BOX2D_LIBRARY_PATH} yaml-cpp)

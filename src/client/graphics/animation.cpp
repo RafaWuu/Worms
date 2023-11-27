@@ -44,7 +44,7 @@ void Animation::render(SDL2pp::Renderer& renderer, const SDL2pp::Rect dst,
                        SDL_RendererFlip& flipType) {
     renderer.Copy(
             *texture,
-            SDL2pp::Rect(0, 1 + (1 + this->size) * this->currentFrame, this->size, this->size), dst,
+            SDL2pp::Rect(0, 2 + this->size * this->currentFrame, this->size, this->size), dst,
             0.0,              // don't rotate
             SDL2pp::NullOpt,  // rotation center - not needed
             flipType);
@@ -65,4 +65,20 @@ void Animation::change_texture(AnimationState new_state) {
 void Animation::advanceFrame() {
     this->currentFrame += 1;
     this->currentFrame = this->currentFrame % this->numFrames;
+}
+
+void Animation::update_by_angle(float aim_angle) {
+    float angle_per_frame = 180.0f / numFrames;
+
+    float offset = 90;
+
+    // En el sprite el gusano empieza apuntando hacia abajo, asi que le sumo el offset
+    float angle_in_degrees = aim_angle * (180.0f / M_PI) + offset;
+
+    int frame_index = angle_in_degrees / angle_per_frame;
+
+    // El # de frames es numFrames, pero los indices son de [0, numFrames - 1]. 
+    frame_index = std::min(numFrames - 1, frame_index);
+
+    currentFrame = frame_index;
 }

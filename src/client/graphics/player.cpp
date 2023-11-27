@@ -59,6 +59,8 @@ void Player::update_info(EntityInfo* info) {
         an.change_texture(DEAD);
     } else if (!idle && is_idle_now) {
         an.change_texture(current_weapon->get_idle_texture_state());
+    } else if (!aiming && is_aiming_now) {
+        an.change_texture(current_weapon->get_aiming_texture_state());
     }
 
     moving = is_moving_now;
@@ -80,9 +82,17 @@ void Player::update_info(EntityInfo* info) {
  * Esto les va a resultar muy util.
  */
 void Player::update(float dt) {
-    // El frame del aiming se debe elegir segun el angulo
     if (!idle && !aiming) 
         an.update(dt);
+
+    if (aiming) {
+        if (facingLeft) {
+            // Flippeo el angulo a la derecha
+            if (aim_angle < 0) aim_angle = - (M_PI + aim_angle);
+            else aim_angle = (M_PI - aim_angle);
+        }
+        an.update_by_angle(aim_angle);
+    }
 }
 
 void Player::render(SDL2pp::Renderer& renderer, SDL2pp::Rect& camera) {
