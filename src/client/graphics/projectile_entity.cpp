@@ -17,6 +17,7 @@ void projectileEntity::update_info(EntityInfo* info) {
 
     x = projectile->get_pos_x();
     y = -projectile->get_pos_y();
+    angle = projectile->get_angle();
 
     type = projectile->type;
 
@@ -27,10 +28,14 @@ void projectileEntity::update_info(EntityInfo* info) {
  * Notar que el manejo de eventos y la actualización de modelo ocurren en momentos distintos.
  * Esto les va a resultar muy util.
  */
-void projectileEntity::update(float dt) { an.update(dt); }
+void projectileEntity::update(float dt) { 
+    an.update(dt); 
+}
 
 void projectileEntity::render(SDL2pp::Renderer& renderer, SDL2pp::Rect& camera) {
+    float angle_degrees = angle * (180.0f / M_PI);
+
     SDL_RendererFlip flip = SDL_FLIP_NONE;
     an.render(renderer,
-              SDL2pp::Rect(x * SCREEN_WIDTH / 20 - 25, y * SCREEN_HEIGHT / 20 - 25, 50, 50), flip);
+              SDL2pp::Rect(x * SCREEN_WIDTH / 20 - 25, y * SCREEN_HEIGHT / 20 - 25, 50, 50), flip, angle_degrees);
 }

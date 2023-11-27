@@ -27,7 +27,7 @@ public:
     void update(float dt);
     void update_by_angle(float aim_angle);
 
-    void render(SDL2pp::Renderer& renderer, const SDL2pp::Rect dest, SDL_RendererFlip& flipType);
+    void render(SDL2pp::Renderer& renderer, const SDL2pp::Rect dest, SDL_RendererFlip& flipType, float angle = 0.0);
 
     void change_texture(AnimationState new_state);
 
