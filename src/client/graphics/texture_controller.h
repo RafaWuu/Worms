@@ -7,6 +7,7 @@
 #include <SDL2pp/SDL2pp.hh>
 
 #include "client_constants.h"
+
 enum AnimationState {
     CROSSHAIR,
     WALKING,
@@ -24,6 +25,18 @@ enum AnimationState {
     BAZOOKA_IDLE, // El gusano empieza con una bazooka, empieza con esta textura
     BAZOOKA_AIMING,
     BAZOOKA_PROJECTILE,
+    MORTAR_IDLE,
+    MORTAR_AIMING,
+    MORTAR_PROJECTILE,
+    RED_GRENADE_IDLE,
+    RED_GRENADE_AIMING,
+    RED_GRENADE_PROJECTILE,
+    GREEN_GRENADE_IDLE,
+    GREEN_GRENADE_AIMING,
+    GREEN_GRENADE_PROJECTILE,
+    HOLY_GRENADE_IDLE,
+    HOLY_GRENADE_AIMING,
+    HOLY_GRENADE_PROJECTILE,
 };
 
 class TextureController {

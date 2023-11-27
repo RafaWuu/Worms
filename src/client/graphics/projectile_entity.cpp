@@ -19,6 +19,8 @@ void projectileEntity::update_info(EntityInfo* info) {
     y = -projectile->get_pos_y();
 
     type = projectile->type;
+
+    an.change_texture(projectile_controller.get_projectile_texture(type));
 }
 
 /**

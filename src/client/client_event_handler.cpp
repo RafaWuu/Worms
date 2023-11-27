@@ -58,7 +58,6 @@ std::shared_ptr<Command> EventHandler::handle(const SDL_Event& event,
         if (event.button.button == SDL_BUTTON_LEFT) {
             if (weapon_selector.mouse_inside(event.button.x, event.button.y)) {
                 uint8_t weapon_id = weapon_selector.get_weapon_index(event.button.x, event.button.y);
-                printf("Cliente elige arma %hhu\n", weapon_id);
                 return change_weapon(weapon_id);
             }
             if (!aiming)

@@ -8,6 +8,12 @@
 #include "../client/client_client.h"
 
 #include "bazooka.h"
+#include "green_grenade.h"
+#include "red_grenade.h"
+#include "holy_grenade.h"
+#include "green_grenade.h"
+#include "mortar.h"
+
 #include "weapon.h"
 
 class WeaponFactory {

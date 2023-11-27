@@ -31,12 +31,12 @@ void WeaponSelector::render(SDL2pp::Renderer& renderer) {
 
 }
 
-bool WeaponSelector::mouse_inside(int x, int y) { 
-    int sprite_x = (SCREEN_WIDTH - width) / 2;
-    int sprite_y = SCREEN_HEIGHT - height;
+bool WeaponSelector::mouse_inside(int mouse_x, int mouse_y) { 
+    int sprite_x = x;
+    int sprite_y = y;
 
-    bool inside_x = ( (x >= sprite_x)  && (x <= sprite_x + width) );
-    bool inside_y = ( (y >= sprite_y)  && (x <= sprite_y + height) );
+    bool inside_x = ( (mouse_x >= sprite_x)  && (mouse_x <= sprite_x + width) );
+    bool inside_y = ( (mouse_y >= sprite_y)  && (mouse_y <= sprite_y + height) );
     
     return inside_x && inside_y;
 }

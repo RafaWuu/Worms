@@ -7,8 +7,9 @@ static Uint32 get_color_key(uint8_t r, uint8_t g, uint8_t b);
 
 TextureController::TextureController(SDL2pp::Renderer& renderer_): renderer(renderer_) {
     Uint32 blue_color_key = get_color_key(0x80, 0x80, 0xC0);
+    Uint32 yellow_color_key = get_color_key(192,192,128);
 
-    std::map<AnimationState, std::string> textures_to_load = {
+    std::map<AnimationState, std::string> textures_blue_bg = {
         {WALKING, "wwalk2.png"},
         {IDLE, "wblink1.png"},
         {JUMPING, "wjumpd.png"},
@@ -20,12 +21,32 @@ TextureController::TextureController(SDL2pp::Renderer& renderer_): renderer(rend
         //{AnimationState::SCENARIO_GROUND, "blue00.bmp"},
         {BAZOOKA_IDLE, "wbazbak.png"}, // Quiza usar el mismo sprite para idle/aiming?
         {BAZOOKA_AIMING, "wbaz.png"},
+        {BAZOOKA_PROJECTILE, "missile.png"},
+        {MORTAR_IDLE, "wbazbak.png"}, 
+        {MORTAR_AIMING, "wbaz.png"},
         {CROSSHAIR, "crshairr.png"},
         {SCENARIO_BACKGROUND, "background.png"},
+        {RED_GRENADE_IDLE, "wclsbak.png"},
+        {RED_GRENADE_AIMING, "wthrcls.png"},
+        {RED_GRENADE_PROJECTILE, "cluster.png"},
+        {GREEN_GRENADE_IDLE, "wgrnbak.png"},
+        {GREEN_GRENADE_AIMING, "wthrgrn.png"},
+        {GREEN_GRENADE_PROJECTILE, "grenade.png"},
+        {HOLY_GRENADE_IDLE, "whgrbak.png"},
+        {HOLY_GRENADE_AIMING, "wthrhgr.png"},
+        {HOLY_GRENADE_PROJECTILE, "hgrenade.png"},
     };
 
-    for (auto const& texture: textures_to_load) {
+    std::map<AnimationState, std::string> textures_yellow_bg = {
+        {MORTAR_PROJECTILE, "mortar.png"},
+    };
+
+    for (auto const& texture: textures_blue_bg) {
         load_texture(texture.first, texture.second, blue_color_key);
+    }
+
+    for (auto const& texture: textures_yellow_bg) {
+        load_texture(texture.first, texture.second, yellow_color_key);
     }
 }
 

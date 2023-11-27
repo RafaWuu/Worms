@@ -7,6 +7,7 @@
 
 #include "animation.h"
 #include "entity.h"
+#include "projectile_controller.h"
 
 class projectileEntity: public Entity {
 public:
@@ -19,11 +20,15 @@ public:
 
 private:
     TextureController& texture_controller;
+
+    ProjectileController projectile_controller;
+
     Animation an;
 
     uint8_t type;
     int x;
     int y;
     int id;
+    float angle;
 };
 #endif  // WORMS_projectile_ENTITY_H

@@ -96,6 +96,7 @@ set(CLIENT_SOURCE
 	src/client/commands/client_fire.cpp
 	src/client/game/projectile.cpp
 	src/client/graphics/projectile_entity.cpp
+	src/client/graphics/projectile_controller.cpp
 	src/common/common_baseprotocol.cpp
 	src/common/common_baseprotocol.h
 	src/client/lobby/gameinfo.cpp
@@ -107,6 +108,10 @@ set(CLIENT_SOURCE
 	src/client/commands/change_weapon.cpp
 	src/client/graphics/weapons/weapon.cpp
 	src/client/graphics/weapons/bazooka.cpp
+	src/client/graphics/weapons/red_grenade.cpp
+	src/client/graphics/weapons/green_grenade.cpp
+	src/client/graphics/weapons/holy_grenade.cpp
+	src/client/graphics/weapons/mortar.cpp
 	src/client/graphics/weapons/weapon_factory.cpp
 	src/client/graphics/crosshair.cpp
 	configuration/configuration.cpp

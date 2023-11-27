@@ -44,9 +44,7 @@ void Player::update_info(EntityInfo* info) {
     bool is_falling_now = (new_state & 0x0020) != 0;
     bool is_idle_now = (new_state & 0x0002) != 0;
     bool is_dead_now = !health;
-    
-    // TODO: cambiar textura cuando apunta y elegir frame segun el angulo
-    
+        
     if (!moving && is_moving_now) {
         an.change_texture(WALKING);
     } else if (!jumping && is_jumping_now) {
@@ -57,10 +55,10 @@ void Player::update_info(EntityInfo* info) {
         an.change_texture(FALLING);
     } else if (!dead && is_dead_now) {
         an.change_texture(DEAD);
-    } else if (!idle && is_idle_now) {
-        an.change_texture(current_weapon->get_idle_texture_state());
     } else if (!aiming && is_aiming_now) {
         an.change_texture(current_weapon->get_aiming_texture_state());
+    } else if (!idle && is_idle_now) { // TODO: que se cambie de textura al cambiar el arma
+        an.change_texture(current_weapon->get_idle_texture_state());
     }
 
     moving = is_moving_now;
