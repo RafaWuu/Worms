@@ -10,7 +10,7 @@
 GameInfo::GameInfo(const Game& game): scenario(game.name) {
     id = game.game_id;
     players = game.id_lists.size();
-    max_players = 2;
+    max_players = game.max_players;
     status = game.had_started;
 }
 

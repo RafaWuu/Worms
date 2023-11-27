@@ -26,7 +26,7 @@ public:
 class LobbyRequestNewGame: public LobbyRequest {
 
 public:
-    explicit LobbyRequestNewGame(const std::string& s);
+    explicit LobbyRequestNewGame(const std::string&& s);
     ~LobbyRequestNewGame() override = default;
 
     std::shared_ptr<Game> execute(LobbyMonitor& lobby, ServerProtocol& gp,

@@ -30,10 +30,10 @@ public:
     LobbyMonitor(const LobbyMonitor&) = delete;
     LobbyMonitor& operator=(const LobbyMonitor&) = delete;
 
-    uint16_t create_game(std::string name, uint16_t client_id);
+    uint16_t create_game(const std::string& name, uint16_t client_id);
     std::shared_ptr<Game> join_game(uint16_t client_id, uint16_t game_id);
 
-    std::vector<GameInfo> list_games();
+    std::vector<GameInfo> list_games() const;
 
     void close_game(uint16_t id);
 

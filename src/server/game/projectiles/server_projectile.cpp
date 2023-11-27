@@ -78,7 +78,7 @@ void Projectile::update(GameWorld& world) {
 
     body->ApplyForce(dragForceMagnitude * -flightDirection, tailPosition, true);
 
-    countdown -= 1.0 / config.getFps();
+    countdown -= 1.0 / config.get_tick_rate();
 
     std::cout << "countdown: " << countdown << '\n';
 

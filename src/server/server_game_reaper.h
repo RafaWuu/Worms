@@ -14,7 +14,6 @@ private:
     LobbyMonitor& lobby;
     Queue<uint16_t>& reap_queue;
 
-    std::atomic<bool> is_alive;
     void kill_all();
 
 public:

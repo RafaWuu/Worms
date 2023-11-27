@@ -29,6 +29,7 @@ public:
 
 public:
     virtual ObjectType get_id() const = 0;
+    virtual ~GameObject() = default;
     virtual std::unique_ptr<GameObjectInfo> get_status() const = 0;
     virtual void update(GameWorld& world);
     virtual void delete_body();

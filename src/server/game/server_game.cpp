@@ -16,7 +16,7 @@
 #include "server_error.h"
 #include "server_statusbroadcast_monitor.h"
 
-Game::Game(uint16_t game_id, std::string& scenario, uint16_t owner_id_,
+Game::Game(uint16_t game_id, const std::string& scenario, uint16_t owner_id_,
            Queue<uint16_t>& reap_queue):
         game_world(scenario),
         game_id(game_id),
@@ -28,14 +28,15 @@ Game::Game(uint16_t game_id, std::string& scenario, uint16_t owner_id_,
         reaper_queue(reap_queue),
         is_alive(true),
         had_started(false),
-        name(scenario) {
+        name(scenario),
+        max_players(game_world.get_worms_number()) {
 
     this->start();
 }
 
 void Game::run() {
 
-    auto rate = 1.0 / Configuration::get_instance().get_fps();
+    auto rate = 1.0 / Configuration::get_instance().get_tick_rate();
 
     while (is_alive) {
         try {
@@ -133,4 +134,4 @@ void Game::exit_game(uint16_t client_id) {
         owner_id = id_lists[0];
 }
 
-GameInfo Game::get_info() const { return std::move(GameInfo(*this)); }
+GameInfo Game::get_info() const { return GameInfo(*this); }

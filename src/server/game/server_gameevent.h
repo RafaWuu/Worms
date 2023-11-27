@@ -16,6 +16,7 @@ protected:
     uint16_t client_id;
 
 public:
+    virtual ~GameEvent() = default;
     explicit GameEvent(uint16_t client_id): client_id(client_id) {}
     virtual void execute(EventHandler& e) = 0;
 };

@@ -15,7 +15,6 @@
 class LobbyClientState: public ClientState {
 private:
     LobbyMonitor& lobby;
-    std::shared_ptr<Game> game;
 
 public:
     LobbyClientState(uint16_t id, LobbyMonitor& lobby, ServerProtocol& gameProtocol);

@@ -167,6 +167,7 @@ void Client::update(WorldView& worldview) {
         std::map<uint16_t, std::unique_ptr<EntityInfo>>& updated_states =
                 estado->get_updated_info();
         worldview.update(updated_states);
+        messages_received.clear();
     }
 }
 

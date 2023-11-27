@@ -38,7 +38,7 @@ bool MortarWeapon::aim_projectile(b2Body& body, float x, float y, bool facing_ri
 }
 
 bool MortarWeapon::power_projectile() {
-    aim_power += config.get_powering_time() / config.getFps();
+    aim_power += config.get_powering_time() / config.get_tick_rate();
 
     if (aim_power > MAX_POWER) {
         aim_power = MAX_POWER;

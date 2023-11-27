@@ -142,7 +142,7 @@ add_executable(server
 	src/server/game/server_clientstate_game.cpp
 	src/server/lobby/server_clientstate_lobby.cpp
 	src/server/lobby/server_lobby_request.cpp
-	src/server/lobby/server_lobby_answer.cpp
+        src/server/lobby/server_lobby_response.cpp
 	src/server/game/server_gameinfo.cpp
 	src/server/game/server_gameevent.cpp
 	src/server/game/server_statusbroadcast_monitor.cpp
@@ -234,7 +234,7 @@ add_executable(hello_test
 		src/server/game/server_clientstate_game.cpp
 		src/server/lobby/server_clientstate_lobby.cpp
 		src/server/lobby/server_lobby_request.cpp
-		src/server/lobby/server_lobby_answer.cpp
+        src/server/lobby/server_lobby_response.cpp
 		src/server/game/server_gameinfo.cpp
 		src/server/game/server_gameevent.cpp
 		src/server/game/server_statusbroadcast_monitor.cpp

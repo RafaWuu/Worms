@@ -64,7 +64,7 @@ std::unique_ptr<LobbyRequest> ServerProtocol::recv_create_game() {
     std::string s(v.data(), l);
     getLog().write("Server recibe creacion de partida, escenario %s\n", s.c_str());
 
-    return std::make_unique<LobbyRequestNewGame>(s);
+    return std::make_unique<LobbyRequestNewGame>(std::move(s));
 }
 
 std::unique_ptr<LobbyRequest> ServerProtocol::recv_join_game() {

@@ -7,9 +7,9 @@
 #include <memory>
 #include <string>
 
-#include "server_lobby_answer.h"
+#include "server_lobby_response.h"
 
-LobbyRequestNewGame::LobbyRequestNewGame(const std::string& s): scenario(s) {}
+LobbyRequestNewGame::LobbyRequestNewGame(const std::string&& s): scenario(s) {}
 
 std::shared_ptr<Game> LobbyRequestNewGame::execute(LobbyMonitor& lobby, ServerProtocol& gp,
                                                    uint16_t client_id) {
@@ -17,8 +17,8 @@ std::shared_ptr<Game> LobbyRequestNewGame::execute(LobbyMonitor& lobby, ServerPr
     uint16_t id = lobby.create_game(this->scenario, client_id);
     auto game = lobby.join_game(client_id, id);
 
-    auto answer = LobbyAnswerGame(id);
-    answer.send(gp);
+    auto response = LobbyResponseGame(id);
+    response.send(gp);
 
     return game;
 }
@@ -29,8 +29,8 @@ std::shared_ptr<Game> LobbyRequestJoinGame::execute(LobbyMonitor& lobby, ServerP
                                                     uint16_t client_id) {
     auto game = lobby.join_game(client_id, id);
 
-    auto answer = LobbyAnswerGame(id);
-    answer.send(gp);
+    auto response = LobbyResponseGame(id);
+    response.send(gp);
 
     return game;
 }
@@ -40,8 +40,8 @@ std::shared_ptr<Game> LobbyRequestListGames::execute(LobbyMonitor& lobby, Server
 
     auto games = lobby.list_games();
 
-    auto answer = LobbyAnswerGamesList(games);
-    answer.send(gp);
+    auto response = LobbyResponseGamesList(games);
+    response.send(gp);
 
     return nullptr;
 }

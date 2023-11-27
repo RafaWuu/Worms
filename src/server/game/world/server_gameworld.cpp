@@ -19,8 +19,14 @@
 #include "scenario_filehandler.h"
 #include "server_error.h"
 
+#define GRAVITY_Y -9.8
+
 GameWorld::GameWorld(const std::string& scenario_name):
-        b2_world(b2Vec2(.0, -9.8)), worm_map(), file_handler(), listener(*this) {
+        b2_world(b2Vec2(.0, GRAVITY_Y)),
+        worm_map(),
+        file_handler(),
+        listener(*this),
+        config(Configuration::get_instance()) {
 
     entity_id = 0;
     file_handler.get_scenario(*this, scenario_name);
@@ -50,7 +56,7 @@ void GameWorld::step(int steps) {
     for (int32 i = 0; i < steps; ++i) {
         // Instruct the world to perform a single step of simulation.
         // It is generally best to keep the time step and iterations fixed.
-        b2_world.Step(1.0f / 60.0f, 8, 3);
+        b2_world.Step(1.0f / config.get_tick_rate(), 8, 3);
     }
 }
 
@@ -69,7 +75,7 @@ void GameWorld::update_entities() {
     }
 }
 
-void GameWorld::set_clients_to_worms(std::vector<uint16_t> client_vec) {
+void GameWorld::set_clients_to_worms(const std::vector<uint16_t>& client_vec) {
     int i = 0;
 
     for (auto& worm: worm_map) {
@@ -77,21 +83,13 @@ void GameWorld::set_clients_to_worms(std::vector<uint16_t> client_vec) {
             continue;
 
         worm.second->set_client_id(client_vec[i % client_vec.size()]);
-        std::cout << "Worm :" << worm.first << ", Client: " << client_vec[i % client_vec.size()]
-                  << "\n";
         i++;
     }
 }
 
 Worm& GameWorld::get_worm(uint8_t worm_id, uint16_t client_id) {
     auto it = worm_map.find(worm_id);
-    if (it == worm_map.end())
-        throw InvalidWormIdGameError(client_id);
-
-    if (it->second == nullptr)
-        throw InvalidWormIdGameError(client_id);
-
-    if (!it->second->validate_client(client_id))
+    if (it == worm_map.end() || !it->second->validate_client(client_id))
         throw InvalidWormIdGameError(client_id);
 
     return *it->second;
@@ -104,7 +102,7 @@ std::map<uint16_t, std::shared_ptr<GameObjectInfo>> GameWorld::get_entities_info
         map.emplace(e.first, e.second->get_status());
     }
 
-    return std::move(map);
+    return map;
 }
 
 std::map<uint16_t, std::shared_ptr<WormInfo>> GameWorld::get_worms_info() {
@@ -114,7 +112,7 @@ std::map<uint16_t, std::shared_ptr<WormInfo>> GameWorld::get_worms_info() {
         map.emplace(e.first, e.second->get_worminfo());
     }
 
-    return std::move(map);
+    return map;
 }
 void GameWorld::get_dimensions(float* h, float* w) {
     *h = this->height;
@@ -159,9 +157,6 @@ void GameWorld::set_dimensions(float h, float w) {
     edge_3->CreateFixture(&fixture_def);*/
 }
 
-void GameWorld::add_explosion(b2Body& projectile, float radius) {}
-
-void GameWorld::apply_blast_impulse(b2Body* body, Worm* worm, b2Vec2 blastCenter, b2Vec2 applyPoint,
-                                    float blastPower) {}
-
 GameWorld::~GameWorld() {}
+
+size_t GameWorld::get_worms_number() { return worm_map.size(); }

@@ -22,6 +22,7 @@ class WeaponConfig;
 class Configuration {
 private:
     double fps;
+    double tick_rate;
 
     float walking_velocity;
     float standing_stop_rate;
@@ -60,6 +61,7 @@ public:
     static Configuration& get_instance();
 
     double get_fps();
+    double get_tick_rate();
 
     /* WEAPONS INFO */
 

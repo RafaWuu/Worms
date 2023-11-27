@@ -10,11 +10,11 @@
 
 #include "memory"
 #include "server_error.h"
-#include "server_lobby_answer.h"
 #include "server_lobby_request.h"
+#include "server_lobby_response.h"
 
 LobbyClientState::LobbyClientState(uint16_t id, LobbyMonitor& lobby, ServerProtocol& gameProtocol):
-        lobby(lobby), game(nullptr), ClientState(id, gameProtocol) {
+        lobby(lobby), ClientState(id, gameProtocol) {
     gp.send_lobby_newclient(client_id);
 }
 
@@ -22,7 +22,7 @@ std::unique_ptr<ClientState> LobbyClientState::run() {
     while (is_alive) {
         try {
             std::unique_ptr<LobbyRequest> request = gp.recv_lobby_msg();
-            game = request->execute(lobby, gp, client_id);
+            std::shared_ptr<Game> game = request->execute(lobby, gp, client_id);
 
             if (game != nullptr) {
                 return std::make_unique<GameClientState>(client_id, gp, *game);

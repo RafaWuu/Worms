@@ -135,6 +135,19 @@ public:
     }
 
 
+    void clear() {
+        std::unique_lock<std::mutex> lck(mtx);
+
+        while (!q.empty()) {
+            if (closed) {
+                throw ClosedQueue();
+            }
+            q.pop();
+        }
+
+        is_not_full.notify_all();
+    }
+
 private:
     Queue(const Queue&) = delete;
     Queue& operator=(const Queue&) = delete;

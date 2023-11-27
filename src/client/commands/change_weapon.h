@@ -3,11 +3,12 @@
 
 #include "client_command.h"
 
-class ChangeWeapon : public Command{
+class ChangeWeapon: public Command {
 private:
     int weapon_id;
+
 public:
-    ChangeWeapon(int weapon_id);
+    explicit ChangeWeapon(int weapon_id);
     void serialize(ClientProtocol& protocol) override;
 };
 

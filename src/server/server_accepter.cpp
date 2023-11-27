@@ -11,12 +11,12 @@
 #include "lobby/server_lobby.h"
 
 Acceptor::Acceptor(Socket&& sk, LobbyMonitor& lobby):
-        sk_acceptor(sk), lobby(lobby), is_alive(true), client_ids(0) {}
+        sk_acceptor(sk), lobby(lobby), client_ids(0) {}
 
 Acceptor::~Acceptor() { kill_all(); }
 
 void Acceptor::run() {
-    while (is_alive) {
+    while (_is_alive) {
         try {
             Socket peer = sk_acceptor.accept();
 
@@ -25,8 +25,8 @@ void Acceptor::run() {
             client_ids++;
             reap_dead();
         } catch (ClosedSocket& e) {
-            if (is_alive) {
-                throw(e);  // Inesperado, dejo que run_expecting loggee
+            if (_is_alive) {
+                throw;  // Inesperado, dejo que run_expecting loggee
             }
         }
     }
@@ -54,7 +54,7 @@ void Acceptor::kill_all() {
 }
 
 void Acceptor::kill() {
-    is_alive = false;
+    _is_alive = false;
 
     sk_acceptor.shutdown(SHUT_RDWR);
     sk_acceptor.close();

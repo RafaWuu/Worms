@@ -33,6 +33,7 @@ private:
     OnFloorContactListener listener;
     double height;
     double width;
+    Configuration& config;
 
 public:
     b2World b2_world;
@@ -51,14 +52,13 @@ public:
     void step(int steps);
     void update_entities();
 
-    void set_clients_to_worms(std::vector<uint16_t> client_vec);
+    void set_clients_to_worms(const std::vector<uint16_t>& client_vec);
     std::map<uint16_t, std::shared_ptr<GameObjectInfo>> get_entities_info();
     std::map<uint16_t, std::shared_ptr<WormInfo>> get_worms_info();
 
     Worm& get_worm(uint8_t worm_id, uint16_t client_id);
     void add_projectile(std::shared_ptr<Projectile> projectile);
-    void apply_blast_impulse(b2Body* body, Worm* worm, b2Vec2 blastCenter, b2Vec2 applyPoint,
-                             float blastPower);
-    void add_explosion(b2Body& projectile, float radius);
+
+    size_t get_worms_number();
 };
 #endif  // WORMS_SERVER_GAMEWORLD_H

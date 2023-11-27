@@ -16,11 +16,14 @@ Server::Server(const std::string& port):
         reap_queue(),
         lobby(reap_queue),
         game_reaper(lobby, reap_queue),
-        acc(std::move(sk), lobby) {}
+        acc(std::move(sk), lobby) {
 
-void Server::run() {
     acc.start();
     game_reaper.start();
+}
+
+void Server::run() {
+
     while (std::cin.get() != CLOSE_CHAR) {}
 }
 

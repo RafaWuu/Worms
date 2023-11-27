@@ -21,8 +21,6 @@ private:
     LobbyMonitor& lobby;
     std::list<Client> clients_list;
 
-    std::atomic<bool> is_alive;
-
     void reap_dead();
     void kill_all();
     size_t client_ids;

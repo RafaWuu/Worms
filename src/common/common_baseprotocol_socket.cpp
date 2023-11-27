@@ -11,6 +11,8 @@
 // Created by xguss on 24/09/23.
 //
 
+#define FIXED_SCALE 10000.0f
+
 SocketBaseProtocol::SocketBaseProtocol(Socket socket): skt(std::move(socket)) {}
 
 
@@ -33,20 +35,26 @@ void SocketBaseProtocol::recv_4byte_number(uint32_t& number) {
 }
 
 void SocketBaseProtocol::send_4byte_float(float number) {
-    float a = number;
+    uint32_t n = std::abs(number * FIXED_SCALE);
+    uint8_t b = number > 0;
 
-    uint32_t num = htonl(*((uint32_t*)((char*)(&a))));
-    send_throw(&num, sizeof(uint32_t));
+    n = htonl(n);
+
+    send_throw(&b, sizeof(uint8_t));
+    send_throw(&n, sizeof(uint32_t));
 }
 
 void SocketBaseProtocol::recv_4byte_float(float& number) {
-    uint32_t num;
-    recv_throw(&num, sizeof(uint32_t));
-    num = ntohl(num);
+    uint8_t b;
+    uint32_t n;
 
+    recv_throw(&b, sizeof(uint8_t));
+    recv_throw(&n, sizeof(uint32_t));
 
-    // cppcheck-suppress invalidPointerCast
-    number = *((float*)((char*)(&num)));
+    number = ntohl(n) / FIXED_SCALE;
+
+    if (!b)
+        number = -number;
 }
 
 void SocketBaseProtocol::recv_2byte_number(uint16_t& number) {
@@ -84,7 +92,7 @@ void SocketBaseProtocol::recv_throw(void* v, size_t n) {
         throw ClosedSocket();
 }
 
-void SocketBaseProtocol::send_throw(void* v, size_t n) {
+void SocketBaseProtocol::send_throw(const void* v, size_t n) {
     bool was_closed = false;
 
     skt.sendall(v, n, &was_closed);

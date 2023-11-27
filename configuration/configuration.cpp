@@ -13,6 +13,8 @@ Configuration::Configuration() {
         YAML::Node config = YAML::LoadFile("../configuration/configuration.yaml");
 
         fps = config["fps"].as<float>();
+        tick_rate = config["tick_rate"].as<float>();
+
         load_weapon_info(config);
         load_server_states_info(config);
 
@@ -21,6 +23,8 @@ Configuration::Configuration() {
             YAML::Node config = YAML::LoadFile("configuration/configuration.yaml");
 
             fps = config["fps"].as<float>();
+            tick_rate = config["tick_rate"].as<float>();
+
             load_weapon_info(config);
             load_server_states_info(config);
 
@@ -33,6 +37,7 @@ Configuration::Configuration() {
 }
 
 double Configuration::get_fps() { return fps; }
+double Configuration::get_tick_rate() { return tick_rate; }
 
 void Configuration::load_weapon_info(YAML::Node config) {
     maximum_countdown = config["maximum_countdown"].as<float>();
@@ -96,10 +101,12 @@ bool Configuration::weapon_is_affected_by_wind(const std::string& weapon_name) {
 }
 
 std::string Configuration::get_weapon_name(int id) {
-    for (auto& weapon: weapons_info) {
-        if (weapon.second.id == id)
-            return weapon.first;
-    }
+    auto w = std::find_if(weapons_info.begin(), weapons_info.end(),
+                          [id](const auto& weapon) { return weapon.second.id == id; });
+
+    if (w != weapons_info.end())
+        return w->first;
+
     throw YAML::Exception::exception();  // TODO mejorar ?)
 }
 
