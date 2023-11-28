@@ -122,7 +122,7 @@ int Client::start() {
 
     TextureController texture_controller(renderer);
     WeaponSelector weapon_selector(renderer);
-    WorldView worldview(texture_controller, std::move(this->scenario), color_map, weapon_selector, my_id);
+    WorldView worldview(texture_controller, std::move(this->scenario), color_map, weapon_selector, id_assigned_worm);
 
     bool running = true;
     auto start = high_resolution_clock::now();
