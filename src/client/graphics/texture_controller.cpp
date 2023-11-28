@@ -35,6 +35,12 @@ TextureController::TextureController(SDL2pp::Renderer& renderer_): renderer(rend
         {HOLY_GRENADE_IDLE, "whgrbak.png"},
         {HOLY_GRENADE_AIMING, "wthrhgr.png"},
         {HOLY_GRENADE_PROJECTILE, "hgrenade.png"},
+        {BANANA_IDLE, "wbanbak.png"},
+        {BANANA_AIMING, "wthrban.png"},
+        {BANANA_PROJECTILE, "banana.png"},
+        {DYNAMITE_IDLE, "wdynbak.png"},
+        {DYNAMITE_AIMING, "wdynbak.png"},
+        {DYNAMITE_PROJECTILE, "dynamite.png"},
     };
 
     std::map<AnimationState, std::string> textures_yellow_bg = {

@@ -112,6 +112,8 @@ set(CLIENT_SOURCE
 	src/client/graphics/weapons/green_grenade.cpp
 	src/client/graphics/weapons/holy_grenade.cpp
 	src/client/graphics/weapons/mortar.cpp
+	src/client/graphics/weapons/banana.cpp
+	src/client/graphics/weapons/dynamite.cpp
 	src/client/graphics/weapons/weapon_factory.cpp
 	src/client/graphics/crosshair.cpp
 	configuration/configuration.cpp

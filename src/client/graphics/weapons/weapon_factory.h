@@ -13,6 +13,8 @@
 #include "holy_grenade.h"
 #include "green_grenade.h"
 #include "mortar.h"
+#include "banana.h"
+#include "dynamite.h"
 
 #include "weapon.h"
 
