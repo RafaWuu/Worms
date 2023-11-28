@@ -126,35 +126,7 @@ void GameWorld::add_projectile(std::shared_ptr<Projectile> projectile) {
 void GameWorld::set_dimensions(float h, float w) {
     width = w;
     height = h;
-
-    /*
-    b2Vec2 top_left(0, 0);
-    b2Vec2 top_right(width, 0);
-    b2Vec2 bottom_left(0, -height);
-    b2Vec2 bottom_right(width, -height);
-
-
-    b2BodyDef body_def;
-    b2FixtureDef fixture_def;
-    body_def.type = b2_staticBody;
-    body_def.position.Set(0, 0);
-
-    b2EdgeShape edge_shape;
-
-    b2Body* edge_1 = b2_world.CreateBody(&body_def);
-    edge_shape.SetTwoSided(top_left, top_right);
-    fixture_def.shape = &edge_shape;
-    edge_1->CreateFixture(&fixture_def);
-
-    b2Body* edge_2 = b2_world.CreateBody(&body_def);
-    edge_shape.SetTwoSided(top_left, bottom_left);
-    fixture_def.shape = &edge_shape;
-    edge_2->CreateFixture(&fixture_def);
-
-    b2Body* edge_3 = b2_world.CreateBody(&body_def);
-    edge_shape.SetTwoSided(top_right, bottom_right);
-    fixture_def.shape = &edge_shape;
-    edge_3->CreateFixture(&fixture_def);*/
+    boundary = std::make_unique<Boundary>(&b2_world,w,h);
 }
 
 GameWorld::~GameWorld() {}

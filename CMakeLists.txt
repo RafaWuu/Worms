@@ -169,6 +169,7 @@ add_executable(server
 	src/server/game/entities/server_gameobject_info.cpp
 	src/server/game/entities/server_ground_info.cpp
 	src/server/game/entities/server_worm_sensor_info.cpp
+	src/server/game/entities/server_boundary.cpp
 	src/server/game/weapons/server_weapon.cpp
 		src/server/game/projectiles/server_projectile.cpp
 		src/server/game/projectiles/server_projectile_info.cpp
@@ -274,6 +275,7 @@ add_executable(hello_test
 		src/server/game/listeners/server_onfloor_contactlistener.cpp
 		src/server/game/entities/server_worm_sensor.cpp
 		src/server/game/entities/server_ground.cpp
+		src/server/game/entities/server_boundary.cpp
 		src/server/game/states/server_state_manager.cpp
 		src/server/game/states/server_states.cpp
 		src/server/game/states/server_state.cpp

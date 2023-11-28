@@ -16,6 +16,7 @@
 #include "game/listeners/server_onfloor_contactlistener.h"
 #include "game/projectiles/server_projectile.h"
 #include "game/weapons/server_weapon.h"
+#include "game/entities/server_boundary.h"
 
 #include "b2_world.h"
 #include "scenario_filehandler.h"
@@ -33,6 +34,7 @@ private:
     OnFloorContactListener listener;
     double height;
     double width;
+    std::unique_ptr<Boundary> boundary;
     Configuration& config;
 
 public:

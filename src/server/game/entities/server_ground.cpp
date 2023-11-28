@@ -18,7 +18,7 @@ Ground::Ground(b2World* world, float width): width(width), height(10.0), GameObj
 
     b2PolygonShape groundBox;
 
-    groundBox.SetAsBox(width / 2, height / 2);
+    groundBox.SetAsBox(width - 4/ 2, height / 2);
 
     b2FixtureDef fixtureDef;
     fixtureDef.shape = &groundBox;

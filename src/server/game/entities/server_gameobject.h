@@ -17,6 +17,7 @@ enum ObjectType {
     GROUND = 0x001,
     BEAM = 0x002,
     WORM = 0x004,
+    BOUNDARY = 0x006,
     WORM_SENSOR = 0x008,
     projectile = 0x0010,
     BOX = 0x0020
