@@ -18,17 +18,15 @@ Beam::Beam(b2World* b2_world, float center_x, float center_y, float width, float
     bodyDef.position.Set(center_x, center_y);
     body = b2_world->CreateBody(&bodyDef);
 
-    body->SetTransform(body->GetWorldCenter(), angle);
 
     b2PolygonShape beam;
     beam.SetAsBox(width / 2, height / 2);
-
     b2FixtureDef fixtureDef;
     fixtureDef.shape = &beam;
 
     fixtureDef.userData.pointer = reinterpret_cast<uintptr_t>(this);
 
-
+    body->SetTransform(body->GetWorldCenter(), angle * M_PI / 180);
     body->CreateFixture(&fixtureDef);
 }
 

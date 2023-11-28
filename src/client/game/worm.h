@@ -15,8 +15,6 @@ private:
     uint16_t id;
     uint16_t ammo;
 
-    float pos_x;
-    float pos_y;
     uint8_t dir;
     uint16_t state;
     uint8_t health;
@@ -25,17 +23,16 @@ private:
     uint8_t attack_power;
 
 public:
-    Worm(uint16_t id, float pos_x, float pos_y, uint8_t dir, uint16_t state, uint8_t health,
-         uint8_t current_weapon, uint16_t ammo, float aim_angle, uint8_t attack_power);
+    Worm(uint16_t id, uint16_t pos_x, uint16_t pos_y, uint16_t width, uint16_t height, uint8_t dir,
+         uint16_t state, uint8_t health, uint8_t current_weapon, uint16_t ammo, float aim_angle,
+         uint8_t attack_power);
 
-    Worm(uint16_t id, float pos_x, float pos_y, uint8_t dir, uint16_t state, uint8_t health,
-         uint8_t current_weapon);
+    Worm(uint16_t id, uint16_t pos_x, uint16_t pos_y, uint16_t width, uint16_t height, uint8_t dir,
+         uint16_t state, uint8_t health, uint8_t current_weapon);
 
     void set_position(float x, float y);
     void set_health(int8_t health);
 
-    float get_pos_x() const override;
-    float get_pos_y() const override;
     int get_health();
     int get_state();
     uint16_t get_id() const override;

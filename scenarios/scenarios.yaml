@@ -15,17 +15,44 @@ scenarios:
               angle: 0.0
             -
               type: large
-              pos_x: 2.0
+              pos_x: 3.0
               pos_y: 5.0
               angle: 0.0
             - type: large
               pos_x: 9.0
               pos_y: 10.0
               angle: 0.0
+            - type: large
+              pos_x: 11.6
+              pos_y: 7.0
+              angle: 90.0
+            - type: large
+              pos_x: 6.4
+              pos_y: 7.0
+              angle: 90.0
+            - type: large
+              pos_x: 9.0
+              pos_y: 11.0
+              angle: 0.0
+            - type: large
+              pos_x: 9.0
+              pos_y: 4.0
+              angle: 0.0
+            - type: large
+              pos_x: 18.0
+              pos_y: 8.5
+              angle: 90.0
+            - type: large
+              pos_x: 18.0
+              pos_y: 4
+              angle: 0
         worms:
             -
               pos_x: 2.0
-              pos_y: 1.0
+              pos_y: 0.0
             -
               pos_x: 15.0
               pos_y: 1.0
+            -
+              pos_x: 12.0
+              pos_y: 7.0

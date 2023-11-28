@@ -26,9 +26,12 @@ private:
     Animation an;
 
     uint8_t type;
-    int x;
-    int y;
     int id;
     float angle;
+    Configuration& config;
+    int x;
+    int y;
+    uint16_t width;
+    uint16_t height;
 };
 #endif  // WORMS_projectile_ENTITY_H

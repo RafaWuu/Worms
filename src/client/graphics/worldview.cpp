@@ -54,7 +54,7 @@ void WorldView::render(SDL2pp::Renderer& renderer) {
 
 void WorldView::render_background(SDL2pp::Renderer& renderer) {
     auto background = texture_controller.get_texture(SCENARIO_BACKGROUND);
-    renderer.Copy(*background, SDL2pp::NullOpt, SDL2pp::Rect{0, 0, 640, 480});
+    renderer.Copy(*background, SDL2pp::NullOpt, SDL2pp::Rect{0, 0, SCREEN_WIDTH, SCREEN_HEIGHT});
 }
 // offset segun la posicion del objeto a enfocar.
 void WorldView::update_camera(float& x, float& y, float& w, float& h) {

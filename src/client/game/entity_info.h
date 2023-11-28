@@ -13,12 +13,20 @@
 class Entity;
 
 class EntityInfo {
+protected:
+    int x;
+    int y;
+    int width;
+    int height;
+
 public:
-    virtual float get_pos_x() const = 0;
-    virtual float get_pos_y() const = 0;
-    virtual uint16_t get_id() const {
-            return 0;
-    };
+    EntityInfo(uint16_t pos_x, uint16_t pos_y, uint16_t width, uint16_t height);
+    virtual ~EntityInfo() = default;
+    uint16_t get_pos_x() const;
+    uint16_t get_pos_y() const;
+    uint16_t get_height() const;
+    uint16_t get_width() const;
+    virtual uint16_t get_id() const { return 0; };
 
     virtual std::unique_ptr<Entity> create(TextureController& controller) = 0;
 };

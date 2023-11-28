@@ -134,6 +134,17 @@ public:
     float get_maximum_countdown() const;
 
     float get_restitution(const std::string& weapon_name);
+
+    void load_entities_info(YAML::Node config);
+
+    float worm_width;  // TODO: geaters
+    float worm_height;
+    uint8_t worm_health;
+    float beam_large_width;
+    float beam_small_width;
+    float beam_height;
+    uint8_t safe_height;
+    uint8_t max_fall_dmg;
 };
 
 #endif

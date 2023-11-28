@@ -12,7 +12,9 @@
 
 WormSensor::WormSensor(Worm* worm): worm(worm), GameObject() {
     b2PolygonShape dynamicBox;
-    dynamicBox.SetAsBox(0.45, 0.35, b2Vec2(0, -.25), 0);
+    auto& config = Configuration::get_instance();
+    dynamicBox.SetAsBox(config.worm_width / 2 * 1.1, .15, b2Vec2(0, -config.worm_height / 2 + .1),
+                        0);
 
     b2FixtureDef fixtureDef;
     fixtureDef.shape = &dynamicBox;

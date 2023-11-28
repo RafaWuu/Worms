@@ -7,12 +7,10 @@
 
 #include "graphics/ground_entity.h"
 
-float Ground::get_pos_x() const { return x; }
-float Ground::get_pos_y() const { return y; }
 
 std::unique_ptr<Entity> Ground::create(TextureController& controller) {
     return std::make_unique<GroundEntity>(controller, x, y, width, height);
 }
 
-Ground::Ground(float x, float y, float height, float width):
-        x(x), y(y), height(height), width(width) {}
+Ground::Ground(uint16_t x, uint16_t y, uint16_t width, uint16_t height):
+        EntityInfo(x, y, width, height) {}

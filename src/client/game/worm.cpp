@@ -2,35 +2,30 @@
 
 #include "graphics/player.h"
 
-Worm::Worm(uint16_t id, float pos_x, float pos_y, uint8_t dir, uint16_t state, uint8_t health,
-           uint8_t current_weapon, uint16_t ammo, float aim_angle, uint8_t attack_power):
+Worm::Worm(uint16_t id, uint16_t pos_x, uint16_t pos_y, uint16_t width, uint16_t height,
+           uint8_t dir, uint16_t state, uint8_t health, uint8_t current_weapon, uint16_t ammo,
+           float aim_angle, uint8_t attack_power):
         dir(dir),
         id(id),
-        pos_x(pos_x),
-        pos_y(pos_y),
         state(state),
         health(health),
         current_weapon(current_weapon),
         ammo(ammo),
         aim_angle(aim_angle),
-        attack_power(attack_power) {}
+        attack_power(attack_power),
+        EntityInfo(pos_x, pos_y, width, height) {}
 
-Worm::Worm(uint16_t id, float pos_x, float pos_y, uint8_t dir, uint16_t state, uint8_t health,
-           uint8_t current_weapon):
+Worm::Worm(uint16_t id, uint16_t pos_x, uint16_t pos_y, uint16_t width, uint16_t height,
+           uint8_t dir, uint16_t state, uint8_t health, uint8_t current_weapon):
         dir(dir),
         id(id),
-        pos_x(pos_x),
-        pos_y(pos_y),
         state(state),
         health(health),
         current_weapon(current_weapon),
         ammo(0),
         aim_angle(0),
-        attack_power(0) {}
-
-float Worm::get_pos_x() const { return pos_x; }
-
-float Worm::get_pos_y() const { return pos_y; }
+        attack_power(0),
+        EntityInfo(pos_x, pos_y, width, height) {}
 
 int Worm::get_health() { return health; }
 

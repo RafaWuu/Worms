@@ -12,15 +12,14 @@
 class GroundEntity: public Entity {
 private:
     TextureController& texture_controller;
-
-    float x;
-    float y;
-    float width;
-    float height;
+    uint16_t x;
+    uint16_t y;
+    uint16_t width;
+    uint16_t height;
     std::shared_ptr<SDL2pp::Texture> texture;
 
 public:
-    GroundEntity(TextureController controller, float d, float d1, float d2, float d3);
+    GroundEntity(TextureController controller, uint16_t x, uint16_t y, uint16_t w, uint16_t h);
     void render(SDL2pp::Renderer& renderer, SDL2pp::Rect& camera) override;
     void update_info(EntityInfo* info) override;
 };

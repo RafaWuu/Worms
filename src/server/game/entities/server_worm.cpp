@@ -26,7 +26,9 @@ Worm::Worm(uint8_t id, GameWorld& world, float pos_x, float pos_y):
         pos_x(pos_x),
         pos_y(pos_y),
         state_manager(Alive | Standing),
+        config(Configuration::get_instance()),
         GameObject() {
+
 
     b2BodyDef bodyDef;
     bodyDef.type = b2_dynamicBody;
@@ -36,7 +38,7 @@ Worm::Worm(uint8_t id, GameWorld& world, float pos_x, float pos_y):
     body->SetFixedRotation(true);
 
     b2PolygonShape dynamicBox;
-    dynamicBox.SetAsBox(.5f, .5f);
+    dynamicBox.SetAsBox(config.worm_height / 2, config.worm_width / 2);
 
     b2FixtureDef fixtureDef;
     fixtureDef.shape = &dynamicBox;
@@ -51,7 +53,7 @@ Worm::Worm(uint8_t id, GameWorld& world, float pos_x, float pos_y):
     getLog().write("Creando gusano %hhu, x: %f, y %f: \n", id, pos_x, pos_y);
 
     current_weapon = BAZOOKA_ID;
-    health = 100;
+    health = config.worm_health;
     numFootContacts = 0;
     jumpTimeout = 0;
     aim_x = 0;
@@ -63,9 +65,9 @@ Worm::Worm(uint8_t id, GameWorld& world, float pos_x, float pos_y):
 Worm::~Worm() = default;
 
 void Worm::process_fall(float distance) {
-    double max = fmax(25, health);
+    double max = fmax(25, config.max_fall_dmg);
 
-    if (distance > 2)
+    if (distance > config.safe_height)
         health -= (uint8_t)fmin(distance, max);
 }
 

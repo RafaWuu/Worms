@@ -17,6 +17,7 @@ private:
     uint16_t id = 0;
 
 public:
+    virtual ~Entity() = default;
     virtual void update_info(EntityInfo* info){
 
     };

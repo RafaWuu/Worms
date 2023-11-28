@@ -15,16 +15,18 @@ class ScenarioBeam: public Entity {
 private:
     TextureController& texture_controller;
     std::shared_ptr<SDL2pp::Texture> texture;
-    float x;
-    float y;
-    float width;
-    float height;
+    uint16_t x;
+    uint16_t y;
+    uint16_t width;
+    uint16_t height;
     float angle;
 
 public:
-    ScenarioBeam(TextureController& texture_controller, float x, float y, float width, float height,
-                 float angle);
+    ScenarioBeam(TextureController& texture_controller, uint16_t x, uint16_t y, uint16_t width,
+                 uint16_t height, float angle);
     ~ScenarioBeam();
+
+
     void render(SDL2pp::Renderer& renderer, SDL2pp::Rect& camera) override;
 };
 #endif  // __DESKTOP_WORMS_SRC_CLIENT_GRAPHICS_BEAM_H_

@@ -15,7 +15,8 @@ Player::Player(TextureController& controller, int id):
         dead(false),
         x(300),
         y(300),
-        id(id) {
+        id(id),
+        config(Configuration::get_instance()) {
     current_weapon = std::make_unique<Bazooka>();
     health = 100;
 }
@@ -27,9 +28,10 @@ void Player::update_info(EntityInfo* info) {
 
     health = worm->get_health();
 
-    x = worm->get_pos_x() * SCREEN_WIDTH / 20;
-    y = -worm->get_pos_y() * SCREEN_HEIGHT / 20;
-
+    x = worm->get_pos_x();
+    y = worm->get_pos_y();
+    height = worm->get_height();
+    width = worm->get_width();
     uint8_t dir = worm->get_dir();
     uint16_t new_state = worm->get_state();
     aim_angle = worm->get_aim_angle();
@@ -44,7 +46,7 @@ void Player::update_info(EntityInfo* info) {
     bool is_falling_now = (new_state & 0x0020) != 0;
     bool is_idle_now = (new_state & 0x0002) != 0;
     bool is_dead_now = !health;
-        
+
     if (!moving && is_moving_now) {
         an.change_texture(WALKING);
     } else if (!jumping && is_jumping_now) {
@@ -57,7 +59,7 @@ void Player::update_info(EntityInfo* info) {
         an.change_texture(DEAD);
     } else if (!aiming && is_aiming_now) {
         an.change_texture(current_weapon->get_aiming_texture_state());
-    } else if (!idle && is_idle_now) { // TODO: que se cambie de textura al cambiar el arma
+    } else if (!idle && is_idle_now) {  // TODO: que se cambie de textura al cambiar el arma
         an.change_texture(current_weapon->get_idle_texture_state());
     }
 
@@ -80,23 +82,30 @@ void Player::update_info(EntityInfo* info) {
  * Esto les va a resultar muy util.
  */
 void Player::update(float dt) {
-    if (!idle && !aiming) 
+    if (!idle && !aiming)
         an.update(dt);
 
     if (aiming) {
         if (facingLeft) {
             // Flippeo el angulo a la derecha
-            if (aim_angle < 0) aim_angle = - (M_PI + aim_angle);
-            else aim_angle = (M_PI - aim_angle);
+            if (aim_angle < 0)
+                aim_angle = -(M_PI + aim_angle);
+            else
+                aim_angle = (M_PI - aim_angle);
         }
         an.update_by_angle(aim_angle);
     }
 }
 
 void Player::render(SDL2pp::Renderer& renderer, SDL2pp::Rect& camera) {
+    int offsetX = 1.58 * 25;
+    int offsetY = -1.4 * 25;
 
     SDL_RendererFlip flip = facingLeft ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL;
-    an.render(renderer, SDL2pp::Rect(x - 50, y - 50, 100, 100), flip);
+    an.render(
+            renderer,
+            SDL2pp::Rect(x - width * 4 + offsetX, y - height * 4 - offsetY, width * 4, height * 4),
+            flip);
     // render barra de vida 50x10
     int bar_width = (health * 50) / 100.0;
     SDL2pp::Rect health_bar = {x - 25, y - 55, bar_width, 10};

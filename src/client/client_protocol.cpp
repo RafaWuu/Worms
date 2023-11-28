@@ -20,6 +20,8 @@
 
 #define BYTE 1
 
+#define SCALE (25.0f)
+
 enum ObjectType {
     GROUND = 0x001,  // habria que ponerlo en common
     BEAM = 0x002,
@@ -157,7 +159,8 @@ std::unique_ptr<Worm> ClientProtocol::receive_worm_initial_status() {
     getLog().write("Cliente recibe gusano: id %hhu, x: %f, y: %f. Estado %hu \n", id, x, y, state);
 
     // quedaria mejor si el constructor recibe el protocolo y se construye a sí mismo?
-    return std::make_unique<Worm>(id, x, y, dir, state, health, current_weapon);
+    return std::make_unique<Worm>(id, x * SCALE, -y * SCALE, config.worm_width * SCALE,
+                                  config.worm_height * SCALE, dir, state, health, current_weapon);
 }
 
 std::unique_ptr<Worm> ClientProtocol::receive_worm() {
@@ -205,8 +208,9 @@ std::unique_ptr<Worm> ClientProtocol::receive_worm() {
     getLog().write("Cliente recibe gusano: id %hhu, x: %f, y: %f. Estado %hu \n", id, x, y, state);
 
     // TODO ahora solo maneja las armas basicas
-    return std::make_unique<Worm>(id, x, y, dir, state, health, current_weapon, ammo, aim_angle,
-                                  attack_power);
+    return std::make_unique<Worm>(id, x * SCALE, -y * SCALE, config.worm_width * SCALE,
+                                  config.worm_height * SCALE, dir, state, health, current_weapon,
+                                  ammo, aim_angle, attack_power);
 }
 
 std::unique_ptr<Ground> ClientProtocol::receive_ground() {
@@ -237,7 +241,7 @@ std::unique_ptr<Beam> ClientProtocol::receive_beam() {
     baseProtocol.recv_4byte_float(angle);
 
     getLog().write("Cliente recibe beam. x=%lf y=%lf\n", x, y);
-    return std::make_unique<Beam>(x, y, height, width, angle);
+    return std::make_unique<Beam>(x * SCALE, -y * SCALE, width * SCALE, height * SCALE, angle);
 }
 
 std::unique_ptr<Projectile> ClientProtocol::receive_projectile() {
@@ -251,7 +255,10 @@ std::unique_ptr<Projectile> ClientProtocol::receive_projectile() {
     baseProtocol.recv_4byte_float(y);
     baseProtocol.recv_4byte_float(angle);
 
-    return std::make_unique<Projectile>(type, x, y, angle);
+    auto name = config.get_weapon_name(type);
+    return std::make_unique<Projectile>(type, x * SCALE, -y * SCALE,
+                                        config.get_weapon_width(name) * SCALE,
+                                        config.get_weapon_height(name) * SCALE, angle);
 }
 
 std::map<uint16_t, uint16_t> ClientProtocol::receive_worms_distribution() {
@@ -320,8 +327,8 @@ std::unique_ptr<Scenario> ClientProtocol::receive_scenario() {
         }
     }
 
-    return std::make_unique<Scenario>(std::move(dynamic_entities), std::move(static_entities), h,
-                                      w);
+    return std::make_unique<Scenario>(std::move(dynamic_entities), std::move(static_entities),
+                                      h * SCALE, w * SCALE);
 }
 
 std::shared_ptr<EstadoJuego> ClientProtocol::recv_msg() {
@@ -404,8 +411,8 @@ void ClientProtocol::serialize_aim(float x, float y) {
     getLog().write("Cliente apuntando hacia %x %y \n", x, y);
 
     baseProtocol.send_uint_vector(serialized_command);
-    baseProtocol.send_4byte_float(x);
-    baseProtocol.send_4byte_float(y);
+    baseProtocol.send_4byte_float(x / SCALE);
+    baseProtocol.send_4byte_float(-y / SCALE);
 }
 
 void ClientProtocol::serialize_stop_aim() {

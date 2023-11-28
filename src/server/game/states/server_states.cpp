@@ -27,7 +27,6 @@ bool AliveState::update(Worm& worm) {
 
 uint16_t AliveState::on_deactivated(Worm& worm) {
     // TODO deshabilitar colisiones
-    worm.body->SetType(b2_staticBody);
     return NoState;
 }
 

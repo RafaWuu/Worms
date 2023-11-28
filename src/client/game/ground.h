@@ -9,17 +9,11 @@
 #include "entity_info.h"
 class Ground: public EntityInfo {
 private:
-    float x;
-    float y;
-    float height;
-    float width;
-
 public:
-    Ground(float x, float y, float height, float width);;
+    Ground(uint16_t x, uint16_t y, uint16_t width, uint16_t height);
+    ;
 
-    float get_pos_x() const override;
-    float get_pos_y() const override;
-    std::unique_ptr<Entity> create(TextureController &controller) override;
+    std::unique_ptr<Entity> create(TextureController& controller) override;
 };
 
 

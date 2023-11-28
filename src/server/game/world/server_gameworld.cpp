@@ -45,11 +45,15 @@ void GameWorld::create_worm(float x, float y) {
 }
 
 void GameWorld::create_large_beam(float x, float y, float angle) {
-    entities_map.emplace(entity_id++, std::make_shared<Beam>(&b2_world, x, -y, 6, .8, angle));
+    entities_map.emplace(entity_id++,
+                         std::make_shared<Beam>(&b2_world, x, -y, config.beam_large_width,
+                                                config.beam_height, angle));
 }
 
 void GameWorld::create_short_beam(float x, float y, float angle) {
-    entities_map.emplace(entity_id++, std::make_shared<Beam>(&b2_world, x, -y, 3, .8, angle));
+    entities_map.emplace(entity_id++,
+                         std::make_shared<Beam>(&b2_world, x, -y, config.beam_small_width,
+                                                config.beam_height, angle));
 }
 
 void GameWorld::step(int steps) {
@@ -126,7 +130,7 @@ void GameWorld::add_projectile(std::shared_ptr<Projectile> projectile) {
 void GameWorld::set_dimensions(float h, float w) {
     width = w;
     height = h;
-    boundary = std::make_unique<Boundary>(&b2_world,w,h);
+    boundary = std::make_unique<Boundary>(&b2_world, w, h);
 }
 
 GameWorld::~GameWorld() {}

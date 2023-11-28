@@ -44,12 +44,11 @@ void Animation::render(SDL2pp::Renderer& renderer, const SDL2pp::Rect dst,
                        SDL_RendererFlip& flipType, float angle) {
 
     SDL2pp::Point center(size / 2, size / 2);
-    renderer.Copy(
-            *texture,
-            SDL2pp::Rect(0, 2 + this->size * this->currentFrame, this->size, this->size), dst,
-            angle,              // don't rotate
-            center,  // rotation center - not needed
-            flipType);
+    renderer.Copy(*texture,
+                  SDL2pp::Rect(0, 2 + this->size * this->currentFrame, this->size, this->size), dst,
+                  angle,            // don't rotate
+                  SDL2pp::NullOpt,  // rotation center - not needed
+                  flipType);
 }
 
 void Animation::change_texture(AnimationState new_state) {
@@ -79,7 +78,7 @@ void Animation::update_by_angle(float aim_angle) {
 
     int frame_index = angle_in_degrees / angle_per_frame;
 
-    // El # de frames es numFrames, pero los indices son de [0, numFrames - 1]. 
+    // El # de frames es numFrames, pero los indices son de [0, numFrames - 1].
     frame_index = std::min(numFrames - 1, frame_index);
 
     currentFrame = frame_index;

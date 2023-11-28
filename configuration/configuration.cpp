@@ -17,6 +17,7 @@ Configuration::Configuration() {
 
         load_weapon_info(config);
         load_server_states_info(config);
+        load_entities_info(config);
 
     } catch (const YAML::Exception& e1) {
         try {
@@ -27,7 +28,7 @@ Configuration::Configuration() {
 
             load_weapon_info(config);
             load_server_states_info(config);
-
+            load_entities_info(config);
         } catch (const YAML::Exception& e2) {
             // If both attempts fail, print the error messages
             std::cerr << "Error yaml: " << e1.what() << std::endl;
@@ -38,6 +39,22 @@ Configuration::Configuration() {
 
 double Configuration::get_fps() { return fps; }
 double Configuration::get_tick_rate() { return tick_rate; }
+
+void Configuration::load_entities_info(YAML::Node config) {
+    auto worm_node = config["worm"];
+
+    worm_width = worm_node["width"].as<float>();
+    worm_height = worm_node["height"].as<float>();
+    worm_health = worm_node["health"].as<int>();
+    max_fall_dmg = worm_node["max_fall_dmg"].as<int>();
+    safe_height = worm_node["safe_height"].as<int>();
+
+    auto beam_node = config["beam"];
+
+    beam_large_width = beam_node["large_width"].as<float>();
+    beam_small_width = beam_node["small_width"].as<float>();
+    beam_height = beam_node["height"].as<float>();
+}
 
 void Configuration::load_weapon_info(YAML::Node config) {
     maximum_countdown = config["maximum_countdown"].as<float>();

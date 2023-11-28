@@ -10,6 +10,7 @@
 #include <utility>
 #include <vector>
 
+#include "../../../../configuration/configuration.h"
 #include "game/server_inputs.h"
 #include "game/states/server_state_manager.h"
 #include "game/weapons/server_weapon_info.h"
@@ -30,6 +31,7 @@ private:
     float pos_y;
 
     StateManager state_manager;
+    Configuration& config;
 
 public:
     std::map<uint8_t, std::unique_ptr<Weapon>> weapons_map;
