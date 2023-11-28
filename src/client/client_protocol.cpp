@@ -327,7 +327,7 @@ std::unique_ptr<Scenario> ClientProtocol::receive_scenario() {
         }
     }
 
-    return std::make_unique<Scenario>(std::move(dynamic_entities), std::move(static_entities),
+    return std::make_unique<Scenario>(dynamic_entities, static_entities,
                                       h * SCALE, w * SCALE);
 }
 

@@ -31,7 +31,7 @@ private:
 
 public:
     WorldView(TextureController& texture_controller, std::unique_ptr<Scenario> scenario,
-              std::map<uint16_t, SDL2pp::Color>& color_map, WeaponSelector& weapon_selector);
+              std::map<uint16_t, SDL2pp::Color>& color_map, WeaponSelector& weapon_selector, uint8_t id_player);
 
     void update(std::map<uint16_t, std::unique_ptr<EntityInfo>>& updated_info);
 
@@ -41,7 +41,7 @@ public:
 
     void add_entities(std::map<uint16_t, std::unique_ptr<EntityInfo>>& source,
                       std::map<uint16_t, std::shared_ptr<Entity>>& destination,
-                      std::map<uint16_t, SDL2pp::Color>& color_map);
+                      std::map<uint16_t, SDL2pp::Color>& color_map, uint8_t id_player);
 };
 
 #endif

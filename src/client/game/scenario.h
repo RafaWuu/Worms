@@ -16,8 +16,8 @@ private:
     std::map<uint16_t, std::unique_ptr<EntityInfo>> static_entities_info;
 
 public:
-    Scenario(std::map<uint16_t, std::unique_ptr<EntityInfo>>&& dynamic_entities_info,
-             std::map<uint16_t, std::unique_ptr<EntityInfo>>&& static_entities_info, float height,
+    Scenario(std::map<uint16_t, std::unique_ptr<EntityInfo>>& dynamic_entities_info,
+             std::map<uint16_t, std::unique_ptr<EntityInfo>>& static_entities_info, float height,
              float width);
 
     float width;

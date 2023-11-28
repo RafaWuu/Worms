@@ -24,8 +24,6 @@ class WorldView;
 
 class Client {
 private:
-    std::string hostname;
-    std::string servicename;
 
     Socket socket;
     SocketBaseProtocol bp;
@@ -33,8 +31,8 @@ private:
 
     std::unique_ptr<Scenario> scenario;
 
-    ClientSender* sender;
-    ClientReceiver* receiver;
+    std::unique_ptr<ClientSender> sender;
+    std::unique_ptr<ClientReceiver> receiver;
 
     uint8_t id_assigned_worm;
     uint16_t my_id;

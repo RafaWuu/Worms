@@ -29,8 +29,6 @@ using namespace std::chrono;
 #define FAILURE 1
 
 Client::Client(const std::string& hostname, const std::string& servicename):
-        hostname(hostname),
-        servicename(servicename),
         socket(hostname.c_str(), servicename.c_str()),
         bp(std::move(socket)),
         protocol(bp),
@@ -38,8 +36,8 @@ Client::Client(const std::string& hostname, const std::string& servicename):
         messages_received(1000),
         event_handler() {
 
-    sender = new ClientSender(protocol, messages_to_send);
-    receiver = new ClientReceiver(protocol, messages_received);
+    sender = std::make_unique<ClientSender> (protocol, messages_to_send);
+    receiver = std::make_unique<ClientReceiver> (protocol, messages_received);
 
     protocol.get_my_id(my_id);  // Reubicar
     id_assigned_worm = 0;
@@ -57,9 +55,6 @@ void Client::kill() {
 
     sender->join();
     receiver->join();
-
-    delete sender;
-    delete receiver;
 }
 
 // lobby
@@ -127,7 +122,7 @@ int Client::start() {
 
     TextureController texture_controller(renderer);
     WeaponSelector weapon_selector(renderer);
-    WorldView worldview(texture_controller, std::move(this->scenario), color_map, weapon_selector);
+    WorldView worldview(texture_controller, std::move(this->scenario), color_map, weapon_selector, my_id);
 
     bool running = true;
     auto start = high_resolution_clock::now();
@@ -163,7 +158,7 @@ void Client::manage_frame_rate(time_point<high_resolution_clock>& start) {
 
 void Client::update(WorldView& worldview) {
     std::shared_ptr<EstadoJuego> estado;
-    if (messages_received.try_pop(estado)) {
+    while (messages_received.try_pop(estado)) {
         std::map<uint16_t, std::unique_ptr<EntityInfo>>& updated_states =
                 estado->get_updated_info();
         worldview.update(updated_states);

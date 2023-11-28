@@ -1,15 +1,15 @@
 #include "worldview.h"
 
 WorldView::WorldView(TextureController& texture_controller, std::unique_ptr<Scenario> scenario,
-                     std::map<uint16_t, SDL2pp::Color>& color_map, WeaponSelector& weapon_selector):
+                     std::map<uint16_t, SDL2pp::Color>& color_map, WeaponSelector& weapon_selector, uint8_t id_player):
         texture_controller(texture_controller),
         entity_factory(texture_controller),
         weapon_selector(weapon_selector) {
 
     camera = SDL2pp::Rect{0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
 
-    add_entities(scenario->get_dynamic_entities_info(), dynamic_entities, color_map);
-    add_entities(scenario->get_static_entities_info(), static_entities, color_map);
+    add_entities(scenario->get_dynamic_entities_info(), dynamic_entities, color_map, id_player);
+    add_entities(scenario->get_static_entities_info(), static_entities, color_map, id_player);
 }
 
 void WorldView::update(std::map<uint16_t, std::unique_ptr<EntityInfo>>& updated_info) {
@@ -77,7 +77,7 @@ void WorldView::update_camera(float& x, float& y, float& w, float& h) {
 
 void WorldView::add_entities(std::map<uint16_t, std::unique_ptr<EntityInfo>>& source,
                              std::map<uint16_t, std::shared_ptr<Entity>>& destination,
-                             std::map<uint16_t, SDL2pp::Color>& color_map) {
+                             std::map<uint16_t, SDL2pp::Color>& color_map, uint8_t id_player) {
 
     for (auto& entity_info: source) {
 
@@ -86,6 +86,9 @@ void WorldView::add_entities(std::map<uint16_t, std::unique_ptr<EntityInfo>>& so
         if (Player* player = dynamic_cast<Player*>(entity.get())) {
             auto color = color_map[player->get_id()];
             player->set_color(color);
+
+            // Si es mi gusano le agrego el crosshair
+            if (player->get_id() == id_player) player->add_crosshair();
         }
 
         destination.emplace(entity_info.first, std::move(entity));

@@ -293,6 +293,9 @@ add_executable(hello_test
         src/server/game/weapons/server_weapon_bazooka.cpp
         src/server/game/weapons/server_weapon_bazooka.h
 		src/server/game/weapons/server_weapon_grenade.cpp
+		src/server/game/weapons/server_weapon_banana.cpp
+		src/server/game/weapons/server_weapon_holygrenade.cpp
+		src/server/game/weapons/server_weapon_dynamite.cpp
 		src/server/game/projectiles/server_projectile.cpp
 		src/server/game/projectiles/server_projectile_effect.cpp
 		src/server/game/projectiles/server_projectile_effect_defaultexplosion.cpp
@@ -305,7 +308,9 @@ add_executable(hello_test
 		src/server/game/weapons/server_weapon_mortar_info.cpp
 		src/server/game/weapons/server_weapon_info_grenade.cpp
 		src/server/game/weapons/server_weapon_redgrenade.cpp
+		src/server/game/weapons/server_weapon_info_banana.cpp
 		src/server/game/weapons/server_weapon_info_redgrenade.cpp
+		src/server/game/weapons/server_weapon_info_dynamite.cpp
 		src/server/game/weapons/server_weapon_factory.cpp
         src/server/game/projectiles/server_projectile_launch_parabolic.cpp
         src/server/game/projectiles/server_projectile_launch_parabolic.h

@@ -32,6 +32,8 @@ public:
     void render_crosshair(SDL2pp::Renderer& renderer);
     void set_color(SDL2pp::Color color);
 
+    void add_crosshair();
+
 private:
     TextureController& texture_controller;
     Animation an;
@@ -54,9 +56,9 @@ private:
     int health;
 
     std::unique_ptr<Weapon> current_weapon;
+    std::unique_ptr<Crosshair> crosshair;
     WeaponFactory weapon_factory;
     SDL2pp::Color color;
-    Crosshair crosshair;
     Configuration& config;
 };
 

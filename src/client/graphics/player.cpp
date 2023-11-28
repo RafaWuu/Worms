@@ -5,7 +5,6 @@
 Player::Player(TextureController& controller, int id):
         texture_controller(controller),
         an(texture_controller.get_texture(AnimationState::BAZOOKA_IDLE), texture_controller),
-        crosshair(texture_controller.get_texture(AnimationState::CROSSHAIR), texture_controller),
         facingLeft(false),
         moving(false),
         jumping(false),
@@ -17,8 +16,13 @@ Player::Player(TextureController& controller, int id):
         y(300),
         id(id),
         config(Configuration::get_instance()) {
+    crosshair = nullptr;
     current_weapon = std::make_unique<Bazooka>();
     health = 100;
+}
+
+void Player::add_crosshair() {
+    crosshair = std::make_unique<Crosshair> (texture_controller.get_texture(AnimationState::CROSSHAIR), texture_controller);
 }
 
 Player::~Player() {}
@@ -55,11 +59,11 @@ void Player::update_info(EntityInfo* info) {
         an.change_texture(ROLLING);
     } else if (!falling && is_falling_now) {
         an.change_texture(FALLING);
-    } else if (!dead && is_dead_now) {
+    } else if (is_dead_now) {
         an.change_texture(DEAD);
     } else if (!aiming && is_aiming_now) {
         an.change_texture(current_weapon->get_aiming_texture_state());
-    } else if (!idle && is_idle_now) {  // TODO: que se cambie de textura al cambiar el arma
+    } else if (is_idle_now && !is_aiming_now) {  
         an.change_texture(current_weapon->get_idle_texture_state());
     }
 
@@ -112,8 +116,8 @@ void Player::render(SDL2pp::Renderer& renderer, SDL2pp::Rect& camera) {
     renderer.SetDrawColor(color.r, color.g, color.b, color.a);
     renderer.FillRect(health_bar);
 
-    if (aiming) {
-        crosshair.render_crosshair(renderer, x, y, aim_angle);
+    if (aiming && crosshair) {
+        crosshair->render_crosshair(renderer, x, y, aim_angle);
     }
 }
 
