@@ -15,6 +15,7 @@
 #include "mortar.h"
 #include "banana.h"
 #include "dynamite.h"
+#include "baseball_bat.h"
 
 #include "weapon.h"
 

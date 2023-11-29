@@ -43,6 +43,8 @@ enum AnimationState {
     HOLY_GRENADE_IDLE,
     HOLY_GRENADE_AIMING,
     HOLY_GRENADE_PROJECTILE,
+    BAT_IDLE,
+    BAT_AIMING,
 };
 
 class TextureController {

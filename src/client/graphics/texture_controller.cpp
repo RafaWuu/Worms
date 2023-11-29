@@ -45,6 +45,8 @@ TextureController::TextureController(SDL2pp::Renderer& renderer_): renderer(rend
 
     std::map<AnimationState, std::string> textures_yellow_bg = {
         {MORTAR_PROJECTILE, "mortar.png"},
+        {BAT_IDLE, "wbsbbak.png"},
+        {BAT_AIMING, "wbsbaim.png"},
     };
 
     for (auto const& texture: textures_blue_bg) {

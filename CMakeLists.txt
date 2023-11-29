@@ -89,7 +89,7 @@ set(CLIENT_SOURCE
 	src/client/game/entity_info.cpp
 	src/client/game/ground.cpp
 	src/client/graphics/entities_factory.cpp
-		src/client/graphics/ground_entity.cpp
+	src/client/graphics/ground_entity.cpp
 	src/client/client_event_handler.cpp
 	src/client/commands/client_aim.cpp
 	src/client/commands/client_stop_aim.cpp
@@ -113,6 +113,7 @@ set(CLIENT_SOURCE
 	src/client/graphics/weapons/holy_grenade.cpp
 	src/client/graphics/weapons/mortar.cpp
 	src/client/graphics/weapons/banana.cpp
+	src/client/graphics/weapons/baseball_bat.cpp
 	src/client/graphics/weapons/dynamite.cpp
 	src/client/graphics/weapons/weapon_factory.cpp
 	src/client/graphics/crosshair.cpp
