@@ -120,6 +120,7 @@ set(CLIENT_SOURCE
 	configuration/configuration.cpp
 	configuration/weapon_info.cpp
 	src/client/graphics/weapons/weapon_selector.cpp
+	src/client/sound/sound_controller.cpp
 	)
 
 message("Headers generados: ${UIS_HEADERS}")

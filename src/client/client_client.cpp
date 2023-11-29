@@ -8,6 +8,7 @@
 #include <vector>
 
 #include <SDL2pp/SDL2pp.hh>
+#include <SDL2pp/Mixer.hh>
 #include <unistd.h>
 
 #include "../common/common_liberror.h"
@@ -20,6 +21,7 @@
 #include "graphics/animation.h"
 #include "graphics/weapons/weapon_selector.h"
 #include "graphics/worldview.h"
+#include "sound/sound_controller.h"
 
 #include "client_protocol.h"
 
@@ -108,12 +110,15 @@ int Client::start() {
     sender->start();
     receiver->start();
 
-    SDL2pp::SDL sdl(SDL_INIT_VIDEO);  //--->crear clase que maneje la vista
-
+    SDL2pp::SDL sdl(SDL_INIT_AUDIO);  //--->crear clase que maneje la vista
+    SDL2pp::Mixer mixer(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 4096); // audio
     // Create main window: 640x480 dimensions, resizable, "SDL2pp demo" title
     SDL2pp::Window window("Worms", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH,
                           SCREEN_HEIGHT, SDL_WINDOW_RESIZABLE);
     SDL2pp::Renderer renderer(window, -1, SDL_RENDERER_ACCELERATED);
+
+    SoundController sound_controller(mixer);
+    sound_controller.set_background_music();
 
     TextureController texture_controller(renderer);
     WeaponSelector weapon_selector(renderer);
