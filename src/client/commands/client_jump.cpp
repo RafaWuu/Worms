@@ -4,12 +4,8 @@
 
 #include "client_jump.h"
 
-void Jump::serialize(ClientProtocol& protocol) {
-    return protocol.serialize_jump();
+void Jump::serialize(uint16_t worm, ClientProtocol& protocol) {
+    return protocol.serialize_jump(worm);
 }
 
-Jump::Jump(){
-
-}
-
-
+Jump::Jump() {}

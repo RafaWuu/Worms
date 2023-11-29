@@ -1,15 +1,17 @@
 #include "worldview.h"
 
 WorldView::WorldView(TextureController& texture_controller, std::unique_ptr<Scenario> scenario,
-                     std::map<uint16_t, SDL2pp::Color>& color_map, WeaponSelector& weapon_selector, uint8_t id_worm):
+                     std::map<uint16_t, SDL2pp::Color>& color_map, WeaponSelector& weapon_selector,
+                     uint16_t current_worm, std::vector<uint16_t>& my_worms_id):
         texture_controller(texture_controller),
         entity_factory(texture_controller),
-        weapon_selector(weapon_selector) {
+        weapon_selector(weapon_selector),
+        current_worm(current_worm) {
 
     camera = SDL2pp::Rect{0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
 
-    add_entities(scenario->get_dynamic_entities_info(), dynamic_entities, color_map, id_worm);
-    add_entities(scenario->get_static_entities_info(), static_entities, color_map, id_worm);
+    add_entities(scenario->get_dynamic_entities_info(), dynamic_entities, color_map, my_worms_id);
+    add_entities(scenario->get_static_entities_info(), static_entities, color_map, my_worms_id);
 }
 
 void WorldView::update(std::map<uint16_t, std::unique_ptr<EntityInfo>>& updated_info) {
@@ -77,7 +79,8 @@ void WorldView::update_camera(float& x, float& y, float& w, float& h) {
 
 void WorldView::add_entities(std::map<uint16_t, std::unique_ptr<EntityInfo>>& source,
                              std::map<uint16_t, std::shared_ptr<Entity>>& destination,
-                             std::map<uint16_t, SDL2pp::Color>& color_map, uint8_t id_worm) {
+                             std::map<uint16_t, SDL2pp::Color>& color_map,
+                             std::vector<uint16_t> my_worms_id) {
 
     for (auto& entity_info: source) {
 
@@ -88,7 +91,9 @@ void WorldView::add_entities(std::map<uint16_t, std::unique_ptr<EntityInfo>>& so
             player->set_color(color);
 
             // Si es mi gusano le agrego el crosshair
-            if (player->get_id() == id_worm) player->add_crosshair();
+            if (std::find(my_worms_id.begin(), my_worms_id.end(), player->get_id()) !=
+                my_worms_id.end())
+                player->add_crosshair();
         }
 
         destination.emplace(entity_info.first, std::move(entity));

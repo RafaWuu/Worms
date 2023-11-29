@@ -18,13 +18,14 @@ StateManager::StateManager(uint16_t starting): current(starting), registeredStat
     registeredStates.emplace(Firing, std::make_shared<FiringState>());
     registeredStates.emplace(Aiming, std::make_shared<AimingState>());
     registeredStates.emplace(Powering, std::make_shared<PoweringState>());
+    registeredStates.emplace(Active, std::make_shared<ActiveState>());
 }
 
 void StateManager::update(Worm& worm) {
     for (auto& state: registeredStates) {
-        if (is_active(*state.second)){
-            bool deactivate_state = state.second->update(worm);
-            if(!deactivate_state)
+        if (is_active(*state.second)) {
+            bool remain_active = state.second->update(worm);
+            if (!remain_active)
                 deactivate(*state.second, worm);
         }
     }
@@ -86,16 +87,17 @@ void StateManager::deactivate_states(uint16_t states_code, Worm& worm) {
 void StateManager::deactivate(WormState& state, Worm& worm) {
     current &= ~state.get_code();
     uint16_t to_activate = state.on_deactivated(worm);
-    activate_states(to_activate, worm);
 
-    // deactivate_states(state.get_states_requiring());
+    deactivate_states(state.get_states_requiring(), worm);
+
+    activate_states(to_activate, worm);
 }
 
 void StateManager::activate_states(uint16_t states_code, Worm& worm) {
     uint16_t states = ~current & states_code;
 
     for (auto& state: registeredStates) {
-        if (states & state.first){
+        if (states & state.first) {
             state.second->on_activated(worm);
             current |= state.second->get_code();
         }

@@ -327,8 +327,7 @@ std::unique_ptr<Scenario> ClientProtocol::receive_scenario() {
         }
     }
 
-    return std::make_unique<Scenario>(dynamic_entities, static_entities,
-                                      h * SCALE, w * SCALE);
+    return std::make_unique<Scenario>(dynamic_entities, static_entities, h * SCALE, w * SCALE);
 }
 
 std::shared_ptr<EstadoJuego> ClientProtocol::recv_msg() {
@@ -363,50 +362,50 @@ std::shared_ptr<EstadoJuego> ClientProtocol::recv_msg() {
 
     getLog().write("Cliente recibe estado de partida \n");
 
-    return std::make_shared<EstadoJuego>(std::move(entities));
+    return std::make_shared<EstadoJuego>(current_worm, std::move(entities));
 }
 
-void ClientProtocol::serialize_move(int dir) {
+void ClientProtocol::serialize_move(uint8_t worm, int dir) {
     uint8_t direction = dir;
 
     // Falta enviar el worm_id
-    std::vector<uint8_t> serialized_command = {GAME_SENDING, MOVE_CODE, worm_id, direction};
+    std::vector<uint8_t> serialized_command = {GAME_SENDING, MOVE_CODE, worm, direction};
 
     getLog().write("Cliente serializando movimiento %hhu \n", direction);
 
     baseProtocol.send_uint_vector(serialized_command);
 }
 
-void ClientProtocol::serialize_stop_move() {
+void ClientProtocol::serialize_stop_move(uint8_t worm) {
     // Falta enviar el worm_id
-    std::vector<uint8_t> serialized_command = {GAME_SENDING, MOVE_CODE, worm_id, STOP_MOVE};
+    std::vector<uint8_t> serialized_command = {GAME_SENDING, MOVE_CODE, worm, STOP_MOVE};
 
     getLog().write("Cliente serializando movimiento %hhu \n", STOP_MOVE);
 
     baseProtocol.send_uint_vector(serialized_command);
 }
 
-void ClientProtocol::serialize_jump() {
+void ClientProtocol::serialize_jump(uint8_t worm) {
 
     // Falta enviar el worm_id
-    std::vector<uint8_t> serialized_command = {GAME_SENDING, JUMP_CODE, worm_id};
+    std::vector<uint8_t> serialized_command = {GAME_SENDING, JUMP_CODE, worm};
 
     getLog().write("Cliente serializando salto \n");
 
     baseProtocol.send_uint_vector(serialized_command);
 }
 
-void ClientProtocol::serialize_rollback() {
+void ClientProtocol::serialize_rollback(uint8_t worm) {
     // Falta enviar el worm_id
-    std::vector<uint8_t> serialized_command = {GAME_SENDING, ROLLBACK_CODE, worm_id};
+    std::vector<uint8_t> serialized_command = {GAME_SENDING, ROLLBACK_CODE, worm};
 
     getLog().write("Cliente serializando salto hacia atras \n");
 
     baseProtocol.send_uint_vector(serialized_command);
 }
 
-void ClientProtocol::serialize_aim(float x, float y) {
-    std::vector<uint8_t> serialized_command = {GAME_SENDING, AIM_CODE, worm_id, 1};
+void ClientProtocol::serialize_aim(uint8_t worm, float x, float y) {
+    std::vector<uint8_t> serialized_command = {GAME_SENDING, AIM_CODE, worm, 1};
 
     getLog().write("Cliente apuntando hacia %x %y \n", x, y);
 
@@ -415,34 +414,34 @@ void ClientProtocol::serialize_aim(float x, float y) {
     baseProtocol.send_4byte_float(-y / SCALE);
 }
 
-void ClientProtocol::serialize_stop_aim() {
-    std::vector<uint8_t> serialized_command = {GAME_SENDING, AIM_CODE, worm_id, 2};
+void ClientProtocol::serialize_stop_aim(uint8_t worm) {
+    std::vector<uint8_t> serialized_command = {GAME_SENDING, AIM_CODE, worm, 2};
 
     getLog().write("Cliente dejando de apuntar \n");
 
     baseProtocol.send_uint_vector(serialized_command);
 }
 
-void ClientProtocol::serialize_fire() {
-    std::vector<uint8_t> serialized_command = {GAME_SENDING, FIRE_CODE, worm_id};
+void ClientProtocol::serialize_fire(uint8_t worm) {
+    std::vector<uint8_t> serialized_command = {GAME_SENDING, FIRE_CODE, worm};
 
     getLog().write("Cliente disparando \n");
 
     baseProtocol.send_uint_vector(serialized_command);
 }
 
-void ClientProtocol::serialize_power_attack() {
-    std::vector<uint8_t> serialized_command = {GAME_SENDING, POWER_CODE, worm_id, 1};
+void ClientProtocol::serialize_power_attack(uint8_t worm) {
+    std::vector<uint8_t> serialized_command = {GAME_SENDING, POWER_CODE, worm, 1};
 
     getLog().write("Cliente potenciando ataque \n");
 
     baseProtocol.send_uint_vector(serialized_command);
 }
 
-void ClientProtocol::serialize_change_weapon(int weapon_id) {
+void ClientProtocol::serialize_change_weapon(uint8_t worm, int weapon_id) {
     uint8_t weapon = weapon_id;
 
-    std::vector<uint8_t> serialized_command = {GAME_SENDING, CHANGE_WEAPON_CODE, worm_id, weapon};
+    std::vector<uint8_t> serialized_command = {GAME_SENDING, CHANGE_WEAPON_CODE, worm, weapon};
 
     getLog().write("Cliente elige arma %hhu\n", weapon);
 
@@ -465,6 +464,5 @@ void ClientProtocol::get_my_id(uint16_t& id) {
     getLog().write("Cliente recibiendo id %hu \n", id);
 }
 
-void ClientProtocol::set_worm_id(uint16_t i) { worm_id = i; }
 
 void ClientProtocol::close() { baseProtocol.kill(); }

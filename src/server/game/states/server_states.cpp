@@ -13,7 +13,8 @@ AliveState::AliveState() {
     required = 0;
     blocking_me = 0;
     terminate = 0;
-    requiring = Standing | Walking | Jumping | Rolling | Falling | Firing | Aiming | Powering;
+    requiring =
+            Standing | Walking | Jumping | Rolling | Falling | Firing | Aiming | Powering | Active;
 }
 
 bool AliveState::update(Worm& worm) {
@@ -25,14 +26,11 @@ bool AliveState::update(Worm& worm) {
     return false;
 }
 
-uint16_t AliveState::on_deactivated(Worm& worm) {
-    // TODO deshabilitar colisiones
-    return NoState;
-}
+uint16_t AliveState::on_deactivated(Worm& worm) { return NoState; }
 
 WalkingState::WalkingState() {
     code = Walking;
-    required = Alive;
+    required = Alive | Active;
     blocking_me = Jumping | Rolling | Falling;
     terminate = Standing;
     requiring = NoState;
@@ -58,7 +56,7 @@ bool WalkingState::update(Worm& worm) {
 
 StandingState::StandingState() {
     code = Standing;
-    required = Alive;
+    required = Alive | Active;
     blocking_me = Jumping | Rolling | Falling;
     terminate = Walking;
     requiring = NoState;
@@ -79,7 +77,7 @@ bool StandingState::update(Worm& worm) {
 
 JumpingState::JumpingState() {
     code = Jumping;
-    required = Alive;
+    required = Alive | Active;
     blocking_me = Rolling | Falling;
     terminate = Walking | Standing | Aiming;
     requiring = NoState;
@@ -120,7 +118,7 @@ uint16_t JumpingState::on_deactivated(Worm& worm) { return NoState; }
 
 RollingState::RollingState() {
     code = Rolling;
-    required = Alive;
+    required = Alive | Active;
     blocking_me = Jumping | Falling;
     terminate = Walking | Standing | Aiming;
     requiring = NoState;
@@ -186,7 +184,7 @@ uint16_t FallingState::on_deactivated(Worm& worm) {
 
 FiringState::FiringState() {
     code = Firing;
-    required = Powering | Alive;
+    required = Powering | Alive | Active;
     blocking_me = NoState;
     terminate = Aiming | Powering;
     requiring = NoState;
@@ -194,36 +192,56 @@ FiringState::FiringState() {
 
 
 bool FiringState::update(Worm& worm) {
+    if (worm.had_used_weapon)
+        return false;
+
     auto it = worm.weapons_map.find(worm.current_weapon);
-    if (it != worm.weapons_map.end())
-        return it->second->fire_projectile(*worm.body, worm.facing_right);
+    if (it == worm.weapons_map.end())
+        return false;
+
+    bool result = it->second->fire_projectile(*worm.body, worm.facing_right);
+    if (result)
+        worm.had_used_weapon = true;
+
     return false;
 }
 
 AimingState::AimingState() {
     code = Aiming;
-    required = Alive;
+    required = Alive | Active;
     blocking_me = Jumping | Rolling | Falling;
     terminate = Walking;
-    requiring = Powering;
+    requiring = NoState;
 }
 
+bool AimingState::can_be_activated(Worm& worm) { return !worm.had_used_weapon; }
+
+
 bool AimingState::update(Worm& worm) {
+    if (worm.had_used_weapon)
+        return false;
+
     auto it = worm.weapons_map.find(worm.current_weapon);
     if (it != worm.weapons_map.end())
         return it->second->aim_projectile(*worm.body, worm.aim_x, worm.aim_y, worm.facing_right);
     return false;
 }
 
+
 PoweringState::PoweringState() {
     code = Powering;
-    required = Alive;
+    required = Alive | Active;
     blocking_me = NoState;
     terminate = NoState;
     requiring = Firing;
 }
 
+bool PoweringState::can_be_activated(Worm& worm) { return !worm.had_used_weapon; }
+
 bool PoweringState::update(Worm& worm) {
+    if (worm.had_used_weapon)
+        return false;
+
     auto it = worm.weapons_map.find(worm.current_weapon);
     if (it != worm.weapons_map.end())
         return it->second->power_projectile();
@@ -231,3 +249,20 @@ bool PoweringState::update(Worm& worm) {
 }
 
 uint16_t PoweringState::on_deactivated(Worm& worm) { return Firing; }
+
+ActiveState::ActiveState() {
+    code = Active;
+    required = Alive;
+    blocking_me = NoState;
+    terminate = NoState;
+    requiring = Walking | Jumping | Rolling | Firing | Aiming | Powering;
+}
+
+void ActiveState::on_activated(Worm& worm) { worm.had_used_weapon = false; }
+
+bool ActiveState::update(Worm& worm) { return true; }
+
+uint16_t ActiveState::on_deactivated(Worm& worm) {
+    worm.clear_attributes();
+    return NoState;
+}

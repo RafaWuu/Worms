@@ -11,5 +11,5 @@ ProjectileLaunchInPlace::ProjectileLaunchInPlace(b2Vec2 pos, float max_vel) {
 
 void ProjectileLaunchInPlace::execute(b2Body& body) {
     body.SetTransform(pos, 0);
-    body.SetLinearVelocity(body.GetWorldVector(b2Vec2(max_vel, 0)));
+    body.SetLinearVelocity(body.GetWorldVector(b2Vec2(0, max_vel)));
 }

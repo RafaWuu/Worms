@@ -27,7 +27,6 @@ private:
     ServerProtocol game_protocol;
     LobbyMonitor& lobby;
     std::unique_ptr<ClientState> state;
-    std::atomic<bool> is_alive;
     uint16_t client_id;
 
 public:

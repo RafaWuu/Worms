@@ -58,8 +58,8 @@ void Game::run() {
                 game_world.update_entities();
                 game_world.step(1);
 
-                broadcastMonitor.send_status_toall(
-                        std::make_shared<GameStatusRunning>(0, game_world));
+                broadcastMonitor.send_status_toall(std::make_shared<GameStatusRunning>(
+                        game_world.get_active_worm(), game_world));
             }
 
             auto end = std::chrono::high_resolution_clock::now();

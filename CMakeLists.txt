@@ -215,6 +215,12 @@ add_executable(server
 		src/server/game/projectiles/server_projectile_launch_inplace.h
 		src/server/game/weapons/server_weapon_info_dynamite.cpp
 		src/server/game/weapons/server_weapon_info_dynamite.h
+        src/server/game/world/server_gameworld_interactive_state.cpp
+        src/server/game/world/server_gameworld_interactive_state.h
+		src/server/game/world/server_gameworld_state.cpp
+		src/server/game/world/server_gameworld_state.h
+		src/server/game/world/server_gameworld_simulationstate.cpp
+		src/server/game/world/server_gameworld_simulationstate.h
 )
 
 target_include_directories(client PUBLIC
@@ -323,6 +329,12 @@ add_executable(hello_test
         src/server/game/weapons/server_weapon_info_holygrenade.h
 		src/server/game/projectiles/server_projectile_launch_inplace.cpp
 		src/server/game/projectiles/server_projectile_launch_inplace.h
+        src/server/game/world/server_gameworld_interactive_state.cpp
+        src/server/game/world/server_gameworld_interactive_state.h
+		src/server/game/world/server_gameworld_state.cpp
+		src/server/game/world/server_gameworld_state.h
+		src/server/game/world/server_gameworld_simulationstate.cpp
+		src/server/game/world/server_gameworld_simulationstate.h
 )
 
 target_link_libraries(hello_test GTest::gtest_main GTest::gmock ${BOX2D_LIBRARY_PATH} yaml-cpp)

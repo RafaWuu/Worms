@@ -9,13 +9,18 @@
 
 class EstadoJuego {
 private:
+    uint16_t current_worm;
+
+private:
     std::vector<Worm> worms;
     std::map<uint16_t, std::unique_ptr<EntityInfo>> entities_info;
+
 public:
-    explicit EstadoJuego(std::map<uint16_t, std::unique_ptr<EntityInfo>>&& entities);
+    EstadoJuego(uint16_t current_worm, std::map<uint16_t, std::unique_ptr<EntityInfo>>&& entities);
 
     std::map<uint16_t, std::unique_ptr<EntityInfo>>& get_updated_info();
 
+    uint16_t get_current_worm() const;
 };
 
 #endif

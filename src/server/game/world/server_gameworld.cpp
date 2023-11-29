@@ -18,6 +18,7 @@
 #include "b2_edge_shape.h"
 #include "scenario_filehandler.h"
 #include "server_error.h"
+#include "server_gameworld_simulationstate.h"
 
 #define GRAVITY_Y -9.8
 
@@ -34,6 +35,7 @@ GameWorld::GameWorld(const std::string& scenario_name):
     entities_map.emplace(entity_id++, std::make_shared<Ground>(&b2_world, width));
 
     b2_world.SetContactListener(&listener);
+    game_state = std::make_shared<GameWorldSimulationState>(worm_map.begin(), worm_map, false);
 }
 
 void GameWorld::create_worm(float x, float y) {
@@ -77,6 +79,14 @@ void GameWorld::update_entities() {
             ++it;
         }
     }
+
+    manage_round();
+}
+
+void GameWorld::manage_round() {
+    this->game_state = this->game_state->update();
+    if (!this->game_state)
+        throw;  // Todo: Crear error
 }
 
 void GameWorld::set_clients_to_worms(const std::vector<uint16_t>& client_vec) {
@@ -138,3 +148,12 @@ GameWorld::~GameWorld() {}
 size_t GameWorld::get_worms_number() { return worm_map.size(); }
 
 void GameWorld::notify_explosion(uint16_t projectile_type, float radius, b2Vec2 center) {}
+
+void GameWorld::notify_damaged_worm(uint16_t worm_id) { game_state->handle_worm_damaged(worm_id); }
+
+void GameWorld::notify_entity_is_moving() { game_state->handle_entity_moving(); }
+
+void GameWorld::notify_weapon_used() { game_state->handle_weapon_fired(); }
+
+
+uint16_t GameWorld::get_active_worm() { return game_state->active_worm->first; }

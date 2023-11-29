@@ -6,8 +6,8 @@
 #define WORMS_CLIENT_STOP_AIM_H
 
 #include "client_command.h"
-class StopAim : public Command {
+class StopAim: public Command {
 public:
-    void serialize(ClientProtocol &protocol) override;
+    void serialize(uint16_t worm, ClientProtocol& protocol) override;
 };
 #endif  // WORMS_CLIENT_STOP_AIM_H

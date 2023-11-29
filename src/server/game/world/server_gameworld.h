@@ -11,15 +11,16 @@
 #include <vector>
 
 #include "game/entities/server_beam.h"
+#include "game/entities/server_boundary.h"
 #include "game/entities/server_ground.h"
 #include "game/entities/server_worm_sensor.h"
 #include "game/listeners/server_onfloor_contactlistener.h"
 #include "game/projectiles/server_projectile.h"
 #include "game/weapons/server_weapon.h"
-#include "game/entities/server_boundary.h"
 
 #include "b2_world.h"
 #include "scenario_filehandler.h"
+#include "server_gameworld_state.h"
 
 class Weapon;
 
@@ -36,6 +37,8 @@ private:
     double width;
     std::unique_ptr<Boundary> boundary;
     Configuration& config;
+
+    std::shared_ptr<GameWorldState> game_state;
 
 public:
     b2World b2_world;
@@ -64,5 +67,15 @@ public:
     size_t get_worms_number();
 
     void notify_explosion(uint16_t projectile_type, float radius, b2Vec2 center);
+
+    void manage_round();
+
+    void notify_damaged_worm(uint16_t worm_id);
+
+    void notify_entity_is_moving();
+
+    void notify_weapon_used();
+
+    uint16_t get_active_worm();
 };
 #endif  // WORMS_SERVER_GAMEWORLD_H

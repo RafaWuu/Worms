@@ -3,6 +3,4 @@
 //
 
 #include "client_fire.h"
-void Fire::serialize(ClientProtocol& protocol) {
-    protocol.serialize_fire();
-}
+void Fire::serialize(uint16_t worm, ClientProtocol& protocol) { protocol.serialize_fire(worm); }

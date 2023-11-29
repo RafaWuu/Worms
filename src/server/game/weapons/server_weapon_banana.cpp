@@ -78,7 +78,7 @@ bool BananaWeapon::fire_projectile(b2Body& body, bool facing_right) {
     aim_power = 0;
     aim_angle = 0;
 
-    return false;
+    return true;
 }
 
 bool BananaWeapon::adjust_projectile_countdown(float seconds) {

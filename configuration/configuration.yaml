@@ -1,4 +1,4 @@
-fps: 100
+fps: 60
 tick_rate: 100
 
 maximum_countdown: 5
@@ -157,7 +157,7 @@ weapons:
     drag_constant: .3
     density: 1
     angular_damping: 0.2
-    max_vel: 3
+    max_vel: 1
 
   baseball_bat:
     id: 7

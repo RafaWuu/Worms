@@ -7,4 +7,6 @@ Aim::Aim(int x, int y) {
     this->x = x;
     this->y = y;
 }
-void Aim::serialize(ClientProtocol& protocol) { return protocol.serialize_aim(x, y); }
+void Aim::serialize(uint16_t worm, ClientProtocol& protocol) {
+    return protocol.serialize_aim(worm, x, y);
+}

@@ -39,7 +39,7 @@ bool DynamiteWeapon::fire_projectile(b2Body& body, bool facing_right) {
     float radius = config.get_weapon_radius(DYNAMITE);
     float damage = config.get_weapon_damage(DYNAMITE);
     float blast_power = config.get_weapon_blastpower(DYNAMITE);
-    float max_vel = config.get_weapon_blastpower(DYNAMITE);
+    float max_vel = config.get_weapon_max_vel(DYNAMITE);
 
     world.add_projectile(std::make_shared<Projectile>(
             &world.b2_world, DYNAMITE,
@@ -51,7 +51,7 @@ bool DynamiteWeapon::fire_projectile(b2Body& body, bool facing_right) {
 
     ammo--;
 
-    return false;
+    return true;
 }
 
 bool DynamiteWeapon::adjust_projectile_countdown(float seconds) {
