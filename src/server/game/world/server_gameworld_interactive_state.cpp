@@ -13,8 +13,9 @@
 GameWorldInteractiveState::GameWorldInteractiveState(
         std::map<uint16_t, Worm*>::iterator active_worm, std::map<uint16_t, Worm*>& worm_map):
         GameWorldState(active_worm, worm_map) {
+    auto& config = Configuration::get_instance();
     ticks = 0;
-    round_length = 30 * 100;
+    round_length = config.round_length * config.get_tick_rate();
     active_worm_get_damaged = false;
     active_worm_used_weapon = false;
     active_worm->second->set_active();

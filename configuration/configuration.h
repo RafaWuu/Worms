@@ -145,6 +145,11 @@ public:
     float beam_height;
     uint8_t safe_height;
     uint8_t max_fall_dmg;
+    float restitution;
+    float density;
+    float round_length;
+    float grace_length;
+    float friction;
 };
 
 #endif

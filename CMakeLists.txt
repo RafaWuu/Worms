@@ -221,6 +221,10 @@ add_executable(server
 		src/server/game/world/server_gameworld_state.h
 		src/server/game/world/server_gameworld_simulationstate.cpp
 		src/server/game/world/server_gameworld_simulationstate.h
+        src/server/game/entities/server_explosion.cpp
+        src/server/game/entities/server_explosion.h
+		src/server/game/entities/server_explosion_info.cpp
+		src/server/game/entities/server_explosion_info.h
 )
 
 target_include_directories(client PUBLIC
@@ -335,6 +339,10 @@ add_executable(hello_test
 		src/server/game/world/server_gameworld_state.h
 		src/server/game/world/server_gameworld_simulationstate.cpp
 		src/server/game/world/server_gameworld_simulationstate.h
+        src/server/game/entities/server_explosion.cpp
+        src/server/game/entities/server_explosion.h
+		src/server/game/entities/server_explosion_info.cpp
+		src/server/game/entities/server_explosion_info.h
 )
 
 target_link_libraries(hello_test GTest::gtest_main GTest::gmock ${BOX2D_LIBRARY_PATH} yaml-cpp)

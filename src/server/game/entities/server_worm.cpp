@@ -41,8 +41,9 @@ Worm::Worm(uint8_t id, GameWorld& world, float pos_x, float pos_y):
     b2FixtureDef fixtureDef;
     fixtureDef.shape = &dynamicBox;
 
-    fixtureDef.density = 1.0f;
-    fixtureDef.friction = 0.1f;
+    fixtureDef.density = config.density;
+    fixtureDef.restitution = config.restitution;
+    fixtureDef.friction = config.friction;
 
     fixtureDef.userData.pointer = reinterpret_cast<uintptr_t>(this);
 

@@ -48,6 +48,9 @@ void Configuration::load_entities_info(YAML::Node config) {
     worm_health = worm_node["health"].as<int>();
     max_fall_dmg = worm_node["max_fall_dmg"].as<int>();
     safe_height = worm_node["safe_height"].as<int>();
+    restitution = worm_node["restitution"].as<float>();
+    density = worm_node["density"].as<float>();
+    friction = worm_node["friction"].as<float>();
 
     auto beam_node = config["beam"];
 
@@ -58,6 +61,8 @@ void Configuration::load_entities_info(YAML::Node config) {
 
 void Configuration::load_weapon_info(YAML::Node config) {
     maximum_countdown = config["maximum_countdown"].as<float>();
+    round_length = config["round_length"].as<float>();
+    grace_length = config["grace_length"].as<float>();
 
     for (const auto& weapon: config["weapons"]) {
         auto weapon_name = weapon.first.as<std::string>();
