@@ -4,10 +4,8 @@
 
 #include "client_rollback.h"
 
-void Rollback::serialize(ClientProtocol& protocol) {
-    return protocol.serialize_rollback();
+void Rollback::serialize(uint16_t worm, ClientProtocol& protocol) {
+    return protocol.serialize_rollback(worm);
 }
 
-Rollback::Rollback(){
-
-}
+Rollback::Rollback() {}

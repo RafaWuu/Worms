@@ -9,7 +9,7 @@ private:
 
 public:
     explicit ChangeWeapon(int weapon_id);
-    void serialize(ClientProtocol& protocol) override;
+    void serialize(uint16_t worm, ClientProtocol& protocol) override;
 };
 
 #endif  // WORMS_CLIENT_CHANGE_WEAPON_H

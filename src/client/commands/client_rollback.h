@@ -5,16 +5,16 @@
 #ifndef WORMS_CLIENT_ROLLBACK_H
 #define WORMS_CLIENT_ROLLBACK_H
 
-#include "client_command.h"
 #include <vector>
+
+#include "client_command.h"
 
 
 class Rollback: public Command {
 private:
-
 public:
     Rollback();
-    void serialize(ClientProtocol& protocol) override;
+    void serialize(uint16_t worm, ClientProtocol& protocol) override;
 };
 
-#endif //WORMS_CLIENT_ROLLBACK_H
+#endif  // WORMS_CLIENT_ROLLBACK_H

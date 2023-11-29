@@ -23,8 +23,6 @@ Worm::Worm(uint8_t id, GameWorld& world, float pos_x, float pos_y):
         weapons_map(WeaponFactory::get_weapons(world)),
         id(id),
         client_id(),
-        pos_x(pos_x),
-        pos_y(pos_y),
         state_manager(Alive | Standing),
         config(Configuration::get_instance()),
         GameObject() {
@@ -52,17 +50,17 @@ Worm::Worm(uint8_t id, GameWorld& world, float pos_x, float pos_y):
 
     getLog().write("Creando gusano %hhu, x: %f, y %f: \n", id, pos_x, pos_y);
 
+    facing_right = true;
     current_weapon = BAZOOKA_ID;
     health = config.worm_health;
     numFootContacts = 0;
     jumpTimeout = 0;
     aim_x = 0;
     aim_y = 0;
-    increasing_power = false;
-    ammo = 0;
+    recent_health = health;
+    recent_speed = 0;
+    had_used_weapon = false;
 }
-
-Worm::~Worm() = default;
 
 void Worm::process_fall(float distance) {
     double max = fmax(25, config.max_fall_dmg);
@@ -77,10 +75,25 @@ void Worm::update(GameWorld& world) {
     if (numFootContacts < 1)
         state_manager.try_activate(StateEnum::Falling, *this);
 
+    bool weapon_already_used = had_used_weapon;
     // getLog().write("Gusano %hhu actualizandose, x: %f, y %f: \n", id, body->GetPosition().x,
     //              body->GetPosition().y);
 
     state_manager.update(*this);
+
+    if (recent_health < health)
+        world.notify_damaged_worm(this->id);
+
+    recent_health = health;
+
+    float speedNow = body->GetLinearVelocity().Length();
+    recent_speed = 0.1 * speedNow + 0.9 * recent_speed;
+
+    if (recent_speed > 0.05)
+        world.notify_entity_is_moving();
+
+    if (had_used_weapon && !weapon_already_used)
+        world.notify_weapon_used();
 }
 
 void Worm::move(MoveDir direction) {
@@ -166,4 +179,21 @@ std::unique_ptr<WeaponInfo> Worm::get_current_weapon_info() const {
     auto it = weapons_map.find(current_weapon);
     if (it != weapons_map.end())
         return it->second->get_info();
+}
+
+void Worm::set_active() { state_manager.try_activate(Active, *this); }
+
+void Worm::set_deactive() {
+    state_manager.deactivate_states(Active, *this);
+    had_used_weapon = false;
+}
+
+void Worm::clear_attributes() {
+    current_weapon = BAZOOKA_ID;
+    jumpTimeout = 0;
+    aim_x = 0;
+    aim_y = 0;
+    recent_health = health;
+    recent_speed = 0;
+    had_used_weapon = false;
 }

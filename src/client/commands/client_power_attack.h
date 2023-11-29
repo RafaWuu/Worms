@@ -11,6 +11,6 @@ class PowerAttack: public Command {
 
 public:
     PowerAttack();
-    void serialize(ClientProtocol& protocol) override;
+    void serialize(uint16_t worm, ClientProtocol& protocol) override;
 };
 #endif  // WORMS_CLIENT_POWER_ATTACK_H

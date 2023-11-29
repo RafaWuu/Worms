@@ -15,21 +15,20 @@ Client::Client(uint16_t id, Socket socket, LobbyMonitor& lobby):
         game_protocol(bp),
         lobby(lobby),
         state(std::make_unique<LobbyClientState>(id, lobby, game_protocol)),
-        is_alive(true),
         client_id(id) {}
 
 void Client::run() {
-    while (is_alive) {
+    while (_is_alive) {
         this->state = this->state->run();
         if (!this->state)
-            is_alive = false;
+            _is_alive = false;
     }
 }
 
-bool Client::is_dead() { return !is_alive; }
+bool Client::is_dead() { return !_is_alive; }
 
 void Client::kill_connection() {
-    is_alive = false;
+    _is_alive = false;
 
     if (state)
         this->state->kill();
@@ -37,7 +36,7 @@ void Client::kill_connection() {
 }
 
 void Client::reap_connection() {
-    is_alive = false;
+    _is_alive = false;
 
     if (state)
         this->state->kill();

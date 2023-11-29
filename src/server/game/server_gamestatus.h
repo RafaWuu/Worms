@@ -9,6 +9,7 @@
 #include <vector>
 
 #include "game/world/server_gameworld.h"
+
 #include "server_protocol.h"
 
 class ServerProtocol;
@@ -16,7 +17,7 @@ class ServerProtocol;
 class GameStatus {
 
 protected:
-    std::map<uint16_t, std::shared_ptr<GameObjectInfo>>  entities_info;
+    std::map<uint16_t, std::shared_ptr<GameObjectInfo>> entities_info;
 
 public:
     explicit GameStatus(GameWorld& world);
@@ -37,6 +38,7 @@ class GameStatusScenario: public GameStatus {
 private:
     float height;
     float width;
+
 public:
     explicit GameStatusScenario(GameWorld& world);
     void serialize(ServerProtocol& protocol) override;
@@ -44,7 +46,7 @@ public:
 
 class GameStatusStart: public GameStatus {
 private:
-    std::map<uint16_t, std::shared_ptr<WormInfo>>  worms_info;
+    std::map<uint16_t, std::shared_ptr<WormInfo>> worms_info;
 
 public:
     explicit GameStatusStart(GameWorld& world);
@@ -53,10 +55,10 @@ public:
 
 class GameStatusRunning: public GameStatus {
 private:
-    uint8_t current_worm;
+    uint16_t current_worm;
 
 public:
-    GameStatusRunning(uint8_t current_worm, GameWorld& world);
+    GameStatusRunning(uint16_t current_worm, GameWorld& world);
     void serialize(ServerProtocol& protocol) override;
 };
 #endif  // WORMS_SERVER_GAMESTATUS_H

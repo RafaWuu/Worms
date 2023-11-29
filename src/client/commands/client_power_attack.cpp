@@ -6,4 +6,6 @@
 
 PowerAttack::PowerAttack() = default;
 
-void PowerAttack::serialize(ClientProtocol& protocol) { return protocol.serialize_power_attack(); }
+void PowerAttack::serialize(uint16_t worm, ClientProtocol& protocol) {
+    return protocol.serialize_power_attack(worm);
+}

@@ -78,7 +78,7 @@ bool GrenadeWeapon::fire_projectile(b2Body& body, bool facing_right) {
     ammo--;
     aim_power = 0;
     aim_angle = 0;
-    return false;
+    return true;
 }
 
 bool GrenadeWeapon::adjust_projectile_countdown(float seconds) {

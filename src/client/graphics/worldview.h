@@ -19,6 +19,8 @@ private:
     TextureController& texture_controller;
     EntityFactory entity_factory;
 
+    uint16_t current_worm;
+
     // Ground and Beams
     std::map<uint16_t, std::shared_ptr<Entity>> static_entities;
     // Worms, missiles, ...
@@ -31,7 +33,8 @@ private:
 
 public:
     WorldView(TextureController& texture_controller, std::unique_ptr<Scenario> scenario,
-              std::map<uint16_t, SDL2pp::Color>& color_map, WeaponSelector& weapon_selector, uint8_t id_worm);
+              std::map<uint16_t, SDL2pp::Color>& color_map, WeaponSelector& weapon_selector,
+              uint16_t current_worm, std::vector<uint16_t>& my_worms_id);
 
     void update(std::map<uint16_t, std::unique_ptr<EntityInfo>>& updated_info);
 
@@ -41,7 +44,8 @@ public:
 
     void add_entities(std::map<uint16_t, std::unique_ptr<EntityInfo>>& source,
                       std::map<uint16_t, std::shared_ptr<Entity>>& destination,
-                      std::map<uint16_t, SDL2pp::Color>& color_map, uint8_t id_worm);
+                      std::map<uint16_t, SDL2pp::Color>& color_map,
+                      std::vector<uint16_t> my_worms_id);
 };
 
 #endif

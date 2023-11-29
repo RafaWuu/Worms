@@ -1,8 +1,9 @@
-#include "client_command.h"
 #include <vector>
 
-class StopMoving : public Command {
+#include "client_command.h"
+
+class StopMoving: public Command {
 public:
     StopMoving();
-    void serialize(ClientProtocol& protocol) override;
+    void serialize(uint16_t worm, ClientProtocol& protocol) override;
 };

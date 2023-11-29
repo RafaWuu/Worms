@@ -73,14 +73,25 @@ public:
 class AimingState: public WormState {
 public:
     AimingState();
+    bool can_be_activated(Worm& worm) override;
     bool update(Worm& worm) override;
 };
 
 class PoweringState: public WormState {
 public:
     PoweringState();
+    bool can_be_activated(Worm& worm) override;
     bool update(Worm& worm) override;
     uint16_t on_deactivated(Worm& worm) override;
+};
+
+class ActiveState: public WormState {
+public:
+    ActiveState();
+    bool update(Worm& worm) override;
+    uint16_t on_deactivated(Worm& worm) override;
+
+    void on_activated(Worm& worm) override;
 };
 
 #endif  // WORMS_SERVER_STATES_H

@@ -5,16 +5,16 @@
 #ifndef WORMS_CLIENT_JUMP_H
 #define WORMS_CLIENT_JUMP_H
 
-#include "client_command.h"
 #include <vector>
+
+#include "client_command.h"
 
 class Jump: public Command {
 private:
-
 public:
     Jump();
-    void serialize(ClientProtocol& protocol) override;
+    void serialize(uint16_t worm, ClientProtocol& protocol) override;
 };
 
 
-#endif //WORMS_CLIENT_JUMP_H
+#endif  // WORMS_CLIENT_JUMP_H

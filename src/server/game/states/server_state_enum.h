@@ -16,8 +16,8 @@ enum StateEnum {
     Falling = 0x020,
     Firing = 0x040,
     Aiming = 0x080,
-    Powering = 0x100
-
+    Powering = 0x100,
+    Active = 0x200,
 };
 
 #endif  // WORMS_SERVER_STATE_ENUM_H

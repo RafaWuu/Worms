@@ -9,7 +9,8 @@
 class Command {
 public:
     Command();
-    virtual void serialize(ClientProtocol& protocol) = 0;
+    virtual ~Command() = default;
+    virtual void serialize(uint16_t worm, ClientProtocol& protocol) = 0;
 };
 
 #endif

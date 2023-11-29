@@ -34,13 +34,14 @@ Client::Client(const std::string& hostname, const std::string& servicename):
         protocol(bp),
         messages_to_send(1000),
         messages_received(1000),
-        event_handler() {
+        event_handler(),
+        my_worms_id_vec() {
 
-    sender = std::make_unique<ClientSender> (protocol, messages_to_send);
-    receiver = std::make_unique<ClientReceiver> (protocol, messages_received);
+    sender = std::make_unique<ClientSender>(protocol, messages_to_send);
+    receiver = std::make_unique<ClientReceiver>(protocol, messages_received);
 
     protocol.get_my_id(my_id);  // Reubicar
-    id_assigned_worm = 0;
+    current_worm = 0;
 }
 
 Client::~Client() { kill(); }
@@ -73,15 +74,13 @@ LobbyState Client::request_game_list() {
 
 void Client::receive_scenario() { this->scenario = protocol.receive_scenario(); }
 
-uint16_t Client::get_id_assigned_worm(const std::map<uint16_t, uint16_t>& distribution) {
-    // Cual es el id del cliente? Hardcodeo un 0 por ahora para probarlo
-    uint16_t assigned_worm = -1;
-    uint16_t id = my_id;
+void Client::get_id_assigned_worm(const std::map<uint16_t, uint16_t>& distribution) {
+    my_worms_id_vec.clear();
 
-    auto it = std::find_if(distribution.begin(), distribution.end(),
-                           [id](const auto& p) { return p.second == id; });
-
-    return it->first;
+    for (auto worm: distribution) {
+        if (worm.second == my_id)
+            my_worms_id_vec.push_back(worm.first);
+    }
 }
 void Client::assign_worms_color(const std::map<uint16_t, uint16_t>& distribution) {
     for (auto& map: distribution) {
@@ -93,8 +92,7 @@ void Client::start_joined_game() {
     // Que worm le corresponde a cada cliente (id_worm, id_client)
     std::map<uint16_t, uint16_t> distribution = protocol.receive_worms_distribution();
     assign_worms_color(distribution);
-    uint16_t assigned_worm = get_id_assigned_worm(distribution);
-    id_assigned_worm = assigned_worm;
+    get_id_assigned_worm(distribution);
 }
 
 void Client::start_game() {
@@ -103,13 +101,10 @@ void Client::start_game() {
     // Que worm le corresponde a cada cliente (id_worm, id_client)
     std::map<uint16_t, uint16_t> distribution = protocol.receive_worms_distribution();
     assign_worms_color(distribution);  // puede ir en world_view
-    uint16_t assigned_worm = get_id_assigned_worm(distribution);
-    id_assigned_worm = assigned_worm;
+    get_id_assigned_worm(distribution);
 }
 
 int Client::start() {
-    protocol.set_worm_id(id_assigned_worm);  // Reubicar
-
     sender->start();
     receiver->start();
 
@@ -122,7 +117,8 @@ int Client::start() {
 
     TextureController texture_controller(renderer);
     WeaponSelector weapon_selector(renderer);
-    WorldView worldview(texture_controller, std::move(this->scenario), color_map, weapon_selector, id_assigned_worm);
+    WorldView worldview(texture_controller, std::move(this->scenario), color_map, weapon_selector,
+                        current_worm, my_worms_id_vec);
 
     bool running = true;
     auto start = high_resolution_clock::now();
@@ -130,8 +126,13 @@ int Client::start() {
 
         // TODO: pasarle weapon_selector al handle_events()??? y manejar desde ahi que arma se
         // selecciono
-        running = handle_events(weapon_selector);
         update(worldview);
+
+        if (std::find(my_worms_id_vec.begin(), my_worms_id_vec.end(), current_worm) !=
+            my_worms_id_vec.end()) {
+            running = handle_events(weapon_selector);
+        }
+
         worldview.render(renderer);
 
         manage_frame_rate(start);
@@ -161,8 +162,16 @@ void Client::update(WorldView& worldview) {
     while (messages_received.try_pop(estado)) {
         std::map<uint16_t, std::unique_ptr<EntityInfo>>& updated_states =
                 estado->get_updated_info();
+        current_worm = estado->get_current_worm();
         worldview.update(updated_states);
         messages_received.clear();
+    }
+
+    if (std::find(my_worms_id_vec.begin(), my_worms_id_vec.end(), current_worm) !=
+        my_worms_id_vec.end()) {
+        // TODO: medio cuestionable porque si hay mensajes q todavia no se mandaron se van a enviar
+        // con el worm nuevo
+        sender->set_current_worm(current_worm);
     }
 }
 

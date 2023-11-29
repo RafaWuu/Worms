@@ -2,6 +2,6 @@
 
 StopMoving::StopMoving() {}
 
-void StopMoving::serialize(ClientProtocol& protocol) {
-    return protocol.serialize_stop_move();
+void StopMoving::serialize(uint16_t worm, ClientProtocol& protocol) {
+    return protocol.serialize_stop_move(worm);
 }

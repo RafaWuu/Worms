@@ -6,13 +6,14 @@
 #define WORMS_CLIENT_AIM_H
 
 #include "client_command.h"
-class Aim : public Command{
+class Aim: public Command {
 private:
     float x;
     float y;
+
 public:
     Aim(int x, int y);
-    void serialize(ClientProtocol& protocol) override;
+    void serialize(uint16_t worm, ClientProtocol& protocol) override;
 };
 
 #endif  // WORMS_CLIENT_AIM_H

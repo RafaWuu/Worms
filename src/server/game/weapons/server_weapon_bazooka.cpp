@@ -79,7 +79,7 @@ bool BazookaWeapon::fire_projectile(b2Body& body, bool facing_right) {
     aim_power = 0;
     aim_angle = 0;
 
-    return false;
+    return true;
 }
 
 std::unique_ptr<WeaponInfo> BazookaWeapon::get_info() const {

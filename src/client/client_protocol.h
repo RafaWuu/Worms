@@ -34,14 +34,17 @@ protected:
 
 public:
     explicit ClientProtocol(BaseProtocol& bp);
-    void serialize_move(int dir);
-    void serialize_stop_move();
-    void serialize_jump();
-    void serialize_rollback();
-    void serialize_aim(float x, float y);
-    void serialize_stop_aim();
-    void serialize_fire();
-    void serialize_change_weapon(int weapon_id);
+
+    // TODO: pasar a uint16
+    void serialize_move(uint8_t worm, int dir);
+    void serialize_stop_move(uint8_t worm);
+    void serialize_jump(uint8_t worm);
+    void serialize_rollback(uint8_t worm);
+    void serialize_aim(uint8_t worm, float x, float y);
+    void serialize_stop_aim(uint8_t worm);
+    void serialize_fire(uint8_t worm);
+    void serialize_change_weapon(uint8_t worm, int weapon_id);
+    void serialize_power_attack(uint8_t worm);
 
 
     std::shared_ptr<EstadoJuego> recv_msg();
@@ -66,13 +69,8 @@ public:
 
     void send_start_game();
 
-
-    uint8_t worm_id = 0;
-
     /* Shutdown y close del socket */
     void close();
-
-    void serialize_power_attack();
 };
 
 #endif

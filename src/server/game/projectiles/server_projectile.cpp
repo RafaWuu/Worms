@@ -65,6 +65,9 @@ void Projectile::update(GameWorld& world) {
     if (is_dead)
         return;
 
+    world.notify_entity_is_moving();  // Si no esta muerta, o se esta moviendo o aun no detono (si
+                                      // es granada)
+
     countdown -= 1.0 / config.get_tick_rate();
 
     if (countdown < 0.0)
