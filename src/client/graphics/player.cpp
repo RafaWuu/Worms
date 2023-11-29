@@ -48,8 +48,8 @@ void Player::update_info(EntityInfo* info) {
     bool is_rolling_now = (new_state & 0x0010) != 0;
     bool is_aiming_now = (new_state & 0x0080) != 0;
     bool is_falling_now = (new_state & 0x0020) != 0;
-    bool is_idle_now = (new_state & 0x0002) != 0;
-    bool is_dead_now = !health;
+    bool is_idle_now = ((new_state & 0x0002) != 0) || new_state == 1;
+    bool is_dead_now = !(new_state & 0x0001);
 
     if (!moving && is_moving_now) {
         an.change_texture(WALKING);
