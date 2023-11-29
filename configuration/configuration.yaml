@@ -1,6 +1,9 @@
 fps: 60
 tick_rate: 100
 
+round_length: 30
+grace_length: 3
+
 maximum_countdown: 5
 
 beam:
@@ -13,6 +16,9 @@ worm:
   health: 100
   max_fall_dmg: 25
   safe_height: 2
+  restitution: .2
+  density: 1.0
+  friction: .1
 
 weapons:
   bazooka:
@@ -28,11 +34,11 @@ weapons:
     radius: 2
     width: .5
     height: .5
-    blast_power: 15
+    blast_power: 25
     drag_constant: 0
     density: 1
     angular_damping: 0.0
-    max_vel: 12
+    max_vel: 20
 
   mortar:
     id: 1
@@ -52,11 +58,11 @@ weapons:
     fragment_number: 6
     width: .5
     height: .5
-    blast_power: 15
+    blast_power: 25
     drag_constant: .3
     density: 1
     angular_damping: 0.2
-    max_vel: 12
+    max_vel: 20
 
   green_grenade:
     id: 2
@@ -71,11 +77,11 @@ weapons:
     radius: 2
     width: .5
     height: .5
-    blast_power: 15
+    blast_power: 25
     drag_constant: .3
     density: 1
     angular_damping: 0.2
-    max_vel: 12
+    max_vel: 20
 
   red_grenade:
     id: 3
@@ -95,11 +101,11 @@ weapons:
     fragment_number: 6
     width: 0.5
     height: 0.5
-    blast_power: 15
+    blast_power: 25
     drag_constant: .3
     density: 1
     angular_damping: 0.2
-    max_vel: 12
+    max_vel: 20
 
   banana:
     id: 4
@@ -118,7 +124,7 @@ weapons:
     drag_constant: .3
     density: 1
     angular_damping: 0.2
-    max_vel: 12
+    max_vel: 20
     restitution: 1
 
   holy_grenade:
@@ -134,11 +140,11 @@ weapons:
     radius: 8
     width: .5
     height: .5
-    blast_power: 15
+    blast_power: 40
     drag_constant: .3
     density: 1
     angular_damping: 0.2
-    max_vel: 12
+    max_vel: 20
 
   dynamite:
     id: 6
@@ -153,9 +159,9 @@ weapons:
     radius: 4
     width: 0.5
     height: 0.5
-    blast_power: 15
+    blast_power: 35
     drag_constant: .3
-    density: 1
+    density: 2
     angular_damping: 0.2
     max_vel: 1
 
@@ -171,7 +177,7 @@ weapons:
     damage: 10
     width: 0.5
     height: 0.5
-    blast_power: 15
+    blast_power: 60
     drag_constant: .3
     density: 1
     angular_damping: 0.2

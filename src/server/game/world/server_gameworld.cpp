@@ -10,6 +10,7 @@
 #include <utility>
 
 #include "game/entities/server_beam_info.h"
+#include "game/entities/server_explosion.h"
 #include "game/entities/server_worm_info.h"
 #include "game/entities/server_worm_sensor.h"
 #include "game/listeners/server_raycast_explosion_callback.h"
@@ -147,7 +148,9 @@ GameWorld::~GameWorld() {}
 
 size_t GameWorld::get_worms_number() { return worm_map.size(); }
 
-void GameWorld::notify_explosion(uint16_t projectile_type, float radius, b2Vec2 center) {}
+void GameWorld::notify_explosion(uint16_t projectile_type, float radius, b2Vec2 center) {
+    entities_map.emplace(entity_id++, std::make_shared<Explosion>(projectile_type, radius, center));
+}
 
 void GameWorld::notify_damaged_worm(uint16_t worm_id) { game_state->handle_worm_damaged(worm_id); }
 

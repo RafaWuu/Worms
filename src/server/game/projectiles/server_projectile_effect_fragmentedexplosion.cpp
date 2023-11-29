@@ -31,6 +31,7 @@ ProjectileEffectFragmentedExplosion::ProjectileEffectFragmentedExplosion(
 
 
 bool ProjectileEffectFragmentedExplosion::execute(GameWorld& world, b2Body& body) {
+    std::vector<uint16_t> affected_worms;
 
     b2Vec2 center = body.GetPosition();
     int num_rays = NRAYS;
@@ -45,8 +46,12 @@ bool ProjectileEffectFragmentedExplosion::execute(GameWorld& world, b2Body& body
         RayCastExplosionCallback callback;
         world.b2_world.RayCast(&callback, center, rayEnd);
         if (callback.m_body && callback.p_worm) {
-            apply_blast_impulse(callback.m_body, callback.p_worm, center, callback.m_point,
-                                (m_blastPower / (float)num_rays));
+            if (std::find(affected_worms.begin(), affected_worms.end(),
+                          callback.p_worm->get_id()) == affected_worms.end()) {
+                apply_blast_impulse(callback.m_body, callback.p_worm, center, callback.m_point,
+                                    (m_blastPower / (float)num_rays));
+                affected_worms.push_back(callback.p_worm->get_id());
+            }
         }
     }
 
@@ -62,7 +67,7 @@ bool ProjectileEffectFragmentedExplosion::execute(GameWorld& world, b2Body& body
                 std::make_unique<ProjectileEffectNone>(BAZOOKA_ID), 0.0));
     }
 
-    world.notify_explosion(projectile_type, main_radius, center);
+    // world.notify_explosion(projectile_type, main_radius, center);
     return true;
 }
 

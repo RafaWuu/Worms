@@ -12,8 +12,10 @@ GameWorldSimulationState::GameWorldSimulationState(std::map<uint16_t, Worm*>::it
                                                    std::map<uint16_t, Worm*>& worm_map,
                                                    bool grace_period):
         grace_period(grace_period), GameWorldState(active_worm, worm_map) {
+    auto& config = Configuration::get_instance();
+
     ticks = 0;
-    round_length = grace_period ? 3 * 100 : 0;
+    round_length = grace_period ? config.grace_length * config.get_tick_rate() : 0;
 
     all_entities_had_stopped = true;
     std::cout << "Empezando simulacion " << (grace_period ? "con" : "sin") << " tiempo extra de "
@@ -27,7 +29,7 @@ std::unique_ptr<GameWorldState> GameWorldSimulationState::update() {
         active_worm->second->set_deactive();
 
     if (all_entities_had_stopped) {
-        active_worm++;
+        ++active_worm;
         if (active_worm == worm_map.end())
             active_worm = worm_map.begin();
 
