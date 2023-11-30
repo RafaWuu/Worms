@@ -41,7 +41,7 @@ bool DynamiteWeapon::fire_projectile(b2Body& body, bool facing_right) {
     float blast_power = config.get_weapon_blastpower(DYNAMITE);
     float max_vel = config.get_weapon_max_vel(DYNAMITE);
 
-    world.add_projectile(std::make_shared<Projectile>(
+    world.add_entity(std::make_shared<Projectile>(
             &world.b2_world, DYNAMITE,
             std::make_unique<ProjectileLaunchInPlace>(body.GetWorldPoint(source), max_vel),
             std::make_unique<ProjectileEffectNone>(DYNAMITE_ID),

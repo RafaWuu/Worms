@@ -14,7 +14,7 @@
 #include "game/entities/server_boundary.h"
 #include "game/entities/server_ground.h"
 #include "game/entities/server_worm_sensor.h"
-#include "game/listeners/server_onfloor_contactlistener.h"
+#include "game/listeners/server_contact_listener.h"
 #include "game/projectiles/server_projectile.h"
 #include "game/weapons/server_weapon.h"
 
@@ -32,7 +32,7 @@ private:
     std::map<uint16_t, std::shared_ptr<GameObject>> entities_map;
 
     uint16_t entity_id;
-    OnFloorContactListener listener;
+    ContactListener listener;
     double height;
     double width;
     std::unique_ptr<Boundary> boundary;
@@ -62,7 +62,7 @@ public:
     std::map<uint16_t, std::shared_ptr<WormInfo>> get_worms_info();
 
     Worm& get_worm(uint8_t worm_id, uint16_t client_id);
-    void add_projectile(std::shared_ptr<Projectile> projectile);
+    void add_entity(std::shared_ptr<GameObject> object);
 
     size_t get_worms_number();
 

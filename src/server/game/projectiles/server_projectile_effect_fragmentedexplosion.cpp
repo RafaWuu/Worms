@@ -58,7 +58,7 @@ bool ProjectileEffectFragmentedExplosion::execute(GameWorld& world, b2Body& body
     for (int i = 0; i < fragment_number; ++i) {
         float angle = (i / (float)fragment_number) * M_PI_2 + M_PI_4;
 
-        world.add_projectile(std::make_shared<Projectile>(
+        world.add_entity(std::make_shared<Projectile>(
                 &world.b2_world, BAZOOKA,
                 std::make_unique<ProjectileLaunchParabolic>(center + b2Vec2(0, .1), angle, .5, 12),
                 std::make_unique<ProjectileEffectDefaultExplosion>(

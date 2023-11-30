@@ -22,6 +22,7 @@ enum ObjectType {
     projectile = 0x0010,
     BOX = 0x0020,
     EXPLOSION = 0x0040,
+    MELEE_SENSOR = 0x0080
 };
 
 class GameObject {

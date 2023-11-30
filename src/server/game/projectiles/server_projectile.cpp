@@ -4,7 +4,6 @@
 
 #include "server_projectile.h"
 
-#include <iostream>
 #include <string>
 #include <utility>
 

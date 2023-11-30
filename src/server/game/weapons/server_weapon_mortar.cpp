@@ -69,7 +69,7 @@ bool MortarWeapon::fire_projectile(b2Body& body, bool facing_right) {
     float fragment_radius = config.get_weapon_fragment_radius(MORTAR);
     float fragment_damage = config.get_weapon_fragment_damage(MORTAR);
 
-    world.add_projectile(std::make_shared<Projectile>(
+    world.add_entity(std::make_shared<Projectile>(
             &world.b2_world, MORTAR,
             std::make_unique<ProjectileLaunchParabolic>(body.GetWorldPoint(source), aim_angle,
                                                         aim_power, max_vel),

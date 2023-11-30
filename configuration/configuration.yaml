@@ -180,9 +180,9 @@ weapons:
     affected_by_wind: false
     ammo: -1 # -1 = inifinito
     damage: 10
-    width: 0.5
-    height: 0.5
-    blast_power: 60
+    width: 1.4
+    height: 1.1
+    blast_power: 30
     drag_constant: .3
     density: 1
     angular_damping: 0.2

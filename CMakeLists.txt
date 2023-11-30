@@ -164,7 +164,7 @@ add_executable(server
 	src/server/game/entities/server_beam_info.cpp
 	src/common/common_log.cpp
 	src/server/game/entities/server_gameobject.cpp
-	src/server/game/listeners/server_onfloor_contactlistener.cpp
+        src/server/game/listeners/server_contact_listener.cpp
 	src/server/game/entities/server_worm_sensor.cpp
 	src/server/game/entities/server_ground.cpp
 	src/server/game/states/server_state_manager.cpp
@@ -226,6 +226,14 @@ add_executable(server
         src/server/game/entities/server_explosion.h
 		src/server/game/entities/server_explosion_info.cpp
 		src/server/game/entities/server_explosion_info.h
+        src/server/game/weapons/server_weapon_bat.cpp
+		src/server/game/weapons/server_weapon_bat.h
+        src/server/game/projectiles/server_melee_impact.cpp
+        src/server/game/projectiles/server_melee_impact.h
+        src/server/game/weapons/server_weapon_info_bat.cpp
+        src/server/game/weapons/server_weapon_info_bat.h
+		src/server/game/projectiles/server_melee_impact_info.cpp
+		src/server/game/projectiles/server_melee_impact_info.h
 )
 
 target_include_directories(client PUBLIC
@@ -286,7 +294,7 @@ add_executable(hello_test
 		src/server/game/entities/server_beam_info.cpp
 		src/common/common_log.cpp
 		src/server/game/entities/server_gameobject.cpp
-		src/server/game/listeners/server_onfloor_contactlistener.cpp
+        src/server/game/listeners/server_contact_listener.cpp
 		src/server/game/entities/server_worm_sensor.cpp
 		src/server/game/entities/server_ground.cpp
 		src/server/game/entities/server_boundary.cpp
@@ -344,6 +352,14 @@ add_executable(hello_test
         src/server/game/entities/server_explosion.h
 		src/server/game/entities/server_explosion_info.cpp
 		src/server/game/entities/server_explosion_info.h
+        src/server/game/weapons/server_weapon_bat.cpp
+		src/server/game/weapons/server_weapon_bat.h
+        src/server/game/projectiles/server_melee_impact.cpp
+        src/server/game/projectiles/server_melee_impact.h
+        src/server/game/weapons/server_weapon_info_bat.cpp
+        src/server/game/weapons/server_weapon_info_bat.h
+		src/server/game/projectiles/server_melee_impact_info.cpp
+		src/server/game/projectiles/server_melee_impact_info.h
 )
 
 target_link_libraries(hello_test GTest::gtest_main GTest::gmock ${BOX2D_LIBRARY_PATH} yaml-cpp)

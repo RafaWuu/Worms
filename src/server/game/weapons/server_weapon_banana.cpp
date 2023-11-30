@@ -65,7 +65,7 @@ bool BananaWeapon::fire_projectile(b2Body& body, bool facing_right) {
     float blast_power = config.get_weapon_blastpower(BANANA);
     float max_vel = config.get_weapon_max_vel(BANANA);
 
-    world.add_projectile(std::make_shared<Projectile>(
+    world.add_entity(std::make_shared<Projectile>(
             &world.b2_world, BANANA,
             std::make_unique<ProjectileLaunchParabolic>(body.GetWorldPoint(source), aim_angle,
                                                         aim_power, max_vel),

@@ -11,6 +11,7 @@
 
 #include "common_weapon_constants.h"
 #include "server_weapon_banana.h"
+#include "server_weapon_bat.h"
 #include "server_weapon_bazooka.h"
 #include "server_weapon_dynamite.h"
 #include "server_weapon_grenade.h"
@@ -18,7 +19,8 @@
 #include "server_weapon_mortar.h"
 #include "server_weapon_redgrenade.h"
 
-std::map<uint8_t, std::unique_ptr<Weapon>> WeaponFactory::get_weapons(GameWorld& world) {
+std::map<uint8_t, std::unique_ptr<Weapon>> WeaponFactory::get_weapons(GameWorld& world,
+                                                                      Worm& worm) {
     std::map<uint8_t, std::unique_ptr<Weapon>> weapons;
 
     weapons.emplace(BAZOOKA_ID, std::make_unique<BazookaWeapon>(world));
@@ -28,6 +30,7 @@ std::map<uint8_t, std::unique_ptr<Weapon>> WeaponFactory::get_weapons(GameWorld&
     weapons.emplace(BANANA_ID, std::make_unique<BananaWeapon>(world));
     weapons.emplace(HOLY_GRENADE_ID, std::make_unique<HolyGrenadeWeapon>(world));
     weapons.emplace(DYNAMITE_ID, std::make_unique<DynamiteWeapon>(world));
+    weapons.emplace(BASEBALL_BAT_ID, std::make_unique<WeaponBat>(world, worm.id));
 
     return weapons;
 }

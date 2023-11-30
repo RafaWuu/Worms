@@ -33,7 +33,7 @@ GameWorld::GameWorld(const std::string& scenario_name):
     entity_id = 0;
     file_handler.get_scenario(*this, scenario_name);
 
-    entities_map.emplace(entity_id++, std::make_shared<Ground>(&b2_world, width));
+    add_entity(std::make_shared<Ground>(&b2_world, width));
 
     b2_world.SetContactListener(&listener);
     game_state = std::make_shared<GameWorldSimulationState>(worm_map.begin(), worm_map, false);
@@ -41,22 +41,19 @@ GameWorld::GameWorld(const std::string& scenario_name):
 
 void GameWorld::create_worm(float x, float y) {
     auto worm = std::make_shared<Worm>(entity_id, *this, x, -y);
-    entities_map.emplace(entity_id, worm);
-    worm_map.emplace(entity_id++, worm.get());
-
-    entities_map.emplace(entity_id++, std::make_shared<WormSensor>(worm.get()));
+    worm_map.emplace(entity_id, worm.get());
+    add_entity(worm);
+    add_entity(std::make_shared<WormSensor>(worm.get()));
 }
 
 void GameWorld::create_large_beam(float x, float y, float angle) {
-    entities_map.emplace(entity_id++,
-                         std::make_shared<Beam>(&b2_world, x, -y, config.beam_large_width,
-                                                config.beam_height, angle));
+    add_entity(std::make_shared<Beam>(&b2_world, x, -y, config.beam_large_width, config.beam_height,
+                                      angle));
 }
 
 void GameWorld::create_short_beam(float x, float y, float angle) {
-    entities_map.emplace(entity_id++,
-                         std::make_shared<Beam>(&b2_world, x, -y, config.beam_small_width,
-                                                config.beam_height, angle));
+    add_entity(std::make_shared<Beam>(&b2_world, x, -y, config.beam_small_width, config.beam_height,
+                                      angle));
 }
 
 void GameWorld::step(int steps) {
@@ -133,8 +130,9 @@ void GameWorld::get_dimensions(float* h, float* w) {
     *h = this->height;
     *w = this->width;
 }
-void GameWorld::add_projectile(std::shared_ptr<Projectile> projectile) {
-    entities_map.emplace(entity_id++, projectile);
+
+void GameWorld::add_entity(std::shared_ptr<GameObject> object) {
+    entities_map.emplace(entity_id++, object);
 }
 
 //  limit 4to cuadrante x>=0 , y<=0
@@ -149,7 +147,7 @@ GameWorld::~GameWorld() {}
 size_t GameWorld::get_worms_number() { return worm_map.size(); }
 
 void GameWorld::notify_explosion(uint16_t projectile_type, float radius, b2Vec2 center) {
-    entities_map.emplace(entity_id++, std::make_shared<Explosion>(projectile_type, radius, center));
+    add_entity(std::make_shared<Explosion>(projectile_type, radius, center));
 }
 
 void GameWorld::notify_damaged_worm(uint16_t worm_id) { game_state->handle_worm_damaged(worm_id); }

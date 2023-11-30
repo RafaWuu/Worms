@@ -24,7 +24,6 @@ class GameWorld;
 
 class Worm: public GameObject {
 private:
-    uint16_t id;
     uint16_t client_id;
 
     StateManager state_manager;
@@ -38,10 +37,11 @@ public:
     Worm(const Worm&) = delete;
     Worm& operator=(const Worm&) = delete;
 
+    uint16_t id;
+
     std::map<uint8_t, std::unique_ptr<Weapon>> weapons_map;
 
     b2Body* body;
-
     int numFootContacts;
     int jumpTimeout;
     bool facing_right;
@@ -50,6 +50,7 @@ public:
     uint8_t current_weapon;
     uint8_t health;
     uint8_t recent_health;
+
     float recent_speed;
     bool had_used_weapon;
 

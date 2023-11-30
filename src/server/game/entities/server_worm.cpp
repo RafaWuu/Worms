@@ -20,9 +20,9 @@
 
 
 Worm::Worm(uint8_t id, GameWorld& world, float pos_x, float pos_y):
-        weapons_map(WeaponFactory::get_weapons(world)),
         id(id),
         client_id(),
+        weapons_map(WeaponFactory::get_weapons(world, *this)),
         state_manager(Alive | Standing),
         config(Configuration::get_instance()),
         GameObject() {

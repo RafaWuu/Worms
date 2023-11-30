@@ -26,6 +26,8 @@ protected:
     Configuration& config;
 
 public:
+    friend class WeaponInfoBat;
+
     explicit Weapon(GameWorld& world);
     virtual ~Weapon() = default;
     virtual bool aim_projectile(b2Body& body, float x, float y, bool facing_right);

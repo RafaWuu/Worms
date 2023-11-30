@@ -67,7 +67,7 @@ bool BazookaWeapon::fire_projectile(b2Body& body, bool facing_right) {
     float blast_power = config.get_weapon_blastpower(BAZOOKA);
     float max_vel = config.get_weapon_max_vel(BAZOOKA);
 
-    world.add_projectile(std::make_shared<Projectile>(
+    world.add_entity(std::make_shared<Projectile>(
             &world.b2_world, BAZOOKA,
             std::make_unique<ProjectileLaunchParabolic>(body.GetWorldPoint(source), aim_angle,
                                                         aim_power, max_vel),

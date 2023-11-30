@@ -2,13 +2,14 @@
 // Created by xguss on 05/11/23.
 //
 
-#include "server_onfloor_contactlistener.h"
+#include "server_contact_listener.h"
 
 #include "game/entities/server_gameobject.h"
 #include "game/entities/server_worm_sensor.h"
+#include "game/projectiles/server_melee_impact.h"
 #include "game/world/server_gameworld.h"
 
-void OnFloorContactListener::BeginContact(b2Contact* contact) {
+void ContactListener::BeginContact(b2Contact* contact) {
 
     auto fixtureUserDataA = contact->GetFixtureA()->GetUserData().pointer;
     auto fixtureUserDataB = contact->GetFixtureB()->GetUserData().pointer;
@@ -36,10 +37,24 @@ void OnFloorContactListener::BeginContact(b2Contact* contact) {
         auto* projectile = dynamic_cast<Projectile*>(game_objectB);
         projectile->on_projectile_impact(world);
     }
+
+    if (game_objectA->get_id() == MELEE_SENSOR && game_objectB->get_id() == WORM) {
+        auto* weapon = dynamic_cast<MeleeImpact*>(game_objectA);
+        auto* worm = dynamic_cast<Worm*>(game_objectB);
+
+        weapon->on_impact(world, *worm);
+    }
+
+    if (game_objectB->get_id() == MELEE_SENSOR && game_objectA->get_id() == WORM) {
+        auto* weapon = dynamic_cast<MeleeImpact*>(game_objectB);
+        auto* worm = dynamic_cast<Worm*>(game_objectA);
+
+        weapon->on_impact(world, *worm);
+    }
 }
 
 
-void OnFloorContactListener::EndContact(b2Contact* contact) {
+void ContactListener::EndContact(b2Contact* contact) {
 
     auto fixtureUserDataA = contact->GetFixtureA()->GetUserData().pointer;
     auto fixtureUserDataB = contact->GetFixtureB()->GetUserData().pointer;
@@ -59,4 +74,4 @@ void OnFloorContactListener::EndContact(b2Contact* contact) {
     }
 }
 
-OnFloorContactListener::OnFloorContactListener(GameWorld& world): world(world) {}
+ContactListener::ContactListener(GameWorld& world): world(world) {}
