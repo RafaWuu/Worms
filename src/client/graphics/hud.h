@@ -13,6 +13,7 @@ class Hud {
 		int current_worm;
 		int time;
 		int ammo;
+		
         void render_ammo(SDL2pp::Renderer& renderer);
         void render_hp(SDL2pp::Renderer& renderer);
         void render_timer(SDL2pp::Renderer& renderer);

@@ -1,5 +1,5 @@
 #include "mainwindow.h"
-
+#include <QFontDatabase>
 #include <QCloseEvent>
 
 #include "./ui_mainwindow.h"
@@ -12,7 +12,8 @@ MainWindow::MainWindow(std::shared_ptr<Client> client, QWidget* parent):
         client(client) {
     ui->setupUi(this);
     ui->start_game->setEnabled(false);
-}
+
+    }
 
 MainWindow::~MainWindow() {
     delete ui;

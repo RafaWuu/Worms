@@ -35,7 +35,8 @@ void Player::update_info(EntityInfo* info, SoundController& sound_controller) {
 
     x = worm->get_pos_x();
     y = worm->get_pos_y();
-    hud->update_ammo(worm->get_id(),worm->get_ammo());
+    //TODO actualizar si es mi gusano, reubicar
+    // hud->update_ammo(worm->get_id(),worm->get_ammo());
     height = worm->get_height();
     width = worm->get_width();
     uint8_t dir = worm->get_dir();

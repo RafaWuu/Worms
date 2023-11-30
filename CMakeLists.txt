@@ -74,6 +74,7 @@ set(CLIENT_SOURCE
 	src/client/lobby/mainwindow.cpp
 	src/client/lobby/new_game_dialog.cpp
 	src/client/lobby/connectdialog.cpp
+	src/client/lobby/resources.qrc
 	# graphics
 	src/client/graphics/animation.cpp
 	src/client/graphics/player.cpp

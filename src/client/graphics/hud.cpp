@@ -2,7 +2,9 @@
 
 Hud::Hud(SDL2pp::Renderer& renderer, std::map<uint16_t,uint16_t>& worms_distribution):
     renderer(renderer),
-    worms_distribution(worms_distribution){
+    worms_distribution(worms_distribution),
+    ammo(0),
+    time(0){
         // por ahi hacer un map de {client_id:worm/player class}
         // for (auto pair : worms_distribution)
         // {
@@ -51,7 +53,7 @@ void Hud::render_hp(SDL2pp::Renderer& renderer){
 
 void Hud::render_ammo(SDL2pp::Renderer& renderer){
         SDL2pp::Font font("/home/rafa/Desktop/final /Worms/assets/Vera.ttf", 12);
-        std::string text = "Ammo: "  + std::to_string(ammo);
+        std::string text = "Ammo: "  + std::to_string(0);
 	    SDL2pp::Texture ammo_sprite(
 		renderer,
 		font.RenderText_Blended(text, SDL2pp::Color{255, 0, 0, 255}));
