@@ -37,6 +37,7 @@ uint8_t Worm::get_dir() const { return dir; }
 
 uint8_t Worm::get_current_weapon() { return current_weapon; }
 
+int Worm::get_ammo() { return ammo; }
 float Worm::get_aim_angle() { return aim_angle; }
 
 uint8_t Worm::get_attack_power() { return attack_power; }

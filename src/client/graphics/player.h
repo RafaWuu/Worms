@@ -14,7 +14,7 @@
 #include "entity.h"
 #include "texture_controller.h"
 #include "../sound/sound_controller.h"
-
+#include "hud.h"
 class Player: public Entity {
 public:
     Player(TextureController& texture_controller, int id);
@@ -32,7 +32,7 @@ public:
 
     void render_crosshair(SDL2pp::Renderer& renderer);
     void set_color(SDL2pp::Color color);
-
+    void set_hud(std::shared_ptr<Hud> hud);
     void add_crosshair();
 
 private:
@@ -60,6 +60,7 @@ private:
     std::unique_ptr<Crosshair> crosshair;
     WeaponFactory weapon_factory;
     SDL2pp::Color color;
+    std::shared_ptr<Hud> hud;
     Configuration& config;
 };
 

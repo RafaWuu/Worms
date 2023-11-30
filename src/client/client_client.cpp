@@ -92,7 +92,7 @@ void Client::assign_worms_color(const std::map<uint16_t, uint16_t>& distribution
 }
 void Client::start_joined_game() {
     // Que worm le corresponde a cada cliente (id_worm, id_client)
-    std::map<uint16_t, uint16_t> distribution = protocol.receive_worms_distribution();
+    distribution = protocol.receive_worms_distribution();
     assign_worms_color(distribution);
     get_id_assigned_worm(distribution);
 }
@@ -101,7 +101,7 @@ void Client::start_game() {
     protocol.send_start_game();
 
     // Que worm le corresponde a cada cliente (id_worm, id_client)
-    std::map<uint16_t, uint16_t> distribution = protocol.receive_worms_distribution();
+    distribution = protocol.receive_worms_distribution();
     assign_worms_color(distribution);  // puede ir en world_view
     get_id_assigned_worm(distribution);
 }
@@ -110,8 +110,9 @@ int Client::start() {
     sender->start();
     receiver->start();
 
-    SDL2pp::SDL sdl(SDL_INIT_AUDIO);  //--->crear clase que maneje la vista
+    SDL2pp::SDL sdl(SDL_INIT_VIDEO | SDL_INIT_AUDIO);  //--->crear clase que maneje la vista
     SDL2pp::Mixer mixer(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 4096); // audio
+    SDL2pp::SDLTTF sdl_ttf;
     // Create main window: 640x480 dimensions, resizable, "SDL2pp demo" title
     SDL2pp::Window window("Worms", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH,
                           SCREEN_HEIGHT, SDL_WINDOW_RESIZABLE);
@@ -122,8 +123,10 @@ int Client::start() {
 
     TextureController texture_controller(renderer);
     WeaponSelector weapon_selector(renderer);
+    auto hud = std::make_shared<Hud>(renderer, distribution);
+
     WorldView worldview(texture_controller, std::move(this->scenario), color_map, weapon_selector,
-                        current_worm, my_worms_id_vec, sound_controller);
+                        current_worm, my_worms_id_vec, sound_controller,hud);
 
     bool running = true;
     auto start = high_resolution_clock::now();
@@ -166,7 +169,8 @@ void Client::update(WorldView& worldview) {
         std::map<uint16_t, std::unique_ptr<EntityInfo>>& updated_states =
                 estado->get_updated_info();
         current_worm = estado->get_current_worm();
-        worldview.update(updated_states);
+
+        worldview.update(updated_states, current_worm);
         messages_received.clear();
     }
 

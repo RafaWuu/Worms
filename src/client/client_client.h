@@ -19,7 +19,7 @@
 #include "client_protocol.h"
 #include "client_receiver.h"
 #include "client_sender.h"
-
+#include "src/client/graphics/hud.h"
 class WorldView;
 
 class Client {
@@ -36,6 +36,7 @@ private:
     std::vector<uint16_t> my_worms_id_vec;
     uint16_t my_id;
     uint16_t current_worm;
+    std::map<uint16_t, uint16_t> distribution;
 
     std::map<uint16_t, SDL2pp::Color> color_map;  // sdl color o 3 ints(r,g,b)
     // Por ahora que sea un array de chars, despues cambiarlo a una clase propia

@@ -80,6 +80,7 @@ set(CLIENT_SOURCE
 	src/client/graphics/scenario_beam.cpp
 	src/client/graphics/texture_controller.cpp
 	src/client/graphics/worldview.cpp
+	src/client/graphics/hud.cpp
 	${UIS_HEADERS}
 	src/common/common_log.cpp
 	src/client/commands/client_jump.cpp

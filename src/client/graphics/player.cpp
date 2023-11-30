@@ -17,6 +17,7 @@ Player::Player(TextureController& controller, int id):
         id(id),
         config(Configuration::get_instance()) {
     crosshair = nullptr;
+    hud = nullptr;
     current_weapon = std::make_unique<Bazooka>();
     health = 100;
 }
@@ -34,6 +35,7 @@ void Player::update_info(EntityInfo* info, SoundController& sound_controller) {
 
     x = worm->get_pos_x();
     y = worm->get_pos_y();
+    hud->update_ammo(worm->get_id(),worm->get_ammo());
     height = worm->get_height();
     width = worm->get_width();
     uint8_t dir = worm->get_dir();
@@ -127,3 +129,4 @@ void Player::render(SDL2pp::Renderer& renderer, SDL2pp::Rect& camera) {
 
 uint16_t Player::get_id() const { return id; }
 void Player::set_color(SDL2pp::Color color) { color = color; }
+void Player::set_hud(std::shared_ptr<Hud> hud){hud = hud;}

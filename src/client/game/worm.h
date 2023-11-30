@@ -35,6 +35,7 @@ public:
 
     int get_health();
     int get_state();
+    int get_ammo();
     uint16_t get_id() const override;
 
     uint8_t get_dir() const;
