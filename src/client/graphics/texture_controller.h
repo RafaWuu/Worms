@@ -22,7 +22,7 @@ enum AnimationState {
     SCENARIO_GROUND,
     SCENARIO_BACKGROUND,
     // Weapons
-    BAZOOKA_IDLE, // El gusano empieza con una bazooka, empieza con esta textura
+    BAZOOKA_IDLE,  // El gusano empieza con una bazooka, empieza con esta textura
     BAZOOKA_AIMING,
     BAZOOKA_PROJECTILE,
     MORTAR_IDLE,
@@ -45,6 +45,8 @@ enum AnimationState {
     HOLY_GRENADE_PROJECTILE,
     BAT_IDLE,
     BAT_AIMING,
+    TELEPORTATION_IDLE,
+    TELEPORTATION_AIMING,
 };
 
 class TextureController {

@@ -18,6 +18,7 @@
 #include "server_weapon_holygrenade.h"
 #include "server_weapon_mortar.h"
 #include "server_weapon_redgrenade.h"
+#include "server_weapon_teleportation.h"
 
 std::map<uint8_t, std::unique_ptr<Weapon>> WeaponFactory::get_weapons(GameWorld& world,
                                                                       Worm& worm) {
@@ -31,6 +32,7 @@ std::map<uint8_t, std::unique_ptr<Weapon>> WeaponFactory::get_weapons(GameWorld&
     weapons.emplace(HOLY_GRENADE_ID, std::make_unique<HolyGrenadeWeapon>(world));
     weapons.emplace(DYNAMITE_ID, std::make_unique<DynamiteWeapon>(world));
     weapons.emplace(BASEBALL_BAT_ID, std::make_unique<WeaponBat>(world, worm.id));
+    weapons.emplace(TELEPORTATION_ID, std::make_unique<TeleportationWeapon>(world));
 
     return weapons;
 }

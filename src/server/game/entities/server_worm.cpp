@@ -82,7 +82,7 @@ void Worm::update(GameWorld& world) {
 
     state_manager.update(*this);
 
-    if (recent_health < health)
+    if (recent_health > health)
         world.notify_damaged_worm(this->id);
 
     recent_health = health;

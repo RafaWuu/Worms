@@ -48,8 +48,8 @@ public:
     float aim_x;
     float aim_y;
     uint8_t current_weapon;
-    uint8_t health;
-    uint8_t recent_health;
+    int health;
+    int recent_health;
 
     float recent_speed;
     bool had_used_weapon;

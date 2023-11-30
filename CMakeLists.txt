@@ -121,7 +121,9 @@ set(CLIENT_SOURCE
 	configuration/weapon_info.cpp
 	src/client/graphics/weapons/weapon_selector.cpp
 	src/client/sound/sound_controller.cpp
-	)
+		src/client/graphics/weapons/teleportation.cpp
+		src/client/graphics/weapons/teleportation.h
+)
 
 message("Headers generados: ${UIS_HEADERS}")
 # Agrego la carpeta con los headers autogenerados a los includes
@@ -131,6 +133,8 @@ include_directories(${PROJECT_BINARY_DIR})
 add_executable(client 
 	src/client/client_main.cpp
 	${CLIENT_SOURCE}
+		src/client/graphics/weapons/teleportation.cpp
+		src/client/graphics/weapons/teleportation.h
 )
 
 add_executable(server
@@ -234,6 +238,10 @@ add_executable(server
         src/server/game/weapons/server_weapon_info_bat.h
 		src/server/game/projectiles/server_melee_impact_info.cpp
 		src/server/game/projectiles/server_melee_impact_info.h
+		src/server/game/weapons/server_weapon_teleportation.cpp
+		src/server/game/weapons/server_weapon_teleportation.h
+		src/server/game/weapons/server_weapon_info_teleportation.cpp
+		src/server/game/weapons/server_weapon_info_teleportation.h
 )
 
 target_include_directories(client PUBLIC
@@ -360,6 +368,10 @@ add_executable(hello_test
         src/server/game/weapons/server_weapon_info_bat.h
 		src/server/game/projectiles/server_melee_impact_info.cpp
 		src/server/game/projectiles/server_melee_impact_info.h
+		src/server/game/weapons/server_weapon_teleportation.cpp
+		src/server/game/weapons/server_weapon_teleportation.h
+		src/server/game/weapons/server_weapon_info_teleportation.cpp
+		src/server/game/weapons/server_weapon_info_teleportation.h
 )
 
 target_link_libraries(hello_test GTest::gtest_main GTest::gmock ${BOX2D_LIBRARY_PATH} yaml-cpp)
@@ -376,6 +388,8 @@ add_test(NAME asd COMMAND hello_test)
 add_executable(client_test
 	test/client_test.cc
 	${CLIENT_SOURCE}
+		src/client/graphics/weapons/teleportation.cpp
+		src/client/graphics/weapons/teleportation.h
 )
 
 target_include_directories(client_test PUBLIC
