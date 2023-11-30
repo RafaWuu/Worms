@@ -11,6 +11,8 @@
 
 #include "game/entity_info.h"
 
+#include "../sound/sound_controller.h"
+
 class Entity {
 private:
     float x = 0, y = 0;
@@ -18,7 +20,7 @@ private:
 
 public:
     virtual ~Entity() = default;
-    virtual void update_info(EntityInfo* info){
+    virtual void update_info(EntityInfo* info, SoundController& sound_controller){
 
     };
     virtual void update(float dt){

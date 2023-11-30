@@ -2,11 +2,12 @@
 
 WorldView::WorldView(TextureController& texture_controller, std::unique_ptr<Scenario> scenario,
                      std::map<uint16_t, SDL2pp::Color>& color_map, WeaponSelector& weapon_selector,
-                     uint16_t current_worm, std::vector<uint16_t>& my_worms_id):
+                     uint16_t current_worm, std::vector<uint16_t>& my_worms_id, SoundController& sound_controller):
         texture_controller(texture_controller),
         entity_factory(texture_controller),
         weapon_selector(weapon_selector),
-        current_worm(current_worm) {
+        current_worm(current_worm),
+        sound_controller(sound_controller) {
 
     camera = SDL2pp::Rect{0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
 
@@ -29,7 +30,7 @@ void WorldView::update(std::map<uint16_t, std::unique_ptr<EntityInfo>>& updated_
         auto it = dynamic_entities.find(info.first);
         if (it != dynamic_entities.end()) {
             it->second->update(FRAME_RATE);
-            it->second->update_info(info.second.get());
+            it->second->update_info(info.second.get(), sound_controller);
 
         } else {
             dynamic_entities.emplace(info.first, entity_factory.create(*info.second));

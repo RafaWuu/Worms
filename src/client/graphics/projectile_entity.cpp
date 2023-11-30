@@ -13,7 +13,7 @@ projectileEntity::projectileEntity(TextureController& controller):
 
 projectileEntity::~projectileEntity() {}
 
-void projectileEntity::update_info(EntityInfo* info) {
+void projectileEntity::update_info(EntityInfo* info, SoundController& sound_controller) {
     auto projectile = dynamic_cast<Projectile*>(info);  // feo?
 
     x = projectile->get_pos_x();

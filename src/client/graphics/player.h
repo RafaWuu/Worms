@@ -13,13 +13,14 @@
 #include "crosshair.h"
 #include "entity.h"
 #include "texture_controller.h"
+#include "../sound/sound_controller.h"
 
 class Player: public Entity {
 public:
     Player(TextureController& texture_controller, int id);
     ~Player();
 
-    void update_info(EntityInfo* info) override;
+    void update_info(EntityInfo* info, SoundController& sound_controller) override;
 
     void update(float dt) override;
 

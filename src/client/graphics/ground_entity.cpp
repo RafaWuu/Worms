@@ -16,4 +16,4 @@ void GroundEntity::render(SDL2pp::Renderer& renderer, SDL2pp::Rect& camera) {
     renderer.FillCopy(*texture, SDL2pp::NullOpt,
                       SDL2pp::Rect(x - width / 2, y - width / 2, width, height));
 }
-void GroundEntity::update_info(EntityInfo* info) { Entity::update_info(info); }
+void GroundEntity::update_info(EntityInfo* info, SoundController& sound_controller) { Entity::update_info(info, sound_controller); }

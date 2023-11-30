@@ -1,3 +1,8 @@
+# Background music distance (mayor distancia menos se escucha)
+bg_music_distance: 230
+# Sound effects distance (mayor distancia menos se escucha)
+sound_effect_distance: 150
+
 fps: 60
 tick_rate: 100
 

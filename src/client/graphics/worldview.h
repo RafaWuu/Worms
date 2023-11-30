@@ -12,12 +12,15 @@
 #include "entity.h"
 #include "player.h"
 #include "scenario_beam.h"
+#include "../sound/sound_controller.h"
 
 // Contiene a los objetos renderizables (x ahora solo los gusanos/Players)
 class WorldView {
 private:
     TextureController& texture_controller;
     EntityFactory entity_factory;
+
+    SoundController& sound_controller;
 
     uint16_t current_worm;
 
@@ -34,7 +37,7 @@ private:
 public:
     WorldView(TextureController& texture_controller, std::unique_ptr<Scenario> scenario,
               std::map<uint16_t, SDL2pp::Color>& color_map, WeaponSelector& weapon_selector,
-              uint16_t current_worm, std::vector<uint16_t>& my_worms_id);
+              uint16_t current_worm, std::vector<uint16_t>& my_worms_id, SoundController& sound_controller);
 
     void update(std::map<uint16_t, std::unique_ptr<EntityInfo>>& updated_info);
 

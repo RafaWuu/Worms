@@ -9,6 +9,7 @@
 
 #include "../common/common_liberror.h"
 #include "commands/client_command.h"
+#include "sound/sound_controller.h"
 
 #include "graphics/weapons/weapon_selector.h"
 
@@ -30,7 +31,7 @@ private:
 
 public:
     EventHandler();
-    std::shared_ptr<Command> handle(const SDL_Event& event, WeaponSelector& weapons_selector);
+    std::shared_ptr<Command> handle(const SDL_Event& event, WeaponSelector& weapons_selector, SoundController& sound_controller);
     std::shared_ptr<Command> aim(int x, int y);
     std::shared_ptr<Command> fire();
     std::shared_ptr<Command> stop_aim();

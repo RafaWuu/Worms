@@ -14,7 +14,7 @@ public:
     explicit projectileEntity(TextureController& texture_controller);
     ~projectileEntity();
 
-    void update_info(EntityInfo* info) override;
+    void update_info(EntityInfo* info, SoundController& sound_controller) override;
     void update(float dt) override;
     void render(SDL2pp::Renderer& renderer, SDL2pp::Rect& camera) override;
 

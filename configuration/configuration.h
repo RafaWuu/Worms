@@ -21,6 +21,9 @@ class WeaponConfig;
 // Singleton
 class Configuration {
 private:
+    int bg_music_distance;
+    int sound_effect_distance;
+
     double fps;
     double tick_rate;
 
@@ -59,6 +62,9 @@ public:
     std::map<std::string, WeaponConfig> weapons_info;
 
     static Configuration& get_instance();
+
+    int get_bg_music_distance();
+    int get_sound_effect_distance();
 
     double get_fps();
     double get_tick_rate();

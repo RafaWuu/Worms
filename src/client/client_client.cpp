@@ -123,7 +123,7 @@ int Client::start() {
     TextureController texture_controller(renderer);
     WeaponSelector weapon_selector(renderer);
     WorldView worldview(texture_controller, std::move(this->scenario), color_map, weapon_selector,
-                        current_worm, my_worms_id_vec);
+                        current_worm, my_worms_id_vec, sound_controller);
 
     bool running = true;
     auto start = high_resolution_clock::now();
@@ -133,7 +133,7 @@ int Client::start() {
 
         if (std::find(my_worms_id_vec.begin(), my_worms_id_vec.end(), current_worm) !=
             my_worms_id_vec.end()) {
-            running = handle_events(weapon_selector);
+            running = handle_events(weapon_selector, sound_controller);
         }
 
         worldview.render(renderer);
@@ -178,12 +178,12 @@ void Client::update(WorldView& worldview) {
     }
 }
 
-bool Client::handle_events(WeaponSelector& weapon_selector) {
+bool Client::handle_events(WeaponSelector& weapon_selector, SoundController& sound_controller) {
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
         try {
             auto c = event_handler.handle(
-                    event, weapon_selector);  
+                    event, weapon_selector, sound_controller);  
             if (c != nullptr)
                 messages_to_send.push(c);
         } catch (QuitGameClientInput& e) {

@@ -1,22 +1,56 @@
 #include "sound_controller.h"
 
-SoundController::SoundController(SDL2pp::Mixer& mixer) : mixer(mixer) {}
+SoundController::SoundController(SDL2pp::Mixer& mixer) : mixer(mixer) {
+    std::map<Sound, std::string> sounds_to_load = {
+        {CURSOR_SELECT, "CursorSelect.wav"},
+        {BACKGROUND_MUSIC, "background_music.mp3"},
+        {JUMP, "JUMP1.WAV"},
+        {WALK, "Walk.wav"},
+    };
+
+    for (auto& [sound, file_name] : sounds_to_load) {
+        load_sound(sound, file_name);
+    }
+}
 
 void SoundController::set_background_music() {
-    mixer.SetMusicVolume(50);
+    std::shared_ptr<SDL2pp::Chunk> bg_music = sounds[BACKGROUND_MUSIC];
 
-    std::string path("../assets/sounds/background_music.mp3");
-    std::string alternative_path("assets/sounds/background_music.mp3");
+    int channel = 0;
+
+    mixer.SetDistance(channel, Configuration::get_instance().get_bg_music_distance());
+    mixer.PlayChannel(channel, *bg_music, -1);     
+}
+
+void SoundController::load_sound(Sound sound, std::string file_name) {
+    std::string path("../assets/sounds/" + file_name);
+    std::string alternative_path("assets/sounds/" + file_name);
 
     try {
 
-        SDL2pp::Music music(path);
-        mixer.PlayMusic(music, -1);
+        auto sound_effect = std::make_shared<SDL2pp::Chunk> (path);
+        sounds.emplace(sound, sound_effect);
 
     } catch (SDL2pp::Exception& e) {
 
-        SDL2pp::Music music(alternative_path);
-        mixer.PlayMusic(music, -1);
-        
-    }    
+        auto sound_effect = std::make_shared<SDL2pp::Chunk> (alternative_path);
+        sounds.emplace(sound, sound_effect);
+
+    }   
 }
+
+void SoundController::play_sound(Sound sound) {
+    int channel = 1;
+
+    // Para que no spamee el sonido al caminar. Hardcodeado?
+    if (sound == WALK && mixer.IsChannelPlaying(channel)) {
+        return;
+    }
+
+    std::shared_ptr<SDL2pp::Chunk> sound_effect = sounds[sound];
+
+    mixer.SetDistance(channel, Configuration::get_instance().get_sound_effect_distance());
+    mixer.PlayChannel(channel, *sound_effect, 0);
+}
+
+

@@ -24,7 +24,7 @@ EventHandler::EventHandler() {
 }
 
 std::shared_ptr<Command> EventHandler::handle(const SDL_Event& event,
-                                              WeaponSelector& weapon_selector) {
+                                              WeaponSelector& weapon_selector, SoundController& sound_controller) {
     if (event.type == SDL_QUIT) {
         throw(QuitGameClientInput());
     }
@@ -57,6 +57,8 @@ std::shared_ptr<Command> EventHandler::handle(const SDL_Event& event,
     if (event.type == SDL_MOUSEBUTTONDOWN) {
         if (event.button.button == SDL_BUTTON_LEFT) {
             if (weapon_selector.mouse_inside(event.button.x, event.button.y)) {
+                sound_controller.play_sound(CURSOR_SELECT);
+
                 uint8_t weapon_id = weapon_selector.get_weapon_index(event.button.x, event.button.y);
                 return change_weapon(weapon_id);
             }

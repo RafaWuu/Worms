@@ -27,7 +27,7 @@ void Player::add_crosshair() {
 
 Player::~Player() {}
 
-void Player::update_info(EntityInfo* info) {
+void Player::update_info(EntityInfo* info, SoundController& sound_controller) {
     auto worm = dynamic_cast<Worm*>(info);  // feo?
 
     health = worm->get_health();
@@ -54,8 +54,10 @@ void Player::update_info(EntityInfo* info) {
     if (!moving && is_moving_now) {
         an.change_texture(WALKING);
     } else if (!jumping && is_jumping_now) {
+        sound_controller.play_sound(JUMP);
         an.change_texture(JUMPING);
     } else if (!rolling && is_rolling_now) {
+        sound_controller.play_sound(JUMP);
         an.change_texture(ROLLING);
     } else if (!falling && is_falling_now) {
         an.change_texture(FALLING);
@@ -74,6 +76,8 @@ void Player::update_info(EntityInfo* info) {
     falling = is_falling_now;
     dead = is_dead_now;
     idle = is_idle_now;
+
+    if (moving) sound_controller.play_sound(WALK);
 
     if (dir == 1)
         facingLeft = false;

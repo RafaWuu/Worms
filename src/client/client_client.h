@@ -53,7 +53,7 @@ public:
     Client(const Client& other) = delete;
     Client& operator=(const Client&) = delete;
 
-    bool handle_events(WeaponSelector& weapon_selector);
+    bool handle_events(WeaponSelector& weapon_selector, SoundController& sound_controller);
     void update(WorldView& worldview);
 
     void kill();
