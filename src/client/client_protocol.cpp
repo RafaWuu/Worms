@@ -28,7 +28,8 @@ enum ObjectType {
     WORM = 0x004,
     WORM_SENSOR = 0x008,
     projectile = 0x0010,
-    BOX = 0x0020
+    BOX = 0x0020,
+    EXPLOSION = 0x0040,
 };
 
 ClientProtocol::ClientProtocol(BaseProtocol& bp):
@@ -261,6 +262,22 @@ std::unique_ptr<Projectile> ClientProtocol::receive_projectile() {
                                         config.get_weapon_height(name) * SCALE, angle);
 }
 
+std::unique_ptr<Explosion> ClientProtocol::receive_explosion() {
+    uint16_t type;
+    float x;
+    float y;
+    float radius;
+
+    baseProtocol.recv_2byte_number(type);
+    baseProtocol.recv_4byte_float(radius);
+    baseProtocol.recv_4byte_float(x);
+    baseProtocol.recv_4byte_float(y);
+
+    return std::make_unique<Explosion>(type, x * SCALE, -y * SCALE,
+                                        radius * SCALE,
+                                        radius * SCALE, radius * SCALE);
+}
+
 std::map<uint16_t, uint16_t> ClientProtocol::receive_worms_distribution() {
     // 87 03 n_worms [... {worm_id, client_id} ...]
 
@@ -321,6 +338,9 @@ std::unique_ptr<Scenario> ClientProtocol::receive_scenario() {
                 break;
             case ObjectType::GROUND:
                 static_entities.emplace(entity_id, receive_ground());
+                break;
+            case ObjectType::EXPLOSION:
+                dynamic_entities.emplace(entity_id, receive_explosion());
                 break;
             default:
                 break;

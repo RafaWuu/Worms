@@ -17,6 +17,7 @@ enum Sound {
     JUMP,
     WALK,
     THROW,
+    EXPLOSION,
 };
 
 class SoundController {

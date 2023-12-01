@@ -89,6 +89,7 @@ set(CLIENT_SOURCE
 	src/client/game/ground.cpp
 	src/client/graphics/entity.cpp
 	src/client/game/entity_info.cpp
+	src/client/game/explosion.cpp
 	src/client/game/ground.cpp
 	src/client/graphics/entities_factory.cpp
 	src/client/graphics/ground_entity.cpp
@@ -98,6 +99,7 @@ set(CLIENT_SOURCE
 	src/client/commands/client_fire.cpp
 	src/client/game/projectile.cpp
 	src/client/graphics/projectile_entity.cpp
+	src/client/graphics/explosion_entity.cpp
 	src/common/common_baseprotocol.cpp
 	src/common/common_baseprotocol.h
 	src/client/lobby/gameinfo.cpp

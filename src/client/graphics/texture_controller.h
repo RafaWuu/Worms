@@ -47,6 +47,9 @@ enum AnimationState {
     BAT_AIMING,
     TELEPORTATION_IDLE,
     TELEPORTATION_AIMING,
+    // Explosion
+    EXPLOSION_CIRCLE,
+    EXPLOSION_ELIPSE,
 };
 
 class TextureController {

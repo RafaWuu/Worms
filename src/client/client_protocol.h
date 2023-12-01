@@ -16,6 +16,7 @@
 #include "game/ground.h"
 #include "game/projectile.h"
 #include "game/scenario.h"
+#include "game/explosion.h"
 #include "lobby/lobby_state.h"
 
 #include "common_log.h"
@@ -56,6 +57,7 @@ public:
     std::unique_ptr<Beam> receive_beam();
     std::unique_ptr<Ground> receive_ground();
     std::unique_ptr<Projectile> receive_projectile();
+    std::unique_ptr<Explosion> receive_explosion();
 
     void get_my_id(uint16_t& id);
     void set_worm_id(uint16_t i);

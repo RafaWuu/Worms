@@ -6,10 +6,11 @@
 static Uint32 get_color_key(uint8_t r, uint8_t g, uint8_t b);
 
 TextureController::TextureController(SDL2pp::Renderer& renderer_): renderer(renderer_) {
-    Uint32 blue_color_key = get_color_key(0x80, 0x80, 0xC0);
+    Uint32 light_blue_color_key = get_color_key(0x80, 0x80, 0xC0);
+    Uint32 dark_blue_color_key = get_color_key(32, 32, 248);
     Uint32 yellow_color_key = get_color_key(192, 192, 128);
 
-    std::map<AnimationState, std::string> textures_blue_bg = {
+    std::map<AnimationState, std::string> textures_light_blue_bg = {
             {WALKING, "wwalk2.png"},
             {IDLE, "wblink1.png"},
             {JUMPING, "wjumpd.png"},
@@ -41,6 +42,8 @@ TextureController::TextureController(SDL2pp::Renderer& renderer_): renderer(rend
             {DYNAMITE_IDLE, "wdynbak.png"},
             {DYNAMITE_AIMING, "wdynbak.png"},
             {DYNAMITE_PROJECTILE, "dynamite.png"},
+            {EXPLOSION_CIRCLE, "circle50.png"},
+
     };
 
     std::map<AnimationState, std::string> textures_yellow_bg = {
@@ -49,12 +52,20 @@ TextureController::TextureController(SDL2pp::Renderer& renderer_): renderer(rend
             {TELEPORTATION_AIMING, "wbsbaim.png"},
     };
 
-    for (auto const& texture: textures_blue_bg) {
-        load_texture(texture.first, texture.second, blue_color_key);
+    std::map<AnimationState, std::string> textures_dark_blue_bg = {
+        {EXPLOSION_ELIPSE, "elipse50.png"},
+    };
+
+    for (auto const& texture: textures_light_blue_bg) {
+        load_texture(texture.first, texture.second, light_blue_color_key);
     }
 
     for (auto const& texture: textures_yellow_bg) {
         load_texture(texture.first, texture.second, yellow_color_key);
+    }
+
+    for (auto const& texture: textures_dark_blue_bg) {
+        load_texture(texture.first, texture.second, dark_blue_color_key);
     }
 }
 

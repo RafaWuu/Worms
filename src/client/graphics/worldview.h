@@ -11,6 +11,7 @@
 #include "entities_factory.h"
 #include "entity.h"
 #include "player.h"
+#include "explosion_entity.h"
 #include "scenario_beam.h"
 #include "../sound/sound_controller.h"
 #include "hud.h"
