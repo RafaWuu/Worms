@@ -3,13 +3,20 @@
 
 #include "game/projectile.h"
 
-projectileEntity::projectileEntity(TextureController& controller):
+projectileEntity::projectileEntity(TextureController& controller, uint8_t type):
         texture_controller(controller),
-        an(texture_controller.get_texture(AnimationState::IDLE), texture_controller),
+        an(texture_controller.get_texture(IDLE), texture_controller),
         type(0),
         x(300),
         y(300),
-        config(Configuration::get_instance()) {}
+        config(Configuration::get_instance()),
+        was_just_thrown(true) {
+
+    WeaponFactory factory;
+    weapon = factory.create_weapon(type);
+
+    an.change_texture(weapon->get_projectile_texture());
+}
 
 projectileEntity::~projectileEntity() {}
 
@@ -25,7 +32,10 @@ void projectileEntity::update_info(EntityInfo* info, SoundController& sound_cont
     type = projectile->type;
     auto type_s = config.get_weapon_name(type);
 
-    an.change_texture(projectile_controller.get_projectile_texture(type));
+    if (was_just_thrown) {
+        sound_controller.play_sound(THROW);
+        was_just_thrown = false;
+    }
 }
 
 /**

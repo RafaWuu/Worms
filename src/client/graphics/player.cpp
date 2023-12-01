@@ -54,6 +54,9 @@ void Player::update_info(EntityInfo* info, SoundController& sound_controller) {
     bool is_idle_now = ((new_state & 0x0002) != 0) || new_state == 1;
     bool is_dead_now = !(new_state & 0x0001);
 
+    if (bool stopped_moving = moving && !is_moving_now) 
+        sound_controller.stop_sound();
+
     if (!moving && is_moving_now) {
         an.change_texture(WALKING);
     } else if (!jumping && is_jumping_now) {

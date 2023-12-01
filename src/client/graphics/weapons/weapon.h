@@ -10,6 +10,8 @@ public:
     virtual AnimationState get_idle_texture_state() = 0;
 
     virtual AnimationState get_aiming_texture_state() = 0;
+
+    virtual AnimationState get_projectile_texture() = 0;
     
     virtual ~Weapon() {}
 };

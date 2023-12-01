@@ -12,7 +12,7 @@
 float Projectile::get_angle() const { return angle; }
 
 std::unique_ptr<Entity> Projectile::create(TextureController& controller) {
-    return std::make_unique<projectileEntity>(controller);
+    return std::make_unique<projectileEntity>(controller, type);
 }
 
 Projectile::Projectile(uint8_t type, uint16_t pos_x, uint16_t pos_y, uint16_t width,

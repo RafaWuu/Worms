@@ -52,7 +52,7 @@ void Hud::render_hp(SDL2pp::Renderer& renderer){
 }
 
 void Hud::render_ammo(SDL2pp::Renderer& renderer){
-        SDL2pp::Font font("/home/rafa/Desktop/final /Worms/assets/Vera.ttf", 12);
+        SDL2pp::Font font("assets/Vera.ttf", 12);
         std::string text = "Ammo: "  + std::to_string(0);
 	    SDL2pp::Texture ammo_sprite(
 		renderer,

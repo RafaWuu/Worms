@@ -11,3 +11,8 @@ AnimationState Teleportation::get_idle_texture_state() {
 AnimationState Teleportation::get_aiming_texture_state() {
     return AnimationState::TELEPORTATION_AIMING;
 }
+
+// Teleportation no tiene proyectil, no se deberia llamar a esta funcion
+AnimationState Teleportation::get_projectile_texture() {
+    return AnimationState::TELEPORTATION_AIMING;
+}

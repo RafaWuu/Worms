@@ -1,11 +1,12 @@
 #include "sound_controller.h"
 
-SoundController::SoundController(SDL2pp::Mixer& mixer) : mixer(mixer) {
+SoundController::SoundController(SDL2pp::Mixer& mixer) : mixer(mixer), background_channel(0), sound_effect_channel(1) {
     std::map<Sound, std::string> sounds_to_load = {
         {CURSOR_SELECT, "CursorSelect.wav"},
         {BACKGROUND_MUSIC, "background_music.mp3"},
         {JUMP, "JUMP1.WAV"},
         {WALK, "Walk.wav"},
+        {THROW, "Throw.wav"},
     };
 
     for (auto& [sound, file_name] : sounds_to_load) {
@@ -16,10 +17,8 @@ SoundController::SoundController(SDL2pp::Mixer& mixer) : mixer(mixer) {
 void SoundController::set_background_music() {
     std::shared_ptr<SDL2pp::Chunk> bg_music = sounds[BACKGROUND_MUSIC];
 
-    int channel = 0;
-
-    mixer.SetDistance(channel, Configuration::get_instance().get_bg_music_distance());
-    mixer.PlayChannel(channel, *bg_music, -1);     
+    mixer.SetDistance(background_channel, Configuration::get_instance().get_bg_music_distance());
+    mixer.PlayChannel(background_channel, *bg_music, -1);     
 }
 
 void SoundController::load_sound(Sound sound, std::string file_name) {
@@ -40,17 +39,19 @@ void SoundController::load_sound(Sound sound, std::string file_name) {
 }
 
 void SoundController::play_sound(Sound sound) {
-    int channel = 1;
-
     // Para que no spamee el sonido al caminar. Hardcodeado?
-    if (sound == WALK && mixer.IsChannelPlaying(channel)) {
+    if (sound == WALK && mixer.IsChannelPlaying(sound_effect_channel)) {
         return;
     }
 
     std::shared_ptr<SDL2pp::Chunk> sound_effect = sounds[sound];
 
-    mixer.SetDistance(channel, Configuration::get_instance().get_sound_effect_distance());
-    mixer.PlayChannel(channel, *sound_effect, 0);
+    mixer.SetDistance(sound_effect_channel, Configuration::get_instance().get_sound_effect_distance());
+    mixer.PlayChannel(sound_effect_channel, *sound_effect, 0);
+}
+
+void SoundController::stop_sound() {
+    mixer.HaltChannel(sound_effect_channel);
 }
 
 

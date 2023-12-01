@@ -16,6 +16,7 @@ enum Sound {
     CURSOR_SELECT,
     JUMP,
     WALK,
+    THROW,
 };
 
 class SoundController {
@@ -27,12 +28,17 @@ private:
 
     void load_sound(Sound, std::string file_name);
 
+    int background_channel;
+    int sound_effect_channel;
+
 public:
     SoundController(SDL2pp::Mixer& mixer);
 
     void set_background_music();
 
     void play_sound(Sound);
+
+    void stop_sound();
 };
 
 #endif

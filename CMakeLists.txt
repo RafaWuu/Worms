@@ -98,7 +98,6 @@ set(CLIENT_SOURCE
 	src/client/commands/client_fire.cpp
 	src/client/game/projectile.cpp
 	src/client/graphics/projectile_entity.cpp
-	src/client/graphics/projectile_controller.cpp
 	src/common/common_baseprotocol.cpp
 	src/common/common_baseprotocol.h
 	src/client/lobby/gameinfo.cpp
