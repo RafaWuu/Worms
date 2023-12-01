@@ -339,9 +339,6 @@ std::unique_ptr<Scenario> ClientProtocol::receive_scenario() {
             case ObjectType::GROUND:
                 static_entities.emplace(entity_id, receive_ground());
                 break;
-            case ObjectType::EXPLOSION:
-                dynamic_entities.emplace(entity_id, receive_explosion());
-                break;
             default:
                 break;
         }
@@ -375,6 +372,10 @@ std::shared_ptr<EstadoJuego> ClientProtocol::recv_msg() {
                 break;
             case ObjectType::projectile:
                 entities.emplace(entity_id, receive_projectile());
+                break;
+            case ObjectType::EXPLOSION:
+                entities.emplace(entity_id, receive_explosion());
+                break;
             default:
                 break;
         }

@@ -31,21 +31,19 @@ void ExplosionEntity::update_info(EntityInfo* info, SoundController& sound_contr
  * Notar que el manejo de eventos y la actualización de modelo ocurren en momentos distintos.
  * Esto les va a resultar muy util.
  */
-void ExplosionEntity::update(float dt) { 
-    circle.update(dt); 
+void ExplosionEntity::update(float dt) {
+    circle.update(dt);
     elipse.update(dt);
 }
 
+// La explosion se deberia enviar 1 sola vez, y al hacer render que haga un loop y renderice todos
+// los frames del sprite?
 void ExplosionEntity::render(SDL2pp::Renderer& renderer, SDL2pp::Rect& camera) {
     SDL_RendererFlip flip = SDL_FLIP_NONE;
 
-    circle.render(
-            renderer,
-            SDL2pp::Rect(x - radius, y -radius, radius * 2, radius * 2),
-            flip, 0.0);
-    
-    elipse.render(
-        renderer,
-        SDL2pp::Rect(x - radius, y -radius, radius * 2, radius * 2),
-        flip, 0.0);
+    circle.render(renderer, SDL2pp::Rect(x - radius, y - radius, radius * 2, radius * 2), flip,
+                  0.0);
+
+    elipse.render(renderer, SDL2pp::Rect(x - radius, y - radius, radius * 2, radius * 2), flip,
+                  0.0);
 }
