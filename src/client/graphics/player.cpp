@@ -1,4 +1,5 @@
 #include "player.h"
+#include <iterator>
 
 #include "../game/worm.h"
 
@@ -53,9 +54,14 @@ void Player::update_info(EntityInfo* info, SoundController& sound_controller) {
     bool is_falling_now = (new_state & 0x0020) != 0;
     bool is_idle_now = ((new_state & 0x0002) != 0) || new_state == 1;
     bool is_dead_now = !(new_state & 0x0001);
-
-    if (bool stopped_moving = moving && !is_moving_now) 
+    
+    bool stopped_moving = moving && !is_moving_now;
+    bool just_died = !dead && is_dead_now;
+  
+    if (stopped_moving) 
         sound_controller.stop_sound();
+    if (just_died) 
+        sound_controller.play_sound(DEATH);
 
     if (!moving && is_moving_now) {
         an.change_texture(WALKING);
@@ -67,11 +73,11 @@ void Player::update_info(EntityInfo* info, SoundController& sound_controller) {
         an.change_texture(ROLLING);
     } else if (!falling && is_falling_now) {
         an.change_texture(FALLING);
-    } else if (is_dead_now) {
+    } else if (just_died) {
         an.change_texture(DEAD);
     } else if (!aiming && is_aiming_now) {
         an.change_texture(current_weapon->get_aiming_texture_state());
-    } else if (is_idle_now && !is_aiming_now) {  
+    } else if (is_idle_now && !is_aiming_now && !is_dead_now) {  
         an.change_texture(current_weapon->get_idle_texture_state());
     }
 
@@ -96,7 +102,7 @@ void Player::update_info(EntityInfo* info, SoundController& sound_controller) {
  * Esto les va a resultar muy util.
  */
 void Player::update(float dt) {
-    if (!idle && !aiming)
+    if (!idle && !aiming) 
         an.update(dt);
 
     if (aiming) {
