@@ -21,8 +21,8 @@ class WeaponConfig;
 // Singleton
 class Configuration {
 private:
-    int bg_music_distance;
-    int sound_effect_distance;
+    int bg_music_volume;
+    int sound_effect_volume;
 
     double fps;
     double tick_rate;
@@ -63,8 +63,8 @@ public:
 
     static Configuration& get_instance();
 
-    int get_bg_music_distance();
-    int get_sound_effect_distance();
+    int get_bg_music_volume();
+    int get_sound_effect_volume();
 
     double get_fps();
     double get_tick_rate();

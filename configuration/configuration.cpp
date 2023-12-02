@@ -14,8 +14,8 @@ Configuration::Configuration() {
 
         fps = config["fps"].as<float>();
         tick_rate = config["tick_rate"].as<float>();
-        bg_music_distance = config["bg_music_distance"].as<int>();
-        sound_effect_distance = config["sound_effect_distance"].as<int>();
+        bg_music_volume = config["bg_music_volume"].as<int>();
+        sound_effect_volume = config["sound_effect_volume"].as<int>();
 
         load_weapon_info(config);
         load_server_states_info(config);
@@ -27,8 +27,8 @@ Configuration::Configuration() {
 
             fps = config["fps"].as<float>();
             tick_rate = config["tick_rate"].as<float>();
-            bg_music_distance = config["bg_music_distance"].as<int>();
-            sound_effect_distance = config["sound_effect_distance"].as<int>();
+            bg_music_volume = config["bg_music_volume"].as<int>();
+            sound_effect_volume = config["sound_effect_volume"].as<int>();
 
             load_weapon_info(config);
             load_server_states_info(config);
@@ -42,8 +42,8 @@ Configuration::Configuration() {
 
 }
 
-int Configuration::get_sound_effect_distance() { return sound_effect_distance; }
-int Configuration::get_bg_music_distance() { return bg_music_distance; }
+int Configuration::get_sound_effect_volume() { return sound_effect_volume; }
+int Configuration::get_bg_music_volume() { return bg_music_volume; }
 
 double Configuration::get_fps() { return fps; }
 double Configuration::get_tick_rate() { return tick_rate; }

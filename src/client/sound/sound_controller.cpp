@@ -13,12 +13,14 @@ SoundController::SoundController(SDL2pp::Mixer& mixer) : mixer(mixer), backgroun
     for (auto& [sound, file_name] : sounds_to_load) {
         load_sound(sound, file_name);
     }
+    
+    mixer.SetVolume(background_channel, Configuration::get_instance().get_bg_music_volume());
+    mixer.SetVolume(sound_effect_channel, Configuration::get_instance().get_sound_effect_volume());
 }
 
 void SoundController::set_background_music() {
     std::shared_ptr<SDL2pp::Chunk> bg_music = sounds[BACKGROUND_MUSIC];
 
-    mixer.SetDistance(background_channel, Configuration::get_instance().get_bg_music_distance());
     mixer.PlayChannel(background_channel, *bg_music, -1);     
 }
 
@@ -47,7 +49,6 @@ void SoundController::play_sound(Sound sound) {
 
     std::shared_ptr<SDL2pp::Chunk> sound_effect = sounds[sound];
 
-    mixer.SetDistance(sound_effect_channel, Configuration::get_instance().get_sound_effect_distance());
     mixer.PlayChannel(sound_effect_channel, *sound_effect, 0);
 }
 
