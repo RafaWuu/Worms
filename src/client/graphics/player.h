@@ -15,6 +15,8 @@
 #include "texture_controller.h"
 #include "../sound/sound_controller.h"
 #include "hud.h"
+#include "../game/aim_info.h"
+
 class Player: public Entity {
 public:
     Player(TextureController& texture_controller, int id);
@@ -47,7 +49,9 @@ private:
     bool falling;
     bool idle;
     bool dead;
+    
     float aim_angle;
+    AimInfo aim_info;
 
     int x;
     int y;

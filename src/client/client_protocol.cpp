@@ -173,9 +173,12 @@ std::unique_ptr<Worm> ClientProtocol::receive_worm() {
     uint8_t health;
     uint8_t current_weapon;
     uint16_t ammo;
-    float aim_angle;
-    float x_aim;
-    float y_aim;
+
+    float aim_angle = 0;
+    float x_aim = 0;
+    float y_aim = 0;
+    AimType aim_type = ANGLE;
+
     uint8_t attack_power;
 
     baseProtocol.recv_2byte_number(id);
@@ -193,9 +196,11 @@ std::unique_ptr<Worm> ClientProtocol::receive_worm() {
 
     if (config.weapon_has_scope(s)) {
         baseProtocol.recv_4byte_float(aim_angle);
+        aim_type = ANGLE;
     } else if (config.weapon_is_point_and_click(s)) {
         baseProtocol.recv_4byte_float(x_aim);
         baseProtocol.recv_4byte_float(y_aim);
+        aim_type = COORDINATES;
     }
 
     if (config.weapon_has_variable_power(s))
@@ -211,7 +216,7 @@ std::unique_ptr<Worm> ClientProtocol::receive_worm() {
     // TODO ahora solo maneja las armas basicas
     return std::make_unique<Worm>(id, x * SCALE, -y * SCALE, config.worm_width * SCALE,
                                   config.worm_height * SCALE, dir, state, health, current_weapon,
-                                  ammo, aim_angle, attack_power);
+                                  ammo, attack_power, AimInfo(aim_angle, x_aim * SCALE, -y_aim * SCALE, aim_type));
 }
 
 std::unique_ptr<Ground> ClientProtocol::receive_ground() {

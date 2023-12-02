@@ -7,6 +7,7 @@
 #include <SDL2pp/SDL2pp.hh>
 
 #include "entity_info.h"
+#include "aim_info.h"
 
 enum WORM_STATE { DirLeft = 1, DirRight = 2, Stop = 3, JumpF = 4, JumpB = 5 };
 
@@ -19,13 +20,13 @@ private:
     uint16_t state;
     uint8_t health;
     uint8_t current_weapon;
-    float aim_angle;
+    AimInfo aim_info;
     uint8_t attack_power;
 
 public:
     Worm(uint16_t id, uint16_t pos_x, uint16_t pos_y, uint16_t width, uint16_t height, uint8_t dir,
-         uint16_t state, uint8_t health, uint8_t current_weapon, uint16_t ammo, float aim_angle,
-         uint8_t attack_power);
+         uint16_t state, uint8_t health, uint8_t current_weapon, uint16_t ammo,  
+         uint8_t attack_power, AimInfo aim_info);
 
     Worm(uint16_t id, uint16_t pos_x, uint16_t pos_y, uint16_t width, uint16_t height, uint8_t dir,
          uint16_t state, uint8_t health, uint8_t current_weapon);
@@ -43,6 +44,9 @@ public:
     uint8_t get_current_weapon();
 
     float get_aim_angle();
+    float get_x_aim();
+    float get_y_aim();
+    AimInfo get_aim_info();
 
     uint8_t get_attack_power();
 

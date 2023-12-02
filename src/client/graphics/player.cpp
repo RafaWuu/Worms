@@ -16,6 +16,7 @@ Player::Player(TextureController& controller, int id):
         x(300),
         y(300),
         id(id),
+        aim_info(0, 0, 0, ANGLE),
         config(Configuration::get_instance()) {
     crosshair = nullptr;
     hud = nullptr;
@@ -42,7 +43,8 @@ void Player::update_info(EntityInfo* info, SoundController& sound_controller) {
     width = worm->get_width();
     uint8_t dir = worm->get_dir();
     uint16_t new_state = worm->get_state();
-    aim_angle = worm->get_aim_angle();
+    aim_info = worm->get_aim_info();
+    aim_angle = aim_info.get_angle();
 
     current_weapon = weapon_factory.create_weapon(worm->get_current_weapon());
 
@@ -102,10 +104,7 @@ void Player::update_info(EntityInfo* info, SoundController& sound_controller) {
  * Esto les va a resultar muy util.
  */
 void Player::update(float dt) {
-    if (!idle && !aiming) 
-        an.update(dt);
-
-    if (aiming) {
+    if (aiming && aim_info.get_type() == ANGLE) {
         if (facingLeft) {
             // Flippeo el angulo a la derecha
             if (aim_angle < 0)
@@ -114,7 +113,11 @@ void Player::update(float dt) {
                 aim_angle = (M_PI - aim_angle);
         }
         an.update_by_angle(aim_angle);
+        return;
     }
+
+    if (!idle || aim_info.get_type() == COORDINATES) 
+        an.update(dt);
 }
 
 void Player::render(SDL2pp::Renderer& renderer, SDL2pp::Rect& camera) {
@@ -126,14 +129,21 @@ void Player::render(SDL2pp::Renderer& renderer, SDL2pp::Rect& camera) {
             renderer,
             SDL2pp::Rect(x - width * 4 + offsetX, y - height * 4 - offsetY, width * 4, height * 4),
             flip);
+
     // render barra de vida 50x10
     int bar_width = (health * 50) / 100.0;
     SDL2pp::Rect health_bar = {x - 25, y - 55, bar_width, 10};
     renderer.SetDrawColor(color.r, color.g, color.b, color.a);
     renderer.FillRect(health_bar);
 
-    if (aiming && crosshair) {
-        crosshair->render_crosshair(renderer, x, y, aim_angle);
+    // Si no tiene crosshair no es mi gusano, no hace falta dibujar hacia donde apunta
+    if (!crosshair || !aiming) return;
+
+    if (aim_info.get_type() == ANGLE) {
+        crosshair->render_by_angle(renderer, x, y, aim_angle);
+    } else {
+        // Si es teledirigido dibujo el crosshair en la posicion del mouse
+        crosshair->render_by_coordinates(renderer, aim_info.get_x(), aim_info.get_y());
     }
 }
 

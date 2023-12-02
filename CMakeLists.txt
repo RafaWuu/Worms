@@ -91,6 +91,7 @@ set(CLIENT_SOURCE
 	src/client/game/entity_info.cpp
 	src/client/game/explosion.cpp
 	src/client/game/ground.cpp
+	src/client/game/aim_info.cpp
 	src/client/graphics/entities_factory.cpp
 	src/client/graphics/ground_entity.cpp
 	src/client/client_event_handler.cpp
