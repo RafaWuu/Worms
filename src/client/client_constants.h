@@ -24,6 +24,7 @@
 
 #define MOVE_CODE 2
 #define STOP_MOVE 3
+#define CHANGE_COUNTDOWN_CODE 9
 
 #define JUMP_CODE 3
 #define ROLLBACK_CODE 4

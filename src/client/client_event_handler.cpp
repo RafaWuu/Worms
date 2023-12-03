@@ -4,7 +4,9 @@
 
 #include "client_event_handler.h"
 
+#include <iostream>
 #include <memory>
+#include <ostream>
 
 #include "commands/change_weapon.h"
 #include "commands/client_aim.h"
@@ -15,7 +17,9 @@
 #include "commands/client_rollback.h"
 #include "commands/client_stop_aim.h"
 #include "commands/client_stop_moving.h"
+#include "commands/change_countdown.h"
 #include "graphics/weapons/weapon_selector.h"
+#include "sound/sound_controller.h"
 
 EventHandler::EventHandler() {
     moving_left = false;
@@ -51,6 +55,21 @@ std::shared_ptr<Command> EventHandler::handle(const SDL_Event& event,
                 return stop_moving();
             case SDLK_RIGHT:
                 return stop_moving();
+            case SDLK_1:
+            case SDLK_KP_1:
+                return change_countdown(1, sound_controller);
+            case SDLK_2:
+            case SDLK_KP_2:
+                return change_countdown(2, sound_controller);
+            case SDLK_3:
+            case SDLK_KP_3:
+                return change_countdown(3, sound_controller);
+            case SDLK_4:
+            case SDLK_KP_4:
+                return change_countdown(4, sound_controller);
+            case SDLK_5:
+            case SDLK_KP_5:
+                return change_countdown(5, sound_controller);
         }
     }
 
@@ -89,6 +108,12 @@ std::shared_ptr<Command> EventHandler::handle(const SDL_Event& event,
 
 std::shared_ptr<Command> EventHandler::change_weapon(int weapon_id) {
     return std::make_shared<ChangeWeapon>(weapon_id);
+}
+
+std::shared_ptr<Command> EventHandler::change_countdown(int countdown, SoundController& sound_controller) {
+    sound_controller.play_sound(CURSOR_SELECT);
+    std::cout << countdown << std::endl;
+    return std::make_shared<ChangeCountdown>(countdown);
 }
 
 std::shared_ptr<Command> EventHandler::move_left() {

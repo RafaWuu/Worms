@@ -25,6 +25,7 @@ private:
     std::shared_ptr<Command> jump();
     std::shared_ptr<Command> rollback();
     std::shared_ptr<Command> change_weapon(int weapon_id);
+    std::shared_ptr<Command> change_countdown(int countdown, SoundController& sound_controller);
     bool moving_right;
     bool moving_left;
     bool aiming;

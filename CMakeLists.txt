@@ -110,6 +110,7 @@ set(CLIENT_SOURCE
 	src/client/commands/client_power_attack.cpp
 	src/client/commands/client_power_attack.h
 	src/client/commands/change_weapon.cpp
+	src/client/commands/change_countdown.cpp
 	src/client/graphics/weapons/weapon.cpp
 	src/client/graphics/weapons/bazooka.cpp
 	src/client/graphics/weapons/red_grenade.cpp

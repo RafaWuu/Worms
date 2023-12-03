@@ -7,7 +7,7 @@ SoundController::SoundController(SDL2pp::Mixer& mixer) : mixer(mixer), backgroun
         {JUMP, "JUMP1.WAV"},
         {WALK, "Walk.wav"},
         {THROW, "Throw.wav"},
-        {EXPLOSION, "Explosion1.wav"},
+        {EXPLOSION, "Explosion_01.wav"},
         {DEATH, "BYEBYE.WAV"}
     };
 

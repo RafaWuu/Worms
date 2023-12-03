@@ -417,6 +417,18 @@ void ClientProtocol::serialize_move(uint8_t worm, int dir) {
     baseProtocol.send_uint_vector(serialized_command);
 }
 
+void ClientProtocol::serialize_change_countdown(uint8_t worm, int new_countdown) {
+    uint8_t countdown = new_countdown;
+
+    // Falta enviar el worm_id
+    std::vector<uint8_t> serialized_command = {GAME_SENDING, CHANGE_COUNTDOWN_CODE, worm, countdown};
+
+    getLog().write("Cliente serializando cambiar countdown %hhu \n", countdown);
+
+    // baseProtocol.send_uint_vector(serialized_command);
+    return;
+}
+
 void ClientProtocol::serialize_stop_move(uint8_t worm) {
     // Falta enviar el worm_id
     std::vector<uint8_t> serialized_command = {GAME_SENDING, MOVE_CODE, worm, STOP_MOVE};

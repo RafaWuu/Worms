@@ -47,6 +47,7 @@ public:
     void serialize_fire(uint8_t worm);
     void serialize_change_weapon(uint8_t worm, int weapon_id);
     void serialize_power_attack(uint8_t worm);
+    void serialize_change_countdown(uint8_t worm, int countdown);
 
 
     std::shared_ptr<EstadoJuego> recv_msg();
