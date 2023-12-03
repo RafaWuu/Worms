@@ -19,6 +19,9 @@ WormSensor::WormSensor(Worm* worm): worm(worm), GameObject() {
     b2FixtureDef fixtureDef;
     fixtureDef.shape = &dynamicBox;
 
+    fixtureDef.filter.categoryBits = WORM_SENSOR;
+    fixtureDef.filter.maskBits = BOUNDARY | BEAM;
+
     fixtureDef.isSensor = true;
     fixtureDef.userData.pointer = reinterpret_cast<uintptr_t>(this);
 

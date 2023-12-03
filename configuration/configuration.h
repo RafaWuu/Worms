@@ -151,11 +151,23 @@ public:
     float beam_height;
     uint8_t safe_height;
     uint8_t max_fall_dmg;
-    float restitution;
-    float density;
+    float worm_restitution;
+    float worm_density;
     float round_length;
     float grace_length;
-    float friction;
+    float worm_friction;
+
+
+    float provision_width;
+    float provision_height;
+    float provision_per_round;
+    float kit_proportion;
+    float ammo_box_proportion;
+    int kit_health;
+    float provision_ammo_amount;
+    float provision_damage;
+    float provision_radius;
+    float provision_blast_power;
 };
 
 #endif

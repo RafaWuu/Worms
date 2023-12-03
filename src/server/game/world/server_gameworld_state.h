@@ -9,14 +9,16 @@
 #include <memory>
 
 #include "game/entities/server_worm.h"
+#include "game/provisions/server_provision_factory.h"
 
 class GameWorldState {
 protected:
     std::map<uint16_t, Worm*>& worm_map;
+    GameWorld& world;
 
 public:
     GameWorldState(std::map<uint16_t, Worm*>::iterator active_worm,
-                   std::map<uint16_t, Worm*>& worm_map);
+                   std::map<uint16_t, Worm*>& worm_map, GameWorld& world);
     virtual ~GameWorldState() = default;
     virtual std::unique_ptr<GameWorldState> update() = 0;
 

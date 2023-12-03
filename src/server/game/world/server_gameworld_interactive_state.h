@@ -18,7 +18,7 @@ private:
 
 public:
     GameWorldInteractiveState(std::map<uint16_t, Worm*>::iterator active_worm,
-                              std::map<uint16_t, Worm*>& worm_map);
+                              std::map<uint16_t, Worm*>& worm_map, GameWorld& world);
     std::unique_ptr<GameWorldState> update() override;
     void handle_weapon_fired() override;
 

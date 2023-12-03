@@ -13,7 +13,7 @@ void GameStatusError::serialize(ServerProtocol& protocol) { protocol.send_game_e
 
 GameStatusScenario::GameStatusScenario(GameWorld& world): GameStatus(world) {
     height = width = 0;
-    world.get_dimensions(&height, &width);
+    world.get_dimensions(height, width);
 }
 
 void GameStatusScenario::serialize(ServerProtocol& protocol) {

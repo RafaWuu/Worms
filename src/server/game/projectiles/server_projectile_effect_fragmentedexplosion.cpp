@@ -84,5 +84,5 @@ void ProjectileEffectFragmentedExplosion::apply_blast_impulse(b2Body* body, Worm
     impulseMag = b2Min(impulseMag, MAX_IMPULSE);
 
     body->ApplyLinearImpulse(impulseMag * blastDir, applyPoint, true);
-    worm->get_hit(main_damage * invDistance);
+    worm->get_hit(main_damage * 1 / (invDistance + 1));
 }

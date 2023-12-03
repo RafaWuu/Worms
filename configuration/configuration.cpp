@@ -39,7 +39,6 @@ Configuration::Configuration() {
             std::cerr << "Error yaml: " << e2.what() << std::endl;
         }
     }
-
 }
 
 int Configuration::get_sound_effect_volume() { return sound_effect_volume; }
@@ -49,6 +48,19 @@ double Configuration::get_fps() { return fps; }
 double Configuration::get_tick_rate() { return tick_rate; }
 
 void Configuration::load_entities_info(YAML::Node config) {
+    auto provision_node = config["provision"];
+
+    provision_width = provision_node["width"].as<float>();
+    provision_height = provision_node["height"].as<float>();
+    provision_per_round = provision_node["provision_per_round"].as<float>();
+    kit_proportion = provision_node["kit_proportion"].as<float>();
+    ammo_box_proportion = provision_node["ammo_box_proportion"].as<float>();
+    kit_health = provision_node["kit_health"].as<int>();
+    provision_ammo_amount = provision_node["ammo_amount"].as<float>();
+    provision_damage = provision_node["damage"].as<float>();
+    provision_radius = provision_node["radius"].as<float>();
+    provision_blast_power = provision_node["blast_power"].as<float>();
+
     auto worm_node = config["worm"];
 
     worm_width = worm_node["width"].as<float>();
@@ -56,9 +68,9 @@ void Configuration::load_entities_info(YAML::Node config) {
     worm_health = worm_node["health"].as<int>();
     max_fall_dmg = worm_node["max_fall_dmg"].as<int>();
     safe_height = worm_node["safe_height"].as<int>();
-    restitution = worm_node["restitution"].as<float>();
-    density = worm_node["density"].as<float>();
-    friction = worm_node["friction"].as<float>();
+    worm_restitution = worm_node["restitution"].as<float>();
+    worm_density = worm_node["density"].as<float>();
+    worm_friction = worm_node["friction"].as<float>();
 
     auto beam_node = config["beam"];
 

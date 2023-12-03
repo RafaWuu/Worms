@@ -14,6 +14,8 @@
 #include "b2_polygon_shape.h"
 #include "server_melee_impact_info.h"
 
+#define FRAMES_ALIVE 3
+
 MeleeImpact::MeleeImpact(b2World* world, std::string&& identifier, uint16_t owner_id, b2Vec2 center,
                          b2Vec2 direction):
         type(config.get_weapon_id(identifier)),
@@ -35,6 +37,11 @@ MeleeImpact::MeleeImpact(b2World* world, std::string&& identifier, uint16_t owne
 
     b2FixtureDef fixtureDef;
     fixtureDef.shape = &polygonShape;
+
+    fixtureDef.filter.categoryBits = MELEE_SENSOR;
+    fixtureDef.filter.maskBits = WORM;
+
+
     fixtureDef.isSensor = true;
     fixtureDef.userData.pointer = reinterpret_cast<uintptr_t>(this);
 
@@ -47,7 +54,7 @@ MeleeImpact::MeleeImpact(b2World* world, std::string&& identifier, uint16_t owne
 
     had_impacted = false;
 
-    frames = 5;
+    frames = FRAMES_ALIVE;
 }
 
 void MeleeImpact::update(GameWorld& world) {

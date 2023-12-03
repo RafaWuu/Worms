@@ -13,7 +13,8 @@ private:
 
 public:
     GameWorldSimulationState(std::map<uint16_t, Worm*>::iterator active_worm,
-                             std::map<uint16_t, Worm*>& worm_map, bool grace_period);
+                             std::map<uint16_t, Worm*>& worm_map, bool grace_period,
+                             GameWorld& world);
     std::unique_ptr<GameWorldState> update() override;
 
     void handle_weapon_fired() override;

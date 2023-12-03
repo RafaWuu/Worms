@@ -14,12 +14,13 @@
 #include "commands/client_command.h"
 #include "commands/client_jump.h"
 #include "game/scenario.h"
+#include "graphics/hud.h"
 
 #include "client_event_handler.h"
 #include "client_protocol.h"
 #include "client_receiver.h"
 #include "client_sender.h"
-#include "src/client/graphics/hud.h"
+
 class WorldView;
 
 class Client {

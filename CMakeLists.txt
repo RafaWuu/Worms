@@ -127,6 +127,10 @@ set(CLIENT_SOURCE
 	src/client/sound/sound_controller.cpp
 		src/client/graphics/weapons/teleportation.cpp
 		src/client/graphics/weapons/teleportation.h
+		src/client/game/provision.cpp
+		src/client/game/provision.h
+		src/client/graphics/provision_entity.cpp
+		src/client/graphics/provision_entity.h
 )
 
 message("Headers generados: ${UIS_HEADERS}")
@@ -139,6 +143,10 @@ add_executable(client
 	${CLIENT_SOURCE}
 		src/client/graphics/weapons/teleportation.cpp
 		src/client/graphics/weapons/teleportation.h
+		src/client/game/provision.cpp
+		src/client/game/provision.h
+		src/client/graphics/provision_entity.cpp
+		src/client/graphics/provision_entity.h
 )
 
 add_executable(server
@@ -246,6 +254,24 @@ add_executable(server
 		src/server/game/weapons/server_weapon_teleportation.h
 		src/server/game/weapons/server_weapon_info_teleportation.cpp
 		src/server/game/weapons/server_weapon_info_teleportation.h
+        src/server/game/provisions/server_provision.cpp
+        src/server/game/provisions/server_provision.h
+		src/server/game/provisions/server_provision_factory.cpp
+		src/server/game/provisions/server_provision_factory.h
+        src/server/game/provisions/server_provision_effect.cpp
+        src/server/game/provisions/server_provision_effect.h
+		src/server/game/provisions/server_provision_effect_health.cpp
+		src/server/game/provisions/server_provision_effect_health.h
+		src/server/game/provisions/server_provision_info.cpp
+		src/server/game/provisions/server_provision_info.h
+		src/server/game/listeners/server_raycast_floor_calbback.cpp
+		src/server/game/listeners/server_raycast_floor_calbback.h
+		src/server/game/provisions/server_provision_effect_explosion.cpp
+		src/server/game/provisions/server_provision_effect_explosion.h
+        src/server/game/provisions/server_provision_effect_ammo.cpp
+        src/server/game/provisions/server_provision_effect_ammo.h
+		src/server/game/world/server_ingame_client_manager.cpp
+		src/server/game/world/server_ingame_client_manager.h
 )
 
 target_include_directories(client PUBLIC
@@ -376,6 +402,24 @@ add_executable(hello_test
 		src/server/game/weapons/server_weapon_teleportation.h
 		src/server/game/weapons/server_weapon_info_teleportation.cpp
 		src/server/game/weapons/server_weapon_info_teleportation.h
+        src/server/game/provisions/server_provision.cpp
+        src/server/game/provisions/server_provision.h
+		src/server/game/provisions/server_provision_factory.cpp
+		src/server/game/provisions/server_provision_factory.h
+        src/server/game/provisions/server_provision_effect.cpp
+        src/server/game/provisions/server_provision_effect.h
+		src/server/game/provisions/server_provision_effect_health.cpp
+		src/server/game/provisions/server_provision_effect_health.h
+		src/server/game/provisions/server_provision_info.cpp
+		src/server/game/provisions/server_provision_info.h
+		src/server/game/listeners/server_raycast_floor_calbback.cpp
+		src/server/game/listeners/server_raycast_floor_calbback.h
+		src/server/game/provisions/server_provision_effect_explosion.cpp
+		src/server/game/provisions/server_provision_effect_explosion.h
+        src/server/game/provisions/server_provision_effect_ammo.cpp
+        src/server/game/provisions/server_provision_effect_ammo.h
+		src/server/game/world/server_ingame_client_manager.cpp
+		src/server/game/world/server_ingame_client_manager.h
 )
 
 target_link_libraries(hello_test GTest::gtest_main GTest::gmock ${BOX2D_LIBRARY_PATH} yaml-cpp)
@@ -394,6 +438,10 @@ add_executable(client_test
 	${CLIENT_SOURCE}
 		src/client/graphics/weapons/teleportation.cpp
 		src/client/graphics/weapons/teleportation.h
+		src/client/game/provision.cpp
+		src/client/game/provision.h
+		src/client/graphics/provision_entity.cpp
+		src/client/graphics/provision_entity.h
 )
 
 target_include_directories(client_test PUBLIC

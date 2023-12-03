@@ -21,13 +21,14 @@
 #include "server_error.h"
 #include "server_gameworld_simulationstate.h"
 
-#define GRAVITY_Y -9.8
+#define GRAVITY_Y (-9.8)
 
 GameWorld::GameWorld(const std::string& scenario_name):
         b2_world(b2Vec2(.0, GRAVITY_Y)),
         worm_map(),
         file_handler(),
         listener(*this),
+        provision_factory(*this),
         config(Configuration::get_instance()) {
 
     entity_id = 0;
@@ -36,7 +37,8 @@ GameWorld::GameWorld(const std::string& scenario_name):
     add_entity(std::make_shared<Ground>(&b2_world, width));
 
     b2_world.SetContactListener(&listener);
-    game_state = std::make_shared<GameWorldSimulationState>(worm_map.begin(), worm_map, false);
+    game_state =
+            std::make_shared<GameWorldSimulationState>(worm_map.begin(), worm_map, false, *this);
 }
 
 void GameWorld::create_worm(float x, float y) {
@@ -126,9 +128,9 @@ std::map<uint16_t, std::shared_ptr<WormInfo>> GameWorld::get_worms_info() {
 
     return map;
 }
-void GameWorld::get_dimensions(float* h, float* w) {
-    *h = this->height;
-    *w = this->width;
+void GameWorld::get_dimensions(float& h, float& w) {
+    h = this->height;
+    w = this->width;
 }
 
 void GameWorld::add_entity(std::shared_ptr<GameObject> object) {
@@ -158,3 +160,12 @@ void GameWorld::notify_weapon_used() { game_state->handle_weapon_fired(); }
 
 
 uint16_t GameWorld::get_active_worm() { return game_state->active_worm->first; }
+
+void GameWorld::generate_provision() {
+    if (provision_factory.provision_this_round()) {
+        auto provision = provision_factory.generate_provision();
+        if (provision != nullptr) {
+            add_entity(provision);
+        }
+    }
+}

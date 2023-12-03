@@ -13,10 +13,11 @@
 #include "../common/common_baseprotocol_socket.h"
 #include "../common/common_socket.h"
 #include "game/estado_juego.h"
+#include "game/explosion.h"
 #include "game/ground.h"
 #include "game/projectile.h"
+#include "game/provision.h"
 #include "game/scenario.h"
-#include "game/explosion.h"
 #include "lobby/lobby_state.h"
 
 #include "common_log.h"
@@ -73,6 +74,8 @@ public:
 
     /* Shutdown y close del socket */
     void close();
+
+    std::unique_ptr<Provision> receive_provision();
 };
 
 #endif

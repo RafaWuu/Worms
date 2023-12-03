@@ -1,12 +1,10 @@
 #include "server_boundary.h"
 
 #include "b2_body.h"
-#include "b2_fixture.h"
 #include "b2_edge_shape.h"
+#include "b2_fixture.h"
 Boundary::Boundary(b2World* b2_world, float width, float height):
-        width(width),
-        height(height),
-        GameObject() {
+        width(width), height(height), GameObject() {
 
     b2Vec2 top_left(0, 0);
     b2Vec2 top_right(width, 0);
@@ -17,6 +15,10 @@ Boundary::Boundary(b2World* b2_world, float width, float height):
     b2BodyDef body_def;
     b2FixtureDef fixture_def;
     fixture_def.userData.pointer = reinterpret_cast<uintptr_t>(this);
+
+    fixture_def.filter.categoryBits = BOUNDARY;
+    fixture_def.filter.maskBits =
+            WORM | WORM_SENSOR | projectile | BEAM | EXPLOSION | MELEE_SENSOR | PROVISION_SENSOR;
 
     body_def.type = b2_staticBody;
     body_def.position.Set(0, 0);
@@ -41,6 +43,4 @@ Boundary::Boundary(b2World* b2_world, float width, float height):
 
 ObjectType Boundary::get_id() const { return BOUNDARY; }
 
-std::unique_ptr<GameObjectInfo> Boundary::get_status() const{
-    return nullptr;
-}
+std::unique_ptr<GameObjectInfo> Boundary::get_status() const { return nullptr; }

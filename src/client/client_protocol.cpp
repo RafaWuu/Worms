@@ -10,6 +10,7 @@
 #include "game/estado_juego.h"
 #include "game/ground.h"
 #include "game/projectile.h"
+#include "game/provision.h"
 #include "lobby/gameinfo.h"
 #include "lobby/lobby_state.h"
 
@@ -28,7 +29,7 @@ enum ObjectType {
     WORM = 0x004,
     WORM_SENSOR = 0x008,
     projectile = 0x0010,
-    BOX = 0x0020,
+    PROVISION = 0x0020,
     EXPLOSION = 0x0040,
 };
 
@@ -216,7 +217,8 @@ std::unique_ptr<Worm> ClientProtocol::receive_worm() {
     // TODO ahora solo maneja las armas basicas
     return std::make_unique<Worm>(id, x * SCALE, -y * SCALE, config.worm_width * SCALE,
                                   config.worm_height * SCALE, dir, state, health, current_weapon,
-                                  ammo, attack_power, AimInfo(aim_angle, x_aim * SCALE, -y_aim * SCALE, aim_type));
+                                  ammo, attack_power,
+                                  AimInfo(aim_angle, x_aim * SCALE, -y_aim * SCALE, aim_type));
 }
 
 std::unique_ptr<Ground> ClientProtocol::receive_ground() {
@@ -278,9 +280,19 @@ std::unique_ptr<Explosion> ClientProtocol::receive_explosion() {
     baseProtocol.recv_4byte_float(x);
     baseProtocol.recv_4byte_float(y);
 
-    return std::make_unique<Explosion>(type, x * SCALE, -y * SCALE,
-                                        radius * SCALE,
-                                        radius * SCALE, radius * SCALE);
+    return std::make_unique<Explosion>(type, x * SCALE, -y * SCALE, radius * SCALE, radius * SCALE,
+                                       radius * SCALE);
+}
+
+std::unique_ptr<Provision> ClientProtocol::receive_provision() {
+    float x;
+    float y;
+
+    baseProtocol.recv_4byte_float(x);
+    baseProtocol.recv_4byte_float(y);
+
+    return std::make_unique<Provision>(x * SCALE, -y * SCALE, config.provision_width * SCALE,
+                                       config.provision_height * SCALE);
 }
 
 std::map<uint16_t, uint16_t> ClientProtocol::receive_worms_distribution() {
@@ -380,6 +392,9 @@ std::shared_ptr<EstadoJuego> ClientProtocol::recv_msg() {
                 break;
             case ObjectType::EXPLOSION:
                 entities.emplace(entity_id, receive_explosion());
+                break;
+            case ObjectType::PROVISION:
+                entities.emplace(entity_id, receive_provision());
                 break;
             default:
                 break;

@@ -16,6 +16,7 @@
 #include "game/entities/server_worm_sensor.h"
 #include "game/listeners/server_contact_listener.h"
 #include "game/projectiles/server_projectile.h"
+#include "game/provisions/server_provision_factory.h"
 #include "game/weapons/server_weapon.h"
 
 #include "b2_world.h"
@@ -27,7 +28,7 @@ class Weapon;
 class GameWorld {
 private:
     ScenarioFileHandler file_handler;
-
+    ProvisionFactory provision_factory;
     std::map<uint16_t, Worm*> worm_map;
     std::map<uint16_t, std::shared_ptr<GameObject>> entities_map;
 
@@ -48,7 +49,7 @@ public:
     GameWorld& operator=(const GameWorld&) = delete;
 
     void set_dimensions(float h, float w);
-    void get_dimensions(float* h, float* w);
+    void get_dimensions(float& h, float& w);
 
     void create_worm(float x, float y);
     void create_large_beam(float x, float y, float angle);
@@ -77,5 +78,7 @@ public:
     void notify_weapon_used();
 
     uint16_t get_active_worm();
+
+    void generate_provision();
 };
 #endif  // WORMS_SERVER_GAMEWORLD_H

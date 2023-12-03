@@ -24,6 +24,10 @@ Beam::Beam(b2World* b2_world, float center_x, float center_y, float width, float
     b2FixtureDef fixtureDef;
     fixtureDef.shape = &beam;
 
+    fixtureDef.filter.categoryBits = BEAM;
+    fixtureDef.filter.maskBits =
+            BOUNDARY | WORM | projectile | PROVISION | BEAM | WORM_SENSOR | EXPLOSION;
+
     fixtureDef.userData.pointer = reinterpret_cast<uintptr_t>(this);
 
     body->SetTransform(body->GetWorldCenter(), angle * M_PI / 180);

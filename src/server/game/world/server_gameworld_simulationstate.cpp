@@ -10,8 +10,8 @@
 
 GameWorldSimulationState::GameWorldSimulationState(std::map<uint16_t, Worm*>::iterator active_worm,
                                                    std::map<uint16_t, Worm*>& worm_map,
-                                                   bool grace_period):
-        grace_period(grace_period), GameWorldState(active_worm, worm_map) {
+                                                   bool grace_period, GameWorld& world):
+        grace_period(grace_period), GameWorldState(active_worm, worm_map, world) {
     auto& config = Configuration::get_instance();
 
     ticks = 0;
@@ -34,7 +34,7 @@ std::unique_ptr<GameWorldState> GameWorldSimulationState::update() {
             active_worm = worm_map.begin();
 
         active_worm->second->set_deactive();
-        return std::make_unique<GameWorldInteractiveState>(active_worm, worm_map);
+        return std::make_unique<GameWorldInteractiveState>(active_worm, worm_map, world);
     }
 
     all_entities_had_stopped = true;

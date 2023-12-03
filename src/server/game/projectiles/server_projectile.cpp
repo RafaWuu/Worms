@@ -44,6 +44,9 @@ Projectile::Projectile(b2World* world, std::string&& identifier,
     fixtureDef.density = density;
     fixtureDef.restitution = restitution;
 
+    fixtureDef.filter.categoryBits = projectile;
+    fixtureDef.filter.maskBits = WORM | BEAM | GROUND | BOUNDARY;
+
     fixtureDef.userData.pointer = reinterpret_cast<uintptr_t>(this);
     fixtureDef.filter.groupIndex = -(int)projectile;
     body = world->CreateBody(&bodyDef);
