@@ -18,6 +18,7 @@
 // Contiene a los objetos renderizables (x ahora solo los gusanos/Players)
 class WorldView {
 private:
+    SDL2pp::Renderer& renderer;
     TextureController& texture_controller;
     EntityFactory entity_factory;
 
@@ -31,19 +32,19 @@ private:
     std::map<uint16_t, std::shared_ptr<Entity>> dynamic_entities;
 
     SDL2pp::Rect camera;
-    void render_background(SDL2pp::Renderer& renderer);
-    std::shared_ptr<Hud> hud;
+    void render_background();
+    Hud* hud;
     WeaponSelector& weapon_selector;
 
 public:
-    WorldView(TextureController& texture_controller, std::unique_ptr<Scenario> scenario,
+    WorldView(SDL2pp::Renderer& renderer, TextureController& texture_controller, std::unique_ptr<Scenario> scenario,
               std::map<uint16_t, SDL2pp::Color>& color_map, WeaponSelector& weapon_selector,
               uint16_t current_worm, std::vector<uint16_t>& my_worms_id, SoundController& sound_controller,
-              std::shared_ptr<Hud> hud);
+              Hud* hud);
 
     void update(std::map<uint16_t, std::unique_ptr<EntityInfo>>& updated_info, int current_worm);
 
-    void render(SDL2pp::Renderer& renderer);
+    void render();
 
     void update_camera(float& x, float& y, float& w, float& h);
 

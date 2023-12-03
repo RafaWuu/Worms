@@ -123,10 +123,17 @@ int Client::start() {
 
     TextureController texture_controller(renderer);
     WeaponSelector weapon_selector(renderer);
-    auto hud = std::make_shared<Hud>(renderer, distribution);
+    Hud hud(renderer, distribution);
 
-    WorldView worldview(texture_controller, std::move(this->scenario), color_map, weapon_selector,
-                        current_worm, my_worms_id_vec, sound_controller,hud);
+    WorldView worldview(renderer,
+                        texture_controller,
+                        std::move(this->scenario), 
+                        color_map,
+                        weapon_selector,
+                        current_worm, 
+                        my_worms_id_vec, 
+                        sound_controller,
+                        &hud);
 
     bool running = true;
     auto start = high_resolution_clock::now();
@@ -139,7 +146,7 @@ int Client::start() {
             running = handle_events(weapon_selector, sound_controller);
         }
 
-        worldview.render(renderer);
+        worldview.render();
 
         manage_frame_rate(start);
     }

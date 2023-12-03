@@ -1,17 +1,17 @@
 #include "worldview.h"
 
-WorldView::WorldView(TextureController& texture_controller, std::unique_ptr<Scenario> scenario,
+WorldView::WorldView(SDL2pp::Renderer& renderer,TextureController& texture_controller, std::unique_ptr<Scenario> scenario,
                      std::map<uint16_t, SDL2pp::Color>& color_map, WeaponSelector& weapon_selector,
                      uint16_t current_worm, std::vector<uint16_t>& my_worms_id, SoundController& sound_controller,
-                     std::shared_ptr<Hud> hud):
+                     Hud* hud):
+        renderer(renderer),
         texture_controller(texture_controller),
         entity_factory(texture_controller),
         weapon_selector(weapon_selector),
         current_worm(current_worm),
-        sound_controller(sound_controller){
-    hud = hud;
+        sound_controller(sound_controller),
+        hud(hud){
     camera = SDL2pp::Rect{0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
-
     add_entities(scenario->get_dynamic_entities_info(), dynamic_entities, color_map, my_worms_id);
     add_entities(scenario->get_static_entities_info(), static_entities, color_map, my_worms_id);
 }
@@ -19,6 +19,7 @@ WorldView::WorldView(TextureController& texture_controller, std::unique_ptr<Scen
 void WorldView::update(std::map<uint16_t, std::unique_ptr<EntityInfo>>& updated_info, int current_worm) {
 
     // Remove dynamic entities the server doesn't send (already exploded missiles, ...)
+
     for (auto it = dynamic_entities.begin(); it != dynamic_entities.end();) {
         if (updated_info.find(it->first) == updated_info.end()) {
             it = dynamic_entities.erase(it);
@@ -26,7 +27,7 @@ void WorldView::update(std::map<uint16_t, std::unique_ptr<EntityInfo>>& updated_
             ++it;
         }
     }
-        // hud->update_current_worm(current_worm);
+        
     for (auto& info: updated_info) {
         auto it = dynamic_entities.find(info.first);
         if (it != dynamic_entities.end()) {
@@ -39,11 +40,11 @@ void WorldView::update(std::map<uint16_t, std::unique_ptr<EntityInfo>>& updated_
     }
 }
 
-void WorldView::render(SDL2pp::Renderer& renderer) {
+void WorldView::render() {
     renderer.SetDrawColor(SDL2pp::Color(0, 0, 0, 255));
     renderer.Clear();
-    render_background(renderer);
-    hud->render(renderer);
+    render_background();
+    hud->render();
     for (auto& entity: static_entities) {
         entity.second->render(renderer, camera);
     }
@@ -56,7 +57,7 @@ void WorldView::render(SDL2pp::Renderer& renderer) {
     renderer.Present();
 }
 
-void WorldView::render_background(SDL2pp::Renderer& renderer) {
+void WorldView::render_background() {
     auto background = texture_controller.get_texture(SCENARIO_BACKGROUND);
     renderer.Copy(*background, SDL2pp::NullOpt, SDL2pp::Rect{0, 0, SCREEN_WIDTH, SCREEN_HEIGHT});
 }
@@ -85,19 +86,24 @@ void WorldView::add_entities(std::map<uint16_t, std::unique_ptr<EntityInfo>>& so
                              std::vector<uint16_t> my_worms_id) {
 
     for (auto& entity_info: source) {
-
+        // si entity_info es un worm creo a player con un constructor propio??
+        // if (Worm* worm = dynamic_cast<Worm*>(*entity.info.second.get()));
+        // Player(entity_info worm, color, hud); else..
         auto entity = entity_factory.create(*entity_info.second);
 
         if (Player* player = dynamic_cast<Player*>(entity.get())) {
             auto color = color_map[player->get_id()];
             player->set_color(color);
             player->set_hud(hud);
+            auto worm = dynamic_cast<Worm*>(entity_info.second.get());
+            player->set_health(worm->get_health());
             // Si es mi gusano le agrego el crosshair
             if (std::find(my_worms_id.begin(), my_worms_id.end(), player->get_id()) !=
                 my_worms_id.end())
                 player->add_crosshair();
+            destination.emplace(entity_info.first, std::move(entity));
+        }else{
+            destination.emplace(entity_info.first, std::move(entity));
         }
-
-        destination.emplace(entity_info.first, std::move(entity));
     }
 }

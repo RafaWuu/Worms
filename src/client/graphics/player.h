@@ -34,7 +34,8 @@ public:
 
     void render_crosshair(SDL2pp::Renderer& renderer);
     void set_color(SDL2pp::Color color);
-    void set_hud(std::shared_ptr<Hud> hud);
+    void set_hud(Hud* hud);
+    void set_health(int hp);
     void add_crosshair();
 
 private:
@@ -59,12 +60,13 @@ private:
     uint16_t width;
     int id;
     int health;
+    int current_health;
 
     std::unique_ptr<Weapon> current_weapon;
     std::unique_ptr<Crosshair> crosshair;
     WeaponFactory weapon_factory;
     SDL2pp::Color color;
-    std::shared_ptr<Hud> hud;
+    Hud* hud;
     Configuration& config;
 };
 
