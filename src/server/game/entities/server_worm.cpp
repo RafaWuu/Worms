@@ -202,3 +202,5 @@ void Worm::clear_attributes() {
     recent_speed = 0;
     had_used_weapon = false;
 }
+
+void Worm::set_extra_health() { health += 25; }

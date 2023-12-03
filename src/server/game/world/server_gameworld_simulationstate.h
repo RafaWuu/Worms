@@ -10,10 +10,13 @@
 class GameWorldSimulationState: public GameWorldState {
 private:
     bool all_entities_had_stopped;
+    Worm& worm;
+    bool grace_period;
+    int ticks;
+    int round_length;
 
 public:
-    GameWorldSimulationState(std::map<uint16_t, Worm*>::iterator active_worm,
-                             std::map<uint16_t, Worm*>& worm_map, bool grace_period,
+    GameWorldSimulationState(PlayerManager& player_manager, Worm& worm, bool grace_period,
                              GameWorld& world);
     std::unique_ptr<GameWorldState> update() override;
 
@@ -23,9 +26,7 @@ public:
 
     void handle_entity_moving() override;
 
-    bool grace_period;
-    int ticks;
-    int round_length;
+    Worm& get_active_worm() override;
 };
 
 #endif  // WORMS_SERVER_GAMEWORLD_SIMULATIONSTATE_H

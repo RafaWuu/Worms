@@ -22,6 +22,7 @@
 #include "b2_world.h"
 #include "scenario_filehandler.h"
 #include "server_gameworld_state.h"
+#include "server_player_manager.h"
 
 class Weapon;
 
@@ -29,6 +30,8 @@ class GameWorld {
 private:
     ScenarioFileHandler file_handler;
     ProvisionFactory provision_factory;
+    PlayerManager player_manager;
+
     std::map<uint16_t, Worm*> worm_map;
     std::map<uint16_t, std::shared_ptr<GameObject>> entities_map;
 

@@ -271,8 +271,12 @@ add_executable(server
 		src/server/game/provisions/server_provision_effect_explosion.h
         src/server/game/provisions/server_provision_effect_ammo.cpp
         src/server/game/provisions/server_provision_effect_ammo.h
-		src/server/game/world/server_ingame_client_manager.cpp
-		src/server/game/world/server_ingame_client_manager.h
+		src/server/game/world/server_player_manager.cpp
+		src/server/game/world/server_player_manager.h
+        src/server/game/world/server_player.cpp
+        src/server/game/world/server_player.h
+        src/server/game/world/server_gameworld_state_waiting.cpp
+        src/server/game/world/server_gameworld_state_waiting.h
 )
 
 target_include_directories(client PUBLIC
@@ -419,8 +423,12 @@ add_executable(hello_test
 		src/server/game/provisions/server_provision_effect_explosion.h
         src/server/game/provisions/server_provision_effect_ammo.cpp
         src/server/game/provisions/server_provision_effect_ammo.h
-		src/server/game/world/server_ingame_client_manager.cpp
-		src/server/game/world/server_ingame_client_manager.h
+		src/server/game/world/server_player_manager.cpp
+		src/server/game/world/server_player_manager.h
+        src/server/game/world/server_player.cpp
+        src/server/game/world/server_player.h
+        src/server/game/world/server_gameworld_state_waiting.cpp
+        src/server/game/world/server_gameworld_state_waiting.h
 )
 
 target_link_libraries(hello_test GTest::gtest_main GTest::gmock ${BOX2D_LIBRARY_PATH} yaml-cpp)

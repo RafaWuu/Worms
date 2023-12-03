@@ -99,5 +99,7 @@ public:
     void set_deactive();
 
     void clear_attributes();
+
+    void set_extra_health();
 };
 #endif  // WORMS_SERVER_WORM_H

@@ -11,32 +11,32 @@
 #include "server_gameworld_simulationstate.h"
 #include "server_gameworld_state.h"
 
-GameWorldInteractiveState::GameWorldInteractiveState(
-        std::map<uint16_t, Worm*>::iterator active_worm, std::map<uint16_t, Worm*>& worm_map,
-        GameWorld& world):
-        GameWorldState(active_worm, worm_map, world) {
+GameWorldInteractiveState::GameWorldInteractiveState(PlayerManager& player_manager,
+                                                     GameWorld& world):
+        worm(player_manager.get_next_worm_from_client()), GameWorldState(player_manager, world) {
     auto& config = Configuration::get_instance();
     ticks = 0;
     round_length = config.round_length * config.get_tick_rate();
     active_worm_get_damaged = false;
     active_worm_used_weapon = false;
-    active_worm->second->set_active();
-    std::cout << "Empezando turno de " << unsigned(active_worm->first) << "\n";
+
+    worm.set_active();
+    std::cout << "Empezando turno de " << unsigned(worm.id) << "\n";
 
     world.generate_provision();
 }
 
 std::unique_ptr<GameWorldState> GameWorldInteractiveState::update() {
     ticks++;
-    if ((active_worm->second->get_state() & Alive) == 0)
-        return std::make_unique<GameWorldSimulationState>(active_worm, worm_map, false, world);
+    if ((worm.get_state() & Alive) == 0)
+        return std::make_unique<GameWorldSimulationState>(player_manager, worm, false, world);
 
     if (ticks > round_length || active_worm_get_damaged)
-        return std::make_unique<GameWorldSimulationState>(active_worm, worm_map, false, world);
+        return std::make_unique<GameWorldSimulationState>(player_manager, worm, false, world);
 
 
     if (active_worm_used_weapon) {
-        return std::make_unique<GameWorldSimulationState>(active_worm, worm_map, true, world);
+        return std::make_unique<GameWorldSimulationState>(player_manager, worm, true, world);
     }
 
 
@@ -46,8 +46,10 @@ std::unique_ptr<GameWorldState> GameWorldInteractiveState::update() {
 void GameWorldInteractiveState::handle_weapon_fired() { active_worm_used_weapon = true; }
 
 void GameWorldInteractiveState::handle_worm_damaged(uint16_t worm_id) {
-    if (active_worm->first == worm_id)
+    if (worm.id == worm_id)
         active_worm_get_damaged = true;
 }
 
 void GameWorldInteractiveState::handle_entity_moving() {}
+
+Worm& GameWorldInteractiveState::get_active_worm() { return worm; }

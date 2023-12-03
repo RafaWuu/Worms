@@ -8,10 +8,9 @@
 
 #include "server_gameworld_interactive_state.h"
 
-GameWorldSimulationState::GameWorldSimulationState(std::map<uint16_t, Worm*>::iterator active_worm,
-                                                   std::map<uint16_t, Worm*>& worm_map,
+GameWorldSimulationState::GameWorldSimulationState(PlayerManager& player_manager, Worm& worm,
                                                    bool grace_period, GameWorld& world):
-        grace_period(grace_period), GameWorldState(active_worm, worm_map, world) {
+        grace_period(grace_period), worm(worm), GameWorldState(player_manager, world) {
     auto& config = Configuration::get_instance();
 
     ticks = 0;
@@ -19,22 +18,20 @@ GameWorldSimulationState::GameWorldSimulationState(std::map<uint16_t, Worm*>::it
 
     all_entities_had_stopped = true;
     std::cout << "Empezando simulacion " << (grace_period ? "con" : "sin") << " tiempo extra de "
-              << unsigned(active_worm->first) << "\n";
+              << unsigned(worm.id) << "\n";
 }
 
 std::unique_ptr<GameWorldState> GameWorldSimulationState::update() {
     ticks++;
 
     if (ticks > round_length)
-        active_worm->second->set_deactive();
+        worm.set_deactive();
 
     if (all_entities_had_stopped) {
-        ++active_worm;
-        if (active_worm == worm_map.end())
-            active_worm = worm_map.begin();
-
-        active_worm->second->set_deactive();
-        return std::make_unique<GameWorldInteractiveState>(active_worm, worm_map, world);
+        worm.set_deactive();
+        if (player_manager.game_ended())
+            return nullptr;
+        return std::make_unique<GameWorldInteractiveState>(player_manager, world);
     }
 
     all_entities_had_stopped = true;
@@ -46,3 +43,5 @@ void GameWorldSimulationState::handle_weapon_fired() {}
 void GameWorldSimulationState::handle_worm_damaged(uint16_t worm_id) {}
 
 void GameWorldSimulationState::handle_entity_moving() { all_entities_had_stopped = false; }
+
+Worm& GameWorldSimulationState::get_active_worm() { return worm; }

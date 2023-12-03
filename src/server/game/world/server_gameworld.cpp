@@ -13,13 +13,11 @@
 #include "game/entities/server_explosion.h"
 #include "game/entities/server_worm_info.h"
 #include "game/entities/server_worm_sensor.h"
-#include "game/listeners/server_raycast_explosion_callback.h"
 
-#include "b2_body.h"
 #include "b2_edge_shape.h"
-#include "scenario_filehandler.h"
 #include "server_error.h"
 #include "server_gameworld_simulationstate.h"
+#include "server_gameworld_state_waiting.h"
 
 #define GRAVITY_Y (-9.8)
 
@@ -27,6 +25,7 @@ GameWorld::GameWorld(const std::string& scenario_name):
         b2_world(b2Vec2(.0, GRAVITY_Y)),
         worm_map(),
         file_handler(),
+        player_manager(),
         listener(*this),
         provision_factory(*this),
         config(Configuration::get_instance()) {
@@ -37,8 +36,7 @@ GameWorld::GameWorld(const std::string& scenario_name):
     add_entity(std::make_shared<Ground>(&b2_world, width));
 
     b2_world.SetContactListener(&listener);
-    game_state =
-            std::make_shared<GameWorldSimulationState>(worm_map.begin(), worm_map, false, *this);
+    game_state = std::make_shared<GameWorldWaitingState>(player_manager, *worm_map[0], *this);
 }
 
 void GameWorld::create_worm(float x, float y) {
@@ -90,6 +88,7 @@ void GameWorld::manage_round() {
 }
 
 void GameWorld::set_clients_to_worms(const std::vector<uint16_t>& client_vec) {
+    player_manager.assign_worms_to_players(client_vec, worm_map);
     int i = 0;
 
     for (auto& worm: worm_map) {
@@ -99,6 +98,9 @@ void GameWorld::set_clients_to_worms(const std::vector<uint16_t>& client_vec) {
         worm.second->set_client_id(client_vec[i % client_vec.size()]);
         i++;
     }
+
+    game_state = std::make_shared<GameWorldSimulationState>(
+            player_manager, player_manager.get_next_worm_from_client(), false, *this);
 }
 
 Worm& GameWorld::get_worm(uint8_t worm_id, uint16_t client_id) {
@@ -159,7 +161,7 @@ void GameWorld::notify_entity_is_moving() { game_state->handle_entity_moving(); 
 void GameWorld::notify_weapon_used() { game_state->handle_weapon_fired(); }
 
 
-uint16_t GameWorld::get_active_worm() { return game_state->active_worm->first; }
+uint16_t GameWorld::get_active_worm() { return game_state->get_active_worm().id; }
 
 void GameWorld::generate_provision() {
     if (provision_factory.provision_this_round()) {

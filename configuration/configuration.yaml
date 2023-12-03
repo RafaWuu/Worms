@@ -28,12 +28,12 @@ beam:
 worm:
   width: .8
   height: .8
-  health: 100
+  health: 5
   max_fall_dmg: 25
-  safe_height: 2
+  safe_height: 3
   restitution: .1
   density: 1
-  friction: .1
+  friction: .1a
 
 weapons:
   bazooka:
