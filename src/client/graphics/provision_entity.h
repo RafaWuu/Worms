@@ -7,10 +7,12 @@
 
 #include "entity.h"
 
+#include "animation.h"
+
 class ProvisionEntity: public Entity {
 private:
     TextureController& texture_controller;
-    std::shared_ptr<SDL2pp::Texture> texture;
+    Animation an;
     uint16_t x;
     uint16_t y;
     uint16_t width;
@@ -21,6 +23,9 @@ public:
                     uint16_t height);
     ~ProvisionEntity();
 
+    void update(float dt) override;
+
+    void update_info(EntityInfo* info, SoundController& sound_controller) override;
 
     void render(SDL2pp::Renderer& renderer, SDL2pp::Rect& camera) override;
 };

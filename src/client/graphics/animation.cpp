@@ -24,6 +24,10 @@ Animation::Animation(std::shared_ptr<SDL2pp::Texture> texture, TextureController
 
 Animation::~Animation() {}
 
+int Animation::get_num_frames() {
+    return numFrames;
+}
+
 void Animation::update(float dt) {
     this->elapsed += dt;
     /* checks if the frame should be updated based on the time elapsed since the last update */

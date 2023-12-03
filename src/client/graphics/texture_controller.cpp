@@ -49,6 +49,7 @@ TextureController::TextureController(SDL2pp::Renderer& renderer_): renderer(rend
             {MORTAR_PROJECTILE, "mortar.png"},     {BAT_IDLE, "wbsbbak.png"},
             {BAT_AIMING, "wbsbaim.png"}, {TELEPORTATION_IDLE, "wtelbak.png"},
             {TELEPORTATION_AIMING, "teleportation.png"},
+            {CRATE, "wcratev.png"}
     };
 
     std::map<AnimationState, std::string> textures_dark_blue_bg = {

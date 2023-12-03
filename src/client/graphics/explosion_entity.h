@@ -26,6 +26,8 @@ private:
     int x;
     int y;
 
+    int frames_rendered;
+
     bool just_exploded;
 };
 #endif  

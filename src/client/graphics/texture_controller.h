@@ -50,6 +50,8 @@ enum AnimationState {
     // Explosion
     EXPLOSION_CIRCLE,
     EXPLOSION_ELIPSE,
+    // Crate
+    CRATE,
 };
 
 class TextureController {

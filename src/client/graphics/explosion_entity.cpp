@@ -1,4 +1,6 @@
 #include "explosion_entity.h"
+#include <iostream>
+#include <ostream>
 
 #include "game/explosion.h"
 
@@ -11,6 +13,7 @@ ExplosionEntity::ExplosionEntity(TextureController& controller, uint8_t type, fl
         y(300),
         radius(radius),
         just_exploded(true),
+        frames_rendered(0),
         config(Configuration::get_instance()) {}
 
 ExplosionEntity::~ExplosionEntity() {}
@@ -32,13 +35,18 @@ void ExplosionEntity::update_info(EntityInfo* info, SoundController& sound_contr
  * Esto les va a resultar muy util.
  */
 void ExplosionEntity::update(float dt) {
+    
     circle.update(dt);
     elipse.update(dt);
+
 }
 
-// La explosion se deberia enviar 1 sola vez, y al hacer render que haga un loop y renderice todos
-// los frames del sprite?
 void ExplosionEntity::render(SDL2pp::Renderer& renderer, SDL2pp::Rect& camera) {
+    
+    if (frames_rendered >= circle.get_num_frames()) {
+        return;
+    }
+
     SDL_RendererFlip flip = SDL_FLIP_NONE;
 
     circle.render(renderer, SDL2pp::Rect(x - radius, y - radius, radius * 2, radius * 2), flip,
@@ -46,4 +54,6 @@ void ExplosionEntity::render(SDL2pp::Renderer& renderer, SDL2pp::Rect& camera) {
 
     elipse.render(renderer, SDL2pp::Rect(x - radius, y - radius, radius * 2, radius * 2), flip,
                   0.0);
+    
+    frames_rendered++;
 }

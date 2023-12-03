@@ -31,6 +31,8 @@ public:
 
     void change_texture(AnimationState new_state);
 
+    int get_num_frames();
+
 private:
     void advanceFrame();
     /** SDL texture of the raw image. */
