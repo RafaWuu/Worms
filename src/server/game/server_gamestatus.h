@@ -56,9 +56,11 @@ public:
 class GameStatusRunning: public GameStatus {
 private:
     uint16_t current_worm;
+    float wind;
+    float remaining_round_time;
 
 public:
-    GameStatusRunning(uint16_t current_worm, GameWorld& world);
+    explicit GameStatusRunning(GameWorld& world);
     void serialize(ServerProtocol& protocol) override;
 };
 #endif  // WORMS_SERVER_GAMESTATUS_H

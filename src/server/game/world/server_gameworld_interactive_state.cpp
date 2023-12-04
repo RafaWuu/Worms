@@ -22,8 +22,6 @@ GameWorldInteractiveState::GameWorldInteractiveState(PlayerManager& player_manag
 
     worm.set_active();
     std::cout << "Empezando turno de " << unsigned(worm.id) << "\n";
-
-    world.generate_provision();
 }
 
 std::unique_ptr<GameWorldState> GameWorldInteractiveState::update() {
@@ -53,3 +51,8 @@ void GameWorldInteractiveState::handle_worm_damaged(uint16_t worm_id) {
 void GameWorldInteractiveState::handle_entity_moving() {}
 
 Worm& GameWorldInteractiveState::get_active_worm() { return worm; }
+
+float GameWorldInteractiveState::get_remaining_time() {
+    float remaining = (round_length - ticks) / Configuration::get_instance().get_tick_rate();
+    return fmax(remaining, 0.0f);
+}

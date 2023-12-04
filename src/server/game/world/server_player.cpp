@@ -27,5 +27,5 @@ Worm& Player::get_next_alive_worm() {
 
 bool Player::is_any_worm_alive() const {
     return std::count_if(worms.begin(), worms.end(),
-                         [&](const Worm* worm) { return worm->health > 0; });
+                         [&](const Worm* worm) { return worm->worm_is_alive(); }) > 0;
 }

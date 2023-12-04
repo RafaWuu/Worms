@@ -10,9 +10,9 @@ void ClientReceiver::run() {
     while (keep_talking) {
         try {
 
-            std::shared_ptr<EstadoJuego> game_status = protocol.recv_msg();
+            std::shared_ptr<EstadoJuego> game_status = protocol.recv_snapshot();
             messages_received.push(game_status);
-            
+
         } catch (ClosedSocket& e) {
             is_alive = keep_talking = false;
         } catch (ClosedQueue& e) {

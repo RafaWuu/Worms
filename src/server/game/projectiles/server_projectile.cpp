@@ -24,7 +24,7 @@ Projectile::Projectile(b2World* world, std::string&& identifier,
         config(Configuration::get_instance()),
         GameObject() {
 
-    this->countdown = countdown;
+    this->countdown = countdown * config.get_tick_rate();
     this->width = config.get_weapon_width(identifier);
     this->height = config.get_weapon_height(identifier);
     this->dragConstant = config.get_weapon_dragconstant(identifier);
@@ -67,12 +67,15 @@ void Projectile::update(GameWorld& world) {
     if (is_dead)
         return;
 
+    if (config.weapon_is_affected_by_wind(config.get_weapon_name(type)))
+        world.apply_wind_effect(*body);
+
     world.notify_entity_is_moving();  // Si no esta muerta, o se esta moviendo o aun no detono (si
                                       // es granada)
 
-    countdown -= 1.0 / config.get_tick_rate();
+    countdown -= 1;
 
-    if (countdown < 0.0)
+    if (countdown < 0)
         on_countdown_finished(world);
 }
 

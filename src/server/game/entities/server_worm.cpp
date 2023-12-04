@@ -71,7 +71,7 @@ void Worm::process_fall(float distance) {
     double max = fmax(25, config.max_fall_dmg);
 
     if (distance > config.safe_height)
-        health -= (uint8_t)fmin(distance, max);
+        get_hit(fmin(distance, max));
 }
 
 void Worm::set_client_id(uint16_t id_) { this->client_id = id_; }
@@ -172,9 +172,20 @@ std::unique_ptr<GameObjectInfo> Worm::get_status() const {
 
 std::unique_ptr<WormInfo> Worm::get_worminfo() const { return std::make_unique<WormInfo>(*this); }
 
-void Worm::get_hit(float d) { health -= (uint8_t)fmin(d, health); }
+void Worm::get_hit(float d) {
+    if (worm_is_alive())
+        health -= (uint8_t)fmin(d, health);
+}
+
+void Worm::add_health(int health) {
+    if (worm_is_alive())
+        this->health += health;
+}
 
 void Worm::change_weapon(uint8_t weapon_id) {
+    if (had_used_weapon)
+        return;
+
     auto it = weapons_map.find(weapon_id);
     if (it != weapons_map.end())
         current_weapon = weapon_id;
@@ -204,3 +215,5 @@ void Worm::clear_attributes() {
 }
 
 void Worm::set_extra_health() { health += 25; }
+
+bool Worm::worm_is_alive() const { return (state_manager.current & Alive) == Alive; }

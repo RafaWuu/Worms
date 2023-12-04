@@ -168,6 +168,8 @@ public:
     float provision_damage;
     float provision_radius;
     float provision_blast_power;
+    float minimum_wind;
+    float maximum_wind;
 };
 
 #endif

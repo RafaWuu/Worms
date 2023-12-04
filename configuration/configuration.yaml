@@ -8,6 +8,9 @@ round_length: 30
 grace_length: 3
 
 maximum_countdown: 5
+maximum_wind: 1
+minimum_wind: 0.01
+
 provision:
   width: 1.2
   height: 1.2
@@ -28,12 +31,12 @@ beam:
 worm:
   width: .8
   height: .8
-  health: 5
+  health: 100
   max_fall_dmg: 25
   safe_height: 3
   restitution: .1
   density: 1
-  friction: .1a
+  friction: .1
 
 weapons:
   bazooka:

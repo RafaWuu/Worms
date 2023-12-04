@@ -29,7 +29,7 @@ private:
     float dragConstant;
     float width;
     float height;
-    float countdown;
+    int countdown;
     bool had_impacted;
 
 public:

@@ -27,6 +27,8 @@ public:
     void handle_entity_moving() override;
 
     Worm& get_active_worm() override;
+
+    float get_remaining_time() override;
 };
 
 #endif  // WORMS_SERVER_GAMEWORLD_SIMULATIONSTATE_H

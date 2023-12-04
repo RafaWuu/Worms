@@ -161,7 +161,7 @@ FallingState::FallingState() {
     code = Falling;
     required = Alive;
     blocking_me = Jumping | Rolling;
-    terminate = Aiming | Walking | Standing;
+    terminate = Aiming | Walking | Standing | Firing;
     requiring = NoState;
 
     max_y = 0;
@@ -185,7 +185,7 @@ uint16_t FallingState::on_deactivated(Worm& worm) {
 FiringState::FiringState() {
     code = Firing;
     required = Powering | Alive | Active;
-    blocking_me = NoState;
+    blocking_me = Falling;
     terminate = Aiming | Powering;
     requiring = NoState;
 }

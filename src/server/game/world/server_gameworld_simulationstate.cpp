@@ -6,6 +6,7 @@
 
 #include <iostream>
 
+#include "server_gameworld.h"
 #include "server_gameworld_interactive_state.h"
 
 GameWorldSimulationState::GameWorldSimulationState(PlayerManager& player_manager, Worm& worm,
@@ -31,6 +32,8 @@ std::unique_ptr<GameWorldState> GameWorldSimulationState::update() {
         worm.set_deactive();
         if (player_manager.game_ended())
             return nullptr;
+
+        world.on_new_round();
         return std::make_unique<GameWorldInteractiveState>(player_manager, world);
     }
 
@@ -45,3 +48,8 @@ void GameWorldSimulationState::handle_worm_damaged(uint16_t worm_id) {}
 void GameWorldSimulationState::handle_entity_moving() { all_entities_had_stopped = false; }
 
 Worm& GameWorldSimulationState::get_active_worm() { return worm; }
+
+float GameWorldSimulationState::get_remaining_time() {
+    float remaining = (round_length - ticks) / Configuration::get_instance().get_tick_rate();
+    return fmax(remaining, 0.0f);
+}

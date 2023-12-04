@@ -101,5 +101,9 @@ public:
     void clear_attributes();
 
     void set_extra_health();
+
+    bool worm_is_alive() const;
+
+    void add_health(int health);
 };
 #endif  // WORMS_SERVER_WORM_H

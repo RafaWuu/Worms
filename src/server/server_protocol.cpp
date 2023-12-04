@@ -281,12 +281,14 @@ void ServerProtocol::send_worms_list(const std::map<uint16_t, std::shared_ptr<Wo
     getLog().write("Server enviando lista de gusanos \n");
 }
 
-void ServerProtocol::send_status(uint16_t current_worm,
+void ServerProtocol::send_status(uint16_t current_worm, float time, float wind,
                                  std::map<uint16_t, std::shared_ptr<GameObjectInfo>> entities) {
     baseProtocol.send_1byte_number(GAME_SENDING);
     baseProtocol.send_1byte_number(GAME_STATUS);
 
     baseProtocol.send_2byte_number(current_worm);
+    baseProtocol.send_4byte_float(time);
+    baseProtocol.send_4byte_float(wind);
 
     baseProtocol.send_2byte_number(entities.size());
 

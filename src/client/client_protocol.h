@@ -50,7 +50,7 @@ public:
     void serialize_change_countdown(uint8_t worm, int countdown);
 
 
-    std::shared_ptr<EstadoJuego> recv_msg();
+    std::shared_ptr<EstadoJuego> recv_snapshot();
     std::map<uint16_t, uint16_t> receive_worms_distribution();
     std::unique_ptr<Scenario> receive_scenario();
 

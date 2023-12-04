@@ -364,14 +364,17 @@ std::unique_ptr<Scenario> ClientProtocol::receive_scenario() {
     return std::make_unique<Scenario>(dynamic_entities, static_entities, h * SCALE, w * SCALE);
 }
 
-std::shared_ptr<EstadoJuego> ClientProtocol::recv_msg() {
+std::shared_ptr<EstadoJuego> ClientProtocol::recv_snapshot() {
     uint8_t game_sending;
     baseProtocol.recv_1byte_number(game_sending);
     uint8_t game_status;
     baseProtocol.recv_1byte_number(game_status);
     uint16_t current_worm;
     baseProtocol.recv_2byte_number(current_worm);
-
+    float remaining_time;
+    baseProtocol.recv_4byte_float(remaining_time);
+    float wind;
+    baseProtocol.recv_4byte_float(wind);
     uint16_t entities_number;
     baseProtocol.recv_2byte_number(entities_number);
 
@@ -403,7 +406,7 @@ std::shared_ptr<EstadoJuego> ClientProtocol::recv_msg() {
 
     getLog().write("Cliente recibe estado de partida \n");
 
-    return std::make_shared<EstadoJuego>(current_worm, std::move(entities));
+    return std::make_shared<EstadoJuego>(current_worm, remaining_time, wind, std::move(entities));
 }
 
 void ClientProtocol::serialize_move(uint8_t worm, int dir) {
@@ -421,7 +424,8 @@ void ClientProtocol::serialize_change_countdown(uint8_t worm, int new_countdown)
     uint8_t countdown = new_countdown;
 
     // Falta enviar el worm_id
-    std::vector<uint8_t> serialized_command = {GAME_SENDING, CHANGE_COUNTDOWN_CODE, worm, countdown};
+    std::vector<uint8_t> serialized_command = {GAME_SENDING, CHANGE_COUNTDOWN_CODE, worm,
+                                               countdown};
 
     getLog().write("Cliente serializando cambiar countdown %hhu \n", countdown);
 

@@ -58,7 +58,7 @@ public:
     std::unique_ptr<GameEvent> recv_game_msg(uint16_t id_client);
 
 
-    void send_status(uint16_t current_worm,
+    void send_status(uint16_t current_worm, float time, float wind,
                      std::map<uint16_t, std::shared_ptr<GameObjectInfo>> entities);
 
     void send_scenario(std::map<uint16_t, std::shared_ptr<GameObjectInfo>>& entities, float height,

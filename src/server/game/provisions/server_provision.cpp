@@ -18,8 +18,6 @@ Provision::Provision(GameWorld& world, float x, float y, std::unique_ptr<Provisi
     float width = config.provision_width;
     float height = config.provision_height;
 
-    std::cout << "Provision generadada en: " << x << ", " << y << '\n';
-
     b2BodyDef bodyDef;
     bodyDef.type = b2_dynamicBody;
     bodyDef.position.Set(x, y);
@@ -56,9 +54,7 @@ Provision::Provision(GameWorld& world, float x, float y, std::unique_ptr<Provisi
     been_took = false;
 }
 
-void Provision::update(GameWorld& world) {
-    std::cout << "Provision en: " << body->GetPosition().x << ", " << body->GetPosition().y << '\n';
-}
+void Provision::update(GameWorld& world) {}
 
 ObjectType Provision::get_id() const { return PROVISION; }
 

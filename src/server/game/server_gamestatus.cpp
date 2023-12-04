@@ -25,9 +25,12 @@ GameStatusStart::GameStatusStart(GameWorld& world):
 
 void GameStatusStart::serialize(ServerProtocol& protocol) { protocol.send_worms_list(worms_info); }
 
-GameStatusRunning::GameStatusRunning(uint16_t current_worm, GameWorld& world):
-        current_worm(current_worm), GameStatus(world) {}
+GameStatusRunning::GameStatusRunning(GameWorld& world): GameStatus(world) {
+    current_worm = world.get_active_worm();
+    wind = world.get_wind_value();
+    remaining_round_time = world.get_round_remaining_time();
+}
 
 void GameStatusRunning::serialize(ServerProtocol& protocol) {
-    protocol.send_status(current_worm, entities_info);
+    protocol.send_status(current_worm, remaining_round_time, wind, entities_info);
 }

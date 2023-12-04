@@ -1,10 +1,12 @@
 #include "estado_juego.h"
 
 
-EstadoJuego::EstadoJuego(uint16_t current_worm,
+EstadoJuego::EstadoJuego(uint16_t current_worm, float remaining_time, float wind,
                          std::map<uint16_t, std::unique_ptr<EntityInfo>>&& entities):
         entities_info(std::move(entities)) {
     this->current_worm = current_worm;
+    this->remaining_time = remaining_time;
+    this->wind = wind;
 }
 
 

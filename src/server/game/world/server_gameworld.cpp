@@ -26,6 +26,7 @@ GameWorld::GameWorld(const std::string& scenario_name):
         worm_map(),
         file_handler(),
         player_manager(),
+        wind(),
         listener(*this),
         provision_factory(*this),
         config(Configuration::get_instance()) {
@@ -163,6 +164,11 @@ void GameWorld::notify_weapon_used() { game_state->handle_weapon_fired(); }
 
 uint16_t GameWorld::get_active_worm() { return game_state->get_active_worm().id; }
 
+void GameWorld::on_new_round() {
+    generate_provision();
+    update_wind();
+}
+
 void GameWorld::generate_provision() {
     if (provision_factory.provision_this_round()) {
         auto provision = provision_factory.generate_provision();
@@ -171,3 +177,14 @@ void GameWorld::generate_provision() {
         }
     }
 }
+
+void GameWorld::update_wind() {
+    wind.update_wind();
+    std::cout << "Viento: " << wind.wind << '\n';
+}
+
+void GameWorld::apply_wind_effect(b2Body& body) { wind.affect_projectile(body); }
+
+float GameWorld::get_wind_value() const { return wind.wind; }
+
+float GameWorld::get_round_remaining_time() { return game_state->get_remaining_time(); }

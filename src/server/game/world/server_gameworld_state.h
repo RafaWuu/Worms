@@ -29,6 +29,7 @@ public:
     virtual void handle_entity_moving() = 0;
 
     virtual Worm& get_active_worm() = 0;
+    virtual float get_remaining_time() = 0;
 };
 
 #endif  // WORMS_SERVER_GAMEWORLD_STATE_H

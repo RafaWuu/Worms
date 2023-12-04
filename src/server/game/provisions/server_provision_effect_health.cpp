@@ -7,5 +7,5 @@
 ProvisionEffectHealth::ProvisionEffectHealth(int health): health(health) {}
 
 void ProvisionEffectHealth::take(GameWorld& world, Provision& provision, Worm& worm) {
-    worm.health += this->health;
+    worm.add_health(health);
 }

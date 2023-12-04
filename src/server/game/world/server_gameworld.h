@@ -23,6 +23,7 @@
 #include "scenario_filehandler.h"
 #include "server_gameworld_state.h"
 #include "server_player_manager.h"
+#include "server_wind.h"
 
 class Weapon;
 
@@ -31,7 +32,7 @@ private:
     ScenarioFileHandler file_handler;
     ProvisionFactory provision_factory;
     PlayerManager player_manager;
-
+    Wind wind;
     std::map<uint16_t, Worm*> worm_map;
     std::map<uint16_t, std::shared_ptr<GameObject>> entities_map;
 
@@ -45,6 +46,8 @@ private:
     std::shared_ptr<GameWorldState> game_state;
 
 public:
+    friend class GameStatusRunning;
+
     b2World b2_world;
     explicit GameWorld(const std::string& scenario_name);
     ~GameWorld();
@@ -83,5 +86,15 @@ public:
     uint16_t get_active_worm();
 
     void generate_provision();
+
+    void on_new_round();
+
+    void update_wind();
+
+    void apply_wind_effect(b2Body& body);
+
+    float get_wind_value() const;
+
+    float get_round_remaining_time();
 };
 #endif  // WORMS_SERVER_GAMEWORLD_H

@@ -20,3 +20,5 @@ void GameWorldWaitingState::handle_worm_damaged(uint16_t worm_id) {}
 void GameWorldWaitingState::handle_entity_moving() {}
 
 Worm& GameWorldWaitingState::get_active_worm() { return worm; }
+
+float GameWorldWaitingState::get_remaining_time() { return 0; }
