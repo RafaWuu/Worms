@@ -28,7 +28,7 @@ Boundary::Boundary(b2World* b2_world, float width, float height):
     edge_1 = b2_world->CreateBody(&body_def);
     edge_shape.SetTwoSided(top_left, top_right);
     fixture_def.shape = &edge_shape;
-    edge_1->CreateFixture(&fixture_def);
+    // edge_1->CreateFixture(&fixture_def);
 
     edge_2 = b2_world->CreateBody(&body_def);
     edge_shape.SetTwoSided(top_left, bottom_left);

@@ -218,7 +218,7 @@ weapons:
     density: 1
     angular_damping: 0.2
     max_vel: 12
-
+    quantity: 6
   teleportation:
     id: 9
     scope: false

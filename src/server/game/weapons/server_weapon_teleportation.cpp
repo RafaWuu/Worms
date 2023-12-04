@@ -4,6 +4,7 @@
 
 #include "server_weapon_teleportation.h"
 
+#include "../world/server_gameworld.h"
 #include "game/entities/server_gameobject.h"
 
 #include "b2_fixture.h"
@@ -35,6 +36,9 @@ TeleportationWeapon::TeleportationWeapon(GameWorld& world): Weapon(world) {
 
 
 bool TeleportationWeapon::fire_projectile(b2Body& body, bool facing_right) {
+    if (ammo == 0) {
+        return false;
+    }
 
     IntersectionCallback callback;
     b2AABB aabb{};
@@ -47,6 +51,7 @@ bool TeleportationWeapon::fire_projectile(b2Body& body, bool facing_right) {
 
     if (!callback.intersecting) {
         body.SetTransform(b2Vec2(aim_x, aim_y), 0);
+        return (true);
     }
 
     return false;

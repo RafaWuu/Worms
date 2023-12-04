@@ -225,6 +225,10 @@ float Configuration::get_restitution(const std::string& weapon_name) {
     return weapons_info[weapon_name].restitution;
 }
 
+float Configuration::get_missil_quantity(const std::string& weapon_name) {
+    return weapons_info[weapon_name].quantity;
+}
+
 float Configuration::get_maximum_countdown() const { return maximum_countdown; }
 
 

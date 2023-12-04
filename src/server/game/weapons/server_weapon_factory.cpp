@@ -10,6 +10,7 @@
 #include "game/world/server_gameworld.h"
 
 #include "common_weapon_constants.h"
+#include "server_weapon_airattack.h"
 #include "server_weapon_banana.h"
 #include "server_weapon_bat.h"
 #include "server_weapon_bazooka.h"
@@ -33,6 +34,7 @@ std::map<uint8_t, std::unique_ptr<Weapon>> WeaponFactory::get_weapons(GameWorld&
     weapons.emplace(DYNAMITE_ID, std::make_unique<DynamiteWeapon>(world));
     weapons.emplace(BASEBALL_BAT_ID, std::make_unique<WeaponBat>(world, worm.id));
     weapons.emplace(TELEPORTATION_ID, std::make_unique<TeleportationWeapon>(world));
+    weapons.emplace(AIR_ATTACK_ID, std::make_unique<AirAttackWeapon>(world));
 
     return weapons;
 }

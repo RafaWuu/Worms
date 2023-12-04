@@ -28,6 +28,7 @@ class WeaponConfig {
     float density;
     float angular_damping;
     float max_vel;
+    int quantity;
 
 public:
     friend class Configuration;

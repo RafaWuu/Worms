@@ -42,4 +42,6 @@ WeaponConfig::WeaponConfig(const YAML::Node& weapon_node) {
     angular_damping = weapon_node["angular_damping"].as<float>();
     max_vel = weapon_node["max_vel"].as<float>();
     restitution = weapon_node["restitution"].as<float>(0.2);
+
+    quantity = weapon_node["quantity"].as<int>(1);
 }
