@@ -9,9 +9,9 @@
 # You should have received a copy of the CC0 Public Domain Dedication along with
 # this software. If not, see <http://creativecommons.org/publicdomain/zero/1.0/>.
 
-set(CONFIG_FILE "/var/configurations.yaml")
-set(SCENARIO_FILE "/var/scenarios.yaml")
-set(ASSETS_DIR "/var/Worms/assets")
+set(CONFIG_FILE "/etc/configurations.yaml")
+set(SCENARIO_FILE "/etc/scenarios.yaml")
+set(ASSETS_DIR "/etc/assets")
 
 cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
 project(worms LANGUAGES CXX)
@@ -32,7 +32,7 @@ set(BOX2D_INCLUDE_PATH "${CMAKE_SOURCE_DIR}/Box2D")
 set(CMAKE_CXX_STANDARD 17)
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
 include_directories(${SDL2PP_INCLUDE_DIRS})
-include_directories(PRIVATE ${BOX2D_INCLUDE_PATH})
+include_directories(${BOX2D_INCLUDE_PATH})
 # Find the QtWidgets library
 
 include(FetchContent)
@@ -155,6 +155,8 @@ add_executable(client
 		src/client/graphics/provision_entity.cpp
 		src/client/graphics/provision_entity.h
 )
+target_compile_definitions(client PUBLIC ASSETS_PATH="${ASSETS_DIR}"
+										CONFIG_PATH="${CONFIG_FILE}")
 
 add_executable(server
 	src/server/server_main.cpp
@@ -292,7 +294,10 @@ add_executable(server
         src/server/game/world/server_gameworld_state_finished.cpp
         src/server/game/world/server_gameworld_state_finished.h
 )
-target_compile_definitions(client_test PUBLIC ASSETS_PATH="${ASSETS_DIR}")
+target_compile_definitions(server PUBLIC CONFIG_PATH="${CONFIG_FILE}"
+										SCENARIO_PATH="${SCENARIO_FILE}"
+)
+
 
 target_include_directories(client PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/common
@@ -301,17 +306,13 @@ target_include_directories(client PUBLIC
 
 )
 
-target_compile_definitions(hello_test PUBLIC CONFIG_PATH="${CONFIG_FILE}"
-										SCENARIO_PATH="${SCENARIO_FILE}"
-)
+
 target_include_directories(server PUBLIC
 		${CMAKE_CURRENT_SOURCE_DIR}/src/common
 		${CMAKE_CURRENT_SOURCE_DIR}/src/server
 		${CMAKE_CURRENT_SOURCE_DIR}/test
 
 )
-
-
 # define targets
 target_link_libraries(client PUBLIC ${BOX2D_LIBRARY_PATH}
 					SDL2pp::SDL2pp
@@ -487,12 +488,13 @@ target_include_directories(client_test PUBLIC
 		${CMAKE_CURRENT_SOURCE_DIR}/test
 )
 
-target_compile_definitions(client_test PUBLIC ASSETS_PATH="${ASSETS_DIR}")
+target_compile_definitions(client_test PUBLIC ASSETS_PATH="${ASSETS_DIR}"
+											CONFIG_PATH="${CONFIG_FILE}" )
 target_link_libraries(client_test PUBLIC GTest::gtest_main GTest::gmock SDL2pp::SDL2pp Qt5::Widgets Qt5::Core yaml-cpp)
 
 add_test(NAME ClientTest COMMAND client_test)
 
 #installer
 INSTALL(TARGETS server client DESTINATION /usr/bin)
-INSTALL(DIRECTORY assets DESTINATION /var/Worms)
-INSTALL(FILES configuration/configuration.yaml scenarios/scenarios.yaml DESTINATION /var/Worms)
+INSTALL(DIRECTORY assets DESTINATION /etc)
+INSTALL(FILES configuration/configuration.yaml scenarios/scenarios.yaml DESTINATION /etc)

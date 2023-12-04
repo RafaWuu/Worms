@@ -29,9 +29,11 @@ void Hud::update_current_worm(int worm_id) { worm_id = current_worm; }
 
 static std::unique_ptr<SDL2pp::Font> get_font() {
     try {
-        return std::make_unique<SDL2pp::Font> ("assets/Vera.ttf", 12);
+        std::string path = std::string(ASSETS_PATH)+"/Vera.ttf";
+        return std::make_unique<SDL2pp::Font> (path, 12);
     } catch (SDL2pp::Exception& e) {
-        return std::make_unique<SDL2pp::Font> ("../assets/Vera.ttf", 12);
+        std::cerr<<"Error font: "<<e.what()<<std::endl; 
+        // return std::make_unique<SDL2pp::Font> ("../assets/Vera.ttf", 12);
     }
     
 }

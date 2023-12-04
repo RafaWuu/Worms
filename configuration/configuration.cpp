@@ -9,8 +9,10 @@ Configuration& Configuration::get_instance() {
 }
 
 Configuration::Configuration() {
+    std::string path = CONFIG_PATH;
     try {
-        YAML::Node config = YAML::LoadFile("../configuration/configuration.yaml");
+        
+        YAML::Node config = YAML::LoadFile(path);
 
         fps = config["fps"].as<float>();
         tick_rate = config["tick_rate"].as<float>();
@@ -25,18 +27,18 @@ Configuration::Configuration() {
 
     } catch (const YAML::Exception& e1) {
         try {
-            YAML::Node config = YAML::LoadFile("configuration/configuration.yaml");
+            // YAML::Node config = YAML::LoadFile("configuration/configuration.yaml");
 
-            fps = config["fps"].as<float>();
-            tick_rate = config["tick_rate"].as<float>();
-            bg_music_volume = config["bg_music_volume"].as<int>();
-            sound_effect_volume = config["sound_effect_volume"].as<int>();
-            round_length = config["round_length"].as<float>();
-            grace_length = config["grace_length"].as<float>();
+            // fps = config["fps"].as<float>();
+            // tick_rate = config["tick_rate"].as<float>();
+            // bg_music_volume = config["bg_music_volume"].as<int>();
+            // sound_effect_volume = config["sound_effect_volume"].as<int>();
+            // round_length = config["round_length"].as<float>();
+            // grace_length = config["grace_length"].as<float>();
 
-            load_weapon_info(config);
-            load_server_states_info(config);
-            load_entities_info(config);
+            // load_weapon_info(config);
+            // load_server_states_info(config);
+            // load_entities_info(config);
         } catch (const YAML::Exception& e2) {
             // If both attempts fail, print the error messages
             std::cerr << "Error yaml: " << e1.what() << std::endl;

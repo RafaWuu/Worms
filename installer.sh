@@ -1,12 +1,4 @@
 #!/bin/bash
-# instalamos dependencias o lo avisamos en el readme sdl, qt, etc
-
-# sudo apt-get install cmake
-# sudo apt-get install libsdl2-dev
-# sudo apt-get install libsdl2-image-dev
-# sudo apt-get install libsdl2-mixer-dev
-# sudo apt-get install qtcreator
-# sudo apt-get install qt5-default
 help() {
   clear
   echo "Options:"
@@ -21,8 +13,8 @@ install(){
 # sudo apt-get install libsdl2-mixer-dev
 # sudo apt-get install qtcreator
 # sudo apt-get install qt5-default
-# git submodule init
-# git submodule update
+git submodule init
+git submodule update
     clear
     cmake .
     sudo make install
