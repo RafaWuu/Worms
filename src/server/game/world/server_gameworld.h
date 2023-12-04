@@ -21,11 +21,12 @@
 
 #include "b2_world.h"
 #include "scenario_filehandler.h"
-#include "server_gameworld_state.h"
 #include "server_player_manager.h"
 #include "server_wind.h"
 
 class Weapon;
+class GameStatus;
+class GameWorldState;
 
 class GameWorld {
 private:
@@ -58,24 +59,23 @@ public:
     void get_dimensions(float& h, float& w);
 
     void create_worm(float x, float y);
-    void create_large_beam(float x, float y, float angle);
-    void create_short_beam(float x, float y, float angle);
+    void create_large_beam(float x, float y, bool flip, float angle);
+    void create_short_beam(float x, float y, bool flip, float angle);
+    void add_explosion_entity(uint16_t projectile_type, float radius, b2Vec2 center);
 
-    void step(int steps);
+    std::shared_ptr<GameStatus> step(int steps);
     void update_entities();
+
+    void add_entity(std::shared_ptr<GameObject> object);
 
     void set_clients_to_worms(const std::vector<uint16_t>& client_vec);
     std::map<uint16_t, std::shared_ptr<GameObjectInfo>> get_entities_info();
+
     std::map<uint16_t, std::shared_ptr<WormInfo>> get_worms_info();
 
     Worm& get_worm(uint8_t worm_id, uint16_t client_id);
-    void add_entity(std::shared_ptr<GameObject> object);
 
     size_t get_worms_number();
-
-    void notify_explosion(uint16_t projectile_type, float radius, b2Vec2 center);
-
-    void manage_round();
 
     void notify_damaged_worm(uint16_t worm_id);
 
@@ -83,11 +83,13 @@ public:
 
     void notify_weapon_used();
 
+    void manage_round();
+
+    void on_new_round();
+
     uint16_t get_active_worm();
 
     void generate_provision();
-
-    void on_new_round();
 
     void update_wind();
 
@@ -96,5 +98,7 @@ public:
     float get_wind_value() const;
 
     float get_round_remaining_time();
+
+    void reap_entities();
 };
 #endif  // WORMS_SERVER_GAMEWORLD_H

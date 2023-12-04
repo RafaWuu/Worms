@@ -2,6 +2,7 @@
 #define NEW_GAME_DIALOG_H
 
 #include <QDialog>
+#include <QStringListModel>
 #include <memory>
 
 #include "../client_client.h"
@@ -26,6 +27,7 @@ private slots:
 private:
     Ui::NewGameDialog* ui;
     std::shared_ptr<Client> client;
+    QStringListModel* model;
 };
 
 #endif  // NEW_GAME_DIALOG_H

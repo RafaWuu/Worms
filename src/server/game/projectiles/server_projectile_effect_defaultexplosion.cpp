@@ -44,7 +44,7 @@ bool ProjectileEffectDefaultExplosion::execute(GameWorld& world, b2Body& body) {
         }
     }
 
-    world.notify_explosion(projectile_type, radius, center);
+    world.add_explosion_entity(projectile_type, radius, center);
     return true;
 }
 

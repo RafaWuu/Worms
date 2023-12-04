@@ -6,6 +6,8 @@
 
 #include <memory>
 
+#include "server_gamestatus.h"
+
 StatusBroadcastMonitor::StatusBroadcastMonitor() = default;
 
 void StatusBroadcastMonitor::add_queue(Queue<std::shared_ptr<GameStatus>>& q, uint16_t client_id) {

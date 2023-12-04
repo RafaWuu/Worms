@@ -58,5 +58,15 @@ public:
                                   uint16_t client_id) override;
 };
 
+class LobbyRequestListScenarios: public LobbyRequest {
+private:
+public:
+    LobbyRequestListScenarios() = default;
+    ~LobbyRequestListScenarios() override = default;
+
+    std::shared_ptr<Game> execute(LobbyMonitor& lobby, ServerProtocol& gp,
+                                  uint16_t client_id) override;
+};
+
 
 #endif  // WORMS_SERVER_LOBBY_REQUEST_H

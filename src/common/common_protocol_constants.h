@@ -14,6 +14,7 @@
 #define LOBBY_CREATE_GAME 01
 #define LOBBY_JOIN_GAME 02
 #define LOBBY_LIST_GAMES 03
+#define LOBBY_LIST_SCENARIOS 04
 
 #define LOBBY_SENDING 89
 
@@ -21,6 +22,7 @@
 #define LOBBY_NEWCLIENT 02
 #define LOBBY_GAMEJOINING 03
 #define LOBBY_GAMELISTING 04
+#define LOBBY_SCENARIOLISTING 05
 
 
 // Juego
@@ -45,6 +47,7 @@
 #define GAME_SCENARIO 2
 #define GAME_LIST_WORMS 3
 #define GAME_STATUS 4
+#define GAME_END 5
 
 // Errores lobby
 
@@ -57,5 +60,9 @@
 #define ONLY_OWNER_CAN_LAUNCH 1
 #define GAME_HAS_NOT_STARTED 2
 #define INVALID_WORM_ID 3
+
+// Otros
+
+#define GAME_DRAW UINT16_MAX
 
 #endif  // WORMS_COMMON_PROTOCOL_CONSTANTS_H

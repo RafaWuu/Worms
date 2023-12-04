@@ -131,4 +131,15 @@ private:
     uint8_t weapon_id;
 };
 
+class GameEventCountdown: public GameEvent {
+
+public:
+    GameEventCountdown(uint16_t client_id, uint8_t worm_id, uint8_t seconds);
+    void execute(EventHandler& e) override;
+
+private:
+    uint8_t worm_id;
+    uint8_t seconds;
+};
+
 #endif  // WORMS_SERVER_GAMEEVENT_H

@@ -67,7 +67,7 @@ bool ProjectileEffectFragmentedExplosion::execute(GameWorld& world, b2Body& body
                 std::make_unique<ProjectileEffectNone>(BAZOOKA_ID), 0.0));
     }
 
-    world.notify_explosion(projectile_type, main_radius, center);
+    world.add_explosion_entity(projectile_type, main_radius, center);
     return true;
 }
 

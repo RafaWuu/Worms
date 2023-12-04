@@ -25,12 +25,23 @@ GameStatusStart::GameStatusStart(GameWorld& world):
 
 void GameStatusStart::serialize(ServerProtocol& protocol) { protocol.send_worms_list(worms_info); }
 
-GameStatusRunning::GameStatusRunning(GameWorld& world): GameStatus(world) {
-    current_worm = world.get_active_worm();
+GameStatusRunning::GameStatusRunning(GameWorld& world, uint16_t current_worm, float remaining_time):
+        current_worm(current_worm), remaining_round_time(remaining_time), GameStatus(world) {
+
     wind = world.get_wind_value();
-    remaining_round_time = world.get_round_remaining_time();
 }
 
 void GameStatusRunning::serialize(ServerProtocol& protocol) {
     protocol.send_status(current_worm, remaining_round_time, wind, entities_info);
+}
+
+GameStatusWaiting::GameStatusWaiting(GameWorld& world): GameStatus(world) { connected = 0; }
+
+void GameStatusWaiting::serialize(ServerProtocol& protocol) {}
+
+GameStatusFinished::GameStatusFinished(GameWorld& world, uint16_t winner):
+        winner(winner), GameStatus(world) {}
+
+void GameStatusFinished::serialize(ServerProtocol& protocol) {
+    protocol.send_finish_status(winner, winner == GAME_DRAW);
 }

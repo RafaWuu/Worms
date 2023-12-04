@@ -9,6 +9,7 @@
 
 #include "server_error.h"
 #include "server_gameevent.h"
+#include "server_gamestatus.h"
 
 EventHandler::EventHandler(GameWorld& game_world, StatusBroadcastMonitor& broadcast,
                            std::vector<uint16_t>& id_list, bool& had_started, uint16_t& game_owner):
@@ -19,7 +20,7 @@ EventHandler::EventHandler(GameWorld& game_world, StatusBroadcastMonitor& broadc
         game_owner(game_owner) {}
 
 
-Worm& EventHandler::get_worm(uint8_t worm_id, uint16_t client_id){
+Worm& EventHandler::get_worm(uint8_t worm_id, uint16_t client_id) {
     Worm& worm = game_world.get_worm(worm_id, client_id);
 
     return worm;

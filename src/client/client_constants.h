@@ -19,6 +19,7 @@
 #define CREATE_CODE 1
 #define JOIN_CODE 2
 #define GAME_LIST_CODE 3
+#define SCENARIO_LIST_CODE 4
 
 #define START_GAME_CODE 1
 

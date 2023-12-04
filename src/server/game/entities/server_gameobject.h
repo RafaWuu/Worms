@@ -14,16 +14,16 @@
 class GameWorld;
 
 enum ObjectType {
-    GROUND = 0x001,
+    BOUNDARY = 0x001,
     BEAM = 0x002,
     WORM = 0x004,
-    BOUNDARY = 0x006,
     WORM_SENSOR = 0x008,
     projectile = 0x0010,
     PROVISION = 0x0020,
     EXPLOSION = 0x0040,
-    MELEE_SENSOR = 0x0080,
+    MELEE_SENSOR = 0x0200,
     PROVISION_SENSOR = 0x0100,
+    GROUND = 0x80,
 
 };
 

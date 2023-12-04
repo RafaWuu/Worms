@@ -42,8 +42,8 @@ Worm::Worm(uint8_t id, GameWorld& world, float pos_x, float pos_y):
     fixtureDef.shape = &dynamicBox;
 
     fixtureDef.filter.categoryBits = WORM;
-    fixtureDef.filter.maskBits =
-            BOUNDARY | projectile | PROVISION | BEAM | EXPLOSION | MELEE_SENSOR | PROVISION_SENSOR;
+    fixtureDef.filter.maskBits = BOUNDARY | projectile | PROVISION | BEAM | EXPLOSION |
+                                 MELEE_SENSOR | PROVISION_SENSOR | WORM_SENSOR | WORM;
 
     fixtureDef.density = config.worm_density;
     fixtureDef.restitution = config.worm_restitution;
@@ -52,6 +52,9 @@ Worm::Worm(uint8_t id, GameWorld& world, float pos_x, float pos_y):
     fixtureDef.userData.pointer = reinterpret_cast<uintptr_t>(this);
 
     body->CreateFixture(&fixtureDef);
+
+    dynamicBox.SetAsBox(config.worm_width / 2 * 1.1, .15, b2Vec2(0, -config.worm_height / 2 + .1),
+                        0);
 
     getLog().write("Creando gusano %hhu, x: %f, y %f: \n", id, pos_x, pos_y);
 
@@ -65,6 +68,7 @@ Worm::Worm(uint8_t id, GameWorld& world, float pos_x, float pos_y):
     recent_health = health;
     recent_speed = 0;
     had_used_weapon = false;
+    deactivate_simulation = false;
 }
 
 void Worm::process_fall(float distance) {
@@ -99,6 +103,16 @@ void Worm::update(GameWorld& world) {
 
     if (had_used_weapon && !weapon_already_used)
         world.notify_weapon_used();
+
+    if (deactivate_simulation)
+        body->SetType(b2_staticBody);
+    else if (frames_to_deactivation == 0)
+        body->SetType(b2_dynamicBody);
+
+    if (frames_to_deactivation == 0) {
+        frames_to_deactivation = 0;
+    } else
+        frames_to_deactivation--;
 }
 
 void Worm::move(MoveDir direction) {
@@ -191,10 +205,17 @@ void Worm::change_weapon(uint8_t weapon_id) {
         current_weapon = weapon_id;
 }
 
+void Worm::set_countdown(uint8_t seconds) {
+    auto it = weapons_map.find(current_weapon);
+    if (it != weapons_map.end())
+        it->second->adjust_projectile_countdown(seconds);
+}
+
 std::unique_ptr<WeaponInfo> Worm::get_current_weapon_info() const {
     auto it = weapons_map.find(current_weapon);
     if (it != weapons_map.end())
         return it->second->get_info();
+    return nullptr;
 }
 
 void Worm::set_active() { state_manager.try_activate(Active, *this); }
@@ -217,3 +238,26 @@ void Worm::clear_attributes() {
 void Worm::set_extra_health() { health += 25; }
 
 bool Worm::worm_is_alive() const { return (state_manager.current & Alive) == Alive; }
+
+void Worm::handle_player_collision(Worm& other) {
+    if ((state_manager.current & Active) == Active)
+        return;
+    if ((other.state_manager.current & Active) != Active)
+        return;
+
+    auto worm_fixture = body->GetFixtureList();
+
+    while (worm_fixture->IsSensor()) worm_fixture = worm_fixture->GetNext();
+
+    deactivate_simulation = true;
+}
+
+
+void Worm::handle_player_end_collision(Worm& other) {
+    auto worm_fixture = body->GetFixtureList();
+
+    while (worm_fixture->IsSensor()) worm_fixture = worm_fixture->GetNext();
+
+    frames_to_deactivation = 5;
+    deactivate_simulation = false;
+}

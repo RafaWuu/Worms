@@ -11,7 +11,7 @@ BeamInfo::BeamInfo(const Beam& beam) {
 
     height = beam.height;
     width = beam.width;
-    angle = beam.angle;
+    angle = -beam.angle;
 }
 
 void BeamInfo::serialize_scenario(BaseProtocol& bp) {

@@ -37,7 +37,7 @@ bool HolyGrenadeWeapon::aim_projectile(b2Body& body, float x, float y, bool faci
 }
 
 bool HolyGrenadeWeapon::power_projectile() {
-    aim_power += config.get_powering_time() / config.get_tick_rate();
+    aim_power += 1 / (config.get_powering_time() * config.get_tick_rate());
 
     if (aim_power > MAX_POWER) {
         aim_power = MAX_POWER;

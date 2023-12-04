@@ -283,6 +283,8 @@ add_executable(server
 		src/server/game/weapons/server_weapon_airattack.h
 		src/server/game/weapons/server_weapon_info_airattack.cpp
 		src/server/game/weapons/server_weapon_info_airattack.h
+        src/server/game/world/server_gameworld_state_finished.cpp
+        src/server/game/world/server_gameworld_state_finished.h
 )
 
 target_include_directories(client PUBLIC
@@ -441,6 +443,8 @@ add_executable(hello_test
 		src/server/game/weapons/server_weapon_airattack.h
 		src/server/game/weapons/server_weapon_info_airattack.cpp
 		src/server/game/weapons/server_weapon_info_airattack.h
+        src/server/game/world/server_gameworld_state_finished.cpp
+        src/server/game/world/server_gameworld_state_finished.h
 )
 
 target_link_libraries(hello_test GTest::gtest_main GTest::gmock ${BOX2D_LIBRARY_PATH} yaml-cpp)

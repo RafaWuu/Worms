@@ -72,6 +72,8 @@ public:
 
 
     EventHandler event_handler;
+
+    LobbyState request_scenarios_list();
 };
 
 #endif

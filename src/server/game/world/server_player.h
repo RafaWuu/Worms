@@ -10,11 +10,11 @@
 #include "../entities/server_worm.h"
 
 class Player {
-    uint16_t client_id;
     std::vector<Worm*> worms;
     std::vector<Worm*>::iterator active_worm;
 
 public:
+    uint16_t client_id;
     explicit Player(uint16_t client_id);
 
     void assign_worm(Worm& worm, bool extra_health);

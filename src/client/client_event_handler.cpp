@@ -8,6 +8,7 @@
 #include <memory>
 #include <ostream>
 
+#include "commands/change_countdown.h"
 #include "commands/change_weapon.h"
 #include "commands/client_aim.h"
 #include "commands/client_fire.h"
@@ -17,7 +18,6 @@
 #include "commands/client_rollback.h"
 #include "commands/client_stop_aim.h"
 #include "commands/client_stop_moving.h"
-#include "commands/change_countdown.h"
 #include "graphics/weapons/weapon_selector.h"
 #include "sound/sound_controller.h"
 
@@ -28,16 +28,14 @@ EventHandler::EventHandler() {
 }
 
 std::shared_ptr<Command> EventHandler::handle(const SDL_Event& event,
-                                              WeaponSelector& weapon_selector, SoundController& sound_controller) {
+                                              WeaponSelector& weapon_selector,
+                                              SoundController& sound_controller) {
     if (event.type == SDL_QUIT) {
         throw(QuitGameClientInput());
     }
 
     if (event.type == SDL_KEYDOWN) {
         switch (event.key.keysym.sym) {
-            case SDLK_ESCAPE:
-            case SDLK_q:
-                throw(QuitGameClientInput());
             case SDLK_a:
                 return jump();
             case SDLK_s:
@@ -78,7 +76,8 @@ std::shared_ptr<Command> EventHandler::handle(const SDL_Event& event,
             if (weapon_selector.mouse_inside(event.button.x, event.button.y)) {
                 sound_controller.play_sound(CURSOR_SELECT);
 
-                uint8_t weapon_id = weapon_selector.get_weapon_index(event.button.x, event.button.y);
+                uint8_t weapon_id =
+                        weapon_selector.get_weapon_index(event.button.x, event.button.y);
                 return change_weapon(weapon_id);
             }
             if (!aiming)
@@ -110,7 +109,8 @@ std::shared_ptr<Command> EventHandler::change_weapon(int weapon_id) {
     return std::make_shared<ChangeWeapon>(weapon_id);
 }
 
-std::shared_ptr<Command> EventHandler::change_countdown(int countdown, SoundController& sound_controller) {
+std::shared_ptr<Command> EventHandler::change_countdown(int countdown,
+                                                        SoundController& sound_controller) {
     sound_controller.play_sound(CURSOR_SELECT);
     std::cout << countdown << std::endl;
     return std::make_shared<ChangeCountdown>(countdown);

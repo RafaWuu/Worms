@@ -14,6 +14,7 @@
 #include "../configuration/configuration.h"
 
 #include "server_error.h"
+#include "server_gamestatus.h"
 #include "server_statusbroadcast_monitor.h"
 
 Game::Game(uint16_t game_id, const std::string& scenario, uint16_t owner_id_,
@@ -55,10 +56,8 @@ void Game::run() {
             }
 
             if (had_started) {
-                game_world.update_entities();
-                game_world.step(1);
-
-                broadcastMonitor.send_status_toall(std::make_shared<GameStatusRunning>(game_world));
+                auto status = game_world.step(1);
+                broadcastMonitor.send_status_toall(status);
             }
 
             auto end = std::chrono::high_resolution_clock::now();
@@ -82,8 +81,13 @@ void Game::run() {
             std::cerr << e.what() << std::endl;
             broadcastMonitor.send_status(e.client_id,
                                          std::make_shared<GameStatusError>(e.code, game_world));
+            is_alive = false;
         } catch (ClosedSocket& e) {
             std::cerr << e.what() << std::endl;
+            is_alive = false;
+        } catch (YAML::Exception& e) {
+            std::cerr << e.what() << std::endl;
+            is_alive = false;
         }
     }
 }

@@ -28,6 +28,7 @@ enum Request {
     CREATE_GAME = LOBBY_CREATE_GAME,
     JOIN_GAME = LOBBY_JOIN_GAME,
     LIST_GAMES = LOBBY_LIST_GAMES,
+    LIST_SCENARIOS = LOBBY_LIST_SCENARIOS,
 };
 
 class ServerProtocol {
@@ -81,6 +82,12 @@ public:
     std::unique_ptr<GameEvent> recv_power(uint16_t id_client);
 
     std::unique_ptr<GameEvent> recv_change_weapon(uint16_t id_client);
+
+    std::unique_ptr<GameEvent> recv_countdown(uint16_t id_client);
+
+    void send_finish_status(uint16_t winner_id, bool draw);
+
+    void send_scenarioslist(std::map<std::string, uint16_t>& map);
 };
 
 

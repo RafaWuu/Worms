@@ -25,6 +25,8 @@ void Wind::update_wind() {
 }
 
 void Wind::affect_projectile(b2Body& body) {
-    float impulse_x = body.GetMass() * (wind - body.GetLinearVelocity().x);
+    float vel_x = wind > 0 ? fmax(wind - body.GetLinearVelocity().x, 0.f) :
+                             fmin(wind - body.GetLinearVelocity().x, 0.f);
+    float impulse_x = body.GetMass() * vel_x;
     body.ApplyLinearImpulse(b2Vec2(impulse_x, 0), body.GetWorldCenter(), true);
 }

@@ -22,3 +22,7 @@ void GameWorldWaitingState::handle_entity_moving() {}
 Worm& GameWorldWaitingState::get_active_worm() { return worm; }
 
 float GameWorldWaitingState::get_remaining_time() { return 0; }
+
+std::shared_ptr<GameStatus> GameWorldWaitingState::get_status() {
+    return std::make_shared<GameStatusWaiting>(world);
+}

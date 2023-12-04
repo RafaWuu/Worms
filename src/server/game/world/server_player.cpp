@@ -16,13 +16,24 @@ void Player::assign_worm(Worm& worm, bool extra_health) {
 }
 
 Worm& Player::get_next_alive_worm() {
-    auto worm = active_worm;
-    ++active_worm;
-
     if (active_worm == worms.end())
         active_worm = worms.begin();
 
-    return **worm;
+    auto worm = std::find_if(active_worm, worms.end(),
+                             [&](const Worm* worm) { return worm->worm_is_alive(); });
+
+    if (worm != worms.end()) {
+        ++active_worm;
+        return **worm;
+    }
+
+    worm = std::find_if(worms.begin(), active_worm,
+                        [&](const Worm* worm) { return worm->worm_is_alive(); });
+
+    if (worm != worms.end()) {
+        ++active_worm;
+        return **worm;
+    }
 }
 
 bool Player::is_any_worm_alive() const {

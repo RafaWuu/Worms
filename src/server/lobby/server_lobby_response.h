@@ -47,4 +47,15 @@ public:
 
     void send(ServerProtocol& gp) override;
 };
+
+class LobbyResponseScenariosList: LobbyResponse {
+private:
+    std::map<std::string, uint16_t>& scenarios;
+
+public:
+    explicit LobbyResponseScenariosList(std::map<std::string, uint16_t>& scenarios);
+
+    void send(ServerProtocol& gp) override;
+};
+
 #endif  // WORMS_SERVER_LOBBY_RESPONSE_H

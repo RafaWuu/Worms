@@ -60,7 +60,25 @@ private:
     float remaining_round_time;
 
 public:
-    explicit GameStatusRunning(GameWorld& world);
+    GameStatusRunning(GameWorld& world, uint16_t current_worm, float remaining_time);
+    void serialize(ServerProtocol& protocol) override;
+};
+
+class GameStatusWaiting: public GameStatus {
+private:
+    uint16_t connected;
+
+public:
+    explicit GameStatusWaiting(GameWorld& world);
+    void serialize(ServerProtocol& protocol) override;
+};
+
+class GameStatusFinished: public GameStatus {
+private:
+    uint16_t winner;
+
+public:
+    explicit GameStatusFinished(GameWorld& world, uint16_t winner);
     void serialize(ServerProtocol& protocol) override;
 };
 #endif  // WORMS_SERVER_GAMESTATUS_H

@@ -12,7 +12,7 @@
 
 #include "../../common/common_queue.h"
 
-#include "server_gamestatus.h"
+class GameStatus;
 
 class StatusBroadcastMonitor {
 

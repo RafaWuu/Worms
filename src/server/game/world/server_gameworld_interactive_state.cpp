@@ -56,3 +56,7 @@ float GameWorldInteractiveState::get_remaining_time() {
     float remaining = (round_length - ticks) / Configuration::get_instance().get_tick_rate();
     return fmax(remaining, 0.0f);
 }
+
+std::shared_ptr<GameStatus> GameWorldInteractiveState::get_status() {
+    return std::make_shared<GameStatusRunning>(world, worm.id, get_remaining_time());
+}

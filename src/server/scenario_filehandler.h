@@ -22,7 +22,7 @@ public:
 
     bool scenario_exists(const std::string& name);
 
-    std::vector<std::string> get_names();
+    std::map<std::string, uint16_t> get_info();
 
     void get_scenario(GameWorld& game, const std::string& name);
 };

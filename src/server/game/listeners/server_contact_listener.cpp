@@ -19,6 +19,16 @@ void ContactListener::BeginContact(b2Contact* contact) {
 
     auto game_objectB = (GameObject*)fixtureUserDataB;
 
+
+    if (game_objectA->get_id() == WORM && game_objectB->get_id() == WORM) {
+        auto wormA = dynamic_cast<Worm*>(game_objectA);
+        auto wormB = dynamic_cast<Worm*>(game_objectB);
+
+        wormA->handle_player_collision(*wormB);
+        wormB->handle_player_collision(*wormA);
+    }
+
+
     // Worm toca el piso
 
     if (game_objectA->get_id() == WORM_SENSOR) {
@@ -85,6 +95,16 @@ void ContactListener::EndContact(b2Contact* contact) {
     auto game_objectA = (GameObject*)fixtureUserDataA;
 
     auto game_objectB = (GameObject*)fixtureUserDataB;
+
+    if (game_objectA->get_id() == WORM && game_objectB->get_id() == WORM) {
+        auto wormA = dynamic_cast<Worm*>(game_objectA);
+        auto wormB = dynamic_cast<Worm*>(game_objectB);
+
+
+        wormA->handle_player_end_collision(*wormB);
+        wormB->handle_player_end_collision(*wormA);
+    }
+
 
     if (game_objectA->get_id() == WORM_SENSOR) {
         auto worm_sensor = dynamic_cast<WormSensor*>(game_objectA);

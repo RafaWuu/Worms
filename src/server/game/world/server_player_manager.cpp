@@ -4,6 +4,8 @@
 
 #include "server_player_manager.h"
 
+#define DRAW UINT16_MAX
+
 PlayerManager::PlayerManager(): players(), active_player() {}
 
 void PlayerManager::assign_worms_to_players(const std::vector<uint16_t>& clients,
@@ -39,14 +41,35 @@ bool PlayerManager::game_ended() {
 }
 
 Worm& PlayerManager::get_next_worm_from_client() {
-    if (!active_player->is_any_worm_alive())
-        ++active_player;
-
-    auto& worm = active_player->get_next_alive_worm();
-    ++active_player;
-
     if (active_player == players.end())
         active_player = players.begin();
 
-    return worm;
+    auto player = std::find_if(active_player, players.end(),
+                               [&](Player player) { return player.is_any_worm_alive(); });
+
+    if (player != players.end()) {
+        ++active_player;
+        return player->get_next_alive_worm();
+    }
+
+    player = std::find_if(players.begin(), active_player,
+                          [&](Player player) { return player.is_any_worm_alive(); });
+
+    if (player != players.end()) {
+        ++active_player;
+        return player->get_next_alive_worm();
+    }
+}
+
+uint16_t PlayerManager::last_client_alive() {
+    if (players.size() == 1)
+        return players[0].client_id;
+
+    auto player = std::find_if(players.begin(), players.end(),
+                               [&](const Player& player) { return player.is_any_worm_alive(); });
+
+    if (player != players.end())
+        return player->get_next_alive_worm().client_id;
+
+    return DRAW;
 }

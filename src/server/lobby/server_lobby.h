@@ -21,6 +21,7 @@ class Game;
 class LobbyMonitor {
 private:
     Queue<uint16_t>& reap_queue;
+    ScenarioFileHandler scenario_file_handler;
     std::mutex mutex;
     std::map<uint8_t, std::shared_ptr<Game>> games_map;
     uint16_t id;
@@ -38,6 +39,8 @@ public:
     void close_game(uint16_t id);
 
     void close_all();
+
+    std::map<std::string, uint16_t> list_scenarios();
 };
 
 #endif  // WORMS_SERVER_LOBBY_H

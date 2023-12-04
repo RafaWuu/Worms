@@ -46,6 +46,9 @@ std::unique_ptr<LobbyRequest> ServerProtocol::recv_lobby_msg() {
             getLog().write("Server recibe pedido de listar partidas");
 
             return std::make_unique<LobbyRequestListGames>();
+        case Request::LIST_SCENARIOS:
+            getLog().write("Server recibe pedido de listar escenarios");
+            return std::make_unique<LobbyRequestListScenarios>();
         default:
             throw InvalidMsg();
     }
@@ -104,6 +107,23 @@ void ServerProtocol::send_gameslist(std::vector<GameInfo>& games_vec) {
     }
 }
 
+void ServerProtocol::send_scenarioslist(std::map<std::string, uint16_t>& map) {
+    baseProtocol.send_1byte_number(LOBBY_SENDING);
+    baseProtocol.send_1byte_number(LOBBY_SCENARIOLISTING);
+
+    baseProtocol.send_2byte_number(map.size());
+
+    getLog().write("Server enviando lista de %hu escenarios \n", map.size());
+
+    for (auto& scenario: map) {
+        baseProtocol.send_2byte_number(scenario.first.length());
+        std::vector<char> vec(scenario.first.begin(), scenario.first.end());
+        baseProtocol.send_char_vector(vec);
+
+        baseProtocol.send_1byte_number(scenario.second);
+    }
+}
+
 std::unique_ptr<GameEvent> ServerProtocol::recv_game_msg(uint16_t id_client) {
     u_int8_t status = 0;
     baseProtocol.recv_1byte_number(status);
@@ -137,7 +157,7 @@ std::unique_ptr<GameEvent> ServerProtocol::recv_game_msg(uint16_t id_client) {
         case Input::DirAttack:
             return recv_aim(id_client);
         case Input::CountDown:
-            return recv_aim(id_client);
+            return recv_countdown(id_client);
         case Input::ChangeWeapon:
             return recv_change_weapon(id_client);
 
@@ -241,6 +261,17 @@ std::unique_ptr<GameEvent> ServerProtocol::recv_change_weapon(uint16_t id_client
     return std::make_unique<GameEventChangeWeapon>(id_client, id_worm, id_weapon);
 }
 
+std::unique_ptr<GameEvent> ServerProtocol::recv_countdown(uint16_t id_client) {
+    uint8_t id_worm;
+    uint8_t countdown;
+
+    baseProtocol.recv_1byte_number(id_worm);
+    baseProtocol.recv_1byte_number(countdown);
+
+
+    return std::make_unique<GameEventCountdown>(id_client, id_worm, countdown);
+}
+
 void ServerProtocol::send_game_errormessage(uint8_t error_code) {
     baseProtocol.send_1byte_number(GAME_SENDING);
     baseProtocol.send_1byte_number(GAME_ERROR);
@@ -299,6 +330,13 @@ void ServerProtocol::send_status(uint16_t current_worm, float time, float wind,
 
     // getLog().write("Server enviando estado de partida, %hhu gusanos vivos \n", worms_vec.size());
 }
+
+void ServerProtocol::send_finish_status(uint16_t winner_id, bool draw) {
+    baseProtocol.send_1byte_number(GAME_SENDING);
+    baseProtocol.send_1byte_number(GAME_END);
+    baseProtocol.send_2byte_number(winner_id);
+}
+
 
 Log& ServerProtocol::getLog() {
     static Log log_(SERVERPROTOCOL_LOG_SRC);
