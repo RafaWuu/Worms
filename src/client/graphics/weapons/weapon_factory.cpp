@@ -21,5 +21,7 @@ std::unique_ptr<Weapon> WeaponFactory::create_weapon(uint8_t weapon_id) {
         return std::make_unique<BaseballBat>();
     if (weapon_id == TELEPORTATION_ID)
         return std::make_unique<Teleportation>();
+    if (weapon_id == AIR_ATTACK_ID)
+        return std::make_unique<Airstrike>();
     return std::make_unique<Bazooka>();
 }

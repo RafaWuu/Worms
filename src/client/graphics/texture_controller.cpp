@@ -43,6 +43,7 @@ TextureController::TextureController(SDL2pp::Renderer& renderer_): renderer(rend
             {DYNAMITE_AIMING, "wdynbak.png"},
             {DYNAMITE_PROJECTILE, "dynamite.png"},
             {EXPLOSION_CIRCLE, "circle50.png"},
+            {AIR_STRIKE_IDLE, "wair.png"},
     };
 
     std::map<AnimationState, std::string> textures_yellow_bg = {

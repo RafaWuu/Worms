@@ -127,6 +127,7 @@ set(CLIENT_SOURCE
 	src/client/graphics/weapons/weapon_selector.cpp
 	src/client/sound/sound_controller.cpp
 		src/client/graphics/weapons/teleportation.cpp
+		src/client/graphics/weapons/airstrike.cpp
 		src/client/graphics/weapons/teleportation.h
 		src/client/game/provision.cpp
 		src/client/game/provision.h

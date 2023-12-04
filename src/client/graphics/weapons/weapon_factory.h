@@ -16,6 +16,7 @@
 #include "banana.h"
 #include "dynamite.h"
 #include "baseball_bat.h"
+#include "airstrike.h"
 
 #include "weapon.h"
 

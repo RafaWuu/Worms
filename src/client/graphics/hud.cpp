@@ -1,4 +1,7 @@
 #include "hud.h"
+#include <memory>
+#include <SDL2pp/Exception.hh>
+#include <SDL2pp/SDL.hh>
 
 Hud::Hud(SDL2pp::Renderer& renderer, std::map<uint16_t, uint16_t> worms_distribution):
         renderer(renderer),
@@ -23,6 +26,16 @@ void Hud::update_ammo(int worm_id, int ammo) {
     }
 }
 void Hud::update_current_worm(int worm_id) { worm_id = current_worm; }
+
+static std::unique_ptr<SDL2pp::Font> get_font() {
+    try {
+        return std::make_unique<SDL2pp::Font> ("assets/Vera.ttf", 12);
+    } catch (SDL2pp::Exception& e) {
+        return std::make_unique<SDL2pp::Font> ("../assets/Vera.ttf", 12);
+    }
+    
+}
+
 void Hud::render_hp() {
     // client_hp --> client_id:{worm_id:worm_hp,..,...}
     offset = 0;
@@ -31,11 +44,12 @@ void Hud::render_hp() {
         for (auto worm_id_hp: client_worm_id.second) {
             hp += worm_id_hp.second;
         }
-        SDL2pp::Font font("../assets/Vera.ttf", 12);
+
+        std::unique_ptr<SDL2pp::Font> font = get_font();
         std::string text =
                 "Player " + std::to_string(client_worm_id.first) + ": " + std::to_string(hp);
         SDL2pp::Texture hp_sprite(renderer,
-                                  font.RenderText_Blended(text, SDL2pp::Color{255, 0, 0, 255}));
+                                  font->RenderText_Blended(text, SDL2pp::Color{255, 0, 0, 255}));
 
         renderer.Copy(hp_sprite, SDL2pp::NullOpt,
                       SDL2pp::Rect(0, hp_sprite.GetHeight() * offset, hp_sprite.GetWidth(),
@@ -45,10 +59,11 @@ void Hud::render_hp() {
 }
 
 void Hud::render_ammo() {
-    SDL2pp::Font font("../assets/Vera.ttf", 12);
+    std::unique_ptr<SDL2pp::Font> font = get_font();
+    
     std::string text = "Ammo: " + std::to_string(0);
     SDL2pp::Texture ammo_sprite(renderer,
-                                font.RenderText_Blended(text, SDL2pp::Color{255, 0, 0, 255}));
+                                font->RenderText_Blended(text, SDL2pp::Color{255, 0, 0, 255}));
 
     renderer.Copy(ammo_sprite, SDL2pp::NullOpt,
                   SDL2pp::Rect(0, ammo_sprite.GetWidth() * offset, ammo_sprite.GetWidth(),

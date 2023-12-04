@@ -47,6 +47,7 @@ enum AnimationState {
     BAT_AIMING,
     TELEPORTATION_IDLE,
     TELEPORTATION_AIMING,
+    AIR_STRIKE_IDLE,
     // Explosion
     EXPLOSION_CIRCLE,
     EXPLOSION_ELIPSE,
