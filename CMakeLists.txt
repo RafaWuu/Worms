@@ -9,6 +9,10 @@
 # You should have received a copy of the CC0 Public Domain Dedication along with
 # this software. If not, see <http://creativecommons.org/publicdomain/zero/1.0/>.
 
+set(CONFIG_FILE "/var/configurations.yaml")
+set(SCENARIO_FILE "/var/scenarios.yaml")
+set(ASSETS_DIR "/var/Worms/assets")
+
 cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
 project(worms LANGUAGES CXX)
 
@@ -288,6 +292,7 @@ add_executable(server
         src/server/game/world/server_gameworld_state_finished.cpp
         src/server/game/world/server_gameworld_state_finished.h
 )
+target_compile_definitions(client_test PUBLIC ASSETS_PATH="${ASSETS_DIR}")
 
 target_include_directories(client PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/common
@@ -296,6 +301,9 @@ target_include_directories(client PUBLIC
 
 )
 
+target_compile_definitions(hello_test PUBLIC CONFIG_PATH="${CONFIG_FILE}"
+										SCENARIO_PATH="${SCENARIO_FILE}"
+)
 target_include_directories(server PUBLIC
 		${CMAKE_CURRENT_SOURCE_DIR}/src/common
 		${CMAKE_CURRENT_SOURCE_DIR}/src/server
@@ -448,7 +456,9 @@ add_executable(hello_test
         src/server/game/world/server_gameworld_state_finished.cpp
         src/server/game/world/server_gameworld_state_finished.h
 )
-
+target_compile_definitions(hello_test PUBLIC CONFIG_PATH="${CONFIG_FILE}"
+										SCENARIO_PATH="${SCENARIO_FILE}"
+)
 target_link_libraries(hello_test GTest::gtest_main GTest::gmock ${BOX2D_LIBRARY_PATH} yaml-cpp)
 
 target_include_directories(hello_test PUBLIC
@@ -477,6 +487,12 @@ target_include_directories(client_test PUBLIC
 		${CMAKE_CURRENT_SOURCE_DIR}/test
 )
 
+target_compile_definitions(client_test PUBLIC ASSETS_PATH="${ASSETS_DIR}")
 target_link_libraries(client_test PUBLIC GTest::gtest_main GTest::gmock SDL2pp::SDL2pp Qt5::Widgets Qt5::Core yaml-cpp)
 
 add_test(NAME ClientTest COMMAND client_test)
+
+#installer
+INSTALL(TARGETS server client DESTINATION /usr/bin)
+INSTALL(DIRECTORY assets DESTINATION /var/Worms)
+INSTALL(FILES configuration/configuration.yaml scenarios/scenarios.yaml DESTINATION /var/Worms)
