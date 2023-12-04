@@ -45,3 +45,14 @@ std::shared_ptr<Game> LobbyRequestListGames::execute(LobbyMonitor& lobby, Server
 
     return nullptr;
 }
+
+std::shared_ptr<Game> LobbyRequestListScenarios::execute(LobbyMonitor& lobby, ServerProtocol& gp,
+                                                         uint16_t client_id) {
+
+    auto scenarios = lobby.list_scenarios();
+
+    auto response = LobbyResponseScenariosList(scenarios);
+    response.send(gp);
+
+    return nullptr;
+}

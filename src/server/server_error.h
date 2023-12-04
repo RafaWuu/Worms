@@ -17,7 +17,6 @@ struct InvalidMsg: public LibError {
     explicit InvalidMsg(): LibError(EBADRQC, "The message is invalid") {}
 
     void send(ServerProtocol& protocol) { protocol.send_lobby_errormessage(0); }
-
 };
 
 struct LobbyError: public LibError {
@@ -65,6 +64,10 @@ struct InvalidWormIdGameError: public GameError {
     explicit InvalidWormIdGameError(uint16_t client_id):
             GameError(INVALID_WORM_ID, "Error in %hu request,  the worm requested cant be moved",
                       client_id) {}
+};
+
+struct FinishedGameError: public GameError {
+    FinishedGameError(): GameError(INVALID_WORM_ID, "Closing finished game", 0) {}
 };
 
 #endif  // WORMS_SERVER_ERROR_H

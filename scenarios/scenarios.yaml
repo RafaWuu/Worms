@@ -12,39 +12,48 @@ scenarios:
               type: large
               pos_x:   15.0
               pos_y:  10.0
+              flip: false
               angle: 0.0
             -
               type: large
               pos_x: 3.0
               pos_y: 5.0
+              flip: false
               angle: 0.0
             - type: large
               pos_x: 9.0
               pos_y: 10.0
+              flip: false
               angle: 0.0
             - type: large
               pos_x: 11.6
               pos_y: 7.0
+              flip: false
               angle: 90.0
             - type: large
               pos_x: 6.4
               pos_y: 7.0
+              flip: false
               angle: 90.0
             - type: large
               pos_x: 9.0
               pos_y: 11.0
+              flip: false
               angle: 0.0
             - type: large
               pos_x: 9.0
               pos_y: 4.0
+              flip: false
               angle: 0.0
             - type: large
               pos_x: 18.0
               pos_y: 8.5
+              flip: false
               angle: 90.0
             - type: large
               pos_x: 18.0
               pos_y: 4
+              flip: false
               angle: 0
         worms:
             -
@@ -54,5 +63,48 @@ scenarios:
               pos_x: 15.0
               pos_y: 1.0
             -
-              pos_x: 12.0
+              pos_x: 13.0
               pos_y: 7.0
+            -
+              pos_x: 15.0
+              pos_y: 7.0
+            -
+              pos_x: 7.0
+              pos_y: 1.0
+    angles:
+      width: 40.0
+      height: 40.0 # Altura desde el suelo
+      beams:
+        -
+          type: large
+          pos_x: 8.0
+          pos_y: 30
+          flip: true
+          angle: 30.0
+        -
+          type: short
+          pos_x:   10.5
+          pos_y:  30
+          flip: false
+          angle: 0
+        -
+          type: large
+          pos_x: 15.0
+          pos_y: 30
+          flip: false
+          angle: 0.0
+        - type: short
+          pos_x: 19.5
+          pos_y: 30.0
+          flip: false
+          angle: 0.0
+        - type: large
+          pos_x: 22.5
+          pos_y: 30.0
+          flip: false
+          angle: 60.0
+
+      worms:
+        -
+          pos_x: 15.0
+          pos_y: 28.0

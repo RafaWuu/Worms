@@ -17,6 +17,7 @@
 #include "b2_edge_shape.h"
 #include "server_error.h"
 #include "server_gameworld_simulationstate.h"
+#include "server_gameworld_state.h"
 #include "server_gameworld_state_waiting.h"
 
 #define GRAVITY_Y (-9.8)
@@ -47,29 +48,34 @@ void GameWorld::create_worm(float x, float y) {
     add_entity(std::make_shared<WormSensor>(worm.get()));
 }
 
-void GameWorld::create_large_beam(float x, float y, float angle) {
+void GameWorld::create_large_beam(float x, float y, bool flip, float angle) {
     add_entity(std::make_shared<Beam>(&b2_world, x, -y, config.beam_large_width, config.beam_height,
-                                      angle));
+                                      flip, angle));
 }
 
-void GameWorld::create_short_beam(float x, float y, float angle) {
+void GameWorld::create_short_beam(float x, float y, bool flip, float angle) {
     add_entity(std::make_shared<Beam>(&b2_world, x, -y, config.beam_small_width, config.beam_height,
-                                      angle));
+                                      flip, angle));
 }
 
-void GameWorld::step(int steps) {
+std::shared_ptr<GameStatus> GameWorld::step(int steps) {
     for (int32 i = 0; i < steps; ++i) {
-        // Instruct the world to perform a single step of simulation.
-        // It is generally best to keep the time step and iterations fixed.
+        update_entities();
+        reap_entities();
         b2_world.Step(1.0f / config.get_tick_rate(), 8, 3);
     }
+
+    manage_round();
+    return game_state->get_status();
 }
 
 void GameWorld::update_entities() {
     for (auto& e: entities_map) {
         e.second->update(*this);
     }
+}
 
+void GameWorld::reap_entities() {
     for (auto it = entities_map.cbegin(); it != entities_map.cend();) {
         if (it->second->is_dead) {
             it->second->delete_body();
@@ -78,14 +84,12 @@ void GameWorld::update_entities() {
             ++it;
         }
     }
-
-    manage_round();
 }
 
 void GameWorld::manage_round() {
     this->game_state = this->game_state->update();
     if (!this->game_state)
-        throw;  // Todo: Crear error
+        throw FinishedGameError();
 }
 
 void GameWorld::set_clients_to_worms(const std::vector<uint16_t>& client_vec) {
@@ -151,7 +155,7 @@ GameWorld::~GameWorld() {}
 
 size_t GameWorld::get_worms_number() { return worm_map.size(); }
 
-void GameWorld::notify_explosion(uint16_t projectile_type, float radius, b2Vec2 center) {
+void GameWorld::add_explosion_entity(uint16_t projectile_type, float radius, b2Vec2 center) {
     add_entity(std::make_shared<Explosion>(projectile_type, radius, center));
 }
 

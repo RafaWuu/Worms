@@ -8,6 +8,7 @@
 
 #include "server_gameworld.h"
 #include "server_gameworld_interactive_state.h"
+#include "server_gameworld_state_finished.h"
 
 GameWorldSimulationState::GameWorldSimulationState(PlayerManager& player_manager, Worm& worm,
                                                    bool grace_period, GameWorld& world):
@@ -31,7 +32,8 @@ std::unique_ptr<GameWorldState> GameWorldSimulationState::update() {
     if (all_entities_had_stopped) {
         worm.set_deactive();
         if (player_manager.game_ended())
-            return nullptr;
+            return std::make_unique<GameWorldFinishedState>(player_manager, worm, world,
+                                                            player_manager.last_client_alive());
 
         world.on_new_round();
         return std::make_unique<GameWorldInteractiveState>(player_manager, world);
@@ -52,4 +54,8 @@ Worm& GameWorldSimulationState::get_active_worm() { return worm; }
 float GameWorldSimulationState::get_remaining_time() {
     float remaining = (round_length - ticks) / Configuration::get_instance().get_tick_rate();
     return fmax(remaining, 0.0f);
+}
+
+std::shared_ptr<GameStatus> GameWorldSimulationState::get_status() {
+    return std::make_shared<GameStatusRunning>(world, worm.id, get_remaining_time());
 }

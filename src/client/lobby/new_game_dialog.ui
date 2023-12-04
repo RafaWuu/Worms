@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>NewGameDialog</class>
+
  <widget class="QDialog" name="NewGameDialog">
   <property name="geometry">
    <rect>
@@ -13,6 +14,16 @@
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
+  <widget class="QListView" name="scenario_list">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>20</y>
+     <width>461</width>
+     <height>201</height>
+    </rect>
+   </property>
+  </widget>
   <widget class="QLabel" name="label_escenario">
    <property name="geometry">
     <rect>

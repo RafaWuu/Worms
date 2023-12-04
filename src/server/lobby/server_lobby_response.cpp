@@ -17,3 +17,8 @@ void LobbyResponseGame::send(ServerProtocol& gp) { gp.send_gameid_message(id); }
 LobbyResponseGamesList::LobbyResponseGamesList(std::vector<GameInfo>& games): games(games) {}
 
 void LobbyResponseGamesList::send(ServerProtocol& gp) { gp.send_gameslist(games); }
+
+LobbyResponseScenariosList::LobbyResponseScenariosList(std::map<std::string, uint16_t>& scenarios):
+        scenarios(scenarios) {}
+
+void LobbyResponseScenariosList::send(ServerProtocol& gp) { gp.send_scenarioslist(scenarios); }

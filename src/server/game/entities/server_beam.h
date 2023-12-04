@@ -21,9 +21,12 @@ private:
 
 public:
     friend class BeamInfo;
-    Beam(b2World* b2_world, float center_x, float center_y, float width, float height, float angle);
+    Beam(b2World* b2_world, float center_x, float center_y, float width, float height, bool flip,
+         float angle);
     ObjectType get_id() const override;
     std::unique_ptr<GameObjectInfo> get_status() const override;
+
+    bool is_walkable();
 };
 
 #endif  // WORMS_SERVER_BEAM_H

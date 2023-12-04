@@ -23,6 +23,7 @@
 #define BEAM_TYPE_NODE "type"
 #define BEAM_ANGLE_NODE "angle"
 #define BEAM_TYPE_LARGE "large"
+#define BEAM_FLIP_NODE "flip"
 
 
 ScenarioFileHandler::ScenarioFileHandler() {
@@ -51,13 +52,14 @@ bool ScenarioFileHandler::scenario_exists(const std::string& name) {
     return false;
 }
 
-std::vector<std::string> ScenarioFileHandler::get_names() {
-    std::vector<std::string> list;
+std::map<std::string, uint16_t> ScenarioFileHandler::get_info() {
+    std::map<std::string, uint16_t> map;
 
-    std::transform(config[SCENARIOS_NODE].begin(), config[SCENARIOS_NODE].end(), list.begin(),
-                   [](const auto& node) { return node.first.template as<std::string>(); });
+    for (auto node: config[SCENARIOS_NODE]) {
+        map.emplace(node.first.template as<std::string>(), node.second[WORMS_NODE].size());
+    }
 
-    return list;
+    return map;
 }
 
 void ScenarioFileHandler::get_scenario(GameWorld& game, const std::string& name) {
@@ -81,10 +83,11 @@ void ScenarioFileHandler::get_scenario(GameWorld& game, const std::string& name)
         auto x = beam[BEAM_POS_X_NODE].as<float>();
         auto y = beam[BEAM_POS_Y_NODE].as<float>();
         auto angle = beam[BEAM_ANGLE_NODE].as<float>();
+        auto flip = beam[BEAM_FLIP_NODE].as<bool>();
 
         if (type == BEAM_TYPE_LARGE)
-            game.create_large_beam(x, y, angle);
+            game.create_large_beam(x, y, flip, angle);
         else
-            game.create_short_beam(x, y, angle);
+            game.create_short_beam(x, y, flip, angle);
     }
 }

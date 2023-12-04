@@ -7,8 +7,8 @@
 #include <utility>
 #include <vector>
 
-#include <SDL2pp/SDL2pp.hh>
 #include <SDL2pp/Mixer.hh>
+#include <SDL2pp/SDL2pp.hh>
 #include <unistd.h>
 
 #include "../common/common_liberror.h"
@@ -74,6 +74,11 @@ LobbyState Client::request_game_list() {
     return protocol.receive_game_list();
 }
 
+LobbyState Client::request_scenarios_list() {
+    protocol.request_scenarios_list();
+    return protocol.receive_scenarios_list();
+}
+
 void Client::receive_scenario() { this->scenario = protocol.receive_scenario(); }
 
 void Client::get_id_assigned_worm(const std::map<uint16_t, uint16_t>& distribution) {
@@ -111,7 +116,8 @@ int Client::start() {
     receiver->start();
 
     SDL2pp::SDL sdl(SDL_INIT_VIDEO | SDL_INIT_AUDIO);  //--->crear clase que maneje la vista
-    SDL2pp::Mixer mixer(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 4096); // audio
+    SDL2pp::Mixer mixer(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS,
+                        4096);  // audio
     SDL2pp::SDLTTF sdl_ttf;
     // Create main window: 640x480 dimensions, resizable, "SDL2pp demo" title
     SDL2pp::Window window("Worms", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH,
@@ -125,15 +131,8 @@ int Client::start() {
     WeaponSelector weapon_selector(renderer);
     Hud hud(renderer, distribution);
 
-    WorldView worldview(renderer,
-                        texture_controller,
-                        std::move(this->scenario), 
-                        color_map,
-                        weapon_selector,
-                        current_worm, 
-                        my_worms_id_vec, 
-                        sound_controller,
-                        &hud);
+    WorldView worldview(renderer, texture_controller, std::move(this->scenario), color_map,
+                        weapon_selector, current_worm, my_worms_id_vec, sound_controller, &hud);
 
     bool running = true;
     auto start = high_resolution_clock::now();
@@ -193,8 +192,7 @@ bool Client::handle_events(WeaponSelector& weapon_selector, SoundController& sou
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
         try {
-            auto c = event_handler.handle(
-                    event, weapon_selector, sound_controller);  
+            auto c = event_handler.handle(event, weapon_selector, sound_controller);
             if (c != nullptr)
                 messages_to_send.push(c);
         } catch (QuitGameClientInput& e) {

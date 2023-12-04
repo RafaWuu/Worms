@@ -9,9 +9,27 @@
 #include "ui_new_game_dialog.h"
 
 NewGameDialog::NewGameDialog(std::shared_ptr<Client> client, QWidget* parent):
-        QDialog(parent), ui(new Ui::NewGameDialog), client(client){
+        QDialog(parent), ui(new Ui::NewGameDialog), client(client) {
     ui->setupUi(this);
     this->ui->nom_escenario->setText("basic");
+
+    model = new QStringListModel(this);
+
+    this->ui->scenario_list->setModel(model);
+
+    LobbyState l = client->request_scenarios_list();
+
+    QStringList listaDeTexto;
+
+    for (const auto& p: l.scenarios_map) {
+        QString scenario = QString::fromStdString(p.first);
+        QString players = QString::number(p.second);
+
+        auto s = QString("Escenario: %1  -  Tamaño: %2 worms").arg(scenario, players);
+
+        listaDeTexto.append(s);
+    }
+    model->setStringList(listaDeTexto);
 }
 
 NewGameDialog::~NewGameDialog() { delete ui; }

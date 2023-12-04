@@ -77,6 +77,10 @@ public:
     void close();
 
     std::unique_ptr<Provision> receive_provision();
+
+    void request_scenarios_list();
+
+    LobbyState receive_scenarios_list();
 };
 
 #endif

@@ -93,3 +93,11 @@ void GameEventChangeWeapon::execute(EventHandler& e) {
     Worm& worm = e.get_worm(this->worm_id, this->client_id);
     worm.change_weapon(weapon_id);
 }
+
+GameEventCountdown::GameEventCountdown(uint16_t client_id, uint8_t worm_id, uint8_t seconds):
+        worm_id(worm_id), seconds(seconds), GameEvent(client_id) {}
+
+void GameEventCountdown::execute(EventHandler& e) {
+    Worm& worm = e.get_worm(this->worm_id, this->client_id);
+    worm.set_countdown(seconds);
+}

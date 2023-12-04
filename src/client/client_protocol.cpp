@@ -24,13 +24,15 @@
 #define SCALE (25.0f)
 
 enum ObjectType {
-    GROUND = 0x001,  // habria que ponerlo en common
+    BOUNDARIE = 0x001,  // habria que ponerlo en common
     BEAM = 0x002,
     WORM = 0x004,
     WORM_SENSOR = 0x008,
     projectile = 0x0010,
     PROVISION = 0x0020,
     EXPLOSION = 0x0040,
+    GROUND = 0x0080,
+
 };
 
 ClientProtocol::ClientProtocol(BaseProtocol& bp):
@@ -92,6 +94,14 @@ void ClientProtocol::request_game_list() {
 
     getLog().write("Cliente solicita lista de partidas\n");
 }
+
+void ClientProtocol::request_scenarios_list() {
+    baseProtocol.send_1byte_number(LOBBY_SENDING);
+    baseProtocol.send_1byte_number(SCENARIO_LIST_CODE);
+
+    getLog().write("Cliente solicita lista de escenarios\n");
+}
+
 LobbyState ClientProtocol::receive_game_list() {
     LobbyState l;
 
@@ -133,6 +143,40 @@ LobbyState ClientProtocol::receive_game_list() {
 
     return l;
 }
+
+LobbyState ClientProtocol::receive_scenarios_list() {
+    LobbyState l;
+
+    uint8_t lobby_receive_code;
+    baseProtocol.recv_1byte_number(lobby_receive_code);
+
+    uint8_t action_code;
+    baseProtocol.recv_1byte_number(action_code);
+
+    uint16_t scenarios_list_size;
+    baseProtocol.recv_2byte_number(scenarios_list_size);
+
+    for (int i = 0; i < scenarios_list_size; i++) {
+
+        uint16_t scenario_len;
+        baseProtocol.recv_2byte_number(scenario_len);
+
+        std::vector<char> buff(scenario_len);
+        baseProtocol.recv_char_vector(buff);
+
+        std::string scenario(buff.begin(), buff.end());
+
+        uint8_t worms;
+        baseProtocol.recv_1byte_number(worms);
+
+        l.scenarios_map.emplace(scenario, worms);
+    }
+
+    getLog().write("Cliente recibe lista de partidas\n");
+
+    return l;
+}
+
 void ClientProtocol::send_start_game() {
     baseProtocol.send_1byte_number(GAME_SENDING);
     baseProtocol.send_1byte_number(START_GAME_CODE);
@@ -429,7 +473,7 @@ void ClientProtocol::serialize_change_countdown(uint8_t worm, int new_countdown)
 
     getLog().write("Cliente serializando cambiar countdown %hhu \n", countdown);
 
-    // baseProtocol.send_uint_vector(serialized_command);
+    baseProtocol.send_uint_vector(serialized_command);
     return;
 }
 

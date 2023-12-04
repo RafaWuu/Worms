@@ -10,6 +10,7 @@
 
 #include "game/entities/server_worm.h"
 #include "game/provisions/server_provision_factory.h"
+#include "game/server_gamestatus.h"
 
 #include "server_player_manager.h"
 
@@ -30,6 +31,7 @@ public:
 
     virtual Worm& get_active_worm() = 0;
     virtual float get_remaining_time() = 0;
+    virtual std::shared_ptr<GameStatus> get_status() = 0;
 };
 
 #endif  // WORMS_SERVER_GAMEWORLD_STATE_H

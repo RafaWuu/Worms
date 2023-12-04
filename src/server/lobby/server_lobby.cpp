@@ -10,7 +10,8 @@
 //
 // Created by xguss on 31/10/23.
 //
-LobbyMonitor::LobbyMonitor(Queue<uint16_t>& reap_queue): reap_queue(reap_queue), id(1) {}
+LobbyMonitor::LobbyMonitor(Queue<uint16_t>& reap_queue):
+        reap_queue(reap_queue), scenario_file_handler(), id(1) {}
 
 uint16_t LobbyMonitor::create_game(const std::string& scenario, uint16_t client_id) {
     std::lock_guard<std::mutex> lock(mutex);
@@ -41,6 +42,10 @@ std::vector<GameInfo> LobbyMonitor::list_games() const {
     }
 
     return v;
+}
+
+std::map<std::string, uint16_t> LobbyMonitor::list_scenarios() {
+    return scenario_file_handler.get_info();
 }
 
 void LobbyMonitor::close_game(uint16_t id) {

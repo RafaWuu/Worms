@@ -29,6 +29,8 @@ public:
     Worm& get_active_worm() override;
 
     float get_remaining_time() override;
+
+    std::shared_ptr<GameStatus> get_status() override;
 };
 
 #endif  // WORMS_SERVER_GAMEWORLD_INTERACTIVE_STATE_H
