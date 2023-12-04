@@ -52,6 +52,8 @@ TextureController::TextureController(SDL2pp::Renderer& renderer_): renderer(rend
             {TELEPORTATION_AIMING, "teleportation.png"},
             {CRATE, "wcratev.png"},
             {AIR_STRIKE_PROJECTILE, "airmisl.png"},
+            {LEFT_WIND, "windl.png"},
+            {RIGHT_WIND, "windr.png"},
     };
 
     std::map<AnimationState, std::string> textures_dark_blue_bg = {

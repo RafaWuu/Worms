@@ -54,6 +54,9 @@ enum AnimationState {
     EXPLOSION_ELIPSE,
     // Crate
     CRATE,
+    // Wind
+    LEFT_WIND,
+    RIGHT_WIND,
 };
 
 class TextureController {

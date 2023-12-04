@@ -176,7 +176,7 @@ void Client::update(WorldView& worldview) {
                 estado->get_updated_info();
         current_worm = estado->get_current_worm();
 
-        worldview.update(updated_states, current_worm);
+        worldview.update(updated_states, current_worm, estado->get_wind());
         messages_received.clear();
     }
 

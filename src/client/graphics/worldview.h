@@ -8,6 +8,7 @@
 #include "../game/worm.h"
 #include "weapons/weapon_selector.h"
 
+#include "wind.h"
 #include "entities_factory.h"
 #include "entity.h"
 #include "player.h"
@@ -36,13 +37,15 @@ private:
     Hud* hud;
     WeaponSelector& weapon_selector;
 
+    Wind wind;
+
 public:
     WorldView(SDL2pp::Renderer& renderer, TextureController& texture_controller, std::unique_ptr<Scenario> scenario,
               std::map<uint16_t, SDL2pp::Color>& color_map, WeaponSelector& weapon_selector,
               uint16_t current_worm, std::vector<uint16_t>& my_worms_id, SoundController& sound_controller,
               Hud* hud);
 
-    void update(std::map<uint16_t, std::unique_ptr<EntityInfo>>& updated_info, int current_worm);
+    void update(std::map<uint16_t, std::unique_ptr<EntityInfo>>& updated_info, int current_worm, float wind);
 
     void render();
 

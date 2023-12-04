@@ -118,6 +118,7 @@ set(CLIENT_SOURCE
 	src/client/graphics/weapons/holy_grenade.cpp
 	src/client/graphics/weapons/mortar.cpp
 	src/client/graphics/weapons/banana.cpp
+	src/client/graphics/wind.cpp
 	src/client/graphics/weapons/baseball_bat.cpp
 	src/client/graphics/weapons/dynamite.cpp
 	src/client/graphics/weapons/weapon_factory.cpp

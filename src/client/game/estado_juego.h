@@ -22,6 +22,8 @@ public:
     std::map<uint16_t, std::unique_ptr<EntityInfo>>& get_updated_info();
 
     uint16_t get_current_worm() const;
+
+    float get_wind();
 };
 
 #endif

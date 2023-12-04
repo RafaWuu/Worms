@@ -10,13 +10,14 @@ WorldView::WorldView(SDL2pp::Renderer& renderer,TextureController& texture_contr
         weapon_selector(weapon_selector),
         current_worm(current_worm),
         sound_controller(sound_controller),
+        wind(texture_controller, 0),
         hud(hud){
     camera = SDL2pp::Rect{0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
     add_entities(scenario->get_dynamic_entities_info(), dynamic_entities, color_map, my_worms_id);
     add_entities(scenario->get_static_entities_info(), static_entities, color_map, my_worms_id);
 }
 
-void WorldView::update(std::map<uint16_t, std::unique_ptr<EntityInfo>>& updated_info, int current_worm) {
+void WorldView::update(std::map<uint16_t, std::unique_ptr<EntityInfo>>& updated_info, int current_worm, float wind) {
 
     // Remove dynamic entities the server doesn't send (already exploded missiles, ...)
 
@@ -38,6 +39,8 @@ void WorldView::update(std::map<uint16_t, std::unique_ptr<EntityInfo>>& updated_
             dynamic_entities.emplace(info.first, entity_factory.create(*info.second));
         }
     }
+
+    this->wind.change_wind(wind);
 }
 
 void WorldView::render() {
@@ -54,7 +57,10 @@ void WorldView::render() {
 
     weapon_selector.render(renderer);
 
+    wind.render(renderer, camera);
+
     renderer.Present();
+
 }
 
 void WorldView::render_background() {

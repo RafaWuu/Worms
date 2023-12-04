@@ -48,6 +48,9 @@ Configuration::Configuration() {
 int Configuration::get_sound_effect_volume() { return sound_effect_volume; }
 int Configuration::get_bg_music_volume() { return bg_music_volume; }
 
+float Configuration::get_max_wind() { return maximum_wind; }
+float Configuration::get_min_wind() { return minimum_wind; }
+
 double Configuration::get_fps() { return fps; }
 double Configuration::get_tick_rate() { return tick_rate; }
 

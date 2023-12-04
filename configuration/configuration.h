@@ -172,6 +172,9 @@ public:
     float maximum_wind;
 
     float get_missil_quantity(const std::string& weapon_name);
+
+    float get_max_wind();
+    float get_min_wind();
 };
 
 #endif
