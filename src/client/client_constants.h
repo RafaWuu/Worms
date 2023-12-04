@@ -11,6 +11,9 @@
 #define PPM 1000 / 20
 
 // Protocolo
+
+#define SCALE (25.0f)
+
 #define GAME_RECEIVING 87
 #define LOBBY_RECEIVING 89
 #define GAME_SENDING 86

@@ -21,8 +21,6 @@
 
 #define BYTE 1
 
-#define SCALE (25.0f)
-
 enum ObjectType {
     BOUNDARIE = 0x001,  // habria que ponerlo en common
     BEAM = 0x002,
