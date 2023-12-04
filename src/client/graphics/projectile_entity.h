@@ -24,6 +24,8 @@ private:
     // Que arma disparo el proyectil (bazooka, granada, ...)
     std::unique_ptr<Weapon> weapon;
 
+    WeaponFactory weapon_factory;
+
     Animation an;
 
     uint8_t type;
