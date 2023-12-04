@@ -21,6 +21,8 @@ public:
     ~NewGameDialog();
 
 private slots:
+    void onScenarioListItemClicked(const QModelIndex &index);
+
 
     void on_play_clicked();
 

@@ -10,7 +10,11 @@
 
 NewGameDialog::NewGameDialog(std::shared_ptr<Client> client, QWidget* parent):
         QDialog(parent), ui(new Ui::NewGameDialog), client(client) {
+
+
     ui->setupUi(this);
+    connect(ui->scenario_list, &QListView::clicked, this, &NewGameDialog::onScenarioListItemClicked);
+
     this->ui->nom_escenario->setText("basic");
 
     model = new QStringListModel(this);
@@ -33,6 +37,17 @@ NewGameDialog::NewGameDialog(std::shared_ptr<Client> client, QWidget* parent):
 }
 
 NewGameDialog::~NewGameDialog() { delete ui; }
+
+void NewGameDialog::onScenarioListItemClicked(const QModelIndex &index) {
+    std::string selected_list_item = model->data(index, Qt::DisplayRole).toString().toStdString();
+
+    unsigned first = selected_list_item.find(':');
+    unsigned last = selected_list_item.find('-');
+    std::string selected_scenario = selected_list_item.substr(first + 2, last - (first + 4)); 
+
+    QString scenario_name = QString::fromStdString(selected_scenario);
+    ui->nom_escenario->setText(scenario_name);
+}
 
 void NewGameDialog::on_play_clicked() {
     std::string escenario = this->ui->nom_escenario->toPlainText().toStdString();
