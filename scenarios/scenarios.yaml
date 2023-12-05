@@ -10,67 +10,67 @@ scenarios:
         beams:
             -
               type: large
-              pos_x:   15.0
-              pos_y:  10.0
+              pos_x:   18.0
+              pos_y:  13.0
               flip: false
               angle: 0.0
             -
               type: large
-              pos_x: 3.0
-              pos_y: 5.0
+              pos_x: 5.0
+              pos_y: 8.0
               flip: false
               angle: 0.0
             - type: large
-              pos_x: 9.0
+              pos_x: 12.0
+              pos_y: 13.0
+              flip: false
+              angle: 0.0
+            - type: large
+              pos_x: 14.6
               pos_y: 10.0
               flip: false
+              angle: 90.0
+            - type: large
+              pos_x: 9.4
+              pos_y: 10.0
+              flip: false
+              angle: 90.0
+            - type: large
+              pos_x: 12.0
+              pos_y: 14.0
+              flip: false
               angle: 0.0
             - type: large
-              pos_x: 11.6
+              pos_x: 12.0
               pos_y: 7.0
               flip: false
-              angle: 90.0
-            - type: large
-              pos_x: 6.4
-              pos_y: 7.0
-              flip: false
-              angle: 90.0
-            - type: large
-              pos_x: 9.0
-              pos_y: 11.0
-              flip: false
               angle: 0.0
             - type: large
-              pos_x: 9.0
-              pos_y: 4.0
-              flip: false
-              angle: 0.0
-            - type: large
-              pos_x: 18.0
-              pos_y: 8.5
+              pos_x: 21.0
+              pos_y: 11.5
               flip: false
               angle: 90.0
             - type: large
-              pos_x: 18.0
-              pos_y: 4
+              pos_x: 21.0
+              pos_y: 7
               flip: false
               angle: 0
         worms:
             -
-              pos_x: 2.0
-              pos_y: 0.0
+              pos_x: 5.0
+              pos_y: 3.0
             -
-              pos_x: 15.0
-              pos_y: 1.0
+              pos_x: 18.0
+              pos_y: 4.0
             -
-              pos_x: 13.0
-              pos_y: 7.0
+              pos_x: 17.0
+              pos_y: 10.0
             -
-              pos_x: 15.0
-              pos_y: 7.0
+              pos_x: 18.0
+              pos_y: 10.0
             -
-              pos_x: 7.0
-              pos_y: 1.0
+              pos_x: 10.0
+              pos_y: 4.0
     angles:
       width: 40.0
       height: 40.0 # Altura desde el suelo

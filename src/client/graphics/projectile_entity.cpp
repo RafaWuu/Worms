@@ -3,12 +3,14 @@
 
 #include "game/projectile.h"
 
-projectileEntity::projectileEntity(TextureController& controller, uint8_t type):
+projectileEntity::projectileEntity(TextureController& controller, Projectile& projectile):
         texture_controller(controller),
         an(texture_controller.get_texture(IDLE), texture_controller),
-        type(0),
-        x(300),
-        y(300),
+        type(projectile.type),
+        x(projectile.get_pos_x()),
+        y(projectile.get_pos_y()),
+        width(projectile.get_width()),
+        height(projectile.get_height()),
         config(Configuration::get_instance()),
         was_just_thrown(true) {
 
@@ -16,8 +18,6 @@ projectileEntity::projectileEntity(TextureController& controller, uint8_t type):
 
     an.change_texture(weapon->get_projectile_texture());
 }
-
-projectileEntity::~projectileEntity() {}
 
 void projectileEntity::update_info(EntityInfo* info, SoundController& sound_controller) {
     auto projectile = dynamic_cast<Projectile*>(info);  // feo?
@@ -40,12 +40,12 @@ void projectileEntity::update_info(EntityInfo* info, SoundController& sound_cont
  * Notar que el manejo de eventos y la actualización de modelo ocurren en momentos distintos.
  * Esto les va a resultar muy util.
  */
-void projectileEntity::update(float dt) { 
+void projectileEntity::update(float dt) {
     // Proyectiles que no tienen "breathing" effect
-    if (!weapon->projectile_should_loop()) 
+    if (!weapon->projectile_should_loop())
         return;
 
-    an.update(dt); 
+    an.update(dt);
 }
 
 void projectileEntity::render(SDL2pp::Renderer& renderer, SDL2pp::Rect& camera) {

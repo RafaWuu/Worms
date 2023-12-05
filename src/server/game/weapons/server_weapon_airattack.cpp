@@ -45,7 +45,7 @@ bool AirAttackWeapon::fire_projectile(b2Body& body, bool facing_right) {
 
         b2Vec2 center(aim_x - 3 + 2 * 3 / missiles * i, -1);
         world.add_entity(std::make_shared<Projectile>(
-                &world.b2_world, AIR_ATTACK,
+                &world.b2_world, BAZOOKA,
                 std::make_unique<ProjectileLaunchInPlace>(center, -max_vel),
                 std::make_unique<ProjectileEffectDefaultExplosion>(AIR_ATTACK_ID, radius, damage,
                                                                    blast_power),

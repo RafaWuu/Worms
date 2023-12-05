@@ -183,10 +183,7 @@ void GameWorld::generate_provision() {
     }
 }
 
-void GameWorld::update_wind() {
-    wind.update_wind();
-    std::cout << "Viento: " << wind.wind << '\n';
-}
+void GameWorld::update_wind() { wind.update_wind(); }
 
 void GameWorld::apply_wind_effect(b2Body& body) { wind.affect_projectile(body); }
 
