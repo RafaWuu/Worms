@@ -15,6 +15,7 @@
 #include "server_weapon_info.h"
 
 #define MAX_POWER 1
+#define INFINITE_AMMO -1
 
 class GameWorld;
 class Projectile;
@@ -24,6 +25,7 @@ private:
 protected:
     GameWorld& world;
     Configuration& config;
+    int ammo;
 
 public:
     friend class WeaponInfoBat;
@@ -37,6 +39,8 @@ public:
     virtual bool fire_projectile(b2Body& body, bool facing_right) = 0;
 
     virtual bool adjust_projectile_countdown(float seconds);
+
+    virtual void add_ammo(int quantity);
 
     virtual std::unique_ptr<WeaponInfo> get_info() const = 0;
 };

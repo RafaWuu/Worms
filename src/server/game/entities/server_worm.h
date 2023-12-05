@@ -119,5 +119,7 @@ public:
     void process_water_fall();
 
     bool is_dying;
+
+    void add_ammo(uint16_t weapon_id, int quantity);
 };
 #endif  // WORMS_SERVER_WORM_H

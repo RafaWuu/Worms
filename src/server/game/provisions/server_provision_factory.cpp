@@ -4,11 +4,15 @@
 
 #include "server_provision_factory.h"
 
+#include <memory>
+#include <vector>
+
 #include "../world/server_gameworld.h"
 #include "game/listeners/server_raycast_explosion_callback.h"
 #include "game/listeners/server_raycast_floor_calbback.h"
 
 #include "common_weapon_constants.h"
+#include "server_provision_effect_ammo.h"
 #include "server_provision_effect_explosion.h"
 #include "server_provision_effect_health.h"
 
@@ -18,9 +22,9 @@
 
 #define DOWN 0, -1
 
-#define NO_VALID_X -1
+#define NO_VALID_X (-1)
 
-#define Y_ORIGIN -2
+#define Y_ORIGIN (5)
 
 ProvisionFactory::ProvisionFactory(GameWorld& world):
         world(world), rd(), gen(rd()), dis(0.0, 1.0), config(Configuration::get_instance()) {}
@@ -41,15 +45,26 @@ std::shared_ptr<Provision> ProvisionFactory::generate_provision() {
     if (x == NO_VALID_X)
         return nullptr;
 
-    if (u < config.kit_proportion)
+    if (u < config.kit_proportion) {
         return std::make_shared<Provision>(
                 world, x, Y_ORIGIN, std::make_unique<ProvisionEffectHealth>(config.kit_health));
-    if (u < (config.ammo_box_proportion + config.kit_proportion))
-        return std::make_shared<Provision>(
-                world, x, Y_ORIGIN, std::make_unique<ProvisionEffectHealth>(config.kit_health));
+    }
+
+    if (u < (config.ammo_box_proportion + config.kit_proportion)) {
+        auto v = config.get_weapons_with_limited_ammo();
+        std::vector<uint16_t> out;
+
+        std::sample(v.begin(), v.end(), std::back_inserter(out), 1,
+                    std::mt19937{std::random_device{}()});
+
+        int quantity = ceil(config.get_weapon_ammo(config.get_weapon_name(out[0])) *
+                            config.provision_ammo_amount);
+        return std::make_shared<Provision>(world, x, Y_ORIGIN,
+                                           std::make_unique<ProvisionEffectAmmo>(quantity, out[0]));
+    }
 
     return std::make_shared<Provision>(
-            world, x, 2,
+            world, x, Y_ORIGIN,
             std::make_unique<ProvisionEffectExplosion>(BAZOOKA_ID, config.provision_damage,
                                                        config.provision_radius,
                                                        config.provision_blast_power));
@@ -58,7 +73,6 @@ std::shared_ptr<Provision> ProvisionFactory::generate_provision() {
 float ProvisionFactory::find_valid_x() {
     float y_ceil;
     float x_max;
-    float x = 0;
 
     world.get_dimensions(y_ceil, x_max);
 

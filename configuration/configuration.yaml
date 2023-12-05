@@ -12,13 +12,16 @@ maximum_wind: 15
 minimum_wind: 0.2
 
 provision:
-  width: 1.2
-  height: 1.2
+  width: .8
+  height: .8
   provision_per_round: .3 # Entre cero y uno
-  kit_proportion: .3 # proporcion de provisiones que son botiquines
-  ammo_box_proportion: .3 # proporcion de provisiones que son municion
+
+  #kit_proportion y ammo_box deberian sumar entre 0 y 1, siendo el complemento de la suma la proporcion de explosiones
+  kit_proportion: 0 # proporcion de provisiones que son botiquines
+  ammo_box_proportion: 1 # proporcion de provisiones que son municion.
+
   kit_health: 30
-  ammo_amount: .52 # Proporcion de cantidad de municion maxima del arma
+  ammo_amount: .25 # Proporcion de cantidad de municion maxima del arma
 
   damage: 40 # Daño de la explision en caso de ser una bomba
   radius: 2

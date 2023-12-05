@@ -13,7 +13,6 @@ class AirAttackWeapon: public Weapon {
 private:
     float aim_x;
     float aim_y;
-    int ammo;
 
 public:
     friend class AirAttackWeaponInfo;

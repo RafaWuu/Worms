@@ -264,3 +264,7 @@ void Worm::handle_player_end_collision(Worm& other) {
 }
 
 void Worm::process_water_fall() { is_dying = true; }
+
+void Worm::add_ammo(uint16_t weapon_id, int quantity) {
+    weapons_map[weapon_id]->add_ammo(quantity);
+}

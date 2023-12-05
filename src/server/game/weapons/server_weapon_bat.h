@@ -14,7 +14,6 @@ class WeaponBat: public Weapon {
 private:
     float aim_angle;
     float aim_power;
-    int ammo;
     uint16_t worm_id;
 
 public:

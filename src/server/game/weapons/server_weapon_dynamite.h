@@ -12,7 +12,6 @@
 class DynamiteWeapon: public Weapon {
 private:
     float countdown;
-    int ammo;
 
 public:
     friend class DynamiteWeaponInfo;

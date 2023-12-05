@@ -14,7 +14,6 @@ private:
     float countdown;
     float aim_angle;
     float aim_power;
-    int ammo;
 
 public:
     friend class RedGrenadeWeaponInfo;

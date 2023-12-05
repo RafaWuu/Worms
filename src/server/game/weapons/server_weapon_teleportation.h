@@ -5,11 +5,12 @@
 #ifndef WORMS_SERVER_WEAPON_TELEPORTATION_H
 #define WORMS_SERVER_WEAPON_TELEPORTATION_H
 
+#include <memory>
+
 #include "server_weapon.h"
 
 class TeleportationWeapon: public Weapon {
 private:
-    int ammo;
     float aim_x;
     float aim_y;
 
