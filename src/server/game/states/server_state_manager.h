@@ -1,6 +1,4 @@
-//
-// Created by xguss on 07/11/23.
-//
+
 
 #ifndef WORMS_SERVER_STATE_MANAGER_H
 #define WORMS_SERVER_STATE_MANAGER_H
@@ -28,10 +26,9 @@ private:
 
     bool is_active(const WormState& state) const;
 
-    void deactivate(WormState& state, Worm &worm);
+    void deactivate(WormState& state, Worm& worm);
 
 public:
-
     explicit StateManager(uint16_t starting);
 
     bool try_activate(StateEnum state_code, Worm& worm);
@@ -41,6 +38,6 @@ public:
 
     uint16_t current;
 
-    void activate_states(uint16_t states_code, Worm &worm);
+    void activate_states(uint16_t states_code, Worm& worm);
 };
 #endif  // WORMS_SERVER_STATE_MANAGER_H

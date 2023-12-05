@@ -1,6 +1,4 @@
-//
-// Created by xguss on 10/09/23.
-//
+
 
 #include "server_protocol.h"
 
@@ -335,6 +333,7 @@ void ServerProtocol::send_status(
 void ServerProtocol::send_finish_status(uint16_t winner_id, bool draw) {
     baseProtocol.send_1byte_number(GAME_SENDING);
     baseProtocol.send_1byte_number(GAME_END);
+    baseProtocol.send_2byte_number(winner_id);
     baseProtocol.send_2byte_number(winner_id);
 }
 

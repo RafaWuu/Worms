@@ -1,6 +1,4 @@
-//
-// Created by xguss on 02/12/23.
-//
+
 
 #ifndef WORMS_SERVER_PROVISION_INFO_H
 #define WORMS_SERVER_PROVISION_INFO_H

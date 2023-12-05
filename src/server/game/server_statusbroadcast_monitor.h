@@ -1,6 +1,4 @@
-//
-// Created by xguss on 02/11/23.
-//
+
 
 #ifndef WORMS_SERVER_STATUSBROADCAST_MONITOR_H
 #define WORMS_SERVER_STATUSBROADCAST_MONITOR_H

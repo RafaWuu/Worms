@@ -235,13 +235,11 @@ std::unique_ptr<Worm> ClientProtocol::receive_worm() {
     baseProtocol.recv_1byte_number(health);
     baseProtocol.recv_1byte_number(current_weapon);
 
-    // TODO por ahi seria mas directo si el map directamente tiene los ids como indice
     auto s = config.get_weapon_name(current_weapon);
 
-
-    if (config.get_weapon_ammo(s) == INFINITE_AMMO){
+    if (config.get_weapon_ammo(s) == INFINITE_AMMO) {
         ammo = INFINITE_AMMO;
-    } else{
+    } else {
         uint16_t aux;
         baseProtocol.recv_2byte_number(aux);
         ammo = aux;
@@ -322,12 +320,12 @@ std::unique_ptr<Projectile> ClientProtocol::receive_projectile() {
 }
 
 std::unique_ptr<Explosion> ClientProtocol::receive_explosion() {
-    uint16_t type;
+    uint8_t type;
     float x;
     float y;
     float radius;
 
-    baseProtocol.recv_2byte_number(type);
+    baseProtocol.recv_1byte_number(type);
     baseProtocol.recv_4byte_float(radius);
     baseProtocol.recv_4byte_float(x);
     baseProtocol.recv_4byte_float(y);

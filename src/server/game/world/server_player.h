@@ -1,14 +1,12 @@
-//
-// Created by xguss on 03/12/23.
-//
+
 
 #ifndef WORMS_SERVER_PLAYER_H
 #define WORMS_SERVER_PLAYER_H
 
 #include <cstdint>
+#include <vector>
 
 #include "../entities/server_worm.h"
-
 class Player {
     std::vector<Worm*> worms;
     std::vector<Worm*>::iterator active_worm;

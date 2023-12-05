@@ -1,6 +1,4 @@
-//
-// Created by xguss on 21/11/23.
-//
+
 
 #include "scenario_filehandler.h"
 

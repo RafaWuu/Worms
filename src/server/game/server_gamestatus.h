@@ -1,17 +1,15 @@
-//
-// Created by xguss on 02/11/23.
-//
+
 
 #ifndef WORMS_SERVER_GAMESTATUS_H
 #define WORMS_SERVER_GAMESTATUS_H
 
-
+#include <map>
+#include <memory>
 #include <vector>
 
 #include "game/world/server_gameworld.h"
 
 #include "server_protocol.h"
-
 class ServerProtocol;
 
 class GameStatus {

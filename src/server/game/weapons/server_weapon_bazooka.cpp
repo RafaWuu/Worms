@@ -1,6 +1,4 @@
-//
-// Created by xguss on 24/11/23.
-//
+
 
 #include "server_weapon_bazooka.h"
 

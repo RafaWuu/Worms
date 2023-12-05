@@ -1,14 +1,14 @@
-//
-// Created by xguss on 30/11/23.
-//
+
 
 #ifndef WORMS_SERVER_MELEE_IMPACT_H
 #define WORMS_SERVER_MELEE_IMPACT_H
 
+#include <memory>
+#include <string>
+
 #include "../../../../configuration/configuration.h"
 #include "../entities/server_worm.h"
 #include "game/entities/server_gameobject.h"
-
 class MeleeImpact: public GameObject {
 private:
     Configuration& config;

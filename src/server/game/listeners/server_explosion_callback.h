@@ -1,6 +1,4 @@
-//
-// Created by xguss on 18/11/23.
-//
+
 
 #ifndef WORMS_SERVER_EXPLOSION_CALLBACK_H
 #define WORMS_SERVER_EXPLOSION_CALLBACK_H

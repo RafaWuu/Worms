@@ -1,9 +1,9 @@
-//
-// Created by xguss on 03/12/23.
-//
+
 
 #ifndef WORMS_SERVER_PROVISION_EFFECT_EXPLOSION_H
 #define WORMS_SERVER_PROVISION_EFFECT_EXPLOSION_H
+
+#include <memory>
 
 #include "game/projectiles/server_projectile_effect_defaultexplosion.h"
 

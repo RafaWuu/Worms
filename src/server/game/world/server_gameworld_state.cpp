@@ -1,6 +1,4 @@
-//
-// Created by xguss on 28/11/23.
-//
+
 
 #include "server_gameworld_state.h"
 

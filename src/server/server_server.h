@@ -1,6 +1,4 @@
-//
-// Created by xguss on 24/09/23.
-//
+
 
 #ifndef SOCKETS_2023C2_ABRAIDA_SERVER_SERVER_H
 #define SOCKETS_2023C2_ABRAIDA_SERVER_SERVER_H

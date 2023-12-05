@@ -1,11 +1,10 @@
-//
-// Created by xguss on 01/11/23.
-//
+
 
 #include "server_lobby_response.h"
 
+#include <map>
+#include <string>
 #include <vector>
-
 LobbyResponseError::LobbyResponseError(uint8_t code): code(code) {}
 
 void LobbyResponseError::send(ServerProtocol& gp) { gp.send_lobby_errormessage(this->code); }

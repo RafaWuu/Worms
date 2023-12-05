@@ -1,13 +1,12 @@
-//
-// Created by xguss on 29/11/23.
-//
+
 
 #include "server_explosion.h"
+
+#include <memory>
 
 #include "../world/server_gameworld.h"
 
 #include "server_explosion_info.h"
-
 ObjectType Explosion::get_id() const { return EXPLOSION; }
 
 Explosion::Explosion(uint16_t projectile_type, float radius, b2Vec2 center):

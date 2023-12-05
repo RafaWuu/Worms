@@ -1,9 +1,8 @@
-//
-// Created by xguss on 04/12/23.
-//
+
 
 #include "server_gameworld_state_finished.h"
 
+#include <memory>
 GameWorldFinishedState::GameWorldFinishedState(PlayerManager& player_manager, Worm& worm,
                                                GameWorld& world, uint16_t winner):
         worm(worm),

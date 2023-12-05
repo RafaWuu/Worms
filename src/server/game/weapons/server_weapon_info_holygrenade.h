@@ -1,6 +1,4 @@
-//
-// Created by xguss on 27/11/23.
-//
+
 
 #ifndef WORMS_SERVER_WEAPON_INFO_HOLYGRENADE_H
 #define WORMS_SERVER_WEAPON_INFO_HOLYGRENADE_H

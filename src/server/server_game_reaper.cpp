@@ -1,6 +1,4 @@
-//
-// Created by xguss on 17/11/23.
-//
+
 
 #include "server_game_reaper.h"
 

@@ -1,6 +1,4 @@
-//
-// Created by xguss on 30/11/23.
-//
+
 
 #ifndef WORMS_SERVER_WEAPON_TELEPORTATION_H
 #define WORMS_SERVER_WEAPON_TELEPORTATION_H

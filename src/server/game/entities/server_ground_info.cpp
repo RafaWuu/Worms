@@ -1,6 +1,4 @@
-//
-// Created by xguss on 14/11/23.
-//
+
 
 #include "server_ground_info.h"
 

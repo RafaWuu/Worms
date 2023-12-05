@@ -1,9 +1,9 @@
-//
-// Created by xguss on 28/11/23.
-//
+
 
 #ifndef WORMS_SERVER_GAMEWORLD_SIMULATIONSTATE_H
 #define WORMS_SERVER_GAMEWORLD_SIMULATIONSTATE_H
+
+#include <memory>
 
 #include "server_gameworld_state.h"
 

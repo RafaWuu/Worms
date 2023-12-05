@@ -1,14 +1,12 @@
-//
-// Created by xguss on 31/10/23.
-//
+
 
 #include "server_clientstate_game.h"
 
 #include <memory>
 #include <utility>
 
-#include "server_game.h"
 #include "server_error.h"
+#include "server_game.h"
 
 GameClientState::GameClientState(uint16_t client_id, ServerProtocol& gameProtocol, Game& game):
         game(game),

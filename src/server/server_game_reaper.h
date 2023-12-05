@@ -1,6 +1,4 @@
-//
-// Created by xguss on 17/11/23.
-//
+
 
 #ifndef WORMS_SERVER_GAME_REAPER_H
 #define WORMS_SERVER_GAME_REAPER_H

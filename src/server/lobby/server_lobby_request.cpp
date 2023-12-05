@@ -1,6 +1,4 @@
-//
-// Created by xguss on 01/11/23.
-//
+
 
 #include "server_lobby_request.h"
 

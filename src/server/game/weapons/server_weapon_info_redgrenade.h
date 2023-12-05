@@ -1,6 +1,4 @@
-//
-// Created by xguss on 26/11/23.
-//
+
 
 #ifndef WORMS_SERVER_WEAPON_INFO_REDGRENADE_H
 #define WORMS_SERVER_WEAPON_INFO_REDGRENADE_H

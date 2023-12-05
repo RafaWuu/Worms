@@ -3,9 +3,7 @@
 #include <memory>
 
 #include "../../common/common_queue.h"
-//
-// Created by xguss on 03/10/23.
-//
+
 Sender::Sender(Queue<std::shared_ptr<GameStatus>>& queue, ServerProtocol& gp):
         game_protocol(gp), outgoing_q(queue) {}
 

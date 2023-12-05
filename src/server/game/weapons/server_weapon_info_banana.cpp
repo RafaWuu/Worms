@@ -1,6 +1,4 @@
-//
-// Created by xguss on 27/11/23.
-//
+
 
 #include "server_weapon_info_banana.h"
 

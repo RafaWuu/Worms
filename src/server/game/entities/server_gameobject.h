@@ -1,6 +1,4 @@
-//
-// Created by xguss on 04/11/23.
-//
+
 
 #ifndef WORMS_SERVER_GAMEOBJECT_H
 #define WORMS_SERVER_GAMEOBJECT_H

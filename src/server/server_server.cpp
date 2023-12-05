@@ -1,6 +1,4 @@
-//
-// Created by xguss on 24/09/23.
-//
+
 
 #include "server_server.h"
 

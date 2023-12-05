@@ -1,6 +1,4 @@
-//
-// Created by xguss on 02/11/23.
-//
+
 
 #include "server_gameworld.h"
 

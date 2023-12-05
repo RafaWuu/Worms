@@ -1,15 +1,14 @@
-//
-// Created by xguss on 01/11/23.
-//
+
 
 #ifndef WORMS_SERVER_LOBBY_RESPONSE_H
 #define WORMS_SERVER_LOBBY_RESPONSE_H
 
+#include <map>
+#include <string>
 #include <vector>
 
 #include "../game/server_gameinfo.h"
 #include "../server_protocol.h"
-
 class LobbyResponse {
 public:
     LobbyResponse() = default;

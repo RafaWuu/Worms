@@ -1,6 +1,4 @@
-//
-// Created by xguss on 03/12/23.
-//
+
 
 #include "server_player.h"
 

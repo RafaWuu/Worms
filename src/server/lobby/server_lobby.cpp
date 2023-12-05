@@ -7,9 +7,7 @@
 
 #include "server_error.h"
 
-//
-// Created by xguss on 31/10/23.
-//
+
 LobbyMonitor::LobbyMonitor(Queue<uint16_t>& reap_queue):
         reap_queue(reap_queue), scenario_file_handler(), id(1) {}
 
