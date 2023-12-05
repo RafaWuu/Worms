@@ -242,3 +242,13 @@ La informacion del arma consiste, en el mismo orden en que se expresa, de:
 	*	Un float en el caso de que el arma tenga cuenta regresiva
 
 Otras entidades pueden o no estar en la lista que se envia, y en caso de estarlo se enviara unicamente el par {entity_id, entity_type}, siendo responsabilidad del cliente leerlo correctamente para que no se altere el significado del flujo de bytes. 
+
+## Arquitectura
+
+### Cliente
+
+En el cliente, sin tener en cuenta los hilos utilizados por el programa de librerias de terceros, se tienen solo los hilos sender y receiver para la comunicacion con el juego, los cuales interactuan entre si a traves del rendererer loop.
+
+Se muestra en la siguien figura un diagrama de la arquitectura del cliente:
+
+![]()
