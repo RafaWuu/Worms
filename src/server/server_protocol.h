@@ -60,7 +60,7 @@ public:
 
 
     void send_status(uint16_t current_worm, float time, float wind,
-                     std::map<uint16_t, std::shared_ptr<GameObjectInfo>> entities);
+                     const std::map<uint16_t, std::shared_ptr<GameObjectInfo>>& entities);
 
     void send_scenario(std::map<uint16_t, std::shared_ptr<GameObjectInfo>>& entities, float height,
                        float width);

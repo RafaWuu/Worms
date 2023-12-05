@@ -18,6 +18,7 @@ private:
 
 public:
     explicit BazookaWeaponInfo(const BazookaWeapon& bazooka);
+    BazookaWeaponInfo(float angle, float power, int ammo);
 
     void serialize_status(BaseProtocol& bp) override;
 };

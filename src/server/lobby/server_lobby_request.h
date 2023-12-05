@@ -36,8 +36,6 @@ public:
 };
 
 class LobbyRequestJoinGame: public LobbyRequest {
-private:
-    uint16_t id;
 
 public:
     explicit LobbyRequestJoinGame(uint16_t id);
@@ -45,6 +43,8 @@ public:
 
     std::shared_ptr<Game> execute(LobbyMonitor& lobby, ServerProtocol& gp,
                                   uint16_t client_id) override;
+
+    uint16_t id;
 };
 
 

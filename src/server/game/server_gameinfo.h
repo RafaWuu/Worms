@@ -21,6 +21,9 @@ private:
 
 public:
     explicit GameInfo(const Game& game);
+    GameInfo(size_t id, const std::string& scenario, uint8_t players, uint8_t max_players,
+             bool status);
+
     void serialize(BaseProtocol& bp);
 };
 #endif  // WORMS_SERVER_GAMEINFO_H

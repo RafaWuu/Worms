@@ -25,3 +25,12 @@ void GameInfo::serialize(BaseProtocol& bp) {
     bp.send_1byte_number(max_players);
     bp.send_1byte_number(status);
 }
+
+GameInfo::GameInfo(size_t id, const std::string& scenario, uint8_t players, uint8_t max_players,
+                   bool status) {
+    this->id = id;
+    this->scenario = scenario;
+    this->players = players;
+    this->max_players = max_players;
+    this->status = status;
+}
