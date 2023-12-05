@@ -197,7 +197,7 @@ add_executable(server
 		src/server/game/projectiles/server_projectile.cpp
 		src/server/game/projectiles/server_projectile_info.cpp
 	src/server/server_game_reaper.cpp
-	src/server/game/listeners/server_raycast_explosion_callback.cpp
+		src/server/game/listeners/server_explosion_callback.cpp
 	configuration/configuration.cpp
 	configuration/weapon_info.cpp
 		src/server/scenario_filehandler.cpp
@@ -361,7 +361,7 @@ add_executable(hello_test
 		src/server/game/projectiles/server_projectile.cpp
 		src/server/game/projectiles/server_projectile_info.cpp
 		src/server/server_game_reaper.cpp
-		src/server/game/listeners/server_raycast_explosion_callback.cpp
+		src/server/game/listeners/server_explosion_callback.cpp
 		configuration/configuration.cpp
 		configuration/weapon_info.cpp
 		src/server/scenario_filehandler.cpp

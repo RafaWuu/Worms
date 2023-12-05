@@ -35,6 +35,7 @@ Provision::Provision(GameWorld& world, float x, float y, std::unique_ptr<Provisi
     b2FixtureDef fixtureDefSensor;
 
     fixtureDefSensor.shape = &polygonShape;
+    fixtureDefSensor.density = 1;
 
     fixtureDefSensor.filter.categoryBits = PROVISION_SENSOR;
     fixtureDefSensor.filter.maskBits = WORM;

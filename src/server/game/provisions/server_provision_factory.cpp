@@ -8,7 +8,7 @@
 #include <vector>
 
 #include "../world/server_gameworld.h"
-#include "game/listeners/server_raycast_explosion_callback.h"
+#include "game/listeners/server_explosion_callback.h"
 #include "game/listeners/server_raycast_floor_calbback.h"
 
 #include "common_weapon_constants.h"
@@ -24,7 +24,7 @@
 
 #define NO_VALID_X (-1)
 
-#define Y_ORIGIN (5)
+#define Y_ORIGIN (-1)
 
 ProvisionFactory::ProvisionFactory(GameWorld& world):
         world(world), rd(), gen(rd()), dis(0.0, 1.0), config(Configuration::get_instance()) {}

@@ -6,7 +6,7 @@
 
 #include "../../../../configuration/configuration.h"
 
-#define WIND_MODIFIER 0.001
+#define WIND_MODIFIER 0.025
 
 Wind::Wind():
         rd(),

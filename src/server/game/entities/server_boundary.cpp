@@ -22,8 +22,7 @@ Boundary::Boundary(b2World* b2_world, float width, float height, float frontier)
     fixture_def.userData.pointer = reinterpret_cast<uintptr_t>(this);
 
     fixture_def.filter.categoryBits = BOUNDARY;
-    fixture_def.filter.maskBits =
-            WORM | WORM_SENSOR | projectile | BEAM | EXPLOSION | MELEE_SENSOR | PROVISION_SENSOR;
+    fixture_def.filter.maskBits = WORM | WORM_SENSOR | projectile | BEAM | EXPLOSION | MELEE_SENSOR;
 
     b2EdgeShape edge_shape;
 
