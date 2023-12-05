@@ -20,7 +20,7 @@ WormSensor::WormSensor(Worm* worm): worm(worm), GameObject() {
     fixtureDef.shape = &dynamicBox;
 
     fixtureDef.filter.categoryBits = WORM_SENSOR;
-    fixtureDef.filter.maskBits = BOUNDARY | BEAM | WORM | GROUND | projectile;
+    fixtureDef.filter.maskBits = BOUNDARY | BEAM | GROUND | projectile;
 
     fixtureDef.isSensor = true;
     fixtureDef.userData.pointer = reinterpret_cast<uintptr_t>(this);
@@ -30,12 +30,6 @@ WormSensor::WormSensor(Worm* worm): worm(worm), GameObject() {
 
 
 void WormSensor::handle_begin_floor_contact(GameObject* other) {
-    if ((other->get_id() & WORM) == WORM) {
-        auto other_worm = dynamic_cast<Worm*>(other);
-        if (this->worm->id != other_worm->id)
-            worm->numFootContacts++;
-    }
-
     if ((other->get_id() & BEAM) == BEAM) {
         auto worm_fixture = this->worm->body->GetFixtureList();
 
@@ -57,12 +51,6 @@ void WormSensor::handle_begin_floor_contact(GameObject* other) {
 }
 
 void WormSensor::handle_end_floor_contact(GameObject* other) {
-    if ((other->get_id() & WORM) == WORM) {
-        auto other_worm = dynamic_cast<Worm*>(other);
-        if (this->worm->id != other_worm->id)
-            worm->numFootContacts--;
-    }
-
     if ((other->get_id() & BEAM) == BEAM) {
         auto worm_fixture = this->worm->body->GetFixtureList();
 

@@ -104,14 +104,6 @@ public:
 
     void add_health(int health);
 
-    void handle_player_collision(Worm& other);
-
-    bool deactivate_simulation;
-
-    void handle_player_end_collision(Worm& other);
-
-    int frames_to_deactivation;
-
     void set_countdown(uint8_t seconds);
 
     uint16_t client_id;

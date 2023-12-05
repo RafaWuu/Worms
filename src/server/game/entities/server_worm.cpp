@@ -42,8 +42,8 @@ Worm::Worm(uint8_t id, GameWorld& world, float pos_x, float pos_y):
     fixtureDef.shape = &dynamicBox;
 
     fixtureDef.filter.categoryBits = WORM;
-    fixtureDef.filter.maskBits = BOUNDARY | projectile | PROVISION | BEAM | EXPLOSION |
-                                 MELEE_SENSOR | PROVISION_SENSOR | WORM_SENSOR | WORM;
+    fixtureDef.filter.maskBits =
+            BOUNDARY | projectile | PROVISION | BEAM | EXPLOSION | MELEE_SENSOR | PROVISION_SENSOR;
 
     fixtureDef.density = config.worm_density;
     fixtureDef.restitution = config.worm_restitution;
@@ -67,7 +67,6 @@ Worm::Worm(uint8_t id, GameWorld& world, float pos_x, float pos_y):
     recent_health = health;
     recent_speed = 0;
     had_used_weapon = false;
-    deactivate_simulation = false;
     is_dying = false;
 }
 
@@ -103,14 +102,6 @@ void Worm::update(GameWorld& world) {
 
     if (had_used_weapon && !weapon_already_used)
         world.notify_weapon_used();
-
-    if (deactivate_simulation)
-        body->SetType(b2_staticBody);
-    else if (frames_to_deactivation == 0)
-        body->SetType(b2_dynamicBody);
-
-    if (frames_to_deactivation > 0)
-        frames_to_deactivation--;
 
     if (is_dying)
         get_hit(1);
@@ -239,29 +230,6 @@ void Worm::clear_attributes() {
 void Worm::set_extra_health() { health += 25; }
 
 bool Worm::worm_is_alive() const { return (state_manager.current & Alive) == Alive; }
-
-void Worm::handle_player_collision(Worm& other) {
-    if ((state_manager.current & Active) == Active)
-        return;
-    if ((other.state_manager.current & Active) != Active)
-        return;
-
-    auto worm_fixture = body->GetFixtureList();
-
-    while (worm_fixture->IsSensor()) worm_fixture = worm_fixture->GetNext();
-
-    deactivate_simulation = true;
-}
-
-
-void Worm::handle_player_end_collision(Worm& other) {
-    auto worm_fixture = body->GetFixtureList();
-
-    while (worm_fixture->IsSensor()) worm_fixture = worm_fixture->GetNext();
-
-    frames_to_deactivation = 5;
-    deactivate_simulation = false;
-}
 
 void Worm::process_water_fall() { is_dying = true; }
 

@@ -77,6 +77,9 @@ void Game::run() {
             start += std::chrono::duration_cast<std::chrono::high_resolution_clock::duration>(
                     std::chrono::duration<double>(rate));
 
+        } catch (FinishedGameError& e) {
+            std::cerr << "Cerrando juego terminado " << game_id << '\n' << std::endl;
+            is_alive = false;
         } catch (GameError& e) {
             std::cerr << e.what() << std::endl;
             broadcastMonitor.send_status(e.client_id,
@@ -108,6 +111,9 @@ void Game::subscribe_queue(Queue<std::shared_ptr<GameStatus>>& queue, uint16_t c
 
 void Game::add_player(uint16_t client_id) {
     std::lock_guard<std::mutex> lock(mutex);
+
+    if (id_lists.size() == max_players)
+        throw GameFullLobbyError(client_id, game_id);
 
     auto it = std::find(id_lists.begin(), id_lists.end(), client_id);
 
