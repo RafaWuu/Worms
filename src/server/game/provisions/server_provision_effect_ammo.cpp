@@ -1,6 +1,4 @@
-//
-// Created by xguss on 03/12/23.
-//
+
 
 #include "server_provision_effect_ammo.h"
 

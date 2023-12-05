@@ -1,15 +1,13 @@
-//
-// Created by xguss on 03/11/23.
-//
 
 #include "server_beam.h"
+
+#include <memory>
 
 #include "b2_body.h"
 #include "b2_edge_shape.h"
 #include "b2_fixture.h"
 #include "b2_polygon_shape.h"
 #include "server_beam_info.h"
-
 Beam::Beam(b2World* b2_world, float center_x, float center_y, float width, float height, bool flip,
            float angle):
         pos_x(center_x), pos_y(center_y), width(width), height(height), angle(angle), GameObject() {

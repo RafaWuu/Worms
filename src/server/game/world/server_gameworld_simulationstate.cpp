@@ -1,15 +1,13 @@
-//
-// Created by xguss on 28/11/23.
-//
+
 
 #include "server_gameworld_simulationstate.h"
 
 #include <iostream>
+#include <memory>
 
 #include "server_gameworld.h"
 #include "server_gameworld_interactive_state.h"
 #include "server_gameworld_state_finished.h"
-
 GameWorldSimulationState::GameWorldSimulationState(PlayerManager& player_manager, Worm& worm,
                                                    bool grace_period, GameWorld& world):
         grace_period(grace_period), worm(worm), GameWorldState(player_manager, world) {

@@ -1,6 +1,4 @@
-//
-// Created by xguss on 07/11/23.
-//
+
 
 #include "server_state.h"
 

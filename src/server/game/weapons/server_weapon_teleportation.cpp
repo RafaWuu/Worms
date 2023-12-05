@@ -1,6 +1,4 @@
-//
-// Created by xguss on 30/11/23.
-//
+
 
 #include "server_weapon_teleportation.h"
 
@@ -18,7 +16,8 @@ public:
     bool ReportFixture(b2Fixture* fixture) override {
         auto fixture_data = fixture->GetUserData().pointer;
 
-        auto game_object = (GameObject*)fixture_data;
+        auto game_object = reinterpret_cast<GameObject*>(fixture_data);
+
         auto id = game_object->get_id();
         if (id == BEAM || id == BOUNDARY) {
             intersecting = true;

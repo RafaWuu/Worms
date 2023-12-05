@@ -1,12 +1,11 @@
-//
-// Created by xguss on 29/11/23.
-//
+
 
 #ifndef WORMS_SERVER_EXPLOSION_H
 #define WORMS_SERVER_EXPLOSION_H
 
-#include "server_gameobject.h"
+#include <memory>
 
+#include "server_gameobject.h"
 class Explosion: public GameObject {
 private:
     int frames;

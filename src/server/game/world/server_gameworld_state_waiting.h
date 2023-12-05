@@ -1,12 +1,11 @@
-//
-// Created by xguss on 03/12/23.
-//
+
 
 #ifndef WORMS_SERVER_GAMEWORLD_STATE_WAITING_H
 #define WORMS_SERVER_GAMEWORLD_STATE_WAITING_H
 
-#include "server_gameworld_state.h"
+#include <memory>
 
+#include "server_gameworld_state.h"
 class GameWorldWaitingState: public GameWorldState {
 private:
     Worm& worm;

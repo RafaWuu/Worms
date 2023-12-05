@@ -1,14 +1,13 @@
-//
-// Created by xguss on 03/11/23.
-//
+
 
 #ifndef WORMS_SERVER_BEAM_H
 #define WORMS_SERVER_BEAM_H
 
+#include <memory>
+
 #include "b2_body.h"
 #include "b2_world.h"
 #include "server_gameobject.h"
-
 class Beam: public GameObject {
 private:
     b2Body* body;

@@ -1,6 +1,4 @@
-//
-// Created by xguss on 30/11/23.
-//
+
 
 #include "server_weapon_bat.h"
 

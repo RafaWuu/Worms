@@ -1,6 +1,4 @@
-//
-// Created by xguss on 03/12/23.
-//
+
 
 #include "server_player_manager.h"
 
@@ -12,7 +10,10 @@ PlayerManager::PlayerManager(): players(), active_player() {}
 
 void PlayerManager::assign_worms_to_players(const std::vector<uint16_t>& clients,
                                             std::map<uint16_t, Worm*>& worm_map) {
-    for (auto& client: clients) players.emplace_back(client);
+    for (auto& client: clients) {
+        //  cppcheck-suppress useStlAlgorithm
+        players.emplace_back(client);
+    }
 
     active_player = players.begin();
 

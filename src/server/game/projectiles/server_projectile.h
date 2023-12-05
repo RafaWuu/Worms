@@ -1,6 +1,4 @@
-//
-// Created by xguss on 14/11/23.
-//
+
 
 #ifndef WORMS_SERVER_BAZOOKA_projectile_H
 #define WORMS_SERVER_BAZOOKA_projectile_H

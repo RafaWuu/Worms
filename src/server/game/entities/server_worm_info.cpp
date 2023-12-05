@@ -1,6 +1,4 @@
-//
-// Created by xguss on 03/11/23.
-//
+
 
 #include "server_worm_info.h"
 

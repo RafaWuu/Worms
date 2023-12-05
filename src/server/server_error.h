@@ -1,6 +1,4 @@
-//
-// Created by xguss on 04/11/23.
-//
+
 
 #ifndef WORMS_SERVER_ERROR_H
 #define WORMS_SERVER_ERROR_H

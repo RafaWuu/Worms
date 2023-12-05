@@ -1,11 +1,10 @@
-//
-// Created by xguss on 21/11/23.
-//
+
 
 #ifndef WORMS_SCENARIO_FILEHANDLER_H
 #define WORMS_SCENARIO_FILEHANDLER_H
 
 #include <cstdint>
+#include <map>
 #include <string>
 #include <vector>
 

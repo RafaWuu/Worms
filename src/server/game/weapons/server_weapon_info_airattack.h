@@ -1,6 +1,4 @@
-//
-// Created by xguss on 03/12/23.
-//
+
 
 #ifndef WORMS_SERVER_WEAPON_INFO_AIRATTACK_H
 #define WORMS_SERVER_WEAPON_INFO_AIRATTACK_H

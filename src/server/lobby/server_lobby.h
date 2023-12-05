@@ -1,6 +1,4 @@
-//
-// Created by xguss on 31/10/23.
-//
+
 
 #ifndef WORMS_SERVER_LOBBY_H
 #define WORMS_SERVER_LOBBY_H

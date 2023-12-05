@@ -1,6 +1,4 @@
-//
-// Created by xguss on 07/11/23.
-//
+
 
 #ifndef WORMS_SERVER_STATES_H
 #define WORMS_SERVER_STATES_H

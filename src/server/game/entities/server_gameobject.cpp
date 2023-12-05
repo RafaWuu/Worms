@@ -1,6 +1,4 @@
-//
-// Created by xguss on 04/11/23.
-//
+
 
 #include "server_gameobject.h"
 

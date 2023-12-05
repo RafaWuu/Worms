@@ -1,6 +1,4 @@
-//
-// Created by xguss on 03/10/23.
-//
+
 
 #ifndef THREADS_SERVER_CLIENTHANDLER_H
 #define THREADS_SERVER_CLIENTHANDLER_H

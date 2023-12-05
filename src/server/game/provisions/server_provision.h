@@ -1,9 +1,9 @@
-//
-// Created by xguss on 30/11/23.
-//
+
 
 #ifndef WORMS_SERVER_PROVISION_H
 #define WORMS_SERVER_PROVISION_H
+
+#include <memory>
 
 #include "game/entities/server_gameobject.h"
 #include "game/entities/server_worm.h"

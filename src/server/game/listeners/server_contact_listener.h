@@ -1,6 +1,4 @@
-//
-// Created by xguss on 05/11/23.
-//
+
 
 #ifndef WORMS_SERVER_CONTACT_LISTENER_H
 #define WORMS_SERVER_CONTACT_LISTENER_H

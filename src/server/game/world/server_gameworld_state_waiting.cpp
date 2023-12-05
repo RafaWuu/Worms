@@ -1,9 +1,8 @@
-//
-// Created by xguss on 03/12/23.
-//
+
 
 #include "server_gameworld_state_waiting.h"
 
+#include <memory>
 
 GameWorldWaitingState::GameWorldWaitingState(PlayerManager& player_manager, Worm& worm,
                                              GameWorld& world):

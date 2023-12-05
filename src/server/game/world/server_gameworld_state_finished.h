@@ -1,12 +1,11 @@
-//
-// Created by xguss on 04/12/23.
-//
+
 
 #ifndef WORMS_SERVER_GAMEWORLD_STATE_FINISHED_H
 #define WORMS_SERVER_GAMEWORLD_STATE_FINISHED_H
 
-#include "server_gameworld_state.h"
+#include <memory>
 
+#include "server_gameworld_state.h"
 class GameWorldFinishedState: public GameWorldState {
 private:
     Worm& worm;
