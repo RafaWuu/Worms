@@ -13,14 +13,14 @@
 
 WormSensor::WormSensor(Worm* worm): worm(worm), GameObject() {
     b2PolygonShape dynamicBox;
-    auto& config = Configuration::get_instance();
+    const auto& config = Configuration::get_instance();
     dynamicBox.SetAsBox(config.worm_width / 2 * 1.1, .15, b2Vec2(0, -config.worm_height / 2), 0);
 
     b2FixtureDef fixtureDef;
     fixtureDef.shape = &dynamicBox;
 
     fixtureDef.filter.categoryBits = WORM_SENSOR;
-    fixtureDef.filter.maskBits = BOUNDARY | BEAM | WORM;
+    fixtureDef.filter.maskBits = BOUNDARY | BEAM | WORM | GROUND | projectile;
 
     fixtureDef.isSensor = true;
     fixtureDef.userData.pointer = reinterpret_cast<uintptr_t>(this);
@@ -48,6 +48,11 @@ void WormSensor::handle_begin_floor_contact(GameObject* other) {
             worm_fixture->SetRestitution(0);
             worm->body->SetGravityScale(0);
         }
+    }
+
+    if ((other->get_id() & GROUND) == GROUND) {
+        worm->numFootContacts++;
+        worm->process_water_fall();
     }
 }
 

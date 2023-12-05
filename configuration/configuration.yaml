@@ -8,8 +8,8 @@ round_length: 30
 grace_length: 3
 
 maximum_countdown: 5
-maximum_wind: 0.15
-minimum_wind: 0.002
+maximum_wind: 15
+minimum_wind: 0.2
 
 provision:
   width: 1.2

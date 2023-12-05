@@ -53,8 +53,7 @@ Worm::Worm(uint8_t id, GameWorld& world, float pos_x, float pos_y):
 
     body->CreateFixture(&fixtureDef);
 
-    dynamicBox.SetAsBox(config.worm_width / 2 * 1.1, .15, b2Vec2(0, -config.worm_height / 2 + .1),
-                        0);
+    dynamicBox.SetAsBox(config.worm_width / 2, config.worm_height / 2);
 
     getLog().write("Creando gusano %hhu, x: %f, y %f: \n", id, pos_x, pos_y);
 
@@ -69,10 +68,11 @@ Worm::Worm(uint8_t id, GameWorld& world, float pos_x, float pos_y):
     recent_speed = 0;
     had_used_weapon = false;
     deactivate_simulation = false;
+    is_dying = false;
 }
 
 void Worm::process_fall(float distance) {
-    double max = fmax(25, config.max_fall_dmg);
+    double max = fmax(distance, config.max_fall_dmg);
 
     if (distance > config.safe_height)
         get_hit(fmin(distance, max));
@@ -109,10 +109,11 @@ void Worm::update(GameWorld& world) {
     else if (frames_to_deactivation == 0)
         body->SetType(b2_dynamicBody);
 
-    if (frames_to_deactivation == 0) {
-        frames_to_deactivation = 0;
-    } else
+    if (frames_to_deactivation > 0)
         frames_to_deactivation--;
+
+    if (is_dying)
+        get_hit(1);
 }
 
 void Worm::move(MoveDir direction) {
@@ -261,3 +262,5 @@ void Worm::handle_player_end_collision(Worm& other) {
     frames_to_deactivation = 5;
     deactivate_simulation = false;
 }
+
+void Worm::process_water_fall() { is_dying = true; }

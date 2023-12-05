@@ -115,5 +115,9 @@ public:
     void set_countdown(uint8_t seconds);
 
     uint16_t client_id;
+
+    void process_water_fall();
+
+    bool is_dying;
 };
 #endif  // WORMS_SERVER_WORM_H

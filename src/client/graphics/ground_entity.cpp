@@ -10,10 +10,12 @@ GroundEntity::GroundEntity(TextureController controller, uint16_t x, uint16_t y,
         y(y),
         width(w),
         height(h),
-        texture(controller.get_texture(AnimationState::IDLE)) {}
+        texture(controller.get_texture(SCENARIO_GROUND)) {}
 
 void GroundEntity::render(SDL2pp::Renderer& renderer, SDL2pp::Rect& camera) {
     renderer.FillCopy(*texture, SDL2pp::NullOpt,
-                      SDL2pp::Rect(x - width / 2, y - width / 2, width, height));
+                      SDL2pp::Rect(x - width / 2, y - height / 2, width, height));
 }
-void GroundEntity::update_info(EntityInfo* info, SoundController& sound_controller) { Entity::update_info(info, sound_controller); }
+void GroundEntity::update_info(EntityInfo* info, SoundController& sound_controller) {
+    Entity::update_info(info, sound_controller);
+}

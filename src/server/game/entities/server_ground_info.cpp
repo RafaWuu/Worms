@@ -17,7 +17,7 @@ void GroundInfo::serialize_scenario(BaseProtocol& bp) {
     bp.send_4byte_float(x);
     bp.send_4byte_float(y);
 
-    bp.send_4byte_float(height);
     bp.send_4byte_float(width);
+    bp.send_4byte_float(height);
 }
 void GroundInfo::serialize_status(BaseProtocol& bp) { bp.send_1byte_number(id); }
