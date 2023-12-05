@@ -9,12 +9,15 @@
 #include "entity_info.h"
 #include "aim_info.h"
 
+#include "graphics/texture_controller.h"
+
+
 enum WORM_STATE { DirLeft = 1, DirRight = 2, Stop = 3, JumpF = 4, JumpB = 5 };
 
 class Worm: public EntityInfo {
 private:
     uint16_t id;
-    uint16_t ammo;
+    int ammo;
 
     uint8_t dir;
     uint16_t state;
@@ -25,7 +28,7 @@ private:
 
 public:
     Worm(uint16_t id, uint16_t pos_x, uint16_t pos_y, uint16_t width, uint16_t height, uint8_t dir,
-         uint16_t state, uint8_t health, uint8_t current_weapon, uint16_t ammo,  
+         uint16_t state, uint8_t health, uint8_t current_weapon, int ammo,
          uint8_t attack_power, AimInfo aim_info);
 
     Worm(uint16_t id, uint16_t pos_x, uint16_t pos_y, uint16_t width, uint16_t height, uint8_t dir,

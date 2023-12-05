@@ -20,12 +20,12 @@ void Hud::update_hp(int worm_id, int hp) {
     auto client_id = worms_distribution[worm_id];
     hp_map[client_id][worm_id] = hp;
 }
-void Hud::update_time(float time) { time = time; }
+void Hud::update_time(float time) { this->time = time; }
 
 void Hud::update_ammo(int worm_id, int ammo) {
     if (client_id == worms_distribution[worm_id])
     {
-        ammo = ammo;
+        this->ammo = ammo;
     }
     
 }
@@ -64,8 +64,9 @@ void Hud::render_hp() {
 
 void Hud::render_ammo() {
     std::unique_ptr<SDL2pp::Font> font = get_font();
-    
-    std::string text = "Ammo: " + std::to_string(ammo);
+
+    std::string ammo_s = (ammo >= 0) ? std::to_string(ammo) : "Infinite";
+    std::string text = "Ammo: " + ammo_s;
     SDL2pp::Texture ammo_sprite(renderer,
                                 font->RenderText_Blended(text, SDL2pp::Color{255, 0, 0, 255}));
 

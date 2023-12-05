@@ -21,6 +21,8 @@
 
 #define BYTE 1
 
+#define INFINITE_AMMO (-1)
+
 enum ObjectType {
     BOUNDARIE = 0x001,  // habria que ponerlo en common
     BEAM = 0x002,
@@ -215,7 +217,7 @@ std::unique_ptr<Worm> ClientProtocol::receive_worm() {
     uint16_t state;
     uint8_t health;
     uint8_t current_weapon;
-    uint16_t ammo;
+    int ammo;
 
     float aim_angle = 0;
     float x_aim = 0;
@@ -235,7 +237,16 @@ std::unique_ptr<Worm> ClientProtocol::receive_worm() {
 
     // TODO por ahi seria mas directo si el map directamente tiene los ids como indice
     auto s = config.get_weapon_name(current_weapon);
-    baseProtocol.recv_2byte_number(ammo);
+
+
+    if (config.get_weapon_ammo(s) == INFINITE_AMMO){
+        ammo = INFINITE_AMMO;
+    } else{
+        uint16_t aux;
+        baseProtocol.recv_2byte_number(aux);
+        ammo = aux;
+    }
+
 
     if (config.weapon_has_scope(s)) {
         baseProtocol.recv_4byte_float(aim_angle);

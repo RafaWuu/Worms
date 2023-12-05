@@ -12,7 +12,6 @@ class TeleportationWeaponInfo: public WeaponInfo {
 private:
     float aim_x;
     float aim_y;
-    int ammo;
 
 public:
     explicit TeleportationWeaponInfo(const TeleportationWeapon& object);

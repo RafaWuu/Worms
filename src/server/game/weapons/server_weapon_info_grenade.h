@@ -12,7 +12,6 @@ class GrenadeWeaponInfo: public WeaponInfo {
 private:
     float angle;
     float power;
-    int ammo;
     float countdown;
 
 public:

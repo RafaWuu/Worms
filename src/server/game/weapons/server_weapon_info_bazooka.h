@@ -14,11 +14,11 @@ class BazookaWeaponInfo: public WeaponInfo {
 private:
     float angle;
     float power;
-    int ammo;
+
 
 public:
     explicit BazookaWeaponInfo(const BazookaWeapon& bazooka);
-    BazookaWeaponInfo(float angle, float power, int ammo);
+    BazookaWeaponInfo(float angle, float power);
 
     void serialize_status(BaseProtocol& bp) override;
 };

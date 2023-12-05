@@ -7,20 +7,18 @@
 #include "common_weapon_constants.h"
 
 BazookaWeaponInfo::BazookaWeaponInfo(const BazookaWeapon& bazooka) {
-    ammo = bazooka.ammo;
+
     angle = bazooka.aim_angle;
     power = bazooka.aim_power;
 }
 
 void BazookaWeaponInfo::serialize_status(BaseProtocol& bp) {
     bp.send_1byte_number(BAZOOKA_ID);
-    bp.send_2byte_number(ammo);
     bp.send_4byte_float(angle);
     bp.send_1byte_number(power * 255);
 }
 
-BazookaWeaponInfo::BazookaWeaponInfo(float angle, float power, int ammo) {
-    this->ammo = ammo;
+BazookaWeaponInfo::BazookaWeaponInfo(float angle, float power) {
     this->angle = angle;
     this->power = power;
 }

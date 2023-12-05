@@ -3,7 +3,7 @@
 #include "graphics/player.h"
 
 Worm::Worm(uint16_t id, uint16_t pos_x, uint16_t pos_y, uint16_t width, uint16_t height,
-           uint8_t dir, uint16_t state, uint8_t health, uint8_t current_weapon, uint16_t ammo,
+           uint8_t dir, uint16_t state, uint8_t health, uint8_t current_weapon, int ammo,
            uint8_t attack_power, AimInfo aim_info):
         dir(dir),
         id(id),
