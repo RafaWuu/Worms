@@ -8,6 +8,7 @@
 #include "entity.h"
 
 #include "animation.h"
+#include "camera.h"
 
 class ProvisionEntity: public Entity {
 private:
@@ -27,7 +28,7 @@ public:
 
     void update_info(EntityInfo* info, SoundController& sound_controller) override;
 
-    void render(SDL2pp::Renderer& renderer, SDL2pp::Rect& camera) override;
+    void render(SDL2pp::Renderer& renderer, Camera& camera) override;
 };
 
 #endif  // WORMS_PROVISION_ENTITY_H

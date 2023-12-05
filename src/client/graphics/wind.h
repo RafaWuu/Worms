@@ -9,6 +9,7 @@
 
 #include "entity.h"
 #include "texture_controller.h"
+#include "camera.h"
 
 class Wind {
 private:
@@ -31,7 +32,7 @@ private:
 public:
     Wind(TextureController& texture_controller, float wind);
 
-    void render(SDL2pp::Renderer& renderer, SDL2pp::Rect& camera);
+    void render(SDL2pp::Renderer& renderer, Camera& camera);
 
     void change_wind(float wind);
 };

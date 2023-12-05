@@ -121,19 +121,22 @@ void Player::update(float dt) {
         an.update(dt);
 }
 
-void Player::render(SDL2pp::Renderer& renderer, SDL2pp::Rect& camera) {
+void Player::render(SDL2pp::Renderer& renderer, Camera& camera) {
+    if (!idle && !dead)
+        camera.update(x, y, width, height);
+
     int offsetX = 1.58 * 25;
     int offsetY = -1.4 * 25;
 
     SDL_RendererFlip flip = facingLeft ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL;
     an.render(
             renderer,
-            SDL2pp::Rect(x - width * 4 + offsetX, y - height * 4 - offsetY, width * 4, height * 4),
+            SDL2pp::Rect((x - camera.get_x() - width * 4 + offsetX)  , (y - -camera.get_y() - height * 4 - offsetY), width * 4, height * 4),
             flip);
 
     // render barra de vida 50x10
     int bar_width = (current_health * 50) / health;
-    SDL2pp::Rect health_bar = {x - 25, y - 55, bar_width, 10};
+    SDL2pp::Rect health_bar = {x - 25 - camera.get_x(), y - 55 - camera.get_y(), bar_width, 10};
     renderer.SetDrawColor(color.r, color.g, color.b, color.a);
     renderer.FillRect(health_bar);
 
@@ -141,10 +144,10 @@ void Player::render(SDL2pp::Renderer& renderer, SDL2pp::Rect& camera) {
     if (!crosshair || !aiming) return;
 
     if (aim_info.get_type() == ANGLE) {
-        crosshair->render_by_angle(renderer, x, y, aim_angle);
+        crosshair->render_by_angle(renderer, x, y, aim_angle, camera);
     } else {
         // Si es teledirigido dibujo el crosshair en la posicion del mouse
-        crosshair->render_by_coordinates(renderer, aim_info.get_x(), aim_info.get_y());
+        crosshair->render_by_coordinates(renderer, aim_info.get_x(), aim_info.get_y(), camera);
     }
 }
 

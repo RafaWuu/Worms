@@ -16,6 +16,8 @@
 #include "scenario_beam.h"
 #include "../sound/sound_controller.h"
 #include "hud.h"
+#include "camera.h"
+
 // Contiene a los objetos renderizables (x ahora solo los gusanos/Players)
 class WorldView {
 private:
@@ -31,7 +33,7 @@ private:
     // Worms, missiles, ...
     std::map<uint16_t, std::shared_ptr<Entity>> dynamic_entities;
 
-    SDL2pp::Rect camera;
+    Camera camera;
     void render_background();
     Hud* hud;
     WeaponSelector& weapon_selector;
@@ -46,8 +48,6 @@ public:
     void update(std::map<uint16_t, std::unique_ptr<EntityInfo>>& updated_info, std::shared_ptr<EstadoJuego>& state);
 
     void render();
-
-    void update_camera(float& x, float& y, float& w, float& h);
 
     void add_entities(std::map<uint16_t, std::unique_ptr<EntityInfo>>& source,
                       std::map<uint16_t, std::shared_ptr<Entity>>& destination,

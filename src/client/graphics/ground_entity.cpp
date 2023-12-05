@@ -12,7 +12,7 @@ GroundEntity::GroundEntity(TextureController controller, uint16_t x, uint16_t y,
         height(h),
         texture(controller.get_texture(SCENARIO_GROUND)) {}
 
-void GroundEntity::render(SDL2pp::Renderer& renderer, SDL2pp::Rect& camera) {
+void GroundEntity::render(SDL2pp::Renderer& renderer, Camera& camera) {
     renderer.FillCopy(*texture, SDL2pp::NullOpt,
                       SDL2pp::Rect(x - width / 2, y - height / 2, width, height));
 }

@@ -15,7 +15,7 @@ ScenarioBeam::ScenarioBeam(TextureController& controller, uint16_t x, uint16_t y
 
 ScenarioBeam::~ScenarioBeam() {}
 
-void ScenarioBeam::render(SDL2pp::Renderer& renderer, SDL2pp::Rect& camera) {
+void ScenarioBeam::render(SDL2pp::Renderer& renderer, Camera& camera) {
     // segun el juego, hay una viga en (-3,6)
     // harcodeado, hay q pasar escalar dimensiones
     SDL2pp::Point center;
@@ -26,6 +26,6 @@ void ScenarioBeam::render(SDL2pp::Renderer& renderer, SDL2pp::Rect& camera) {
     int offsetY = 0;
 
     renderer.Copy(*texture, SDL2pp::Rect(0, 0, (*texture).GetWidth(), (*texture).GetHeight()),
-                  SDL2pp::Rect(x - width / 2 + offsetX, y - height / 2 + offsetY, width, height),
+                  SDL2pp::Rect(x -camera.get_x() - width / 2 + offsetX, y - camera.get_y() - height / 2 + offsetY, width, height),
                   angle, center, 0);
 }

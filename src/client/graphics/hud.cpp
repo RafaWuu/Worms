@@ -86,6 +86,7 @@ void Hud::render_timer() {
     renderer.Copy(time_sprite, SDL2pp::NullOpt,
                   SDL2pp::Rect(0, time_sprite.GetWidth() * offset, time_sprite.GetWidth(),
                                time_sprite.GetHeight()));
+    offset++;
 }
 
 void Hud::render() {

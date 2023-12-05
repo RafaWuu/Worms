@@ -10,6 +10,7 @@
 #include <SDL2pp/Renderer.hh>
 
 #include "game/entity_info.h"
+#include "camera.h"
 
 #include "../sound/sound_controller.h"
 
@@ -27,7 +28,7 @@ public:
 
     };
 
-    virtual void render(SDL2pp::Renderer& renderer, SDL2pp::Rect& camera) = 0;
+    virtual void render(SDL2pp::Renderer& renderer, Camera& camera) = 0;
 
     virtual uint16_t get_id() const { return 0; };
 };

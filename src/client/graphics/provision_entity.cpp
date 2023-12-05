@@ -22,14 +22,14 @@ void ProvisionEntity::update_info(EntityInfo* info, SoundController& sound_contr
 
 void ProvisionEntity::update(float dt) { an.update(dt); }
 
-void ProvisionEntity::render(SDL2pp::Renderer& renderer, SDL2pp::Rect& camera) {
+void ProvisionEntity::render(SDL2pp::Renderer& renderer, Camera& camera) {
     int offsetX = 0;
     int offsetY = 0;
 
     SDL_RendererFlip flip = SDL_FLIP_NONE;
 
     an.render(renderer,
-              SDL2pp::Rect(x - width * 3 / 2 + offsetX, y - height * 3 / 2 + offsetY, width * 3,
+              SDL2pp::Rect(x - camera.get_x() - width * 3 / 2 + offsetX, y - camera.get_y() -  height * 3 / 2 + offsetY, width * 3,
                            height * 3),
               flip, 0.0);
 }

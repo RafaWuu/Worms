@@ -10,6 +10,7 @@
 
 #include "entity.h"
 #include "texture_controller.h"
+#include "camera.h"
 
 class ScenarioBeam: public Entity {
 private:
@@ -27,6 +28,6 @@ public:
     ~ScenarioBeam();
 
 
-    void render(SDL2pp::Renderer& renderer, SDL2pp::Rect& camera) override;
+    void render(SDL2pp::Renderer& renderer, Camera& camera) override;
 };
 #endif  // __DESKTOP_WORMS_SRC_CLIENT_GRAPHICS_BEAM_H_

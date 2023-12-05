@@ -41,7 +41,7 @@ void ExplosionEntity::update(float dt) {
 
 }
 
-void ExplosionEntity::render(SDL2pp::Renderer& renderer, SDL2pp::Rect& camera) {
+void ExplosionEntity::render(SDL2pp::Renderer& renderer, Camera& camera) {
     
     if (frames_rendered >= circle.get_num_frames()) {
         return;
@@ -49,10 +49,10 @@ void ExplosionEntity::render(SDL2pp::Renderer& renderer, SDL2pp::Rect& camera) {
 
     SDL_RendererFlip flip = SDL_FLIP_NONE;
 
-    circle.render(renderer, SDL2pp::Rect(x - radius, y - radius, radius * 2, radius * 2), flip,
+    circle.render(renderer, SDL2pp::Rect(x - camera.get_x() - radius, y - camera.get_y() - radius, radius * 2, radius * 2), flip,
                   0.0);
 
-    elipse.render(renderer, SDL2pp::Rect(x - radius, y - radius, radius * 2, radius * 2), flip,
+    elipse.render(renderer, SDL2pp::Rect(x - camera.get_x() - radius, y - camera.get_y() - radius, radius * 2, radius * 2), flip,
                   0.0);
     
     frames_rendered++;

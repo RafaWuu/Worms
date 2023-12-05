@@ -8,6 +8,7 @@
 #include "animation.h"
 #include "entity.h"
 #include "weapons/weapon_factory.h"
+#include "camera.h"
 
 class projectileEntity: public Entity {
 public:
@@ -16,7 +17,7 @@ public:
 
     void update_info(EntityInfo* info, SoundController& sound_controller) override;
     void update(float dt) override;
-    void render(SDL2pp::Renderer& renderer, SDL2pp::Rect& camera) override;
+    void render(SDL2pp::Renderer& renderer, Camera& camera) override;
 
 private:
     TextureController& texture_controller;

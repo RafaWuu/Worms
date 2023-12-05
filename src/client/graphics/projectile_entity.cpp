@@ -48,7 +48,7 @@ void projectileEntity::update(float dt) {
     an.update(dt); 
 }
 
-void projectileEntity::render(SDL2pp::Renderer& renderer, SDL2pp::Rect& camera) {
+void projectileEntity::render(SDL2pp::Renderer& renderer, Camera& camera) {
     float angle_degrees = angle * (180.0f / M_PI) + 90.0f;
 
     int offsetX = -1 * 25;
@@ -59,6 +59,6 @@ void projectileEntity::render(SDL2pp::Renderer& renderer, SDL2pp::Rect& camera) 
     SDL_RendererFlip flip = SDL_FLIP_NONE;
     an.render(
             renderer,
-            SDL2pp::Rect(x - width / 2 + offsetX, y - height / 2 + offsetY, width * 4, height * 4),
+            SDL2pp::Rect(x - camera.get_x() - width / 2 + offsetX, y - camera.get_y() - height / 2 + offsetY, width * 4, height * 4),
             flip, rotation);
 }

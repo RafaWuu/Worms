@@ -16,7 +16,7 @@ Wind::Wind(TextureController& texture_controller, float wind) : texture_controll
     y = SCREEN_HEIGHT - size;
 }
 
-void Wind::render(SDL2pp::Renderer& renderer, SDL2pp::Rect& camera) {
+void Wind::render(SDL2pp::Renderer& renderer, Camera& camera) {
     float wind_per_frame = (max_wind - min_wind) / numFrames;
 
     if (wind > 0) {

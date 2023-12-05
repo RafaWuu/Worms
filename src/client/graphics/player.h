@@ -15,6 +15,7 @@
 #include "texture_controller.h"
 #include "../sound/sound_controller.h"
 #include "hud.h"
+#include "camera.h"
 #include "../game/aim_info.h"
 
 class Player: public Entity {
@@ -26,7 +27,7 @@ public:
 
     void update(float dt) override;
 
-    void render(SDL2pp::Renderer& renderer, SDL2pp::Rect& camera) override;
+    void render(SDL2pp::Renderer& renderer, Camera& camera) override;
 
     uint16_t get_id() const override;
 

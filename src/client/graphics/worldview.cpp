@@ -10,8 +10,8 @@ WorldView::WorldView(SDL2pp::Renderer& renderer,TextureController& texture_contr
         weapon_selector(weapon_selector),
         sound_controller(sound_controller),
         wind(texture_controller, 0),
-        hud(hud){
-    camera = SDL2pp::Rect{0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
+        hud(hud),
+        camera(SCREEN_WIDTH, SCREEN_HEIGHT) {
     add_entities(scenario->get_dynamic_entities_info(), dynamic_entities, color_map, my_worms_id);
     add_entities(scenario->get_static_entities_info(), static_entities, color_map, my_worms_id);
 }
@@ -65,24 +65,6 @@ void WorldView::render() {
 void WorldView::render_background() {
     auto background = texture_controller.get_texture(SCENARIO_BACKGROUND);
     renderer.Copy(*background, SDL2pp::NullOpt, SDL2pp::Rect{0, 0, SCREEN_WIDTH, SCREEN_HEIGHT});
-}
-// offset segun la posicion del objeto a enfocar.
-void WorldView::update_camera(float& x, float& y, float& w, float& h) {
-
-    camera.x = (x + w / 2) * PPM - SCREEN_WIDTH / 2;
-    camera.y = ((-1) * y + h / 2) * PPM - SCREEN_HEIGHT / 2;
-
-    if (camera.x < 0)
-        camera.x = 0;
-
-    if (camera.y < 0)
-        camera.y = 0;
-
-    if (camera.x > LEVEL_WIDTH - camera.w)
-        camera.x = LEVEL_WIDTH - camera.w;
-
-    if (camera.y > LEVEL_HEIGHT - camera.h)
-        camera.y = LEVEL_HEIGHT - camera.h;
 }
 
 void WorldView::add_entities(std::map<uint16_t, std::unique_ptr<EntityInfo>>& source,

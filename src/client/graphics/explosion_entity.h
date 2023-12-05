@@ -3,6 +3,7 @@
 
 #include "animation.h"
 #include "entity.h"
+#include "camera.h"
 
 class ExplosionEntity: public Entity {
 public:
@@ -11,7 +12,7 @@ public:
 
     void update_info(EntityInfo* info, SoundController& sound_controller) override;
     void update(float dt) override;
-    void render(SDL2pp::Renderer& renderer, SDL2pp::Rect& camera) override;
+    void render(SDL2pp::Renderer& renderer, Camera& camera) override;
 
 private:
     TextureController& texture_controller;
