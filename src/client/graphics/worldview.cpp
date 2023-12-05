@@ -96,7 +96,7 @@ void WorldView::render_game_over(const std::string& game_status) {
                   SDL2pp::Rect(0, status_text.GetWidth(), status_text.GetWidth(),
                                status_text.GetHeight()));
     
-    std::this_thread::sleep_for(5);
+    std::this_thread::sleep_for(std::chrono::seconds(4));
 }
 
 void WorldView::render_background() {
