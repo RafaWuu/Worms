@@ -5,6 +5,7 @@
 #ifndef WORMS_SERVER_PROVISION_FACTORY_H
 #define WORMS_SERVER_PROVISION_FACTORY_H
 
+#include <memory>
 #include <random>
 
 #include "../../../../configuration/configuration.h"
@@ -16,6 +17,8 @@ private:
     std::random_device rd;
     std::mt19937 gen;
     std::uniform_real_distribution<> dis;
+    std::uniform_int_distribution<> dis_sample;
+
     Configuration& config;
 
     GameWorld& world;

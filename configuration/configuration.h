@@ -3,6 +3,7 @@
 
 #include <map>
 #include <string>
+#include <vector>
 
 #include "yaml-cpp/yaml.h"
 
@@ -175,6 +176,8 @@ public:
 
     float get_max_wind();
     float get_min_wind();
+
+    std::vector<uint16_t> get_weapons_with_limited_ammo();
 };
 
 #endif

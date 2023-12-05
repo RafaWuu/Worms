@@ -12,7 +12,7 @@ void Player::assign_worm(Worm& worm, bool extra_health) {
         worm.set_extra_health();
 
     worms.emplace_back(&worm);
-    active_worm = worms.begin();
+    active_worm = worms.end() - 1;
 }
 
 Worm& Player::get_next_alive_worm() {
@@ -23,7 +23,7 @@ Worm& Player::get_next_alive_worm() {
                              [&](const Worm* worm) { return worm->worm_is_alive(); });
 
     if (worm != worms.end()) {
-        ++active_worm;
+        active_worm = worm + 1;
         return **worm;
     }
 
@@ -31,9 +31,11 @@ Worm& Player::get_next_alive_worm() {
                         [&](const Worm* worm) { return worm->worm_is_alive(); });
 
     if (worm != worms.end()) {
-        ++active_worm;
+        active_worm = worm + 1;
         return **worm;
     }
+
+    throw;
 }
 
 bool Player::is_any_worm_alive() const {

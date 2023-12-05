@@ -15,7 +15,6 @@ class MortarWeapon: public Weapon {
 private:
     float aim_angle;
     float aim_power;
-    int ammo;
 
 public:
     friend class MortarWeaponInfo;

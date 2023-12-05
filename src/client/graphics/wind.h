@@ -1,11 +1,14 @@
 #ifndef CLIENT_WIND_H
 #define CLIENT_WIND_H
 
+#include <memory>
+
 #include <SDL2pp/SDL2pp.hh>
+
+#include "../configuration/configuration.h"
 
 #include "entity.h"
 #include "texture_controller.h"
-#include "configuration/configuration.h"
 
 class Wind {
 private:
@@ -27,10 +30,10 @@ private:
 
 public:
     Wind(TextureController& texture_controller, float wind);
-    
+
     void render(SDL2pp::Renderer& renderer, SDL2pp::Rect& camera);
 
     void change_wind(float wind);
 };
 
-#endif 
+#endif

@@ -16,7 +16,7 @@ private:
     ObjectType id;
 
 public:
-    ProvisionInfo(const Provision& provision);
+    explicit ProvisionInfo(const Provision& provision);
     void serialize_status(BaseProtocol& gp) override;
 
     void serialize_scenario(BaseProtocol& gp) override;

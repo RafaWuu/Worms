@@ -37,5 +37,9 @@ public:
     void serialize_start(BaseProtocol& bp);
 
     std::unique_ptr<WeaponInfo> weapon_info;
+
+    WormInfo(ObjectType object_id, float x, float y, uint16_t worm_id, bool facing_right,
+             uint16_t state, uint8_t health, int current_weapon, uint16_t client_id,
+             std::unique_ptr<WeaponInfo> weapon_info);
 };
 #endif  // WORMS_SERVER_WORM_INFO_H

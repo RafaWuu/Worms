@@ -4,20 +4,22 @@
 
 #include "server_player_manager.h"
 
+#include <algorithm>
+
 #define DRAW UINT16_MAX
 
 PlayerManager::PlayerManager(): players(), active_player() {}
 
 void PlayerManager::assign_worms_to_players(const std::vector<uint16_t>& clients,
-                                            std::map<uint16_t, Worm*> worm_map) {
+                                            std::map<uint16_t, Worm*>& worm_map) {
     for (auto& client: clients) players.emplace_back(client);
 
     active_player = players.begin();
 
     int i = 0;
 
-    int n = worm_map.size();
-    int last_player_full_of_worms = n % players.size() - 1;
+    size_t n = worm_map.size();
+    size_t last_player_full_of_worms = n % players.size() - 1;
 
     for (auto& worm: worm_map) {
         if (worm.second == nullptr)
@@ -45,20 +47,23 @@ Worm& PlayerManager::get_next_worm_from_client() {
         active_player = players.begin();
 
     auto player = std::find_if(active_player, players.end(),
-                               [&](Player player) { return player.is_any_worm_alive(); });
+                               [&](const Player& player) { return player.is_any_worm_alive(); });
 
     if (player != players.end()) {
-        ++active_player;
+        active_player = player + 1;
+
         return player->get_next_alive_worm();
     }
 
     player = std::find_if(players.begin(), active_player,
-                          [&](Player player) { return player.is_any_worm_alive(); });
+                          [&](const Player& player) { return player.is_any_worm_alive(); });
 
     if (player != players.end()) {
-        ++active_player;
+        active_player = player + 1;
         return player->get_next_alive_worm();
     }
+
+    throw;
 }
 
 uint16_t PlayerManager::last_client_alive() {

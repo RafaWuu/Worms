@@ -4,6 +4,8 @@
 
 #include "server_worm_info.h"
 
+#include <utility>
+
 #include "../../configuration/configuration.h"
 
 #include "common_weapon_constants.h"
@@ -20,6 +22,21 @@ WormInfo::WormInfo(const Worm& worm) {
     weapon = worm.current_weapon;  // arma
     client_id = worm.client_id;
     weapon_info = worm.get_current_weapon_info();
+}
+
+WormInfo::WormInfo(ObjectType object_id, float x, float y, uint16_t worm_id, bool facing_right,
+                   uint16_t state, uint8_t health, int current_weapon, uint16_t client_id,
+                   std::unique_ptr<WeaponInfo> weapon_info):
+        weapon_info(std::move(weapon_info)) {
+    this->object_id = object_id;
+    this->worm_id = worm_id;
+    this->x = x;
+    this->y = y;
+    this->facing_right = facing_right;
+    this->state = state;
+    this->health = health;
+    this->weapon = current_weapon;  // arma
+    this->client_id = client_id;
 }
 
 void WormInfo::serialize_scenario(BaseProtocol& bp) {

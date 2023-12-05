@@ -18,7 +18,7 @@ private:
 public:
     friend class GroundInfo;
 
-    explicit Ground(b2World* world, float width);
+    Ground(b2World* world, float width, float height, float pos_x, float pos_y);
     ObjectType get_id() const override;
     std::unique_ptr<GameObjectInfo> get_status() const override;
     float width;

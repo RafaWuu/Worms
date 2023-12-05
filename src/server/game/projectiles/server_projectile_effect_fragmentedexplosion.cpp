@@ -4,7 +4,7 @@
 
 #include "server_projectile_effect_fragmentedexplosion.h"
 
-#include "game/listeners/server_raycast_explosion_callback.h"
+#include "game/listeners/server_explosion_callback.h"
 #include "game/weapons/server_weapon.h"
 #include "game/world/server_gameworld.h"
 
@@ -31,28 +31,27 @@ ProjectileEffectFragmentedExplosion::ProjectileEffectFragmentedExplosion(
 
 
 bool ProjectileEffectFragmentedExplosion::execute(GameWorld& world, b2Body& body) {
-    std::vector<uint16_t> affected_worms;
+    ExplosionCallback callback;
+    b2AABB aabb{};
 
     b2Vec2 center = body.GetPosition();
-    int num_rays = NRAYS;
-    float m_blastPower = blast_power;
-    for (int i = 0; i < num_rays; i++) {
-        float angle = (i / (float)num_rays) * 2 * M_PI;
 
-        b2Vec2 rayDir(sinf(angle), cosf(angle));
-        b2Vec2 rayEnd = center + main_radius * rayDir;
+    aabb.lowerBound = center - b2Vec2(main_radius, main_radius);
+    aabb.upperBound = center + b2Vec2(main_radius, main_radius);
 
-        // check what this ray hits
-        RayCastExplosionCallback callback;
-        world.b2_world.RayCast(&callback, center, rayEnd);
-        if (callback.m_body && callback.p_worm) {
-            if (std::find(affected_worms.begin(), affected_worms.end(),
-                          callback.p_worm->get_id()) == affected_worms.end()) {
-                apply_blast_impulse(callback.m_body, callback.p_worm, center, callback.m_point,
-                                    (m_blastPower / (float)num_rays));
-                affected_worms.push_back(callback.p_worm->get_id());
-            }
-        }
+    body.GetWorld()->QueryAABB(&callback, aabb);
+
+    for (int i = 0; i < callback.found_worms.size(); i++) {
+        b2Body* worm_body = callback.found_bodies[i];
+        Worm* worm = callback.found_worms[i];
+
+        b2Vec2 bodyCom = worm_body->GetWorldCenter();
+
+        // ignore bodies outside the blast range
+        if ((bodyCom - worm_body->GetPosition()).Length() >= main_radius)
+            continue;
+
+        apply_blast_impulse(worm_body, worm, center, bodyCom, blast_power);
     }
 
     for (int i = 0; i < fragment_number; ++i) {

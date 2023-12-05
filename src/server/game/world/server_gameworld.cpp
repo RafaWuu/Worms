@@ -22,6 +22,8 @@
 
 #define GRAVITY_Y (-9.8)
 
+#define FRONTIER 8
+
 GameWorld::GameWorld(const std::string& scenario_name):
         b2_world(b2Vec2(.0, GRAVITY_Y)),
         worm_map(),
@@ -35,7 +37,10 @@ GameWorld::GameWorld(const std::string& scenario_name):
     entity_id = 0;
     file_handler.get_scenario(*this, scenario_name);
 
-    add_entity(std::make_shared<Ground>(&b2_world, width));
+    boundary = std::make_unique<Boundary>(&b2_world, width + FRONTIER * 2, height + FRONTIER * 2,
+                                          FRONTIER);
+    add_entity(std::make_shared<Ground>(&b2_world, width + FRONTIER * 2, FRONTIER, width / 2,
+                                        -height - FRONTIER / 2));
 
     b2_world.SetContactListener(&listener);
     game_state = std::make_shared<GameWorldWaitingState>(player_manager, *worm_map[0], *this);
@@ -144,11 +149,9 @@ void GameWorld::add_entity(std::shared_ptr<GameObject> object) {
     entities_map.emplace(entity_id++, object);
 }
 
-//  limit 4to cuadrante x>=0 , y<=0
 void GameWorld::set_dimensions(float h, float w) {
     width = w;
     height = h;
-    boundary = std::make_unique<Boundary>(&b2_world, w, h);
 }
 
 GameWorld::~GameWorld() {}

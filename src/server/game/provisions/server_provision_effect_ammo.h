@@ -10,10 +10,11 @@
 class ProvisionEffectAmmo: public ProvisionEffect {
 private:
     int quantity;
-    uint16_t id;
+    uint16_t weapon_id;
 
 public:
     explicit ProvisionEffectAmmo(int quantity, uint16_t weapon_id);
+
     void take(GameWorld& world, Provision& provision, Worm& worm) override;
 };
 

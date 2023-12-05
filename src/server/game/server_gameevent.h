@@ -34,9 +34,10 @@ public:
     GameEventMove(uint16_t client_id, uint8_t worm_id, MoveDir dir);
     void execute(EventHandler& e) override;
 
-private:
-    MoveDir dir;
     uint8_t worm_id;
+    MoveDir dir;
+
+private:
 };
 
 
@@ -44,8 +45,6 @@ class GameEventStop: public GameEvent {
 public:
     GameEventStop(uint16_t client_id, uint8_t worm_id);
     void execute(EventHandler& e) override;
-
-private:
     uint8_t worm_id;
 };
 
@@ -55,7 +54,6 @@ public:
     GameEventJump(uint16_t client_id, uint8_t worm_id);
     void execute(EventHandler& e) override;
 
-private:
     uint8_t worm_id;
 };
 
@@ -65,7 +63,6 @@ public:
     GameEventRollBack(uint16_t client_id, uint8_t worm_id);
     void execute(EventHandler& e) override;
 
-private:
     uint8_t worm_id;
 };
 
@@ -75,7 +72,6 @@ public:
     GameEventFireGun(uint16_t client_id, uint8_t worm_id);
     void execute(EventHandler& e) override;
 
-private:
     uint8_t worm_id;
 };
 
@@ -85,9 +81,10 @@ public:
     GameEventAim(uint16_t client_id, uint8_t worm_id, float x, float y);
     void execute(EventHandler& e) override;
 
-private:
     uint8_t worm_id;
     float x, y;
+
+private:
 };
 
 

@@ -19,7 +19,7 @@ TextureController::TextureController(SDL2pp::Renderer& renderer_): renderer(rend
             {DEAD, "grave2.png"},
             {SCENARIO_BEAM_3M, "beam_3m.png"},
             {SCENARIO_BEAM_6M, "beam_6m.png"},
-            //{AnimationState::SCENARIO_GROUND, "blue00.bmp"},
+            {SCENARIO_GROUND, "blue02.png"},
             {BAZOOKA_IDLE, "wbazbak.png"},  // Quiza usar el mismo sprite para idle/aiming?
             {BAZOOKA_AIMING, "wbaz.png"},
             {BAZOOKA_PROJECTILE, "missile.png"},
@@ -47,8 +47,10 @@ TextureController::TextureController(SDL2pp::Renderer& renderer_): renderer(rend
     };
 
     std::map<AnimationState, std::string> textures_yellow_bg = {
-            {MORTAR_PROJECTILE, "mortar.png"},     {BAT_IDLE, "wbsbbak.png"},
-            {BAT_AIMING, "wbsbaim.png"}, {TELEPORTATION_IDLE, "wtelbak.png"},
+            {MORTAR_PROJECTILE, "mortar.png"},
+            {BAT_IDLE, "wbsbbak.png"},
+            {BAT_AIMING, "wbsbaim.png"},
+            {TELEPORTATION_IDLE, "wtelbak.png"},
             {TELEPORTATION_AIMING, "teleportation.png"},
             {CRATE, "wcratev.png"},
             {AIR_STRIKE_PROJECTILE, "airmisl.png"},
@@ -57,7 +59,7 @@ TextureController::TextureController(SDL2pp::Renderer& renderer_): renderer(rend
     };
 
     std::map<AnimationState, std::string> textures_dark_blue_bg = {
-        {EXPLOSION_ELIPSE, "elipse50.png"},
+            {EXPLOSION_ELIPSE, "elipse50.png"},
     };
 
     for (auto const& texture: textures_light_blue_bg) {

@@ -21,7 +21,7 @@ private:
 public:
     PlayerManager();
     void assign_worms_to_players(const std::vector<uint16_t>& clients,
-                                 std::map<uint16_t, Worm*> worm_map);
+                                 std::map<uint16_t, Worm*>& worm_map);
 
     Worm& get_next_worm_from_client();
 

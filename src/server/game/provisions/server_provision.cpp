@@ -5,12 +5,16 @@
 #include "server_provision.h"
 
 #include <iostream>
+#include <memory>
+#include <utility>
 
 #include "../world/server_gameworld.h"
 
 #include "b2_fixture.h"
 #include "b2_polygon_shape.h"
 #include "server_provision_info.h"
+
+#define PROV_GRAVITY_SCALE .7
 
 Provision::Provision(GameWorld& world, float x, float y, std::unique_ptr<ProvisionEffect> effect):
         effect(std::move(effect)), config(Configuration::get_instance()) {
@@ -26,10 +30,12 @@ Provision::Provision(GameWorld& world, float x, float y, std::unique_ptr<Provisi
     polygonShape.SetAsBox(width / 2, height / 2);
 
     body = world.b2_world.CreateBody(&bodyDef);
+    body->SetGravityScale(PROV_GRAVITY_SCALE);
 
     b2FixtureDef fixtureDefSensor;
 
     fixtureDefSensor.shape = &polygonShape;
+    fixtureDefSensor.density = 1;
 
     fixtureDefSensor.filter.categoryBits = PROVISION_SENSOR;
     fixtureDefSensor.filter.maskBits = WORM;
@@ -43,7 +49,6 @@ Provision::Provision(GameWorld& world, float x, float y, std::unique_ptr<Provisi
 
     fixtureDef.shape = &polygonShape;
     fixtureDef.userData.pointer = reinterpret_cast<uintptr_t>(this);
-    fixtureDef.density = 1;
     fixtureDef.filter.categoryBits = PROVISION;
     fixtureDef.filter.maskBits = BEAM | GROUND;
 

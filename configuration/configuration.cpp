@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <string>
+#include <vector>
 
 Configuration& Configuration::get_instance() {
     static Configuration instance;
@@ -266,3 +267,14 @@ float Configuration::get_firing_source_y() const { return firing_source_y; }
 
 // Powering
 float Configuration::get_powering_time() const { return powering_modifier; }
+
+std::vector<uint16_t> Configuration::get_weapons_with_limited_ammo() {
+    std::vector<uint16_t> v;
+
+    for (auto& config: weapons_info) {
+        if (config.second.ammo != -1)
+            v.push_back(config.second.id);
+    }
+
+    return v;
+}

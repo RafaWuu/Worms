@@ -256,7 +256,6 @@ std::unique_ptr<Worm> ClientProtocol::receive_worm() {
 
     getLog().write("Cliente recibe gusano: id %hhu, x: %f, y: %f. Estado %hu \n", id, x, y, state);
 
-    // TODO ahora solo maneja las armas basicas
     return std::make_unique<Worm>(id, x * SCALE, -y * SCALE, config.worm_width * SCALE,
                                   config.worm_height * SCALE, dir, state, health, current_weapon,
                                   ammo, attack_power,
@@ -271,10 +270,10 @@ std::unique_ptr<Ground> ClientProtocol::receive_ground() {
 
     baseProtocol.recv_4byte_float(x);
     baseProtocol.recv_4byte_float(y);
-    baseProtocol.recv_4byte_float(h);
     baseProtocol.recv_4byte_float(w);
+    baseProtocol.recv_4byte_float(h);
 
-    return std::make_unique<Ground>(x, y, h, w);
+    return std::make_unique<Ground>(x * SCALE, -y * SCALE, w * SCALE, h * SCALE);
 }
 
 std::unique_ptr<Beam> ClientProtocol::receive_beam() {

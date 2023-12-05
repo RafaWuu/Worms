@@ -6,6 +6,8 @@
 
 #include "../../../../configuration/configuration.h"
 
+#define WIND_MODIFIER 0.025
+
 Wind::Wind():
         rd(),
         gen(rd()),
@@ -27,6 +29,8 @@ void Wind::update_wind() {
 void Wind::affect_projectile(b2Body& body) {
     float vel_x = wind > 0 ? fmax(wind - body.GetLinearVelocity().x, 0.f) :
                              fmin(wind - body.GetLinearVelocity().x, 0.f);
-    float impulse_x = body.GetMass() * vel_x;
+
+
+    float impulse_x = body.GetMass() * vel_x * WIND_MODIFIER;
     body.ApplyLinearImpulse(b2Vec2(impulse_x, 0), body.GetWorldCenter(), true);
 }
