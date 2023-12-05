@@ -17,8 +17,6 @@ GameWorldSimulationState::GameWorldSimulationState(PlayerManager& player_manager
     round_length = grace_period ? config.grace_length * config.get_tick_rate() : 0;
 
     all_entities_had_stopped = true;
-    std::cout << "Empezando simulacion " << (grace_period ? "con" : "sin") << " tiempo extra de "
-              << unsigned(worm.id) << "\n";
 }
 
 std::unique_ptr<GameWorldState> GameWorldSimulationState::update() {

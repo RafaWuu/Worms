@@ -19,7 +19,6 @@ GameWorldInteractiveState::GameWorldInteractiveState(PlayerManager& player_manag
     active_worm_used_weapon = false;
 
     worm.set_active();
-    std::cout << "Empezando turno de " << unsigned(worm.id) << "\n";
 }
 
 std::unique_ptr<GameWorldState> GameWorldInteractiveState::update() {

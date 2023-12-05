@@ -127,11 +127,11 @@ int Client::start() {
     SoundController sound_controller(mixer);
     sound_controller.set_background_music();
 
-    TextureController texture_controller(renderer);
+    TextureController texture_controller(renderer, window);
     WeaponSelector weapon_selector(renderer);
-    Hud hud(renderer, distribution,my_id);
+    Hud hud(renderer, distribution, my_id);
 
-    WorldView worldview(renderer, texture_controller, std::move(this->scenario), color_map,
+    WorldView worldview(renderer, window, texture_controller, std::move(this->scenario), color_map,
                         weapon_selector, my_worms_id_vec, sound_controller, &hud);
 
     bool running = true;
@@ -140,7 +140,8 @@ int Client::start() {
 
         update(worldview, running);
 
-        if (!running) return SUCCESS;
+        if (!running)
+            return SUCCESS;
 
         if (std::find(my_worms_id_vec.begin(), my_worms_id_vec.end(), current_worm) !=
             my_worms_id_vec.end()) {
@@ -193,7 +194,6 @@ void Client::update(WorldView& worldview, bool& running) {
         // con el worm nuevo
         sender->set_current_worm(current_worm);
     }
-    
 }
 
 void Client::handle_game_over(WorldView& worldview, std::shared_ptr<EstadoJuego> estado) {

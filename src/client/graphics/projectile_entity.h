@@ -5,14 +5,14 @@
 #ifndef WORMS_projectile_ENTITY_H
 #define WORMS_projectile_ENTITY_H
 
+#include "weapons/weapon_factory.h"
+
 #include "animation.h"
 #include "entity.h"
-#include "weapons/weapon_factory.h"
 
 class projectileEntity: public Entity {
 public:
-    explicit projectileEntity(TextureController& texture_controller, uint8_t type);
-    ~projectileEntity();
+    projectileEntity(TextureController& texture_controller, Projectile& projectile);
 
     void update_info(EntityInfo* info, SoundController& sound_controller) override;
     void update(float dt) override;
