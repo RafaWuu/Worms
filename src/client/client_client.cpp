@@ -177,6 +177,7 @@ void Client::update(WorldView& worldview, bool& running) {
 
         if (estado->is_game_over()) {
             handle_game_over(worldview, estado);
+            return;
         }
 
         std::map<uint16_t, std::unique_ptr<EntityInfo>>& updated_states =

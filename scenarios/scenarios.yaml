@@ -4,6 +4,22 @@ beam_config:
   height: 0.8
 
 scenarios:
+    single:
+        width: 20.0
+        height: 20.0 # Altura desde el suelo
+        beams:
+            -
+              type: large
+              pos_x:   15.0
+              pos_y:  10.0
+              flip: false
+              angle: 0.0
+        worms:
+            -
+              pos_x: 15.0
+              pos_y: 12.0
+
+
     basic:
         width: 20.0
         height: 20.0 # Altura desde el suelo

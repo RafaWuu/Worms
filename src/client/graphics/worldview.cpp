@@ -90,13 +90,23 @@ void WorldView::render_game_over(const std::string& game_status) {
     hud->render();
 
     std::unique_ptr<SDL2pp::Font> font = get_font(48);
+
     SDL2pp::Texture status_text(renderer,
                                 font->RenderText_Blended(game_status, SDL2pp::Color{255, 0, 0, 255}));
+
+    int text_width = status_text.GetWidth();
+    int text_height = status_text.GetHeight();
+
+    int x = (SCREEN_WIDTH - text_width) / 2;
+    int y = (SCREEN_HEIGHT - text_height) / 2;
+
+    SDL2pp::Rect dest(x, y, text_width, text_height);
+
     renderer.Copy(status_text, SDL2pp::NullOpt,
-                  SDL2pp::Rect(0, status_text.GetWidth(), status_text.GetWidth(),
-                               status_text.GetHeight()));
-    
-    std::this_thread::sleep_for(std::chrono::seconds(4));
+                  dest);
+    renderer.Present();
+
+    std::this_thread::sleep_for(std::chrono::seconds(2));
 }
 
 void WorldView::render_background() {
