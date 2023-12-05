@@ -138,7 +138,9 @@ int Client::start() {
     auto start = high_resolution_clock::now();
     while (running) {
 
-        update(worldview);
+        update(worldview, running);
+
+        if (!running) return SUCCESS;
 
         if (std::find(my_worms_id_vec.begin(), my_worms_id_vec.end(), current_worm) !=
             my_worms_id_vec.end()) {
@@ -169,9 +171,14 @@ void Client::manage_frame_rate(time_point<high_resolution_clock>& start) {
     start += duration_cast<high_resolution_clock::duration>(duration<double>(FRAME_RATE));
 }
 
-void Client::update(WorldView& worldview) {
+void Client::update(WorldView& worldview, bool& running) {
     std::shared_ptr<EstadoJuego> estado;
     while (messages_received.try_pop(estado)) {
+
+        if (estado->is_game_over()) {
+            handle_game_over(worldview, estado);
+        }
+
         std::map<uint16_t, std::unique_ptr<EntityInfo>>& updated_states =
                 estado->get_updated_info();
         current_worm = estado->get_current_worm();
@@ -186,6 +193,15 @@ void Client::update(WorldView& worldview) {
         sender->set_current_worm(current_worm);
     }
     
+}
+
+void Client::handle_game_over(WorldView& worldview, std::shared_ptr<EstadoJuego> estado) {
+    uint16_t winner_id = estado->get_winner_id();
+    if (winner_id == my_id) {
+        worldview.render_game_over("VICTORY");
+    } else {
+        worldview.render_game_over("DEFEAT");
+    }
 }
 
 bool Client::handle_events(WeaponSelector& weapon_selector, SoundController& sound_controller) {

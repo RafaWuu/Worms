@@ -62,6 +62,43 @@ void WorldView::render() {
 
 }
 
+static std::unique_ptr<SDL2pp::Font> get_font(int size) {
+    try {
+        std::string path = std::string(ASSETS_PATH)+"Vera.ttf";
+        return std::make_unique<SDL2pp::Font> (path, size);
+    } catch (SDL2pp::Exception& e) {
+        std::cerr<<"Error font: "<<e.what()<<std::endl; 
+    }
+    
+}
+
+void WorldView::render_game_over(const std::string& game_status) {
+    renderer.SetDrawColor(SDL2pp::Color(0, 0, 0, 255));
+    renderer.Clear();
+    render_background();
+
+    for (auto& entity: static_entities) {
+        entity.second->render(renderer, camera);
+    }
+    for (auto& entity: dynamic_entities) {
+        entity.second->render(renderer, camera);
+    }
+
+    weapon_selector.render(renderer);
+
+    wind.render(renderer, camera);
+    hud->render();
+
+    std::unique_ptr<SDL2pp::Font> font = get_font(48);
+    SDL2pp::Texture status_text(renderer,
+                                font->RenderText_Blended(game_status, SDL2pp::Color{255, 0, 0, 255}));
+    renderer.Copy(status_text, SDL2pp::NullOpt,
+                  SDL2pp::Rect(0, status_text.GetWidth(), status_text.GetWidth(),
+                               status_text.GetHeight()));
+    
+    std::this_thread::sleep_for(5);
+}
+
 void WorldView::render_background() {
     auto background = texture_controller.get_texture(SCENARIO_BACKGROUND);
     renderer.Copy(*background, SDL2pp::NullOpt, SDL2pp::Rect{0, 0, SCREEN_WIDTH, SCREEN_HEIGHT});

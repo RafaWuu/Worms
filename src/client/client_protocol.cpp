@@ -415,10 +415,21 @@ std::unique_ptr<Scenario> ClientProtocol::receive_scenario() {
 }
 
 std::shared_ptr<EstadoJuego> ClientProtocol::recv_snapshot() {
+    std::map<uint16_t, std::unique_ptr<EntityInfo>> entities;
+
     uint8_t game_sending;
     baseProtocol.recv_1byte_number(game_sending);
     uint8_t game_status;
     baseProtocol.recv_1byte_number(game_status);
+
+    if (game_status == GAME_END) {
+        uint16_t winner_id;
+        baseProtocol.recv_2byte_number(winner_id);
+
+        return std::make_shared<EstadoJuego>(0, 0, 0, std::move(entities), true, winner_id);
+
+    }
+
     uint16_t current_worm;
     baseProtocol.recv_2byte_number(current_worm);
     float remaining_time;
@@ -428,7 +439,6 @@ std::shared_ptr<EstadoJuego> ClientProtocol::recv_snapshot() {
     uint16_t entities_number;
     baseProtocol.recv_2byte_number(entities_number);
 
-    std::map<uint16_t, std::unique_ptr<EntityInfo>> entities;
 
     uint16_t entity_id;
     uint8_t entity_type;

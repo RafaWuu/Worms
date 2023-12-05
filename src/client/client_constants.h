@@ -15,6 +15,7 @@
 #define SCALE (25.0f)
 
 #define GAME_RECEIVING 87
+#define GAME_END 5
 #define LOBBY_RECEIVING 89
 #define GAME_SENDING 86
 #define LOBBY_SENDING 88

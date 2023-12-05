@@ -53,6 +53,8 @@ public:
                       std::map<uint16_t, std::shared_ptr<Entity>>& destination,
                       std::map<uint16_t, SDL2pp::Color>& color_map,
                       std::vector<uint16_t> my_worms_id);
+
+    void render_game_over(const std::string& status);
 };
 
 #endif

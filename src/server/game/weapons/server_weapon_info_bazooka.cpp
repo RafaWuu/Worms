@@ -8,6 +8,7 @@ BazookaWeaponInfo::BazookaWeaponInfo(const BazookaWeapon& bazooka) {
 
     angle = bazooka.aim_angle;
     power = bazooka.aim_power;
+    ammo = bazooka.ammo;
 }
 
 void BazookaWeaponInfo::serialize_status(BaseProtocol& bp) {
@@ -16,7 +17,8 @@ void BazookaWeaponInfo::serialize_status(BaseProtocol& bp) {
     bp.send_1byte_number(power * 255);
 }
 
-BazookaWeaponInfo::BazookaWeaponInfo(float angle, float power) {
+BazookaWeaponInfo::BazookaWeaponInfo(float angle, float power, float ammo) {
     this->angle = angle;
     this->power = power;
+    this->ammo = ammo;
 }

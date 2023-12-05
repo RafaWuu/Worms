@@ -334,7 +334,6 @@ void ServerProtocol::send_finish_status(uint16_t winner_id, bool draw) {
     baseProtocol.send_1byte_number(GAME_SENDING);
     baseProtocol.send_1byte_number(GAME_END);
     baseProtocol.send_2byte_number(winner_id);
-    baseProtocol.send_2byte_number(winner_id);
 }
 
 
