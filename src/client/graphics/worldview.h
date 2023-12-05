@@ -6,20 +6,22 @@
 #include "../game/beam.h"
 #include "../game/scenario.h"
 #include "../game/worm.h"
+#include "../sound/sound_controller.h"
 #include "weapons/weapon_selector.h"
 
-#include "wind.h"
 #include "entities_factory.h"
 #include "entity.h"
-#include "player.h"
 #include "explosion_entity.h"
-#include "scenario_beam.h"
-#include "../sound/sound_controller.h"
 #include "hud.h"
+#include "player.h"
+#include "scenario_beam.h"
+#include "wind.h"
 // Contiene a los objetos renderizables (x ahora solo los gusanos/Players)
 class WorldView {
 private:
     SDL2pp::Renderer& renderer;
+    SDL2pp::Window& window;
+
     TextureController& texture_controller;
     EntityFactory entity_factory;
 
@@ -39,11 +41,13 @@ private:
     Wind wind;
 
 public:
-    WorldView(SDL2pp::Renderer& renderer, TextureController& texture_controller, std::unique_ptr<Scenario> scenario,
-              std::map<uint16_t, SDL2pp::Color>& color_map, WeaponSelector& weapon_selector,std::vector<uint16_t>& my_worms_id, SoundController& sound_controller,
-              Hud* hud);
+    WorldView(SDL2pp::Renderer& renderer, SDL2pp::Window& window,
+              TextureController& texture_controller, std::unique_ptr<Scenario> scenario,
+              std::map<uint16_t, SDL2pp::Color>& color_map, WeaponSelector& weapon_selector,
+              std::vector<uint16_t>& my_worms_id, SoundController& sound_controller, Hud* hud);
 
-    void update(std::map<uint16_t, std::unique_ptr<EntityInfo>>& updated_info, std::shared_ptr<EstadoJuego>& state);
+    void update(std::map<uint16_t, std::unique_ptr<EntityInfo>>& updated_info,
+                std::shared_ptr<EstadoJuego>& state);
 
     void render();
 

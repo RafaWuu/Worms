@@ -1,22 +1,25 @@
 #include "worldview.h"
 
-WorldView::WorldView(SDL2pp::Renderer& renderer,TextureController& texture_controller, std::unique_ptr<Scenario> scenario,
+WorldView::WorldView(SDL2pp::Renderer& renderer, SDL2pp::Window& window,
+                     TextureController& texture_controller, std::unique_ptr<Scenario> scenario,
                      std::map<uint16_t, SDL2pp::Color>& color_map, WeaponSelector& weapon_selector,
                      std::vector<uint16_t>& my_worms_id, SoundController& sound_controller,
                      Hud* hud):
         renderer(renderer),
+        window(window),
         texture_controller(texture_controller),
         entity_factory(texture_controller),
         weapon_selector(weapon_selector),
         sound_controller(sound_controller),
         wind(texture_controller, 0),
-        hud(hud){
+        hud(hud) {
     camera = SDL2pp::Rect{0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
     add_entities(scenario->get_dynamic_entities_info(), dynamic_entities, color_map, my_worms_id);
     add_entities(scenario->get_static_entities_info(), static_entities, color_map, my_worms_id);
 }
 
-void WorldView::update(std::map<uint16_t, std::unique_ptr<EntityInfo>>& updated_info, std::shared_ptr<EstadoJuego>& state) {
+void WorldView::update(std::map<uint16_t, std::unique_ptr<EntityInfo>>& updated_info,
+                       std::shared_ptr<EstadoJuego>& state) {
 
     // Remove dynamic entities the server doesn't send (already exploded missiles, ...)
 
@@ -59,17 +62,15 @@ void WorldView::render() {
     wind.render(renderer, camera);
     hud->render();
     renderer.Present();
-
 }
 
 static std::unique_ptr<SDL2pp::Font> get_font(int size) {
     try {
-        std::string path = std::string(ASSETS_PATH)+"Vera.ttf";
-        return std::make_unique<SDL2pp::Font> (path, size);
+        std::string path = std::string(ASSETS_PATH) + "Vera.ttf";
+        return std::make_unique<SDL2pp::Font>(path, size);
     } catch (SDL2pp::Exception& e) {
-        std::cerr<<"Error font: "<<e.what()<<std::endl; 
+        std::cerr << "Error font: " << e.what() << std::endl;
     }
-    
 }
 
 void WorldView::render_game_over(const std::string& game_status) {
@@ -90,18 +91,22 @@ void WorldView::render_game_over(const std::string& game_status) {
     hud->render();
 
     std::unique_ptr<SDL2pp::Font> font = get_font(48);
-    SDL2pp::Texture status_text(renderer,
-                                font->RenderText_Blended(game_status, SDL2pp::Color{255, 0, 0, 255}));
+    SDL2pp::Texture status_text(
+            renderer, font->RenderText_Blended(game_status, SDL2pp::Color{255, 0, 0, 255}));
     renderer.Copy(status_text, SDL2pp::NullOpt,
                   SDL2pp::Rect(0, status_text.GetWidth(), status_text.GetWidth(),
                                status_text.GetHeight()));
-    
+
     std::this_thread::sleep_for(std::chrono::seconds(4));
 }
 
 void WorldView::render_background() {
+    int m_screen_width = window.GetWidth();
+    int m_screen_height = window.GetWidth();
+
     auto background = texture_controller.get_texture(SCENARIO_BACKGROUND);
-    renderer.Copy(*background, SDL2pp::NullOpt, SDL2pp::Rect{0, 0, SCREEN_WIDTH, SCREEN_HEIGHT});
+    renderer.Copy(*background, SDL2pp::NullOpt,
+                  SDL2pp::Rect{0, 0, m_screen_width, m_screen_height});
 }
 // offset segun la posicion del objeto a enfocar.
 void WorldView::update_camera(float& x, float& y, float& w, float& h) {
@@ -144,7 +149,7 @@ void WorldView::add_entities(std::map<uint16_t, std::unique_ptr<EntityInfo>>& so
                 my_worms_id.end())
                 player->add_crosshair();
             destination.emplace(entity_info.first, std::move(entity));
-        }else{
+        } else {
             destination.emplace(entity_info.first, std::move(entity));
         }
     }

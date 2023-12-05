@@ -5,7 +5,8 @@
 
 static Uint32 get_color_key(uint8_t r, uint8_t g, uint8_t b);
 
-TextureController::TextureController(SDL2pp::Renderer& renderer_): renderer(renderer_) {
+TextureController::TextureController(SDL2pp::Renderer& renderer_, SDL2pp::Window& window):
+        renderer(renderer_), window(window) {
     Uint32 light_blue_color_key = get_color_key(0x80, 0x80, 0xC0);
     Uint32 dark_blue_color_key = get_color_key(32, 32, 248);
     Uint32 yellow_color_key = get_color_key(192, 192, 128);
@@ -81,27 +82,30 @@ std::shared_ptr<SDL2pp::Texture> TextureController::get_texture(AnimationState s
 
 // Color del pixel que hay que hacer transparente
 static Uint32 get_color_key(uint8_t r, uint8_t g, uint8_t b) {
-        std::string path = std::string(ASSETS_PATH)+ "wwalk2.png";
+    std::string path = std::string(ASSETS_PATH) + "wwalk2.png";
     try {
         SDL2pp::Surface surface(path);
         Uint32 color_key = SDL_MapRGB(surface.Get()->format, r, g, b);
         return color_key;
     } catch (SDL2pp::Exception& e) {
 
-        std::cerr<< "get_color_key error: " << e.what() <<std::endl;
+        std::cerr << "get_color_key error: " << e.what() << std::endl;
     }
 }
 
 void TextureController::load_texture(AnimationState state, const std::string& file_name,
                                      Uint32 color_key) {
 
-    std::string path = std::string(ASSETS_PATH)+ file_name;
+    std::string path = std::string(ASSETS_PATH) + file_name;
     try {
         SDL2pp::Texture texture(renderer, SDL2pp::Surface(path).SetColorKey(true, color_key));
         textures.emplace(state, std::make_shared<SDL2pp::Texture>(std::move(texture)));
     } catch (SDL2pp::Exception& e) {
-    
-        std::cerr<< "load texture error: " << e.what() <<std::endl;
-    }
 
+        std::cerr << "load texture error: " << e.what() << std::endl;
+    }
 }
+
+int TextureController::get_ground_height(int i) { return window.GetHeight() - i; }
+
+int TextureController::get_ground_width(int i) { return window.GetWidth() - i; }

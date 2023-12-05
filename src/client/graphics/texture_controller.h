@@ -62,12 +62,17 @@ enum AnimationState {
 class TextureController {
 private:
     SDL2pp::Renderer& renderer;
+    SDL2pp::Window& window;
+
     std::map<AnimationState, std::shared_ptr<SDL2pp::Texture>> textures;
 
 public:
-    explicit TextureController(SDL2pp::Renderer& renderer);
+    explicit TextureController(SDL2pp::Renderer& renderer, SDL2pp::Window& window);
     std::shared_ptr<SDL2pp::Texture> get_texture(AnimationState state);
     void load_texture(AnimationState state, const std::string& file_name, Uint32 color_key);
+
+    int get_ground_height(int i);
+    int get_ground_width(int i);
 };
 
 #endif
