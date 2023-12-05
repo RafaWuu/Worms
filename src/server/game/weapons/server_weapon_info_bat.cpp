@@ -14,6 +14,5 @@ BatWeaponInfo::BatWeaponInfo(const WeaponBat& bat) {
 
 void BatWeaponInfo::serialize_status(BaseProtocol& bp) {
     bp.send_1byte_number(BASEBALL_BAT_ID);
-    bp.send_2byte_number(ammo);
     bp.send_4byte_float(angle);
 }

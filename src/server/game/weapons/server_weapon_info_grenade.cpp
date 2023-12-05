@@ -8,6 +8,7 @@
 
 GrenadeWeaponInfo::GrenadeWeaponInfo(const GrenadeWeapon& grenade) {
     power = grenade.aim_power;
+    angle = grenade.aim_angle;
     countdown = grenade.countdown;
 }
 
