@@ -24,6 +24,9 @@ public:
 
 private slots:
 
+    void onScenarioListItemClicked(const QModelIndex &index);
+
+
     void on_join_clicked();
 
 private:

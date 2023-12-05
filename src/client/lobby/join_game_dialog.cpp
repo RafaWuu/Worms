@@ -6,7 +6,10 @@
 
 JoinGameDialog::JoinGameDialog(std::shared_ptr<Client> client, QWidget* parent):
         QDialog(parent), ui(new Ui::JoinGameDialog), client(client) {
+
     ui->setupUi(this);
+    connect(ui->game_list, &QListView::clicked, this, &JoinGameDialog::onScenarioListItemClicked);
+
     model = new QStringListModel(this);
 
     this->ui->game_list->setModel(model);
@@ -19,6 +22,17 @@ JoinGameDialog::JoinGameDialog(std::shared_ptr<Client> client, QWidget* parent):
         listaDeTexto.append(GameInfoView::toString(p));
     }
     model->setStringList(listaDeTexto);
+}
+
+void JoinGameDialog::onScenarioListItemClicked(const QModelIndex &index) {
+    std::string selected_list_item = model->data(index, Qt::DisplayRole).toString().toStdString();
+
+    unsigned first = selected_list_item.find(':');
+    unsigned last = selected_list_item.find('-');
+    std::string selected_scenario = selected_list_item.substr(first + 2, last - (first + 2)); 
+
+    QString scenario_name = QString::fromStdString(selected_scenario);
+    ui->id_partida->setText(scenario_name);
 }
 
 
