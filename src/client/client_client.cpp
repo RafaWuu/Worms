@@ -129,10 +129,10 @@ int Client::start() {
 
     TextureController texture_controller(renderer);
     WeaponSelector weapon_selector(renderer);
-    Hud hud(renderer, distribution);
+    Hud hud(renderer, distribution,my_id);
 
     WorldView worldview(renderer, texture_controller, std::move(this->scenario), color_map,
-                        weapon_selector, current_worm, my_worms_id_vec, sound_controller, &hud);
+                        weapon_selector, my_worms_id_vec, sound_controller, &hud);
 
     bool running = true;
     auto start = high_resolution_clock::now();
@@ -175,8 +175,7 @@ void Client::update(WorldView& worldview) {
         std::map<uint16_t, std::unique_ptr<EntityInfo>>& updated_states =
                 estado->get_updated_info();
         current_worm = estado->get_current_worm();
-
-        worldview.update(updated_states, current_worm, estado->get_wind());
+        worldview.update(updated_states, estado);
         messages_received.clear();
     }
 
@@ -186,6 +185,7 @@ void Client::update(WorldView& worldview) {
         // con el worm nuevo
         sender->set_current_worm(current_worm);
     }
+    
 }
 
 bool Client::handle_events(WeaponSelector& weapon_selector, SoundController& sound_controller) {

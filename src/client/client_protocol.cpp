@@ -447,7 +447,7 @@ std::shared_ptr<EstadoJuego> ClientProtocol::recv_snapshot() {
     }
 
     getLog().write("Cliente recibe estado de partida \n");
-
+    // pasar game_status como parametro a Estado_juego y manejar desde el cliente (win lose)
     return std::make_shared<EstadoJuego>(current_worm, remaining_time, wind, std::move(entities));
 }
 

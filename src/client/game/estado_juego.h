@@ -13,6 +13,7 @@ private:
     float remaining_time;
     float wind;
     std::vector<Worm> worms;
+    bool end_game_state;
     std::map<uint16_t, std::unique_ptr<EntityInfo>> entities_info;
 
 public:
@@ -22,7 +23,7 @@ public:
     std::map<uint16_t, std::unique_ptr<EntityInfo>>& get_updated_info();
 
     uint16_t get_current_worm() const;
-
+    float get_remaining_time();
     float get_wind();
 };
 

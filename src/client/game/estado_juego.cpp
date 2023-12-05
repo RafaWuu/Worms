@@ -15,5 +15,5 @@ std::map<uint16_t, std::unique_ptr<EntityInfo>>& EstadoJuego::get_updated_info()
 }
 
 uint16_t EstadoJuego::get_current_worm() const { return current_worm; }
-
+float EstadoJuego::get_remaining_time() { return remaining_time; }
 float EstadoJuego::get_wind() { return wind; }

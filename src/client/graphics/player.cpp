@@ -37,7 +37,7 @@ void Player::update_info(EntityInfo* info, SoundController& sound_controller) {
 
     x = worm->get_pos_x();
     y = worm->get_pos_y();
-    //hud->update_ammo(worm->get_id(),worm->get_ammo());
+    hud->update_ammo(worm->get_id(),worm->get_ammo());
     hud->update_hp(worm->get_id(),worm->get_health());
 
     height = worm->get_height();

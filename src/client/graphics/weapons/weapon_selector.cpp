@@ -1,13 +1,11 @@
 #include "weapon_selector.h"
 
 WeaponSelector::WeaponSelector(SDL2pp::Renderer& renderer) {
-    // std::string path = "../assets/weapons.png";
-    // std::string alternative_path = "assets/weapons.png";
-    std::string path =std::string(ASSETS_PATH)+ "/weapons.png";
+    std::string path =std::string(ASSETS_PATH)+ "weapons.png";
     try {
         texture = std::make_unique<SDL2pp::Texture>(renderer, SDL2pp::Surface(path));
     } catch (SDL2pp::Exception& e) {
-        // texture = std::make_unique<SDL2pp::Texture>(renderer, SDL2pp::Surface(alternative_path));
+       
         std::cerr<<"Error weaponSelector:"<< e.what()<<std::endl;
     }
 

@@ -10,7 +10,7 @@ class Hud {
 		SDL2pp::Renderer& renderer;
         std::map<uint16_t,uint16_t> worms_distribution;
         std::map<int,std::map<int,int>> hp_map;
-		int current_worm;
+		int client_id;
 		int time;
 		int ammo;
 		int offset;
@@ -20,10 +20,9 @@ class Hud {
 
 	public:
 
-		Hud(SDL2pp::Renderer& renderer, std::map<uint16_t,uint16_t> worms_distribution);
+		Hud(SDL2pp::Renderer& renderer, std::map<uint16_t,uint16_t> worms_distribution, int client_id);
 		void update_hp(int worm_id, int hp);
-		void update_time(int time);
-		void update_current_worm (int worm_id);
+		void update_time(float time);
 		void update_ammo(int worm_id, int ammo);
 		void render();
 		~Hud();

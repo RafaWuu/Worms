@@ -26,9 +26,8 @@ void SoundController::set_background_music() {
 }
 
 void SoundController::load_sound(Sound sound, std::string file_name) {
-    // std::string path("../assets/sounds/" + file_name);
-    // std::string alternative_path("assets/sounds/" + file_name);
-    std::string path = std::string(ASSETS_PATH) + "/sounds/" + file_name;
+
+    std::string path = std::string(ASSETS_PATH) + "sounds/" + file_name;
     try {
 
         auto sound_effect = std::make_shared<SDL2pp::Chunk> (path);
@@ -36,8 +35,6 @@ void SoundController::load_sound(Sound sound, std::string file_name) {
 
     } catch (SDL2pp::Exception& e) {
 
-        // auto sound_effect = std::make_shared<SDL2pp::Chunk> (alternative_path);
-        // sounds.emplace(sound, sound_effect);
         std::cerr<<e.what()<<std::endl;
     }   
 }

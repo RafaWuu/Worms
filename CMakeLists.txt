@@ -9,9 +9,9 @@
 # You should have received a copy of the CC0 Public Domain Dedication along with
 # this software. If not, see <http://creativecommons.org/publicdomain/zero/1.0/>.
 
-set(CONFIG_FILE "/etc/configurations.yaml")
+set(CONFIG_FILE "/etc/configuration.yaml")
 set(SCENARIO_FILE "/etc/scenarios.yaml")
-set(ASSETS_DIR "/etc/assets")
+set(ASSETS_DIR "/etc/assets/")
 
 cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
 project(worms LANGUAGES CXX)

@@ -25,7 +25,6 @@ private:
 
     SoundController& sound_controller;
 
-    uint16_t current_worm;
 
     // Ground and Beams
     std::map<uint16_t, std::shared_ptr<Entity>> static_entities;
@@ -41,11 +40,10 @@ private:
 
 public:
     WorldView(SDL2pp::Renderer& renderer, TextureController& texture_controller, std::unique_ptr<Scenario> scenario,
-              std::map<uint16_t, SDL2pp::Color>& color_map, WeaponSelector& weapon_selector,
-              uint16_t current_worm, std::vector<uint16_t>& my_worms_id, SoundController& sound_controller,
+              std::map<uint16_t, SDL2pp::Color>& color_map, WeaponSelector& weapon_selector,std::vector<uint16_t>& my_worms_id, SoundController& sound_controller,
               Hud* hud);
 
-    void update(std::map<uint16_t, std::unique_ptr<EntityInfo>>& updated_info, int current_worm, float wind);
+    void update(std::map<uint16_t, std::unique_ptr<EntityInfo>>& updated_info, std::shared_ptr<EstadoJuego>& state);
 
     void render();
 

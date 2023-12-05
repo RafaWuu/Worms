@@ -2,13 +2,12 @@
 
 WorldView::WorldView(SDL2pp::Renderer& renderer,TextureController& texture_controller, std::unique_ptr<Scenario> scenario,
                      std::map<uint16_t, SDL2pp::Color>& color_map, WeaponSelector& weapon_selector,
-                     uint16_t current_worm, std::vector<uint16_t>& my_worms_id, SoundController& sound_controller,
+                     std::vector<uint16_t>& my_worms_id, SoundController& sound_controller,
                      Hud* hud):
         renderer(renderer),
         texture_controller(texture_controller),
         entity_factory(texture_controller),
         weapon_selector(weapon_selector),
-        current_worm(current_worm),
         sound_controller(sound_controller),
         wind(texture_controller, 0),
         hud(hud){
@@ -17,7 +16,7 @@ WorldView::WorldView(SDL2pp::Renderer& renderer,TextureController& texture_contr
     add_entities(scenario->get_static_entities_info(), static_entities, color_map, my_worms_id);
 }
 
-void WorldView::update(std::map<uint16_t, std::unique_ptr<EntityInfo>>& updated_info, int current_worm, float wind) {
+void WorldView::update(std::map<uint16_t, std::unique_ptr<EntityInfo>>& updated_info, std::shared_ptr<EstadoJuego>& state) {
 
     // Remove dynamic entities the server doesn't send (already exploded missiles, ...)
 
@@ -28,7 +27,7 @@ void WorldView::update(std::map<uint16_t, std::unique_ptr<EntityInfo>>& updated_
             ++it;
         }
     }
-        
+    hud->update_time(state->get_remaining_time());
     for (auto& info: updated_info) {
         auto it = dynamic_entities.find(info.first);
         if (it != dynamic_entities.end()) {
@@ -40,14 +39,14 @@ void WorldView::update(std::map<uint16_t, std::unique_ptr<EntityInfo>>& updated_
         }
     }
 
-    this->wind.change_wind(wind);
+    this->wind.change_wind(state->get_wind());
 }
 
 void WorldView::render() {
     renderer.SetDrawColor(SDL2pp::Color(0, 0, 0, 255));
     renderer.Clear();
     render_background();
-    hud->render();
+
     for (auto& entity: static_entities) {
         entity.second->render(renderer, camera);
     }
@@ -58,7 +57,7 @@ void WorldView::render() {
     weapon_selector.render(renderer);
 
     wind.render(renderer, camera);
-
+    hud->render();
     renderer.Present();
 
 }

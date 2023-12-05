@@ -1,8 +1,8 @@
 #!/bin/bash
 help() {
-  clear
   echo "Options:"
   echo "i: install"
+  echo "u: unistall"
   echo "q: close"
 }
 install(){
@@ -13,11 +13,17 @@ install(){
 # sudo apt-get install libsdl2-mixer-dev
 # sudo apt-get install qtcreator
 # sudo apt-get install qt5-default
-git submodule init
-git submodule update
-    clear
-    cmake .
-    sudo make install
+  git submodule init
+  git submodule update
+  clear
+  cmake .
+  sudo make install
+}
+uninstall(){
+  clear
+  sudo rm /usr/bin/client /usr/bin/server
+  sudo rm /etc/scenarios.yaml /etc/configuration.yaml
+  sudo rm -rf /etc/assets
 }
 # main 
 clear
@@ -32,12 +38,17 @@ while true; do
   i)
     install
     ;;
+  u)
+    uninstall
+    ;;
   q)
     clear
     exit 0
     ;;
   *)
+    clear
     echo "Error: invalid option"
+    help
     ;;
   esac
   echo
