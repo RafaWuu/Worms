@@ -56,7 +56,7 @@ public:
     Client& operator=(const Client&) = delete;
 
     bool handle_events(WeaponSelector& weapon_selector, SoundController& sound_controller);
-    void update(WorldView& worldview, bool& running);
+    void update(WorldView& worldview);
 
     void kill();
     int start();
@@ -69,6 +69,7 @@ public:
 
     void handle_game_over(WorldView& worldview, std::shared_ptr<EstadoJuego> estado);
 
+    void wait_for_exit();
 
     void start_joined_game();
 

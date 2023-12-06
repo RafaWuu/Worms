@@ -106,8 +106,6 @@ void WorldView::render_game_over(const std::string& game_status) {
     renderer.Copy(status_text, SDL2pp::NullOpt,
                   dest);
     renderer.Present();
-
-    std::this_thread::sleep_for(std::chrono::seconds(2));
 }
 
 void WorldView::render_background() {

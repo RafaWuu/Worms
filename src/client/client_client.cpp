@@ -134,14 +134,15 @@ int Client::start() {
     WorldView worldview(renderer, window, texture_controller, std::move(this->scenario), color_map,
                         weapon_selector, my_worms_id_vec, sound_controller, &hud);
 
-    bool running = true;
+    bool running = true; 
     auto start = high_resolution_clock::now();
     while (running) {
 
-        update(worldview, running);
-
-        if (!running)
-            return SUCCESS;
+        try {
+            update(worldview);
+        } catch (QuitGameClientInput& e) {
+            break;
+        }
 
         if (std::find(my_worms_id_vec.begin(), my_worms_id_vec.end(), current_worm) !=
             my_worms_id_vec.end()) {
@@ -172,13 +173,12 @@ void Client::manage_frame_rate(time_point<high_resolution_clock>& start) {
     start += duration_cast<high_resolution_clock::duration>(duration<double>(FRAME_RATE));
 }
 
-void Client::update(WorldView& worldview, bool& running) {
+void Client::update(WorldView& worldview) {
     std::shared_ptr<EstadoJuego> estado;
     while (messages_received.try_pop(estado)) {
 
         if (estado->is_game_over()) {
             handle_game_over(worldview, estado);
-            return;
         }
 
         std::map<uint16_t, std::unique_ptr<EntityInfo>>& updated_states =
@@ -203,6 +203,21 @@ void Client::handle_game_over(WorldView& worldview, std::shared_ptr<EstadoJuego>
     } else {
         worldview.render_game_over("DEFEAT");
     }
+
+    // Espero que el cliente cierre la ventana
+    wait_for_exit();
+}
+
+void Client::wait_for_exit() {
+    SDL_Event event;
+    while (true) {
+        while (SDL_PollEvent(&event)) {
+            if (event.type == SDL_QUIT) {
+                throw QuitGameClientInput();
+            }
+        }   
+    }
+ 
 }
 
 bool Client::handle_events(WeaponSelector& weapon_selector, SoundController& sound_controller) {
