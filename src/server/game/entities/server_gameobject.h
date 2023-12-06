@@ -5,7 +5,7 @@
 
 #include <memory>
 
-#include "b2_world.h"
+#include "box2d/b2_world.h"
 #include "common_log.h"
 #include "server_gameobject_info.h"
 

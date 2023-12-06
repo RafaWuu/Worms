@@ -9,9 +9,9 @@
 #include "game/entities/server_gameobject.h"
 #include "game/entities/server_worm.h"
 
-#include "b2_fixture.h"
-#include "b2_math.h"
-#include "b2_world_callbacks.h"
+#include "box2d/b2_fixture.h"
+#include "box2d/b2_math.h"
+#include "box2d/b2_world_callbacks.h"
 
 class ExplosionCallback: public b2QueryCallback {
 public:

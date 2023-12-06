@@ -8,8 +8,8 @@
 
 #include "../../../configuration/configuration.h"
 
-#include "b2_body.h"
-#include "b2_math.h"
+#include "box2d/b2_body.h"
+#include "box2d/b2_math.h"
 #include "server_weapon_info.h"
 
 #define MAX_POWER 1

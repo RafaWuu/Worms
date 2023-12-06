@@ -12,7 +12,7 @@
 #include "game/entities/server_worm_info.h"
 #include "game/entities/server_worm_sensor.h"
 
-#include "b2_edge_shape.h"
+#include "box2d/b2_edge_shape.h"
 #include "server_error.h"
 #include "server_gameworld_simulationstate.h"
 #include "server_gameworld_state.h"

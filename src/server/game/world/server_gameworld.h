@@ -17,7 +17,7 @@
 #include "game/provisions/server_provision_factory.h"
 #include "game/weapons/server_weapon.h"
 
-#include "b2_world.h"
+#include "box2d/b2_world.h"
 #include "scenario_filehandler.h"
 #include "server_player_manager.h"
 #include "server_wind.h"

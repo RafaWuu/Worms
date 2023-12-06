@@ -3,10 +3,10 @@
 
 #include <memory>
 
-#include "b2_body.h"
-#include "b2_edge_shape.h"
-#include "b2_fixture.h"
-#include "b2_polygon_shape.h"
+#include "box2d/b2_body.h"
+#include "box2d/b2_edge_shape.h"
+#include "box2d/b2_fixture.h"
+#include "box2d/b2_polygon_shape.h"
 #include "server_beam_info.h"
 
 #define MAX_ANGLE 90.01

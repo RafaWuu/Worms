@@ -5,8 +5,8 @@
 #include "../world/server_gameworld.h"
 #include "game/entities/server_gameobject.h"
 
-#include "b2_fixture.h"
-#include "b2_world_callbacks.h"
+#include "box2d/b2_fixture.h"
+#include "box2d/b2_world_callbacks.h"
 #include "common_weapon_constants.h"
 #include "server_weapon_info_teleportation.h"
 

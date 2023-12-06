@@ -16,14 +16,14 @@ install(){
   git submodule init
   git submodule update
   clear
-  cmake .
+  cmake -DCMAKE_BUILD_TYPE=Release .
   sudo make install
 }
 uninstall(){
   clear
   sudo rm /usr/bin/client /usr/bin/server
-  sudo rm /etc/scenarios.yaml /etc/configuration.yaml
-  sudo rm -rf /etc/assets
+  sudo rm /etc/worms/scenarios.yaml /etc/worms/configuration.yaml
+  sudo rm -rf /etc/worms/assets
 }
 # main 
 clear

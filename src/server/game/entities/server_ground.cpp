@@ -5,9 +5,9 @@
 #include <iostream>
 #include <memory>
 
-#include "b2_edge_shape.h"
-#include "b2_fixture.h"
-#include "b2_polygon_shape.h"
+#include "box2d/b2_edge_shape.h"
+#include "box2d/b2_fixture.h"
+#include "box2d/b2_polygon_shape.h"
 #include "server_ground_info.h"
 
 

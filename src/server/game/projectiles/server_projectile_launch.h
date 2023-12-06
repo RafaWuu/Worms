@@ -3,7 +3,7 @@
 #ifndef WORMS_SERVER_PROJECTILE_LAUNCH_H
 #define WORMS_SERVER_PROJECTILE_LAUNCH_H
 
-#include "b2_body.h"
+#include "box2d/b2_body.h"
 
 class ProjectileLaunch {
 public:

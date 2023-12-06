@@ -7,8 +7,8 @@
 
 #include "game/world/server_gameworld.h"
 
-#include "b2_fixture.h"
-#include "b2_polygon_shape.h"
+#include "box2d/b2_fixture.h"
+#include "box2d/b2_polygon_shape.h"
 #include "server_projectile_effect.h"
 #include "server_projectile_info.h"
 

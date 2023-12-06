@@ -10,8 +10,8 @@
 #include "game/entities/server_gameobject.h"
 #include "game/entities/server_gameobject_info.h"
 
-#include "b2_body.h"
-#include "b2_world.h"
+#include "box2d/b2_body.h"
+#include "box2d/b2_world.h"
 #include "server_projectile_launch.h"
 
 class ProjectileEffect;

@@ -13,7 +13,7 @@
 #include "game/states/server_state_manager.h"
 #include "game/weapons/server_weapon_info.h"
 
-#include "b2_body.h"
+#include "box2d/b2_body.h"
 #include "server_gameobject.h"
 
 class StateManager;

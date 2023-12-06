@@ -85,11 +85,6 @@ En el juego, una comunicación tipo entre un cliente y el servidor se daría de 
 
 ![](https://i.imgur.com/VR6MJ1T.png)
 
-
-Una comunicación tipo entre los clientes y el servidor se daría de forma similar a la que se muestra en el siguiente diagrama de secuencias:
-
-![](https://i.imgur.com/I6DLxqt.png)
-
 El protocolo de comunicación desde el **cliente** es el siguiente (los números corresponden a enteros sin signo de un byte salvo que se indique lo contrario):
 
 *    Inicio de partida
@@ -146,8 +141,7 @@ El protocolo de comunicación de parte del **servidor** es el siguiente (los nú
 
 * Enviar escenario inicial
     -    88 02 height width n {entity_id entity_info}
-    -    Siendo height y width, floats codificados según se comentó previamente, las dimensiones del escenario, n un número de 2 bytes la cantidad de entidades, entity_id el tipo de entidad y entity_info una serie de bytes variable para cada entidad según se especificara en secciones siguientes
-
+    -    Siendo height y width, floats codificados según se comentó previamente, las dimensiones del escenario, n un número de 2 bytes la cantidad de entidades, entity_id el tipo de entidad y entity_info una serie de bytes variable para cada entidad según se especifica en la seccion *Envío de escenario inicial*
 
 * Enviar repartición de worms
     -    88 03 n {worm_id client_id}
@@ -158,7 +152,7 @@ El protocolo de comunicación de parte del **servidor** es el siguiente (los nú
   +    88 04 worm_id time wind n {entity_id entity_info}
   +    Siendo worm_id el worm activo
   +    time y wind, floats codificados según se comentó previamente, el tiempo restando del turno y el viento respectivamente
-  +    n un número de 2 bytes la cantidad de entidades, entity_id el tipo de entidad y entity_info una serie de bytes variable para cada entidad según se especificará en secciones siguientes
+  +    n un número de 2 bytes la cantidad de entidades, entity_id el tipo de entidad y entity_info una serie de bytes variable para cada entidad según se especifica en la seccion *Envío de snapshots*
 
 
 * Enviar fin del juego

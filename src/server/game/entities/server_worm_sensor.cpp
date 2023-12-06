@@ -4,8 +4,8 @@
 
 #include <memory>
 
-#include "b2_fixture.h"
-#include "b2_polygon_shape.h"
+#include "box2d/b2_fixture.h"
+#include "box2d/b2_polygon_shape.h"
 #include "server_beam.h"
 #include "server_worm_sensor_info.h"
 

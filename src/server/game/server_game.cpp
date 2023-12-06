@@ -8,8 +8,8 @@
 
 #include <bits/stdc++.h>
 
-#include "../../common/common_socket.h"
-#include "../configuration/configuration.h"
+#include "common_socket.h"
+#include "configuration/configuration.h"
 
 #include "server_error.h"
 #include "server_gamestatus.h"

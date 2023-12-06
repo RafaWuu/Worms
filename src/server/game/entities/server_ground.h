@@ -5,8 +5,8 @@
 
 #include <memory>
 
-#include "b2_body.h"
-#include "b2_world.h"
+#include "box2d/b2_body.h"
+#include "box2d/b2_world.h"
 #include "server_gameobject.h"
 
 class Ground: public GameObject {

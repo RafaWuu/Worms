@@ -9,14 +9,7 @@
 
 #include <SDL2pp/Mixer.hh>
 #include <SDL2pp/SDL2pp.hh>
-#include <unistd.h>
-
-#include "../common/common_liberror.h"
-#include "../common/common_socket.h"
-#include "../configuration/configuration.h"
-#include "commands/client_jump.h"
 #include "commands/client_move.h"
-#include "commands/client_rollback.h"
 #include "commands/client_stop_moving.h"
 #include "graphics/animation.h"
 #include "graphics/weapons/weapon_selector.h"

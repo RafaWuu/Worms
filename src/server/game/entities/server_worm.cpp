@@ -10,8 +10,8 @@
 #include "game/weapons/server_weapon_factory.h"
 #include "game/world/server_gameworld.h"
 
-#include "b2_fixture.h"
-#include "b2_polygon_shape.h"
+#include "box2d/b2_fixture.h"
+#include "box2d/b2_polygon_shape.h"
 #include "common_weapon_constants.h"
 #include "server_error.h"
 #include "server_worm_info.h"

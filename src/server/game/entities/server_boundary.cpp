@@ -2,9 +2,9 @@
 
 #include <memory>
 
-#include "b2_body.h"
-#include "b2_edge_shape.h"
-#include "b2_fixture.h"
+#include "box2d/b2_body.h"
+#include "box2d/b2_edge_shape.h"
+#include "box2d/b2_fixture.h"
 Boundary::Boundary(b2World* b2_world, float width, float height, float frontier):
         width(width), height(height), GameObject() {
 

@@ -3,7 +3,7 @@
 #ifndef WORMS_SERVER_GAMEOBJECT_INFO_H
 #define WORMS_SERVER_GAMEOBJECT_INFO_H
 
-#include "../src/server/server_protocol.h"
+#include "server_protocol.h"
 
 class ServerProtocol;
 

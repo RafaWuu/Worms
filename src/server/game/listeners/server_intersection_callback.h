@@ -5,9 +5,9 @@
 #ifndef WORMS_SERVER_INTERSECTION_CALLBACK_H
 #define WORMS_SERVER_INTERSECTION_CALLBACK_H
 
-#include "b2_world_callbacks.h"
+#include "box2d/b2_world_callbacks.h"
 #include "game/entities/server_gameobject.h"
-#include "b2_fixture.h"
+#include "box2d/b2_fixture.h"
 
 class IntersectionCallback: public b2QueryCallback {
 public:

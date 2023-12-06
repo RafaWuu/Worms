@@ -10,7 +10,7 @@
 
 #include <SDL2pp/SDL2pp.hh>
 
-#include "../configuration/configuration.h"
+#include "configuration/configuration.h"
 
 #include "texture_controller.h"
 
