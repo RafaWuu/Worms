@@ -98,5 +98,7 @@ public:
     float get_round_remaining_time();
 
     void reap_entities();
+
+    bool is_new_position_valid(float x, float y, b2Vec2 size) const;
 };
 #endif  // WORMS_SERVER_GAMEWORLD_H

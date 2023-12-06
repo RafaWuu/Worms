@@ -17,6 +17,7 @@
 #include "server_gameworld_simulationstate.h"
 #include "server_gameworld_state.h"
 #include "server_gameworld_state_waiting.h"
+#include "game/listeners/server_intersection_callback.h"
 
 #define GRAVITY_Y (-9.8)
 
@@ -190,3 +191,19 @@ void GameWorld::apply_wind_effect(b2Body& body) { wind.affect_projectile(body); 
 float GameWorld::get_wind_value() const { return wind.wind; }
 
 float GameWorld::get_round_remaining_time() { return game_state->get_remaining_time(); }
+
+bool GameWorld::is_new_position_valid(float x, float y, b2Vec2 size) const{
+
+    if (x > (width+FRONTIER) || -y > (height+FRONTIER))
+        return false;
+
+    IntersectionCallback callback;
+    b2AABB aabb{};
+
+    aabb.lowerBound = b2Vec2(x - size.x, y - size.y);
+    aabb.upperBound = b2Vec2(x + size.x, y + size.y);
+
+    b2_world.QueryAABB(&callback, aabb);
+
+    return !callback.intersecting;
+}

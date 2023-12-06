@@ -295,6 +295,8 @@ add_executable(server
         src/server/game/world/server_gameworld_state_finished.h
         src/server/game/entities/server_worm_collision_manager.cpp
         src/server/game/entities/server_worm_collision_manager.h
+        src/server/game/listeners/server_intersection_callback.cpp
+        src/server/game/listeners/server_intersection_callback.h
 )
 target_compile_definitions(server PUBLIC CONFIG_PATH="${CONFIG_FILE}"
 										SCENARIO_PATH="${SCENARIO_FILE}"
@@ -460,6 +462,8 @@ add_executable(hello_test
         src/server/game/world/server_gameworld_state_finished.h
         src/server/game/entities/server_worm_collision_manager.cpp
         src/server/game/entities/server_worm_collision_manager.h
+        src/server/game/listeners/server_intersection_callback.cpp
+        src/server/game/listeners/server_intersection_callback.h
 )
 target_compile_definitions(hello_test PUBLIC CONFIG_PATH="${CONFIG_FILE}"
 										SCENARIO_PATH="${SCENARIO_FILE}"

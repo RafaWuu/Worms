@@ -10,23 +10,6 @@
 #include "common_weapon_constants.h"
 #include "server_weapon_info_teleportation.h"
 
-class IntersectionCallback: public b2QueryCallback {
-public:
-    bool intersecting = false;
-    bool ReportFixture(b2Fixture* fixture) override {
-        auto fixture_data = fixture->GetUserData().pointer;
-
-        auto game_object = reinterpret_cast<GameObject*>(fixture_data);
-
-        auto id = game_object->get_id();
-        if (id == BEAM || id == BOUNDARY) {
-            intersecting = true;
-            return false;
-        }
-        return true;
-    }
-};
-
 TeleportationWeapon::TeleportationWeapon(GameWorld& world): Weapon(world) {
     ammo = config.get_weapon_ammo(TELEPORTATION);
     aim_x = 0;
@@ -39,18 +22,11 @@ bool TeleportationWeapon::fire_projectile(b2Body& body, bool facing_right) {
         return false;
     }
 
-    IntersectionCallback callback;
-    b2AABB aabb{};
     b2Vec2 size(config.worm_width, config.worm_height);
 
-    aabb.lowerBound = b2Vec2(aim_x - size.x, aim_y - size.y);
-    aabb.upperBound = b2Vec2(aim_x + size.x, aim_y + size.y);
-
-    body.GetWorld()->QueryAABB(&callback, aabb);
-
-    if (!callback.intersecting) {
+    if (world.is_new_position_valid(aim_x, aim_y, size)) {
         body.SetTransform(b2Vec2(aim_x, aim_y), 0);
-        return (true);
+        return true;
     }
 
     return false;
