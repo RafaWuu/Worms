@@ -26,16 +26,12 @@ void Client::run() {
 bool Client::is_dead() { return !_is_alive; }
 
 void Client::kill_connection() {
-    _is_alive = false;
-
     if (state)
         this->state->kill();
     bp.kill();
 }
 
 void Client::reap_connection() {
-    _is_alive = false;
-
     if (state)
         this->state->kill();
 }

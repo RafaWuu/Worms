@@ -15,20 +15,20 @@ Server::Server(const std::string& port):
         lobby(reap_queue),
         game_reaper(lobby, reap_queue),
         acc(std::move(sk), lobby) {
-
-    acc.start();
-    game_reaper.start();
 }
 
 void Server::run() {
+    acc.start();
+    game_reaper.start();
 
     while (std::cin.get() != CLOSE_CHAR) {}
+
+    acc.kill();
+    acc.join();
+
+    game_reaper.kill();
+    game_reaper.join();
 }
 
 Server::~Server() {
-    acc.kill();
-    game_reaper.kill();
-
-    acc.join();
-    game_reaper.join();
 }

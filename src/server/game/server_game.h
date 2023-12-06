@@ -44,6 +44,7 @@ public:
 
     void run() override;
     void kill();
+    void reap();
     bool is_dead();
 
     void subscribe_queue(Queue<std::shared_ptr<GameStatus>>& queue, uint16_t client_id);

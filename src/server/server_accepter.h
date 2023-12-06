@@ -28,7 +28,6 @@ public:
     Acceptor(const Acceptor&) = delete;
 
     Acceptor& operator=(const Acceptor&) = delete;
-    ~Acceptor() override;
     void run() override;
     void kill();
 };

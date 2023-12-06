@@ -11,8 +11,6 @@
 Acceptor::Acceptor(Socket&& sk, LobbyMonitor& lobby):
         sk_acceptor(sk), lobby(lobby), client_ids(0) {}
 
-Acceptor::~Acceptor() { kill_all(); }
-
 void Acceptor::run() {
     while (_is_alive) {
         try {
@@ -28,6 +26,7 @@ void Acceptor::run() {
             }
         }
     }
+    kill_all();
 }
 
 void Acceptor::reap_dead() {
