@@ -6,6 +6,7 @@ tick_rate: 100
 
 round_length: 30
 grace_length: 3
+bonus_health: 25
 
 maximum_countdown: 5
 maximum_wind: 15

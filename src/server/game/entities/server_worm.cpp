@@ -17,6 +17,8 @@
 #include "server_worm_info.h"
 
 
+#define STOPPED_THRESHOLD 0.05
+
 Worm::Worm(uint8_t id, GameWorld& world, float pos_x, float pos_y):
         id(id),
         client_id(),
@@ -95,7 +97,7 @@ void Worm::update(GameWorld& world) {
     float speedNow = body->GetLinearVelocity().Length();
     recent_speed = 0.1 * speedNow + 0.9 * recent_speed;
 
-    if (recent_speed > 0.05)
+    if (recent_speed > STOPPED_THRESHOLD)
         world.notify_entity_is_moving();
 
     if (had_used_weapon && !weapon_already_used)
@@ -225,7 +227,7 @@ void Worm::clear_attributes() {
     had_used_weapon = false;
 }
 
-void Worm::set_extra_health() { health += 25; }
+void Worm::set_extra_health() { health += config.bonus_health; }
 
 bool Worm::worm_is_alive() const { return (state_manager.current & Alive) == Alive; }
 

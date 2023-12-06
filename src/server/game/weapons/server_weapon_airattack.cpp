@@ -10,6 +10,8 @@
 #include "common_weapon_constants.h"
 #include "server_weapon_info_airattack.h"
 
+#define AIRATTACK_SPAWNLENGHT 6
+
 AirAttackWeapon::AirAttackWeapon(GameWorld& world): Weapon(world) {
     ammo = config.get_weapon_ammo(AIR_ATTACK);
     aim_x = 0;
@@ -43,7 +45,7 @@ bool AirAttackWeapon::fire_projectile(b2Body& body, bool facing_right) {
 
     for (int i = 0; i < missiles; ++i) {
 
-        b2Vec2 center(aim_x - 3 + 2 * 3 / missiles * i, -1);
+        b2Vec2 center(aim_x - AIRATTACK_SPAWNLENGHT/2 + AIRATTACK_SPAWNLENGHT / missiles * i, -1);
         world.add_entity(std::make_shared<Projectile>(
                 &world.b2_world, BAZOOKA,
                 std::make_unique<ProjectileLaunchInPlace>(center, -max_vel),

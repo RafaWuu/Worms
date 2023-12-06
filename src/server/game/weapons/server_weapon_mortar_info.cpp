@@ -14,5 +14,5 @@ void MortarWeaponInfo::serialize_status(BaseProtocol& bp) {
     bp.send_1byte_number(MORTAR_ID);
     bp.send_2byte_number(ammo);
     bp.send_4byte_float(angle);
-    bp.send_1byte_number(power * 255);
+    bp.send_1byte_number(power * UINT8_MAX);
 }

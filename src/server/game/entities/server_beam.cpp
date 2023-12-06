@@ -8,6 +8,13 @@
 #include "b2_fixture.h"
 #include "b2_polygon_shape.h"
 #include "server_beam_info.h"
+
+#define MAX_ANGLE 90.01
+#define WALKABLE_ANGLE 45
+
+#define WALKABLE_FRICTION .5
+#define NO_WALKABLE_FRICTION .1
+
 Beam::Beam(b2World* b2_world, float center_x, float center_y, float width, float height, bool flip,
            float angle):
         pos_x(center_x), pos_y(center_y), width(width), height(height), angle(angle), GameObject() {
@@ -19,8 +26,8 @@ Beam::Beam(b2World* b2_world, float center_x, float center_y, float width, float
 
     b2FixtureDef fixtureDef;
 
-    this->angle = fmod(this->angle, 90.01);
-    fixtureDef.friction = this->angle < 45 ? .5 : .1;
+    this->angle = fmod(this->angle, MAX_ANGLE);
+    fixtureDef.friction = this->angle < WALKABLE_ANGLE ? WALKABLE_FRICTION : NO_WALKABLE_FRICTION;
 
     if (flip)
         this->angle = -this->angle;
@@ -58,4 +65,4 @@ std::unique_ptr<GameObjectInfo> Beam::get_status() const {
     return std::make_unique<BeamInfo>(*this);
 }
 
-bool Beam::is_walkable() { return abs(angle) < 45; }
+bool Beam::is_walkable() { return abs(angle) < WALKABLE_ANGLE; }

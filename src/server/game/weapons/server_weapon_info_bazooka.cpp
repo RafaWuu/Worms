@@ -14,7 +14,7 @@ BazookaWeaponInfo::BazookaWeaponInfo(const BazookaWeapon& bazooka) {
 void BazookaWeaponInfo::serialize_status(BaseProtocol& bp) {
     bp.send_1byte_number(BAZOOKA_ID);
     bp.send_4byte_float(angle);
-    bp.send_1byte_number(power * 255);
+    bp.send_1byte_number(power * UINT8_MAX);
 }
 
 BazookaWeaponInfo::BazookaWeaponInfo(float angle, float power, float ammo) {

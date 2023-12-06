@@ -8,8 +8,10 @@
 ## Herramientas y Recursos Utilizados
 
 ### Herramientas
-- IDE: Visual Studio Code
-- Linters: IntelliSense
+- IDE: Visual Studio Code y Clion
+- Linters: IntelliSense, cpplint, cppcheck
+- Formatter: clang-format
+- Otros: valgrind y gdb
 
 ### Recursos 
 
@@ -29,6 +31,10 @@ Para aprender sobe las nuevas tecnologías necesarias para el desarrollo del pro
 
 - Box2D:
     - [iforce2d](https://www.iforce2d.net/b2dtut/) 
+
+#### En general
+- Patrones de diseño
+  - [Game Programming Patterns](https://gameprogrammingpatterns.com/contents.html)
 
 ## Desafíos
 Durante las primeras semanas había buena comunicación entre los integrantes. Definíamos objetivos y nos dividíamos las tareas, de manera que teníamos un progreso constante.

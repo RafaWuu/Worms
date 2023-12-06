@@ -15,6 +15,8 @@
 #define MAX_IMPULSE 500.0f
 #define NRAYS 15
 
+#define FRAGMENT_VEL 6
+
 ProjectileEffectFragmentedExplosion::ProjectileEffectFragmentedExplosion(
         uint16_t projectile_type, float radius, float damage, float blast_power,
         int fragment_number, float fragment_radius, float fragment_damage):
@@ -57,7 +59,7 @@ bool ProjectileEffectFragmentedExplosion::execute(GameWorld& world, b2Body& body
 
         world.add_entity(std::make_shared<Projectile>(
                 &world.b2_world, BAZOOKA,
-                std::make_unique<ProjectileLaunchParabolic>(center + b2Vec2(0, .1), angle, .5, 12),
+                std::make_unique<ProjectileLaunchParabolic>(center + b2Vec2(0, .1), angle, 1, FRAGMENT_VEL),
                 std::make_unique<ProjectileEffectDefaultExplosion>(
                         BAZOOKA_ID, fragment_radius, fragment_damage,
                         blast_power / (float)fragment_number),

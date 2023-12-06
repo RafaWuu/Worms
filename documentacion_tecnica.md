@@ -47,26 +47,34 @@ El protocolo de comunicación desde el **cliente** es el siguiente (los números
     
 El protocolo de comunicación de parte del **servidor** es el siguiente (los números corresponden a enteros sin signo de un byte salvo que se indique lo contrario):
 
-*    Mensaje de error
-    -    89 01 x
-    -    Siendo x un codigo de error
-*    Informar al cliente su id
-    -    89 02 id
-    -    Siendo el id del cliente un número sin signo de dos bytes
-*    Confirmación de éxito al crear o unirse a partida
+* Mensaje de error 
+  - 89 01 x
+  - Siendo x un codigo de error
+  
+
+* Informar al cliente su id
+  - 89 02 id
+  - Siendo el id del cliente un número sin signo de dos bytes
+
+
+* Confirmación de éxito al crear o unirse a partida
     -    89 03 id
     -    Siendo el id de la partida un número sin signo de dos bytes
-*    Lista de partidas
-    -    89 04 n {id l escenario players max_players status}
-    -    Siendo n un número de dos bytes la cantidad de partidas a leer. Luego, n veces:
-   	 +    id un número de dos bytes el id de la partida
-   	 +    escenario el nombre del escenario como un vector de bytes y l un entero sin signo de dos bytes el tamaño del vector
-   	 +    players un número de dos bytes la cantidad actual de jugadores
-   	 +    max_players un número de dos bytes la cantidad máxima de jugadores
-   	 +    status un número de un byte, 1 si la partida empezó y 0 si aun esta por iniciar
-*    Lista de escenarios
-    -    89 05 n {l escenario worms}
-    -    Siendo n un número de dos bytes la cantidad de escenarios a leer. Luego, n veces:
+   
+
+* Lista de partidas
+    - 89 04 n {id l escenario players max_players status}
+    - Siendo n un número de dos bytes la cantidad de partidas a leer. Luego, n veces:
+      + id un número de dos bytes el id de la partida
+      + escenario el nombre del escenario como un vector de bytes y l un entero sin signo de dos bytes el tamaño del vector
+   	  + players un número de dos bytes la cantidad actual de jugadores
+   	  + max_players un número de dos bytes la cantidad máxima de jugadores
+   	  + status un número de un byte, 1 si la partida empezó y 0 si aun esta por iniciar
+   
+
+* Lista de escenarios
+  - 89 05 n {l escenario worms}
+  - Siendo n un número de dos bytes la cantidad de escenarios a leer. Luego, n veces:
    	 +    escenario el nombre del escenario como un vector de bytes y l un entero sin signo de dos bytes el tamaño del vector
    	 +    worms un número de dos bytes la cantidad de gusanos en el escenario
     
@@ -147,10 +155,10 @@ El protocolo de comunicación de parte del **servidor** es el siguiente (los nú
 
 
 * Enviar snapshot
-    -    88 04 worm_id time wind n {entity_id entity_info}
-   	 +    Siendo worm_id el worm activo
-   	 +    time y wind, floats codificados según se comentó previamente, el tiempo restando del turno y el viento respectivamente
-   	 +    n un número de 2 bytes la cantidad de entidades, entity_id el tipo de entidad y entity_info una serie de bytes variable para cada entidad según se especificará en secciones siguientes
+  +    88 04 worm_id time wind n {entity_id entity_info}
+  +    Siendo worm_id el worm activo
+  +    time y wind, floats codificados según se comentó previamente, el tiempo restando del turno y el viento respectivamente
+  +    n un número de 2 bytes la cantidad de entidades, entity_id el tipo de entidad y entity_info una serie de bytes variable para cada entidad según se especificará en secciones siguientes
 
 
 * Enviar fin del juego
@@ -221,7 +229,7 @@ Luego de cada tick del juego se envían las siguientes entidades (los números c
     - weapon_info una serie de bytes dependiente del arma
     - state es un número de dos bytes representando el estado del gusano
 
-Tanto el tipo de proyectil como el tipo de explosion corresponden al tipo de arma que las produjo. El valor que tome no es parte fija del código sino que puede ser modificado en los archivos de configuración.
+Tanto el tipo de proyectil como el tipo de explosion corresponden al tipo de arma que las produjo. El valor que tome no es parte fija del código si no que puede ser modificado en los archivos de configuración.
 
 El tipo de entidad puede tomar los siguientes valores:
 
@@ -279,9 +287,47 @@ Cuando se crea el juego, se crea además un thread extra de
 comunicación con el cliente que actuará como el sender. El
 thread original se convertirá en el receiver, recibiendo
  los mensajes del cliente por socket y comunicandoselos al
-juego mediante una blocking queue de comandos
+juego mediante una blocking queue de eventos
 
 El thread juego por cada tick procesara estos comandos,
-simulara el gameworld y mandara una snapshot al thread
-sender correspondiente a cada cliente utilizando una queue
-de eventos.
+simulara el gameworld y se brodcasteara una snapshot a los thread
+sender correspondientes a cada cliente utilizando outgoing queues de estados.
+
+Se ejemplifica la arquitectura del juego para un caso simple de dos jugadores
+
+![](https://i.imgur.com/VruaY5V.png)
+
+La arquitectura a nivel global se esquematiza en la siguiente figura
+
+![](https://i.imgur.com/i8LuIN0.png)
+
+## Diagrama de clases
+
+Se muestra un diagrama de clases para las clases principales relacionadas con el Juego y las principales interacciones entre ellas
+
+![](https://i.imgur.com/gVvBEhO.png)
+
+## Contencion entre threads
+
+Tanto en el cliente como en el server la sincronizacion entre threads se maneja a nivel Queues Bloqueantes, las cuales ofrecen la siguiente interfaz:
+
+*	bool try_push(T const& val)
+*	bool try_pop(T& val)
+*	void push(T const& val)
+*	T pop()
+*	void close()
+*	void clear()
+
+En el server, los threads clientes tienen acceso a la lista de partidas por lo que la clase LobbyMonitor ofrece contencion adicional dando acceso a la lista de partidas mediante la siguiente interfaz:
+
+*	uint16_t create_game(const std::string& name, uint16_t client_id);
+*   std::shared_ptr<Game> join_game(uint16_t client_id, uint16_t game_id);
+*   void close_game(uint16_t id);
+*   void close_all();
+
+Ademas, la lista de outgoinq_queues es accesida por todos los threads receiver del server. El recurso es contenido por una clase BroadcastMonitor que ofrece la siguiente interfaz:
+
+*	void add_queue(Queue<std::shared_ptr<GameStatus>>& q, uint16_t client_id);
+*	void remove_queue(uint16_t key);
+*	void send_status_toall(const std::shared_ptr<GameStatus>& status);
+*	void send_status(uint16_t client_id, const std::shared_ptr<GameStatus>& status);

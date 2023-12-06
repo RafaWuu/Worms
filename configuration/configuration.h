@@ -171,6 +171,7 @@ public:
     float provision_blast_power;
     float minimum_wind;
     float maximum_wind;
+    int bonus_health;
 
     float get_missil_quantity(const std::string& weapon_name);
 
